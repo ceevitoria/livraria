@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition> 
+		<plcf:tabela tituloChave="tabpreco.mestre.titulo.comp"> 
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.nome']}"/>  
+					<plcf:texto id="nome" value="#{tabpreco.nome}" ajudaChave="ajuda.nome" tamanho="60"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.dataInicio']}"/>  
+					<plcf:data id="dataInicio" value="#{tabpreco.dataInicio}" tamanho="13" ajudaChave="ajuda.dataInicio"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.dataFim']}"/>  
+					<plcf:data id="dataFim" value="#{tabpreco.dataFim}" tamanho="13" ajudaChave="ajuda.dataFim"/> 
+				</plcf:celula> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.ativa']}"/>  
+					<plcf:caixaMarcacao id="ativa" obrigatorio="N" value="#{tabpreco.ativa}" ajudaChave="ajuda.ativa"/> 
+				</plcf:celula> 
+				<plcf:celula rendered="false"> 
+					<plcf:titulo value="#{msg['label.padrao']}"/>  
+					<plcf:caixaMarcacao id="padrao" obrigatorio="N" value="#{tabpreco.padrao}" ajudaChave="ajuda.padrao"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula columnSpan="5"> 
+					<plcf:titulo value="#{msg['label.descricao']}"/>  
+					<plcf:area id="descricao" value="#{tabpreco.descricao}" numLinhas="2" colunas="80" ajudaChave="ajuda.descricao"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.tipoPrecificacao']}"/>  
+					<plcf:radio id="tipoPrecificacao" value="#{tabpreco.tipoPrecificacao}" dominio="TipoPrecificacao" layout="horizontal" inlineStyle="width:180px;" ajudaChave="ajuda.tipoPrecificacao"/> 
+				</plcf:celula> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.tipoVariacao']}"/>  
+					<plcf:radio id="tipoVariacao" value="#{tabpreco.tipoVariacao}" dominio="TipoVariacao" layout="horizontal" inlineStyle="width:180px;" ajudaChave="ajuda.tipoVariacao"/> 
+				</plcf:celula> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.variacao']}"/>  
+					<plcf:numerico id="variacao" value="#{tabpreco.variacao}" tamanho="10" ajudaChave="ajuda.variacao"/> 
+				</plcf:celula>  
+				<plcf:celula columnSpan="2"> 
+					<plcf:titulo value="#{msg['label.tipoArredondamento']}"/>  
+					<plcf:radio id="tipoArredondamento" value="#{tabpreco.tipoArredondamento}" dominio="TipoArredondamento" layout="horizontal" inlineStyle="width:180px;" ajudaChave="ajuda.tipoArredondamento"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+		</plcf:tabela> 
+	</ui:composition> 
+</html>

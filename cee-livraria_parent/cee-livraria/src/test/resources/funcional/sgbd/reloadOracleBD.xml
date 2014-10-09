@@ -1,0 +1,25 @@
+
+<project name="reloadOracleBD" default="reloadBD">
+
+    <target name="reloadBD" description="reloadBD">
+		<antcall target="drop_objects" />
+		<antcall target="imp_original_db" />
+    </target>
+
+    <target name="drop_objects" description="drop_objects">
+		<exec executable="sqlplus.exe" output="output.txt">
+		  <arg value="###USUARIO### / ###SENHA### @ ###SID###"/>
+		  <arg value="@${env.PLC_MEUS_PROJETOS}/${jcompany.subdiretorio}/${jcompany.recursos.nome}/teste/funcional/sgbd/scriptDropSchemaOracle.sql"/>
+		</exec>
+    </target>
+
+    <target name="imp_original_db" description="imp_original_db">
+		<exec executable="imp.exe" output="c:\dir.txt">
+		  <arg value="###USUARIO### / ###SENHA### @ ###SID###"/>
+		  <arg value="FILE='${env.PLC_MEUS_PROJETOS}/../../bd_dumps/###NOME DO ESQUEMA####.dmp'"/>
+		  <arg value="fromuser=###USER###"/>
+		  <arg value="touser=###USER###"/>
+ 		</exec>
+    </target>
+
+</project>    

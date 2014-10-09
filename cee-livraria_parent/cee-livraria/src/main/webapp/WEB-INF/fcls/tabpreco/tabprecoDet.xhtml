@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:plct="http://www.powerlogic.com.br/plct" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition> 
+		<plcf:iteracao var="itemTabela" id="itemTabela" value="#{tabpreco.itemTabela}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
+			<h:column> 
+				<h:outputText value="#{rowCounter.index}."/> 
+			</h:column>  
+			<h:column rendered="#{empty requestScope.visualizaDocumentoPlc}"> 
+				<f:facet name="header">
+					<plcf:tituloExclusao>Exc.</plcf:tituloExclusao>
+				</f:facet>  
+				<span class="celulaFormularioCaixaMarcacao">
+					<plcf:caixaExclusao id="indExcPlc" value="#{itemTabela.indExcPlc}"/>
+				</span> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.titulo']}"/>
+				</f:facet>  
+				<plcf:texto id="livro_titulo" value="#{itemTabela.titulo}" ajudaChave="ajuda.titulo" tamanho="40" somenteLeitura="S" /> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.autor']}"/>
+				</f:facet>  
+				<plcf:comboDinamico id="livro_autor" value="#{itemTabela.autor}" somenteLeitura="S" dominio="AutorEntity" exibeBranco="S" ajudaChave="ajuda.autor"/> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.espirito']}"/>
+				</f:facet>  
+				<plcf:comboDinamico id="livro_espirito" value="#{itemTabela.espirito}" somenteLeitura="S" dominio="EspiritoEntity" exibeBranco="S" ajudaChave="ajuda.espirito"/> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.edicao']}"/>
+				</f:facet>  
+				<plcf:numerico id="livro_edicao" value="#{itemTabela.edicao}" numCasas="0" somenteLeitura="S" ajudaChave="ajuda.edicao"/> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.localizacao']}"/>
+				</f:facet>  
+				<plcf:comboDinamico id="livro_localizacao" value="#{itemTabela.localizacao}" somenteLeitura="S" dominio="LocalizacaoEntity" exibeBranco="S" ajudaChave="ajuda.localizacao"/> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.preco.venda']}"/>
+				</f:facet>  
+				<plcf:numerico id="preco" value="#{itemTabela.preco}" ajudaChave="ajuda.preco.venda"/> 
+			</h:column> 
+		</plcf:iteracao> 
+	</ui:composition> 
+</html>

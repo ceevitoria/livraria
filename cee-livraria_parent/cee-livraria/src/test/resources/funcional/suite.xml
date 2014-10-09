@@ -1,0 +1,10 @@
+<suite>
+	<!--Descomente a tag abaixo e coloque o nome completo do pacote
+	das classes a serem testadas, em ordem de execução
+	Em caso de duvidas sobre este arquivo, visite o manual 
+	jCompany QA Functional Tests.-->
+	
+	<!-->teste classe="nome.pacote.da.classe1.completo"/-->
+	<!-->teste classe="nome.pacote.da.classe2.completo"/-->
+	
+</suite>

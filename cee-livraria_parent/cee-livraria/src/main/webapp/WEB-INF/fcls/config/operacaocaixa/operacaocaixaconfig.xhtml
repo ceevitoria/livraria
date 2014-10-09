@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition template="/fcls/template/PlcGeralTemplate.xhtml"> 
+		<ui:define name="plc-corpo-formulario"> 
+			<div id="plc-corpo-formulario" class="plc-corpo-formulario plc-form-simples"> 
+				<plcf:tabela tituloChave="operacaocaixaconfig.titulo"> 
+					<plcf:linha> 
+						<plcf:tabela tituloChave="operacaocaixaconfig.abertura"> 
+							<plcf:linha> 
+							</plcf:linha> 
+						</plcf:tabela> 
+					</plcf:linha> 
+					<plcf:linha> 
+						<plcf:tabela tituloChave="operacaocaixaconfig.fechamento"> 
+							<plcf:linha> 
+								<plcf:celula> 
+									<plcf:titulo value="#{msg['label.permitirFechamentoSaldoDivergente']}"/>  
+									<!-- plcf:radio id="permitirFechamentoSaldoDivergente" layout="horizontal" value="#{operacaocaixaconfig.permitirFechamentoSaldoDivergente}" dominio="PlcYesNo" ajudaChave="ajuda.permitirFechamentoSaldoDivergente">
+										<f:ajax event="change" 
+											render="permitirAjusteSaldoDivergente valorMaximoAjusteSaldoDivergente" 
+											onerror="plc.manipulaErroAjax"/> 
+									</plcf:radio-->
+									<plcf:radio id="permitirFechamentoSaldoDivergente" layout="horizontal" value="#{operacaocaixaconfig.permitirFechamentoSaldoDivergente}" dominio="PlcYesNo" ajudaChave="ajuda.permitirFechamentoSaldoDivergente">
+									</plcf:radio> 
+								</plcf:celula>  
+							</plcf:linha>  
+							<plcf:linha> 
+								<plcf:celula> 
+									<plcf:titulo value="#{msg['label.permitirAjusteSaldoDivergente']}"/>  
+									<!-- plcf:radio id="permitirAjusteSaldoDivergente" 
+										layout="horizontal" 
+										skipCacheControl="true" 
+										value="#{operacaocaixaconfig.permitirAjusteSaldoDivergente}" 
+										dominio="PlcYesNo" 
+										disabled="#{operacaocaixaconfig.permitirFechamentoSaldoDivergente=='N'}" 
+										ajudaChave="ajuda.permitirAjusteSaldoDivergente"/--> 
+									<plcf:radio id="permitirAjusteSaldoDivergente" 
+										layout="horizontal" 
+										value="#{operacaocaixaconfig.permitirAjusteSaldoDivergente}" 
+										dominio="PlcYesNo" 
+										ajudaChave="ajuda.permitirAjusteSaldoDivergente"/> 
+								</plcf:celula> 
+							</plcf:linha>  
+							<plcf:linha> 
+								<plcf:celula> 
+									<plcf:titulo value="#{msg['label.valorMaximoAjusteSaldoDivergente']}"/>  
+									<plcf:numerico id="valorMaximoAjusteSaldoDivergente" 
+										value="#{operacaocaixaconfig.valorMaximoAjusteSaldoDivergente}"
+										ajudaChave="ajuda.valorMaximoAjusteSaldoDivergente"/> 
+								</plcf:celula> 
+							</plcf:linha>  
+						</plcf:tabela> 
+					</plcf:linha>  
+				</plcf:tabela> 
+			</div> 
+		</ui:define> 
+	</ui:composition> 
+</html>

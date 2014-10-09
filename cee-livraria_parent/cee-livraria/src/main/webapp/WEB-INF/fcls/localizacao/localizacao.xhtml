@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:p="http://primefaces.prime.com.tr/ui" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition template="/fcls/template/PlcGeralTemplate.xhtml"> 
+		<ui:define name="plc-corpo-formulario"> 
+			<div id="plc-corpo-formulario" class="plc-corpo-formulario plc-form-tabular"> 
+				<fieldset class="plc-fieldset"> 
+					<legend class="plc-fieldset-legend">#{msg['localizacao.titulo']}</legend>  
+					<plcf:iteracao var="localizacao" id="localizacao" value="#{localizacaoLista.itensPlc}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
+						<h:column> 
+							<h:outputText value="#{rowCounter.index}."/> 
+						</h:column>  
+						<h:column rendered="#{empty requestScope.visualizaDocumentoPlc}"> 
+							<f:facet name="header">
+								<plcf:tituloExclusao>Exc.</plcf:tituloExclusao>
+							</f:facet>  
+							<span class="celulaFormularioCaixaMarcacao">
+								<plcf:caixaExclusao id="indExcPlc" value="#{localizacao.indExcPlc}"/>
+							</span> 
+						</h:column>  
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.id']}"/>
+							</f:facet>  
+							<plcf:oid id="id" value="#{localizacao.id}" ajudaChave="ajuda.id"/> 
+						</h:column>  
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.codigo']}"/>
+							</f:facet>  
+							<plcf:texto id="codigo" value="#{localizacao.codigo}" ajudaChave="ajuda.codigo"/> 
+						</h:column> 
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.descricao']}"/>
+							</f:facet>  
+							<plcf:texto id="descricao" value="#{localizacao.descricao}" tamanho="60" ajudaChave="ajuda.descricao"/> 
+						</h:column> 
+					</plcf:iteracao> 
+				</fieldset> 
+			</div> 
+		</ui:define> 
+	</ui:composition> 
+</html>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  																													
+	    			       Jaguar-jCompany Developer Suite.																		
+			    		        Powerlogic 2010-2014.
+			    		    
+		Please read licensing information in your installation directory.Contact Powerlogic for more 
+		information or contribute with this project: suporte@powerlogic.com.br - www.powerlogic.com.br																								
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+
+
+	<!-- definição do parent do projeto -->
+	<parent>
+		<groupId>powerlogic.jaguar.app</groupId>
+		<artifactId>projeto-cee-livraria</artifactId>
+		<version>1.0</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<!-- dados do projeto -->
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>powerlogic.jaguar.app</groupId>
+	<artifactId>cee-livraria_model</artifactId>
+	<name>cee-livraria_model</name>
+	<packaging>jar</packaging>
+	
+	<dependencies>
+		<dependency>
+			<groupId>powerlogic.jaguar.app</groupId>
+			<artifactId>cee-livraria_commons</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>powerlogic.jaguar.jcompany</groupId>
+			<artifactId>jcompany_commons</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>powerlogic.jaguar.jcompany</groupId>
+			<artifactId>jcompany_model</artifactId>
+		</dependency>
+	</dependencies>
+	
+	<profiles>
+		<profile>
+			<id>jboss</id>
+			<build>
+				<plugins>
+					<!-- Esse plugin é necessário para filtar alguns recursos que existem 
+						no web.xml da aplicação -->
+					<plugin>
+						<groupId>powerlogic.jaguar.jcompany.maven</groupId>
+						<artifactId>plc-maven-plugin</artifactId>
+						<version>${jcompany.versao}</version>
+						<executions>
+							<execution>
+								<id>Filtro</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>filtrar-recursos</goal>
+								</goals>
+								<configuration>
+									<resources>
+										<resource>
+											<file>META-INF/persistence.xml</file>
+											<filters>
+												<filter>
+													<token>
+														/*[name()='persistence']/*[name()='persistence-unit']/*[name()='non-jta-data-source']
+													</token>
+													<value>java:jboss/datasources/cee-livraria</value>
+												</filter>
+											</filters>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
+	<!-- Para auditoria rígida descomentar o código abaixo -->
+	<!-- 
+	<build>
+		<plugins>
+			 <plugin>
+		        <artifactId>maven-dependency-plugin</artifactId>
+		        <executions>
+		          <execution>
+		            <id>unpack</id>
+		            <phase>process-resources</phase>
+		            <goals>
+		              <goal>unpack</goal>
+		            </goals>
+		            <configuration>
+		              <artifactItems>
+		                <artifactItem>
+					        <groupId>powerlogic.jaguar.jcompany.extension</groupId>
+					        <artifactId>plx_jcompany_audit</artifactId>
+		                    <version>${jcompany.versao}</version>
+							<type>jar</type>
+							<overWrite>false</overWrite>
+							<outputDirectory>${project.build.directory}/classes</outputDirectory>
+							<includes>**/*.class</includes>
+						</artifactItem>               
+		              </artifactItems>
+		            </configuration>
+		          </execution>
+		        </executions>
+		      </plugin>
+		</plugins>
+	</build>
+	 -->
+	 
+</project> 

@@ -1,0 +1,14 @@
+<configuracoes>
+  <host>localhost</host>
+  <port>8080</port>
+  <protocolo>http</protocolo>
+  <path>cee-livraria</path>
+  <navegador>
+    <tipo>FIREFOX</tipo>
+    <!-- caminhoNavegador>/usr/lib/firefox/firefox-bin</caminhoNavegador-->
+  </navegador>
+  <pesquisar>Pesquisar</pesquisar>
+  <gravar>Gravar</gravar>
+  <novo>Novo</novo>
+  <abrir>Abrir</abrir>  
+</configuracoes>

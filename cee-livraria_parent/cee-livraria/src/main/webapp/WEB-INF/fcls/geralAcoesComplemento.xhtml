@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:plcf="http://www.powerlogic.com.br/plcf"
+	xmlns:tr="http://myfaces.apache.org/trinidad"
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">
+	<body>
+		<ui:composition>
+			<div id='plc-corpo-acao-personalisado' class='plc-corpo-acao-generico'>
+				<!--PONTO_INSERCAO-->
+			
+			<ui:include src="/fcls/javascript/tabJs.xhtml"/>
+
+			<ui:insert name="livraria_acao_buscarItensPorRegra">	 
+				<plcf:botaoAcao id="botaoAcaoBuscarItensPorRegra" urlIcone="ico iEspecifico" acao="buscarItensPorRegra" 
+					limpaForm="false"  partialSubmit="#{!partialSubmit}" label="tabpreco.evt.buscarItensPorRegra" 
+					botaoArrayID="PRECIFICACAO" validaForm="false" immediate="false" blocking="true" 
+					rendered="#{requestScope.exibeBuscarItensPorRegra=='S'}" onclick="beforeSubmit();">
+					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
+					<f:param name="skipValidation" value="true"/>
+				</plcf:botaoAcao>
+			</ui:insert>
+
+			<ui:insert name="livraria_acao_atualizarItensPorPrecificacao">	 
+				<plcf:botaoAcao id="botaoAcaoAtualizarItensPorPrecificacao" urlIcone="ico iRefresh" acao="atualizarItensPorPrecificacao" 
+					limpaForm="false"  partialSubmit="#{!partialSubmit}" label="tabpreco.evt.atualizarItensPorPrecificacao" 
+					botaoArrayID="PRECIFICACAO" validaForm="false" immediate="false" blocking="true" 
+					rendered="#{requestScope.atualizarItensPorPrecificacao=='S'}" onclick="beforeSubmit();">
+					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
+					<f:param name="skipValidation" value="true"/>
+				</plcf:botaoAcao>
+			</ui:insert>
+
+			<ui:insert name="livraria_acao_buscarDadosVenda">	 	           
+				<plcf:botaoAcao id="botaoAcaoBuscarDadosVenda" urlIcone="ico iEspecifico" acao="buscarDadosVendaLivros" 
+					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
+					label="cee.evt.buscar" limpaForm="true"  
+					botaoArrayID="BUSCAR" rendered="#{requestScope.exibeBtnBuscarDadosVenda=='S'}" 
+					onclick="beforeSubmit();">
+					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
+					<f:param name="skipValidation" value="true"/>
+				</plcf:botaoAcao>	
+			</ui:insert>
+
+			<ui:insert name="livraria_acao_registrarVenda">	 	           
+				<plcf:botaoAcao id="botaoAcaoRegistrarVenda" urlIcone="ico iGravar" acao="registrarVendaLivros" 
+					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
+					label="cee.evt.registrar" limpaForm="true"  
+					botaoArrayID="REGISTRAR_VENDA" rendered="#{requestScope.exibeBtnRegistrarVendaLivro=='S'}" 
+					onclick="beforeSubmit();">
+					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
+					<f:param name="skipValidation" value="true"/>
+				</plcf:botaoAcao>	
+			</ui:insert>
+
+			<ui:insert name="livraria_acao_limparVendaAnterior">	 	           
+				<plcf:botaoAcao id="botaoAcaoLimparVendaAnterior" urlIcone="ico iLimpar" acao="limparVendaAnterior" 
+					partialSubmit="#{!partialSubmit}" 
+					label="cee.evt.limpar" limpaForm="true" validaForm="false" immediate="false" blocking="true"   
+					botaoArrayID="LIMPAR" rendered="#{requestScope.exibeBtnLimpar=='S'}" 
+					onclick="beforeSubmit();">
+					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
+					<f:param name="skipValidation" value="true"/>
+				</plcf:botaoAcao>	
+			</ui:insert>
+
+			<ui:insert name="livraria_acao_registrarAberturaCaixa">	 	           
+				<plcf:botaoAcao id="botaoAcaoRegistrarAberturaCaixa" urlIcone="ico iGravar" acao="registrarAberturaCaixa" 
+					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
+					label="cee.evt.registrar" limpaForm="true"  
+					botaoArrayID="REGISTRAR_ABERTURA_CAIXA" rendered="#{requestScope.exibeBtnRegistrarAberturaCaixa=='S'}" 
+					onclick="beforeSubmit();">
+					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
+					<f:param name="skipValidation" value="true"/>
+				</plcf:botaoAcao>	
+			</ui:insert>
+
+			<ui:insert name="livraria_acao_registrarSangriaCaixa">	 	           
+				<plcf:botaoAcao id="botaoAcaoRegistrarSangriaCaixa" urlIcone="ico iGravar" acao="registrarSangriaCaixa" 
+					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
+					label="cee.evt.registrar" limpaForm="true"  
+					botaoArrayID="REGISTRAR_SANGRIA_CAIXA" rendered="#{requestScope.exibeBtnRegistrarSangriaCaixa=='S'}" 
+					onclick="beforeSubmit();">
+					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
+					<f:param name="skipValidation" value="true"/>
+				</plcf:botaoAcao>	
+			</ui:insert>
+
+			<ui:insert name="livraria_acao_registrarSuprimentoCaixa">	 	           
+				<plcf:botaoAcao id="botaoAcaoRegistrarSuprimentoCaixa" urlIcone="ico iGravar" acao="registrarSuprimentoCaixa" 
+					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
+					label="cee.evt.registrar" limpaForm="true"  
+					botaoArrayID="REGISTRAR_SUPRIMENTO_CAIXA" rendered="#{requestScope.exibeBtnRegistrarSuprimentoCaixa=='S'}" 
+					onclick="beforeSubmit();">
+					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
+					<f:param name="skipValidation" value="true"/>
+				</plcf:botaoAcao>	
+			</ui:insert>
+
+			<ui:insert name="livraria_acao_registrarFechamentoCaixa">	 	           
+				<plcf:botaoAcao id="botaoAcaoRegistrarFechamentoCaixa" urlIcone="ico iGravar" acao="registrarFechamentoCaixa" 
+					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
+					label="cee.evt.registrar" limpaForm="true"  
+					botaoArrayID="REGISTRAR_FECHAMENTO_CAIXA" rendered="#{requestScope.exibeBtnRegistrarFechamentoCaixa=='S'}" 
+					onclick="beforeSubmit();">
+					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
+					<f:param name="skipValidation" value="true"/>
+				</plcf:botaoAcao>	
+			</ui:insert>
+
+			</div>			 
+		</ui:composition>
+	</body>
+</html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  																													
+	    			       Jaguar-jCompany Developer Suite.																		
+			    		        Powerlogic 2010-2014.
+			    		    
+		Please read licensing information in your installation directory.Contact Powerlogic for more 
+		information or contribute with this project: suporte@powerlogic.com.br - www.powerlogic.com.br																								
+--><persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
+	<persistence-unit name="default" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<non-jta-data-source>java:/comp/env/jdbc/cee-livraria</non-jta-data-source>
+		<class>com.cee.livraria.entity.AutorEntity</class>
+		<class>com.cee.livraria.entity.ColecaoEntity</class>
+		<class>com.cee.livraria.entity.EditoraEntity</class>
+		<class>com.cee.livraria.entity.EspiritoEntity</class>
+		<class>com.cee.livraria.entity.LocalizacaoEntity</class>
+		<class>com.cee.livraria.entity.LivroEntity</class>
+		<class>com.cee.livraria.entity.tabpreco.RegraPesquisaLivros</class>
+		<class>com.cee.livraria.entity.tabpreco.TabelaPrecoEntity</class>
+		<class>com.cee.livraria.entity.tabpreco.ItemTabelaEntity</class>
+		<class>com.cee.livraria.entity.tabpreco.Precificacao</class>
+		<class>com.cee.livraria.entity.estoque.EstoqueEntity</class>
+		<class>com.cee.livraria.entity.estoque.MovimentoEntity</class>
+		<class>com.cee.livraria.entity.estoque.ItemMovimentoEntity</class>
+		<class>com.cee.livraria.entity.caixa.CaixaEntity</class>
+		<class>com.cee.livraria.entity.caixa.CaixaMovimentoEntity</class>
+		<class>com.cee.livraria.entity.config.CompraVendaConfigEntity</class>
+		<class>com.cee.livraria.entity.config.OperacaoCaixaConfigEntity</class>
+		<class>com.cee.livraria.entity.estoque.conferencia.ConferenciaEntity</class>
+		<class>com.cee.livraria.entity.estoque.conferencia.ItemConferenciaEntity</class>
+	<properties>
+			<property name="hibernate.archive.autodetection" value="class, hbm"/>
+			<!-- property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect"/-->
+			<!--property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/-->
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+			<property name="hibernate.show_sql" value="true"/>
+			<property name="hibernate.format_sql" value="true"/>
+			<property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
+			<!-- 
+				A propriedade abaixo define a estratégia para nomes de colunas
+				Ao encontrar uma letra maiúscula no nome da coluna, esse letra é transformada
+				em minúscula e é adicionado um "_" antes dela. Sua utilização é aconselhada na maioria dos casos.
+				Ex: departamentPai fica departamento_pai 
+				Atenção: para bancos legados recomenda-se retirar essa propriedade para o hibernate utilizar
+				a estratégia "default" que não altera o nome da coluna
+			 -->
+			<property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy"/>
+		</properties>
+	</persistence-unit>
+</persistence>

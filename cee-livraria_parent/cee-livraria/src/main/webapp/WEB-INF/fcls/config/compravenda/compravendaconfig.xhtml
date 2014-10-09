@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition template="/fcls/template/PlcGeralTemplate.xhtml"> 
+		<ui:define name="plc-corpo-formulario"> 
+			<div id="plc-corpo-formulario" class="plc-corpo-formulario plc-form-simples"> 
+				<plcf:tabela tituloChave="compravendaconfig.titulo"> 
+					<plcf:linha> 
+						<plcf:tabela tituloChave="compraconfig.titulo"> 
+							<plcf:linha> 
+							</plcf:linha> 
+						</plcf:tabela> 
+					</plcf:linha> 
+					<plcf:linha> 
+						<plcf:tabela tituloChave="vendaconfig.titulo"> 
+							<plcf:linha> 
+								<plcf:celula> 
+									<plcf:titulo value="#{msg['label.alertaEstoqueMinimoAtingido']}"/>  
+									<plcf:radio id="alertaEstoqueMinimoAtingido" layout="horizontal" value="#{compravendaconfig.alertaEstoqueMinimoAtingido}" dominio="PlcYesNo" ajudaChave="ajuda.alertaEstoqueMinimoAtingido"/> 
+								</plcf:celula>  
+								<plcf:celula> 
+									<plcf:titulo value="#{msg['label.alertaEstoqueNegativoAtingido']}"/>  
+									<plcf:radio id="alertaEstoqueNegativoAtingido" layout="horizontal" value="#{compravendaconfig.alertaEstoqueNegativoAtingido}" dominio="PlcYesNo" ajudaChave="ajuda.alertaEstoqueNegativoAtingido"/> 
+								</plcf:celula> 
+							</plcf:linha>  
+							<plcf:linha> 
+								<plcf:celula> 
+									<plcf:titulo value="#{msg['label.permiteVendaParaEstoqueNegativo']}"/>  
+									<plcf:radio id="permiteVendaParaEstoqueNegativo" layout="horizontal" value="#{compravendaconfig.permiteVendaParaEstoqueNegativo}" dominio="PlcYesNo" ajudaChave="ajuda.permiteVendaParaEstoqueNegativo"/> 
+								</plcf:celula>  
+								<plcf:celula> 
+									<plcf:titulo value="#{msg['label.autoLimparTelaParaNovaVenda']}"/>  
+									<plcf:radio id="autoLimparTelaParaNovaVenda" layout="horizontal" value="#{compravendaconfig.autoLimparTelaParaNovaVenda}" dominio="PlcYesNo" ajudaChave="ajuda.autoLimparTelaParaNovaVenda"/> 
+								</plcf:celula> 
+							</plcf:linha>  
+							<plcf:linha> 
+								<plcf:celula> 
+									<plcf:titulo value="#{msg['label.exibirMensagemSucessoVenda']}"/>  
+									<plcf:radio id="exibirMensagemSucessoVenda" layout="horizontal" value="#{compravendaconfig.exibirMensagemSucessoVenda}" dominio="PlcYesNo" ajudaChave="ajuda.exibirMensagemSucessoVenda"/> 
+								</plcf:celula>  
+								<plcf:celula columnSpan="2"> 
+									<plcf:titulo value="#{msg['label.tipoMensagemSucessoVenda']}"/>  
+									<plcf:comboEstatico id="tipoMensagemSucessoVenda" value="#{compravendaconfig.tipoMensagemSucessoVenda}" dominio="TipoMensagemSucessoVendaConfig" exibeBranco="S" ajudaChave="ajuda.tipoMensagemSucessoVenda"/> 
+								</plcf:celula> 
+							</plcf:linha> 
+						</plcf:tabela> 
+					</plcf:linha>  
+				</plcf:tabela> 
+			</div> 
+		</ui:define> 
+	</ui:composition> 
+</html>

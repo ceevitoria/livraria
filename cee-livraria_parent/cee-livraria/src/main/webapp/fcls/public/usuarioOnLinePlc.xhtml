@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:plcf="http://www.powerlogic.com.br/plcf"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:cs="http://java.sun.com/jsp/jstl/core"
+	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:tr="http://myfaces.apache.org/trinidad"
+	xmlns:trh="http://myfaces.apache.org/trinidad/html"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<ui:composition template="/fcls/template/PlcSomenteCorpoTemplate.xhtml">
+	<ui:define name="plc-titulo">
+		#{msgPlc['jcompany.titulo.usuario.online']} #{fn:length(listaUsuarioOnLine)}
+	</ui:define>
+		<ui:define name="plc-corpo">
+			<c:if test="#{listaUsuarioOnLine == null}">
+				<table width="97%"  border="0" cellspacing="0" cellpadding="0">
+					<tr>
+					<td class="titulo" id="label.invalido">
+						<label jsfc="plcf:titulo" tituloChave="jcompany.usuario.online.cache.invalido" for="label.invalido"/>	
+					</td>
+					</tr>
+				</table>
+			</c:if>
+			<c:if test="#{listaUsuarioOnLine != null}">
+				<table jsfc="plcf:tabela" tituloChave="jcompany.usuonline.label.usuario.online" width="97%"  border="0" cellspacing="0" cellpadding="0" >
+					<tr>
+						<td class="cabecalho"></td>
+						<td class="cabecalho" id="label.usuario">
+							<label jsfc="plcf:titulo" tituloChave="jcompany.usuonline.label.usuario" for="label.usuario" />
+						</td>
+						<td class="cabecalho" id="label.desde">
+							<label jsfc="plcf:titulo" tituloChave="jcompany.usuonline.label.desde" for="label.desde"/>
+						</td>
+						<td class="cabecalho" id="label.acesso">
+							<label jsfc="plcf:titulo" tituloChave="jcompany.usuonline.label.ult.acesso" for="label.acesso"/>
+						</td>
+						<td class="cabecalho" id="label.timeout">
+							<label jsfc="plcf:titulo" tituloChave="jcompany.usuonline.label.ult.timeout" for="label.timeout"/>
+						</td>
+					</tr>
+					<c:forEach var="usuario" items="#{listaUsuarioOnLine}" varStatus="i">
+						<tr class="#{i.index % 2==0?'linhapar':'linhaimpar'}">
+							<td>
+								<img style="vertical-align: middle;" src="#{request.contextPath}/res-plc/midia/rodape-usu.png" />
+							</td>
+							<td>
+								#{usuario.login}
+							</td>
+							<td>
+								#{usuario.desde}
+							</td>
+							<td>
+								#{usuario.ultRequisicao}
+								
+							</td>
+							<td>
+								#{usuario.timeoutUsuario / 60} m.
+							</td>
+						</tr>
+					</c:forEach>
+			</table>
+			</c:if>
+			<div style="float:left;margin-right:2px;">
+				<label jsfc="plcf:titulo" tituloChave="jcompany.total" />
+			</div>
+			<div>
+				<label jsfc="plcf:titulo" titulo="#{fn:length(listaUsuarioOnLine)}"  />
+			</div>
+			<div style="text-align:center;float:none;">
+				<button class="botao_menu" property="evento" onclick="window.close();" >
+				<label jsfc="plcf:titulo" tituloChave="jcompany.ok" />
+				</button>
+			</div>
+		</ui:define>
+	</ui:composition>
+</html>

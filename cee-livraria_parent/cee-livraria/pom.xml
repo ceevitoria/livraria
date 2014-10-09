@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Jaguar-jCompany Developer Suite. Powerlogic 2010-2014. Please read licensing 
+	information in your installation directory.Contact Powerlogic for more information 
+	or contribute with this project: suporte@powerlogic.com.br - www.powerlogic.com.br -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+
+
+	<!-- definição do parent do projeto -->
+	<parent>
+		<groupId>powerlogic.jaguar.app</groupId>
+		<artifactId>projeto-cee-livraria</artifactId>
+		<version>1.0</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<!-- dados do projeto -->
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>powerlogic.jaguar.app</groupId>
+	<artifactId>cee-livraria</artifactId>
+	<name>cee-livraria</name>
+	<packaging>war</packaging>
+
+	<!-- O pom.xml é dividido em dependências gerais e profiles. Os profiles 
+		são utilizados para importarem dependências, plugins, executar tarefas, específicas 
+		para um fim. Ex. realizar testes ou não, empacotar a aplicação para um servidor 
+		específico como Tomcat ou JBoss, dentre outras. O que é definido fora dos 
+		profiles torna-se uma dependência geral e todos utilizam e o que é definido 
+		dentro do profile somente terá efeito quando o profile for utilizado. Para 
+		utilizar um profile, deve colocar um argumento na linha de comando do maven: 
+		-P <id_profile> Se nenhum profile for definido na linha de comando do maven, 
+		é utilizado o profile que contém o argumento "<activeByDefault>" definido 
+		como "true". -->
+
+	<!-- �?rea de dependências globais -->
+	<dependencies>
+		<dependency>
+			<groupId>powerlogic.jaguar.jcompany</groupId>
+			<artifactId>jcompany_view</artifactId>
+			<type>war</type>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+	<!-- Build global -->
+	<build>
+		<plugins>
+			<!-- Esse plugin é necessário para ao realizar o build do projeto, os 
+				artefatos de visão serem importados do jcompany_visao e empacotados junto 
+				à essa aplicação -->
+			<plugin>
+				<groupId>powerlogic.jaguar.jcompany.maven</groupId>
+				<artifactId>plc-maven-plugin</artifactId>
+				<configuration>
+					<wars>
+						<war>powerlogic.jaguar.jcompany.jcompany_view:excludes=/WEB-INF/plcf.tld</war>
+					</wars>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- Definição dos profiles -->
+	<profiles>
+		<!-- Para a utilização no Tomcat, utilizar o profile abaixo. Se nenhum 
+			profile for passado na execução do Maven, por padrão esse será chamado -->
+		<profile>
+			<!-- Identificador do profile. Utilizado como argumento na linha de comando 
+				do maven para seré utilizado para executar na linha de comando do maven -->
+			<id>tomcat</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>powerlogic.jaguar.jcompany</groupId>
+					<artifactId>jcompany_service</artifactId>
+				</dependency>
+				<!-- TODO exclusions -->
+				<dependency>
+					<groupId>powerlogic.jaguar.jcompany</groupId>
+					<artifactId>jcompany_controller</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>powerlogic.jaguar.app</groupId>
+					<artifactId>cee-livraria_model</artifactId>
+					<version>1.0</version>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<!-- Para a utilização no JBoss, utilizar o profile abaixo. Muitos "<exclusions>" 
+			são necessários nesse profile devido ao JBoss ter a dependência nativamente. 
+			TODO comentar os exclusions importantes -->
+
+		<profile>
+			<id>jboss</id>
+			<dependencies>
+				<dependency>
+					<groupId>javax.enterprise</groupId>
+					<artifactId>cdi-api</artifactId>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.hibernate.javax.persistence</groupId>
+					<artifactId>hibernate-jpa-2.0-api</artifactId>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>com.sun.faces</groupId>
+					<artifactId>jsf-api</artifactId>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.jboss.weld.servlet</groupId>
+					<artifactId>weld-servlet-core</artifactId>
+					<version>1.1.4.Final-plc</version>
+					<exclusions>
+						<exclusion>
+							<artifactId>weld-spi</artifactId>
+							<groupId>org.jboss.weld</groupId>
+						</exclusion>
+						<exclusion>
+							<artifactId>weld-build-config</artifactId>
+							<groupId>org.jboss.weld</groupId>
+						</exclusion>
+					</exclusions>
+				</dependency>				
+				<dependency>
+					<groupId>powerlogic.jaguar.jcompany</groupId>
+					<artifactId>jcompany_controller</artifactId>
+					<exclusions>
+						<exclusion>
+							<groupId>org.jboss.weld</groupId>
+							<artifactId>weld-core</artifactId>
+						</exclusion>
+						<exclusion>
+							<artifactId>weld-spi</artifactId>
+							<groupId>org.jboss.weld</groupId>
+						</exclusion>
+						<exclusion>
+							<artifactId>weld-build-config</artifactId>
+							<groupId>org.jboss.weld</groupId>
+						</exclusion>
+						<exclusion>
+							<artifactId>javassist</artifactId>
+							<groupId>jboss</groupId>
+						</exclusion>
+						<exclusion>
+							<groupId>xml-apis</groupId>
+							<artifactId>xml-apis</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>javax.activation</groupId>
+							<artifactId>activation</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>org.javassist</groupId>
+							<artifactId>javassist</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>xom</groupId>
+							<artifactId>xom</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>com.sun.faces</groupId>
+							<artifactId>jsf-api</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>com.sun.faces</groupId>
+							<artifactId>jsf-impl</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>xerces</groupId>
+							<artifactId>xercesImpl</artifactId>
+						</exclusion>	
+						<exclusion>
+							<groupId>org.jboss.weld.servlet</groupId>
+							<artifactId>weld-servlet-core</artifactId>
+						</exclusion>											
+					</exclusions>
+				</dependency>
+				<dependency>
+					<groupId>powerlogic.jaguar.jcompany</groupId>
+					<artifactId>jcompany_service</artifactId>
+					<exclusions>
+						<exclusion>
+							<artifactId>hibernate-core</artifactId>
+							<groupId>org.hibernate</groupId>
+						</exclusion>
+						<exclusion>
+							<artifactId>hibernate-validator</artifactId>
+							<groupId>org.hibernate</groupId>
+						</exclusion>
+						<exclusion>
+							<artifactId>weld-core</artifactId>
+							<groupId>org.jboss.weld</groupId>
+						</exclusion>
+						<exclusion>
+							<artifactId>weld-api</artifactId>
+							<groupId>org.jboss.weld</groupId>
+						</exclusion>
+						<exclusion>
+							<artifactId>weld-spi</artifactId>
+							<groupId>org.jboss.weld</groupId>
+						</exclusion>
+						<exclusion>
+							<groupId>javax.enterprise</groupId>
+							<artifactId>cdi-api</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>jboss.jaxbintros</groupId>
+							<artifactId>jboss-jaxb-intros</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+				<dependency>
+					<groupId>powerlogic.jaguar.app</groupId>
+					<artifactId>cee-livraria_model</artifactId>
+					<version>1.0</version>
+					<exclusions>
+						<exclusion>
+							<groupId>org.hibernate</groupId>
+							<artifactId>hibernate-entitymanager</artifactId>
+						</exclusion>
+						<exclusion>
+							<artifactId>hibernate-core</artifactId>
+							<groupId>org.hibernate</groupId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+				<!-- dependency>
+					<groupId>powerlogic.jaguar.app</groupId>
+					<artifactId>cee-admin_commons</artifactId>
+					<version>1.0</version>
+				</dependency-->
+			</dependencies>
+			<!-- Build do profile para o servidor JBoss -->
+			<build>
+				<plugins>
+					<!-- Esse plugin é necessário para filtar alguns recursos que existem 
+						no web.xml da aplicação -->
+					<plugin>
+						<groupId>powerlogic.jaguar.jcompany.maven</groupId>
+						<artifactId>plc-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>Filtro</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>filtrar-recursos</goal>
+								</goals>
+								<configuration>
+									<resources>
+										<resource>
+											<file>
+												WEB-INF/web.xml
+											</file>
+											<filters>
+												<filter>
+													<token>/*[name()='web-app']/*[name()='listener']/*[name()='listener-class'
+														and
+														text()='com.powerlogic.jcompany.controller.listener.PlcWeldListener']</token>
+													<value>com.powerlogic.jcompany.controller.listener.PlcAnotherWeldListener</value>
+												</filter>
+												<filter>
+													<token>/*[name()='web-app']/*[name()='resource-env-ref']/*[name()='resource-env-ref-name'
+														and
+														text()='BeanManager']/../*[name()='resource-env-ref-name']</token>
+													<remove>true</remove>
+												</filter>
+												<filter>
+													<token>/*[name()='web-app']/*[name()='resource-ref']/*[name()='res-type'
+														and
+														text()='javax.sql.DataSource']/../*[name()='res-type']</token>
+													<remove>true</remove>
+												</filter>
+												<filter>
+													<token>/*[name()='web-app']/*[name()='context-param']/*[name()='param-name'
+														and
+														text()='com.sun.faces.expressionFactory']</token>
+													<remove>true</remove>
+												</filter>
+											</filters>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>2.2</version>
+						<configuration>
+							<webXml>${project.build.directory}/${project.name}/WEB-INF/web.xml</webXml>
+							<packagingExcludes>WEB-INF/*.tld</packagingExcludes>
+							<archive>
+								<manifestEntries>
+									<Implementation-Title>
+										${project.name}
+									</Implementation-Title>
+									<Implementation-Build>
+										${build.number}
+									</Implementation-Build>
+									<Implementation-Version>
+										${project.version}
+									</Implementation-Version>
+									<Implementation-Date>
+										${buildNumber}
+									</Implementation-Date>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project> 

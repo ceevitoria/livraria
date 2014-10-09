@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Jaguar-jCompany Developer Suite. Powerlogic 2010-2014. Please read licensing 
+	information in your installation directory.Contact Powerlogic for more information 
+	or contribute with this project: suporte@powerlogic.com.br - www.powerlogic.com.br -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+
+
+	<!-- definição do parent do projeto -->
+	<parent>
+		<groupId>powerlogic.jaguar.jcompany</groupId>
+		<artifactId>projeto-plc</artifactId>
+		<version>6.1.7</version>
+	</parent>
+
+	<!-- dados do projeto -->
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>powerlogic.jaguar.app</groupId>
+	<artifactId>projeto-cee-livraria</artifactId>
+	<version>1.0</version>
+	<name>projeto-cee-livraria</name>
+	<packaging>pom</packaging>
+
+	<!-- descricao do projeto -->
+	<description>Descrição do projeto</description>
+	<url>www.meuprojeto.com.br</url>
+	<issueManagement>
+		<system>eprocess</system>
+		<url>http://www.minhaempresa.com.br/eprj</url>
+	</issueManagement>
+	<!-- dados da organização -->
+	<organization>
+		<name>Minha Empresa</name>
+		<url>www.minhaempresa.com.br</url>
+	</organization>
+	<mailingLists>
+		<mailingList>
+			<name>Forum do Projeto</name>
+			<subscribe>http://www.minhaempresa.com.br/ecp/forum.do</subscribe>
+			<unsubscribe>http://www.minhaempresa.com.br/ecp/forum.do</unsubscribe>
+			<post>http://www.minhaempresa.com.br/ecp/forum.do</post>
+			<archive>http://www.minhaempresa.com.br/ecp/forum.do</archive>
+		</mailingList>
+	</mailingLists>
+	<ciManagement>
+		<system>Sistema de Integração</system>
+		<url>www.sisintegracao.com</url>
+		<notifiers>
+			<notifier>
+				<type>email</type>
+				<sendOnError>true</sendOnError>
+				<sendOnFailure>true</sendOnFailure>
+				<sendOnWarning>false</sendOnWarning>
+				<address>test@address.com</address>
+			</notifier>
+		</notifiers>
+	</ciManagement>
+	<!-- desenvolvedores do projeto -->
+	<developers>
+		<developer>
+			<id>admin</id>
+			<name>Desenvolvedor 1</name>
+			<email>desen1@desenvolvedor.com.br</email>
+			<organization>Empresa</organization>
+			<organizationUrl>www.minhaempresa.com.br</organizationUrl>
+			<roles>
+				<role>desenvolvedor</role>
+			</roles>
+			<timezone>-3</timezone>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>Contribuidor</name>
+			<email>cont@contribuidor.com.br</email>
+			<organization>MinhaEmpresa</organization>
+			<organizationUrl>www.minhaempresa.com.br</organizationUrl>
+			<roles>
+				<role>Contribuidor</role>
+			</roles>
+			<timezone>-3</timezone>
+		</contributor>
+	</contributors>
+
+	<!-- módulos do projeto -->
+	<modules>
+		<module>cee-livraria_commons</module>
+		<module>cee-livraria_model</module>
+		<module>cee-livraria</module>
+	</modules>
+
+	<profiles>
+		<profile>
+			<id>jboss</id>
+			<dependencies>
+				<dependency>
+					<groupId>powerlogic.jaguar.jcompany</groupId>
+					<artifactId>jcompany_qa_unit</artifactId>
+					<scope>test</scope>
+					<exclusions>
+						<exclusion>
+							<groupId>xerces</groupId>
+							<artifactId>xmlParserAPIs</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>xml-apis</groupId>
+							<artifactId>xml-apis</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>antlr</groupId>
+							<artifactId>antlr</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>commons-beanutils</groupId>
+							<artifactId>commons-beanutils</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>javax.xml.bind</groupId>
+							<artifactId>jaxb-api</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>jboss.jaxbintros</groupId>
+							<artifactId>jboss-jaxb-intros</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>javax.annotation</groupId>
+							<artifactId>jsr250-api</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>jregex</groupId>
+							<artifactId>jregex</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>org.jboss.weld.servlet</groupId>
+							<artifactId>weld-servlet-core</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+				<dependency>
+					<groupId>powerlogic.jaguar.oss_base_qa</groupId>
+					<artifactId>oss_base_qa</artifactId>
+					<type>pom</type>
+					<scope>test</scope>
+					<exclusions>
+						<exclusion>
+							<groupId>antlr</groupId>
+							<artifactId>antlr</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>commons-beanutils</groupId>
+							<artifactId>commons-beanutils</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>xml-apis</groupId>
+							<artifactId>xml-apis</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+
+	<!-- Nome final do projeto -->
+	<properties>
+		<finalName>cee-livraria</finalName>
+	</properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>[2.4,)</versionRange>
+										<goals>
+											<goal>unpack</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>powerlogic.jaguar.jcompany.maven</groupId>
+										<artifactId>plc-maven-plugin</artifactId>
+										<versionRange>[6.1.5,)</versionRange>
+										<goals>
+											<goal>unpack</goal>
+											<goal>add-sourcepath</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project> 

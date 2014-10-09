@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<Context displayName="cee-livraria"  
+         docBase="cee-livraria" 
+         path="cee-livraria" 
+         privileged="true" swallowOutput="off">
+   
+<Resource name="jdbc/cee-livraria" type="javax.sql.DataSource"
+		auth="Container" driverClassName="com.mysql.jdbc.Driver" 
+       url="jdbc:mysql://localhost:3306/ceedb" username="ceeuser" password="xjtq28"
+       maxActive="50" maxWait="-1" maxIdle="10" removeAbandoned="true" logAbandoned="true" />
+
+
+ <!-- JCDI / Weld (RI)  -->      
+ <Resource name="BeanManager"
+      auth="Container"
+      type="javax.enterprise.inject.spi.BeanManager"
+      factory="org.jboss.weld.resources.ManagerObjectFactory"/>
+ <!-- Uncomment to enable injection into Servlet -->
+ <!-- <Listener className="org.jboss.weld.environment.tomcat.WeldLifecycleListener"/>  -->
+
+</Context>
+

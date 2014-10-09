@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition> 
+		<plcf:tabela tituloChave="conferencia.mestre.2.titulo.comp"> 
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.regra.titulo']}"/>  
+					<plcf:texto id="regra_titulo" value="#{conferencia.regra.titulo}" disabled="#{conferencia.id!=null}" ajudaChave="ajuda.regra.titulo"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.regra.codigoBarras']}"/>  
+					<plcf:texto id="regra_codigoBarras" value="#{conferencia.regra.codigoBarras}" disabled="#{conferencia.id!=null}" ajudaChave="ajuda.regra.codigoBarras"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.regra.autor']}"/>  
+					<plcf:comboDinamico id="regra_autor" value="#{conferencia.regra.autor}" disabled="#{conferencia.id!=null}" dominio="AutorEntity" exibeBranco="S" ajudaChave="ajuda.regra.autor"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.regra.espirito']}"/>  
+					<plcf:comboDinamico id="regra_espirito" value="#{conferencia.regra.espirito}" disabled="#{conferencia.id!=null}" dominio="EspiritoEntity" exibeBranco="S" ajudaChave="ajuda.regra.espirito"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.regra.editora']}"/>  
+					<plcf:comboDinamico id="regra_editora" value="#{conferencia.regra.editora}" disabled="#{conferencia.id!=null}" dominio="EditoraEntity" exibeBranco="S" ajudaChave="ajuda.regra.editora"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.regra.edicao']}"/>  
+					<plcf:numerico id="regra_edicao" value="#{conferencia.regra.edicao}" disabled="#{conferencia.id!=null}" ajudaChave="ajuda.regra.edicao"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.regra.colecao']}"/>  
+					<plcf:comboDinamico id="regra_colecao" value="#{conferencia.regra.colecao}" disabled="#{conferencia.id!=null}" dominio="ColecaoEntity" exibeBranco="S" ajudaChave="ajuda.regra.colecao"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.regra.palavraChave']}"/>  
+					<plcf:texto id="regra_palavraChave" value="#{conferencia.regra.palavraChave}" disabled="#{conferencia.id!=null}" ajudaChave="ajuda.regra.palavraChave"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula columnSpan="2"> 
+					<plcf:titulo value="#{msg['label.regra.localizacao']}"/>  
+					<plcf:comboDinamico id="regra_localizacao" value="#{conferencia.regra.localizacao}" disabled="#{conferencia.id!=null}" dominio="LocalizacaoEntity" exibeBranco="S" ajudaChave="ajuda.regra.localizacao"/> 
+				</plcf:celula> 
+			</plcf:linha> 
+		</plcf:tabela> 
+	</ui:composition> 
+</html>

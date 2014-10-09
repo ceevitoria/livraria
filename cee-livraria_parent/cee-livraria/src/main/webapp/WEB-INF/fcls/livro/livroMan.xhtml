@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition> 
+		<plcf:tabela tituloChave="livroman.titulo"> 
+			<plcf:linha> 
+				<plcf:celula columnSpan="2"> 
+					<plcf:titulo value="#{msg['label.codigoBarras']}"/>  
+					<plcf:texto id="codigoBarras" value="#{livro.codigoBarras}" ajudaChave="ajuda.codigoBarras" tamanho="50"/> 
+				</plcf:celula>  
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula columnSpan="2"> 
+					<plcf:titulo value="#{msg['label.titulo']}"/>  
+					<plcf:texto id="titulo" value="#{livro.titulo}" ajudaChave="ajuda.titulo" tamanho="100"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.isbn']}"/>  
+					<plcf:texto id="isbn" value="#{livro.isbn}" tamanho="30" ajudaChave="ajuda.isbn"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.palavrasChave']}"/>  
+					<plcf:texto id="palavrasChave" value="#{livro.palavrasChave}" ajudaChave="ajuda.palavrasChave" tamanho="40"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.espirito']}"/>  
+					<plcf:comboDinamico id="espirito" value="#{livro.espirito}" dominio="EspiritoEntity" exibeBranco="S" ajudaChave="ajuda.espirito"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.autor']}"/>  
+					<plcf:comboDinamico id="autor" value="#{livro.autor}" dominio="AutorEntity" exibeBranco="S" ajudaChave="ajuda.autor"/> 
+				</plcf:celula>  
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.editora']}"/>  
+					<plcf:comboDinamico id="editora" value="#{livro.editora}" dominio="EditoraEntity" exibeBranco="S" ajudaChave="ajuda.editora"/> 
+				</plcf:celula> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.edicao']}"/>  
+					<plcf:numerico id="edicao" value="#{livro.edicao}" tamanho="10" numCasas="0" ajudaChave="ajuda.edicao"/> 
+				</plcf:celula>  
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.colecao']}"/>  
+					<plcf:comboDinamico id="colecao" value="#{livro.colecao}" dominio="ColecaoEntity" exibeBranco="S" ajudaChave="ajuda.colecao"/> 
+				</plcf:celula> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.preco.original']}"/>
+					<plcf:numerico id="precoOrig1" value="#{livro.preco}" somenteLeitura="S" rendered="#{not plct:execOneArg(request,'isUserInRole','Gestor')}" 
+						tamanho="10" ajudaChave="ajuda.preco.original"/> 
+					<plcf:numerico id="precoOrig2" value="#{livro.preco}" somenteLeitura="N" rendered="#{plct:execOneArg(request,'isUserInRole','Gestor')}"
+						tamanho="10" ajudaChave="ajuda.preco.original"/> 
+				</plcf:celula>  
+			</plcf:linha> 
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.tabpreco']}"/>  
+					<plcf:texto id="nomeTabela" value="#{livro.nomeTabela}" somenteLeitura="S" tamanho="50" ajudaChave="ajuda.tabpreco"/> 
+	                <plcf:linkInteligente
+	                    link="#{request.contextPath}/f/n/tabprecomdt?id=#{livro.idTabela}"
+	                    tituloChave="label.tabpreco"
+	                    ajudaChave="ajuda.tabpreco"
+	                    exibeSe="#{not empty livro.idTabela and plct:execOneArg(request,'isUserInRole','Gestor')}" />
+				</plcf:celula> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.preco.venda']}"/>  
+					<plcf:numerico id="precoTabela" value="#{livro.precoTabela}" somenteLeitura="S" tamanho="10" ajudaChave="ajuda.preco.venda"/> 
+				</plcf:celula>  
+			</plcf:linha> 
+		</plcf:tabela> 
+	</ui:composition> 
+</html>

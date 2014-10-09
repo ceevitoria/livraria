@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+	<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:plct="http://www.powerlogic.com.br/plct" xmlns:plcf="http://www.powerlogic.com.br/plcf">
+		<ul>
+			<li>
+				<a>
+					<span class="ico iNotas"/>
+					<label jsfc="plcf:titulo" tituloChave="app.m.cadastros">Cadastros</label>
+				</a>
+				<ul class="ui-state-hover">
+					<li>
+						<a href="#{request.contextPath}/f/n/autor">
+							<label jsfc="plcf:titulo" tituloChave="menu.autor.titulo">Autor</label>
+						</a>
+					</li>
+					<li>
+						<a href="#{request.contextPath}/f/n/espirito">
+							<label jsfc="plcf:titulo" tituloChave="menu.espirito.titulo">Espírito</label>
+						</a>
+					</li>
+					<li>
+						<a href="#{request.contextPath}/f/n/editora">
+							<label jsfc="plcf:titulo" tituloChave="menu.editora.titulo">Editora</label>
+						</a>
+					</li>
+					<li>
+						<a href="#{request.contextPath}/f/n/colecao">
+							<label jsfc="plcf:titulo" tituloChave="menu.colecao.titulo">Coleção</label>
+						</a>
+					</li>
+					<li>
+						<a href="#{request.contextPath}/f/n/localizacao">
+							<label jsfc="plcf:titulo" tituloChave="menu.localizacao.titulo">Localização</label>
+						</a>
+					</li>
+					<li>
+						<a href="#{request.contextPath}/f/n/livrosel">
+							<label jsfc="plcf:titulo" tituloChave="menu.livro.titulo">Livro</label>
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<a>
+					<span class="ico iLeiautepadrao"/>
+					<label jsfc="plcf:titulo" tituloChave="app.m.estoque">Estoque</label>
+				</a>
+				<ul class="ui-state-hover">
+					<li style="#{plct:execOneArg(request,'isUserInRole','Gestor')?'':'display:none;'}">
+						<a href="#{request.contextPath}/f/n/tabprecosel">
+							<label jsfc="plcf:titulo" tituloChave="menu.tabpreco.titulo">Tabela de Preço</label>
+						</a>
+					</li>
+					<li>
+						<a href="#{request.contextPath}/f/n/vendalivro">
+							<label jsfc="plcf:titulo" tituloChave="menu.vendalivro.titulo">Vender Livro</label>
+						</a>
+					</li>
+					<li>
+						<a href="#{request.contextPath}/f/n/conferencia">
+							<label jsfc="plcf:titulo" tituloChave="menu.conferencia.titulo">Conferência</label>
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<a>
+					<span class="ico iLeiautepadrao"/>
+					<label jsfc="plcf:titulo" tituloChave="app.m.caixa">Caixa</label>
+				</a>
+				<ul class="ui-state-hover">
+					<li>
+						<a href="#{request.contextPath}/f/n/caixaabertura">
+							<label jsfc="plcf:titulo" tituloChave="menu.caixa.abertura.titulo">Abertura de Caixa</label>
+						</a>
+					</li>
+					<li style="#{plct:execOneArg(request,'isUserInRole','Gestor')?'':'display:none;'}">
+						<a href="#{request.contextPath}/f/n/caixasangria">
+							<label jsfc="plcf:titulo" tituloChave="menu.caixa.sangria.titulo">Sangria de Caixa</label>
+						</a>
+					</li>
+					<li style="#{plct:execOneArg(request,'isUserInRole','Gestor')?'':'display:none;'}">
+						<a href="#{request.contextPath}/f/n/caixasuprimento">
+							<label jsfc="plcf:titulo" tituloChave="menu.caixa.suprimento.titulo">Suprimento de Caixa</label>
+						</a>
+					</li>
+					<li>
+						<a href="#{request.contextPath}/f/n/caixafechamento">
+							<label jsfc="plcf:titulo" tituloChave="menu.caixa.fechamento.titulo">Fechamento de Caixa</label>
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li style="#{plct:execOneArg(request,'isUserInRole','Gestor')?'':'display:none;'}">
+				<a>
+					<span class="ico iGerarEsquema"/>
+					<label jsfc="plcf:titulo" tituloChave="app.m.configuracao">Configuracao</label>
+				</a>
+				<ul class="ui-state-hover">
+					<li>
+						<a href="#{request.contextPath}/f/n/compravendaconfig">
+							<label jsfc="plcf:titulo" tituloChave="menu.compravendaconfig.titulo">Compra e Venda Config</label>
+						</a>
+					</li>
+					<li>
+						<a href="#{request.contextPath}/f/n/operacaocaixaconfig">
+							<label jsfc="plcf:titulo" tituloChave="menu.operacaocaixaconfig.titulo">Operacao Caixa Config</label>
+						</a>
+					</li>
+				</ul>
+			</li>
+			<ui:include src="/WEB-INF/fcls-plc/geralMenuAjuda.xhtml"/>
+			<ui:include src="/WEB-INF/fcls-plc/geralMenuPrefLang.xhtml"/>
+			<ui:include src="/WEB-INF/fcls-plc/geralMenuAreaTecnica.xhtml"/>
+			<ui:include src="/WEB-INF/fcls-plc/geralMenuDinamico.xhtml"/>
+			<ui:include src="/WEB-INF/fcls-plc/geralMenuThemeSwitcher.xhtml"/>
+		</ul>
+	</ui:composition>
