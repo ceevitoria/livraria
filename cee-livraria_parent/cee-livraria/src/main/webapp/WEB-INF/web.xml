@@ -317,8 +317,8 @@
  <resource-ref>
   <description>Endereço JNDI para pegar o Pool de Conexões com o SGBD. Este
 			pool deve ser configurado no Application Server e registrado
-			com o endereço acima: jdbc/cee-livraria</description>
-  <res-ref-name>jdbc/cee-livraria</res-ref-name>
+			com o endereço acima: jdbc/cee-apps</description>
+  <res-ref-name>jdbc/cee-apps</res-ref-name>
   <res-type>javax.sql.DataSource</res-type>
   <res-auth>Container</res-auth>
   <res-sharing-scope>Shareable</res-sharing-scope>
