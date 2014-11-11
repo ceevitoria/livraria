@@ -297,10 +297,21 @@ public class TabelaPrecoMB extends AppMB  {
 		item.setTitulo(livro.getTitulo());
 		item.setAutor(livro.getAutor());
 		item.setCodigoBarras(livro.getCodigoBarras());
-		item.setColecao(livro.getColecao());
+		
+		if (livro.getColecao() != null && livro.getColecao().getId() != null) {
+			item.setColecao(livro.getColecao());
+		} else {
+			item.setColecao(null);
+		}
+		
 		item.setEdicao(livro.getEdicao());
 		item.setEditora(livro.getEditora());
-		item.setEspirito(livro.getEspirito());
+		
+		if (livro.getEspirito() != null && livro.getEspirito().getId() != null) {
+			item.setEspirito(livro.getEspirito());
+		} else {
+			item.setEspirito(null);
+		}
 		
 		//TODO: Definir a localizacao
 		item.setLocalizacao(null);
