@@ -14,8 +14,6 @@ import com.cee.livraria.entity.estoque.conferencia.ConferenciaEntity;
 import com.cee.livraria.entity.estoque.conferencia.ItemConferencia;
 import com.cee.livraria.entity.estoque.conferencia.ItemConferenciaEntity;
 import com.cee.livraria.entity.estoque.conferencia.RegraPesquisaLivros;
-import com.cee.livraria.entity.tabpreco.ItemTabela;
-import com.cee.livraria.entity.tabpreco.TabelaPreco;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcConstants;
 import com.powerlogic.jcompany.commons.annotation.PlcUriIoC;
@@ -136,12 +134,6 @@ public class ConferenciaMB extends AppMB {
 					
 					for (Livro livro : livros) {
 						ItemConferencia item = criaNovoItem(conferencia, livro);
-						
-//						//Definir o ajuste de preço
-//						double preco = calcularAjustePrecoLivro(conferencia, livro);
-//						
-//						item.setPreco(new BigDecimal(preco) );
-						
 						listaItens.add(item);
 					}
 					
@@ -162,10 +154,21 @@ public class ConferenciaMB extends AppMB {
 		item.setConferencia(conferencia);
 		item.setLivro(livro);
 		item.setAutor(livro.getAutor());
-		item.setColecao(livro.getColecao());
+		
+		if (livro.getColecao() != null && livro.getColecao().getId() != null) {
+			item.setColecao(livro.getColecao());
+		} else {
+			item.setColecao(null);
+		}
+		
 		item.setEdicao(livro.getEdicao());
 		item.setEditora(livro.getEditora());
-		item.setEspirito(livro.getEspirito());
+		
+		if (livro.getEspirito() != null && livro.getEspirito().getId() != null) {
+			item.setEspirito(livro.getEspirito());
+		} else {
+			item.setEspirito(null);
+		}
 		
 		//TODO: Definir a localizacao
 		item.setLocalizacao(null);
@@ -222,7 +225,6 @@ public class ConferenciaMB extends AppMB {
 				contextUtil.getRequest().setAttribute("exibeBuscarItensPorRegra", PlcConstants.SIM);
 			}
 		}
-
 		
 		super.handleButtonsAccordingFormPattern();
 	}

@@ -11,7 +11,7 @@ import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.model.CaixaRepository;
-import com.cee.livraria.model.VendaLivroManager;
+import com.cee.livraria.model.VendaLivroRepository;
 import com.cee.livraria.persistence.jpa.livro.LivroDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
@@ -28,7 +28,7 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	private LivroDAO livroDAO;
 	
 	@Inject
-	private VendaLivroManager vendaLivroManager;
+	private VendaLivroRepository vendaLivroRepository;
 	
 	@Inject
 	private CaixaRepository caixaRepository;
@@ -44,14 +44,14 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.REQUIRED)
 	@Override
 	public RetornoConfig registrarVendaLivros(PlcBaseContextVO context, List entityList) throws PlcException {
-		return vendaLivroManager.registrarVendaLivros(context, entityList);
+		return vendaLivroRepository.registrarVendaLivros(context, entityList);
 	}
 	
 	@PlcTransactional(commit=false)
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
 	@Override
 	public BigDecimal buscarDadosVendaLivros(PlcBaseContextVO context, List entityList) throws PlcException {
-		return vendaLivroManager.buscarDadosVendaLivros(context, entityList);
+		return vendaLivroRepository.buscarDadosVendaLivros(context, entityList);
 	}
 
 	@PlcTransactional(commit=true)

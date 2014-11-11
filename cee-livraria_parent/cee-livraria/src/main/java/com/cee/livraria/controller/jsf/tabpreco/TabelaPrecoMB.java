@@ -327,7 +327,6 @@ public class TabelaPrecoMB extends AppMB  {
 		return baseDeleteMB.delete(entityPlc);
 	}
 	
-	
 	public void handleButtonsAccordingFormPattern() {
 		String nomeAction = (String) contextUtil.getRequestAttribute(PlcConstants.PlcJsfConstantes.URL_COM_BARRA);
 		

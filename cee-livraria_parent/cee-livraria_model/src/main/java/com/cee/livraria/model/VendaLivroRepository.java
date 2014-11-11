@@ -37,7 +37,7 @@ import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.domain.type.PlcYesNo;
 
-public class VendaLivroManager {
+public class VendaLivroRepository {
 	
 	@Inject
 	private LivroDAO livroDAO;
@@ -76,10 +76,8 @@ public class VendaLivroManager {
 		} catch (PlcException plcE) {
 			throw plcE;
 		} catch (Exception e) {
-			throw new PlcException("VendaLivroManager", "registrarVendaLivros",
-					e, log, "");
+			throw new PlcException("VendaLivroRepository", "registrarVendaLivros",	e, log, "");
 		}
-		
 		
 		return new RetornoConfig(config, alertas, mensagens);
 	}
@@ -384,7 +382,7 @@ public class VendaLivroManager {
 		} catch (PlcException plcE) {
 			throw plcE;
 		} catch (Exception e) {
-			throw new PlcException("VendaLivroManager",
+			throw new PlcException("VendaLivroRepository",
 					"buscarDadosVendaLivros", e, log, "");
 		}
 		
