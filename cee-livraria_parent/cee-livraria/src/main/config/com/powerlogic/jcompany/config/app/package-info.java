@@ -5,7 +5,7 @@
   *******************************************************************************************/
 
 @PlcConfigApplication(
-	definition=@PlcConfigApplicationDefinition(name="Livraria",acronym="Livraria",version=1,release=0),
+	definition=@PlcConfigApplicationDefinition(name="Controle da Livraria",acronym="Livraria",version=1,release=0),
 	classesDiscreteDomain={com.cee.livraria.entity.estoque.conferencia.StatusConferencia.class,
 		com.powerlogic.jcompany.domain.type.PlcYesNo.class,
 		com.cee.livraria.entity.caixa.StatusCaixa.class,
