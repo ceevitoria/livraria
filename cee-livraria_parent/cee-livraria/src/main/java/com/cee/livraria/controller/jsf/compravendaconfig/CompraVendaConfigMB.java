@@ -21,20 +21,14 @@ import com.powerlogic.jcompany.config.collaboration.PlcConfigForm.ExclusionMode;
 
 import com.powerlogic.jcompany.config.aggregation.PlcConfigAggregation;
 
-
 @PlcConfigAggregation(
-		entity= com.cee.livraria.entity.config.CompraVendaConfigEntity.class
-	)
-
-
-@PlcConfigForm (
-	
-	formPattern=FormPattern.Apl,
-	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/config/compravenda")
-	
-	
+	entity= com.cee.livraria.entity.config.CompraVendaConfigEntity.class
 )
 
+@PlcConfigForm (
+	formPattern=FormPattern.Apl,
+	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/config/compravenda")
+)
 
 /**
  * Classe de Controle gerada pelo assistente
@@ -47,8 +41,6 @@ public class CompraVendaConfigMB extends AppMB  {
 
 	private static final long serialVersionUID = 1L;
 	
-	
-     		
 	/**
 	* Entidade da ação injetado pela CDI
 	*/
@@ -58,6 +50,7 @@ public class CompraVendaConfigMB extends AppMB  {
               this.entityPlc = new CompraVendaConfigEntity();
               this.newEntity();
         }
+        
         return (CompraVendaConfigEntity)this.entityPlc;     	
 	}
 		
