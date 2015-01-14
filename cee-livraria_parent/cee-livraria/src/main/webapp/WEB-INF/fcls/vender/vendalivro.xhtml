@@ -100,19 +100,19 @@ function formataVlUnitario(indice) {
 								<plcf:titulo value="#{msg['label.livro']}"/>
 							</f:facet>
 							<plcf:vinculado id="livro" value="#{vendalivro.livro}" 
-								propSelPop="livro" idExibe="S" lookupTamanho="50"
+								propSelPop="livro" idExibe="S" lookupTamanho="25"
 								autoRecuperacaoPropriedade="codigoBarras"
-								autoComplete="true" idTamanho="15" evento="y"
+								autoComplete="true" idTamanho="8" evento="y"
 								idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.LivroEntity" 
 								actionSel="livrosel" modal="S" ajudaChave="ajuda.livro" 
-								onkeydown="selecionaPorTecla(event,this);" larg="900"
+								onkeydown="selecionaPorTecla(event,this);" larg="950"
 								riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.livro?q=titulo')"/> 
 						</h:column>  
 						<h:column> 
 							<f:facet name="header">
 								<plcf:titulo value="#{msg['label.quantidade']}"/>
 							</f:facet>
-							<plcf:numerico id="quantidade" value="#{vendalivro.quantidade}" numCasas="0" onfocus="formataVlUnitario(#{rowCounter.indexIteration})" tamanho="10" ajudaChave="ajuda.quantidade"/> 
+							<plcf:numerico id="quantidade" value="#{vendalivro.quantidade}" numCasas="0" onfocus="formataVlUnitario(#{rowCounter.indexIteration})" tamanho="6" ajudaChave="ajuda.quantidade"/> 
 						</h:column>  
 						<h:column> 
 							<f:facet name="header">
@@ -124,27 +124,34 @@ function formataVlUnitario(indice) {
 							<f:facet name="header">
 								<plcf:titulo value="#{msg['label.valorUnitario']}"/>
 							</f:facet>  
-							<plcf:numerico id="valorUnitario" value="#{vendalivro.valorUnitario}" somenteLeitura="S" tamanho="15" ajudaChave="ajuda.valorUnitario"/> 
+							<plcf:numerico id="valorUnitario" value="#{vendalivro.valorUnitario}" somenteLeitura="S" tamanho="10" ajudaChave="ajuda.valorUnitario"/> 
 						</h:column>  
 						<h:column> 
 							<f:facet name="header">
 								<plcf:titulo value="#{msg['label.valorTotal']}"/>
 							</f:facet>  
-							<plcf:numerico id="valorTotal" value="#{vendalivro.valorTotal}" tamanho="15" somenteLeitura="S" ajudaChave="ajuda.valorTotal"/> 
+							<plcf:numerico id="valorTotal" value="#{vendalivro.valorTotal}" tamanho="10" somenteLeitura="S" ajudaChave="ajuda.valorTotal"/> 
 						</h:column> 
 					</plcf:iteracao> 
-					<plcf:linha halign="right"> 
-						<plcf:celula> 
-							<plcf:titulo value="#{msg['label.valorTotalGeral']}"/>  
-						</plcf:celula>  
-						<plcf:celula>
-							<plcf:titulo value="&nbsp;:&nbsp;&nbsp;"/>  
-						</plcf:celula>  
-						<plcf:celula> 
-							<plcf:numerico id="valorTotalGeral" value="#{valorTotalGeral}" tamanho="15" somenteLeitura="S" ajudaChave="ajuda.valorTotalGeral"/> 
-						</plcf:celula>  
-						<plcf:celula width="40"/>
-					</plcf:linha>
+				</fieldset> 
+			</div> 
+			<div id="plc-corpo-formulario2" class="plc-corpo-formulario plc-form-tabular"> 
+				<fieldset class="plc-fieldset"> 
+					<legend class="plc-fieldset-legend">#{msg['vendalivro.pagamento']}</legend>  
+					<plcf:iteracao var="pagamento" id="pagamento" value="#{pagamentoLista.itens}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.valorTotalGeral']}"/>  
+							</f:facet>  
+							<plcf:numerico id="valorTotalGeral" value="#{pagamento.valor}" tamanho="8" numCasas="2" somenteLeitura="N" ajudaChave="ajuda.valorTotalGeral"/> 
+						</h:column>  
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.formaPagLivroGeral']}"/>  
+							</f:facet>  
+							<plcf:comboDinamico id="formaPagLivro" value="#{pagamento.formaPag}" dominio="FormaPagLivroEntity" exibeBranco="S" ajudaChave="ajuda.formaPagtoGeral"/> 
+						</h:column>  
+					</plcf:iteracao> 
 				</fieldset> 
 			</div> 
 		</ui:define> 

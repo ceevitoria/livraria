@@ -6,6 +6,7 @@ import java.util.List;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.config.RetornoConfig;
+import com.cee.livraria.entity.pagamento.PagamentoList;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
@@ -25,9 +26,10 @@ public interface IAppFacade extends IPlcFacade {
 	 * Registra a venda de livros
 	 * @param context Contexto da aplicacao
 	 * @param entityList Relacao dos livros sendo vendidos
+	 * @param pagtoList Relacao dos pagamentos para a venda sendo realizada
 	 * @return RetornoConfig Retorna com informacoes sobre a venda realizada (@see RetornoConfig)
 	 */
-	public RetornoConfig registrarVendaLivros(PlcBaseContextVO context, List entityList) throws PlcException;
+	public RetornoConfig registrarVendaLivros(PlcBaseContextVO context, List entityList, List pagtoList) throws PlcException;
 
 	/**
 	 * Busca os dados para a venda dos livros

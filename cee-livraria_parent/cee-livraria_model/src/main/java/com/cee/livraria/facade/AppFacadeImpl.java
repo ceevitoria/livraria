@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.config.RetornoConfig;
+import com.cee.livraria.entity.pagamento.PagamentoList;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.model.CaixaRepository;
 import com.cee.livraria.model.VendaLivroRepository;
@@ -43,8 +44,8 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	@PlcTransactional(commit=true)
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.REQUIRED)
 	@Override
-	public RetornoConfig registrarVendaLivros(PlcBaseContextVO context, List entityList) throws PlcException {
-		return vendaLivroRepository.registrarVendaLivros(context, entityList);
+	public RetornoConfig registrarVendaLivros(PlcBaseContextVO context, List entityList, List pagtoList) throws PlcException {
+		return vendaLivroRepository.registrarVendaLivros(context, entityList, pagtoList);
 	}
 	
 	@PlcTransactional(commit=false)

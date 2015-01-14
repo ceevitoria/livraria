@@ -48,11 +48,11 @@
 			<ui:insert name="livraria_acao_registrarVenda">	 	           
 				<plcf:botaoAcao id="botaoAcaoRegistrarVenda" urlIcone="ico iGravar" acao="registrarVendaLivros" 
 					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
-					label="cee.evt.registrar" limpaForm="true"  
-					botaoArrayID="REGISTRAR_VENDA" rendered="#{requestScope.exibeBtnRegistrarVendaLivro=='S'}" 
+					label="cee.evt.registrar" limpaForm="false"  
+					botaoArrayID="REGISTRAR_VENDA" rendered="#{requestScope.exibeBtnRegistrarVenda=='S'}" 
 					onclick="beforeSubmit();">
-					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
-					<f:param name="skipValidation" value="true"/>
+					<f:ajax event="action" execute="@form" render="@form" imediate="false" onerror="plc.manipulaErroAjax"/>
+					<f:param name="skipValidation" value="false"/>
 				</plcf:botaoAcao>	
 			</ui:insert>
 

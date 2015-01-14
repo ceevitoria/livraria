@@ -15,6 +15,8 @@
 		<class>com.cee.livraria.entity.EspiritoEntity</class>
 		<class>com.cee.livraria.entity.LocalizacaoEntity</class>
 		<class>com.cee.livraria.entity.LivroEntity</class>
+		<class>com.cee.livraria.entity.pagamento.FormaPagtoEntity</class>
+		<class>com.cee.livraria.entity.pagamento.FormaPagLivroEntity</class>
 		<class>com.cee.livraria.entity.tabpreco.RegraPesquisaLivros</class>
 		<class>com.cee.livraria.entity.tabpreco.TabelaPrecoEntity</class>
 		<class>com.cee.livraria.entity.tabpreco.ItemTabelaEntity</class>

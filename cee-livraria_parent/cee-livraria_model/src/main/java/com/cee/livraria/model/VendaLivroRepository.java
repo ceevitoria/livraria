@@ -30,6 +30,7 @@ import com.cee.livraria.entity.estoque.Movimento;
 import com.cee.livraria.entity.estoque.MovimentoEntity;
 import com.cee.livraria.entity.estoque.TipoMovimento;
 import com.cee.livraria.entity.estoque.apoio.VendaLivro;
+import com.cee.livraria.entity.pagamento.Pagamento;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.persistence.jpa.livro.LivroDAO;
 import com.cee.livraria.persistence.jpa.vendalivro.VendaLivroDAO;
@@ -59,7 +60,7 @@ public class VendaLivroRepository {
 	 * @param entityList
 	 * @throws PlcException
 	 */
-	public RetornoConfig registrarVendaLivros(PlcBaseContextVO context, List entityList) throws PlcException {
+	public RetornoConfig registrarVendaLivros(PlcBaseContextVO context, List entityList, List pagtoList) throws PlcException {
 		this.context = context;
 		Date dataVenda = new Date();
 
@@ -68,6 +69,7 @@ public class VendaLivroRepository {
 		
 		try {
 			carregaConfiguracao(context);
+			validarValorPagamento(entityList, pagtoList);
 			
 			double valor = registraMovimento(entityList, dataVenda);
 			int quantidade = atualizaEstoque(entityList, dataVenda);
@@ -82,6 +84,54 @@ public class VendaLivroRepository {
 		return new RetornoConfig(config, alertas, mensagens);
 	}
 
+	@SuppressWarnings("rawtypes")
+	private void validarValorPagamento(List itensVenda, List pagtoList) throws PlcException {
+		
+		// Calcula o valor todos dos itens a serem vendidos
+		double valorItens = 0.0;
+		
+		for (Object o : itensVenda) {
+			VendaLivro cl = (VendaLivro)o;
+			
+			// Evita os itens em branco
+			if (cl.getLivro() != null && cl.getLivro().getId() != null) {
+				double valorItem = cl.getQuantidade().doubleValue() * cl.getValorUnitario().doubleValue();
+				valorItem = Math.round(valorItem * 100.00) / 100.00;
+				valorItens += valorItem;
+			}
+		}
+
+		valorItens = Math.round(valorItens * 100.00) / 100.00;
+
+		// Calcula o valor total informado para todas as formas de pagamento  
+		double valorFormasPagto = 0.0;
+		
+		for (Object o : pagtoList) {
+			Pagamento pagto = (Pagamento)o;
+			
+			if (pagto != null && pagto.getValor() != null) {
+				double valorFormaPagto = pagto.getValor().doubleValue();
+				valorFormaPagto = Math.round(valorFormaPagto * 100.00) / 100.00;
+				valorFormasPagto += valorFormaPagto;
+			}
+		}
+
+		valorFormasPagto = Math.round(valorFormasPagto * 100.00) / 100.00;
+		
+		if (config.getPermitirVendaPagtoDivergente().equals(PlcYesNo.N) && valorFormasPagto != valorItens) {
+			throw new PlcException("{erro.vendaLivro.valorPagto.diverge.valorTotal}", 
+				new Object[] {String.format("R$ %,.02f", new Object[]{valorItens}), 
+							  String.format("R$ %,.02f", new Object[]{valorFormasPagto})});
+			
+		} else if (config.getPermitirVendaPagtoDivergente().equals(PlcYesNo.S) && 
+				config.getValorMaximoAjustePagtoDivergente().doubleValue() < Math.abs(valorFormasPagto-valorItens)) {
+			throw new PlcException("{erro.vendaLivro.valorPagto.diverge.valorTotal}", 
+					new Object[] {String.format("R$ %,.02f", new Object[]{valorItens}), 
+								  String.format("R$ %,.02f", new Object[]{valorFormasPagto})});
+		}
+		
+	}
+	
 	/**
 	 * @param context
 	 */
@@ -104,7 +154,8 @@ public class VendaLivroRepository {
 	 * @throws PlcException
 	 */
 	private int atualizaEstoque(List relacaoLivros, Date dataVenda) throws PlcException {
-		int quantidade = 0;
+		int qtEstoque = 0;
+		int qtVendida = 0;
 		
 		for (Object o : relacaoLivros) {
 			VendaLivro vl = (VendaLivro)o;
@@ -116,19 +167,20 @@ public class VendaLivroRepository {
 				if (lista != null && lista.size() == 1) {
 					Estoque estoque = (Estoque)lista.get(0);
 					
-					quantidade = estoque.getQuantidade() - vl.getQuantidade();
+					qtVendida += vl.getQuantidade();
+					qtEstoque = estoque.getQuantidade() - vl.getQuantidade();
 					
-					if (config.getPermiteVendaParaEstoqueNegativo().equals(PlcYesNo.N) && quantidade < 0) {
+					if (config.getPermiteVendaParaEstoqueNegativo().equals(PlcYesNo.N) && qtEstoque < 0) {
 						throw new PlcException("{erro.vendaLivro.estoque.negativo.atingido}", new Object[]{vl.getLivro().getCodigoBarras(), vl.getLivro().getTitulo()});
 					}
 					
-					if (config.getAlertaEstoqueNegativoAtingido().equals(PlcYesNo.S) && quantidade < 0) {
+					if (config.getAlertaEstoqueNegativoAtingido().equals(PlcYesNo.S) && qtEstoque < 0) {
 						alertas.add(String.format("Quantidade negativa em estoque atingida para o livro '%s-%s'", new Object[]{vl.getLivro().getCodigoBarras(), vl.getLivro().getTitulo()}));
-					} else if (config.getAlertaEstoqueMinimoAtingido().equals(PlcYesNo.S) && quantidade <= estoque.getQuantidadeMinima()) {
+					} else if (config.getAlertaEstoqueMinimoAtingido().equals(PlcYesNo.S) && qtEstoque <= estoque.getQuantidadeMinima()) {
 						alertas.add(String.format("Quantidade minina em estoque atingida para o livro '%s-%s'", new Object[]{vl.getLivro().getCodigoBarras(), vl.getLivro().getTitulo()}));
 					}
 					
-					estoque.setQuantidade(quantidade);
+					estoque.setQuantidade(qtEstoque);
 
 					estoque.setDataUltAlteracao(dataVenda);
 					estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
@@ -140,7 +192,7 @@ public class VendaLivroRepository {
 			}
 		}
 		 
-		return quantidade;
+		return qtVendida;
 	}
 
 	/**

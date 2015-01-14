@@ -17,6 +17,8 @@
 	classesLookup={
 		com.cee.livraria.entity.LocalizacaoEntity.class,
 		com.cee.livraria.entity.EspiritoEntity.class,
+		com.cee.livraria.entity.pagamento.FormaPagtoEntity.class,
+		com.cee.livraria.entity.pagamento.FormaPagLivroEntity.class,
 		com.cee.livraria.entity.AutorEntity.class,
 		com.cee.livraria.entity.EditoraEntity.class,
 		com.cee.livraria.entity.ColecaoEntity.class}

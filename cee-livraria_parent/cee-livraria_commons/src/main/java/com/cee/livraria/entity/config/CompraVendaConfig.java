@@ -1,5 +1,7 @@
 package com.cee.livraria.entity.config;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -7,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
 import com.powerlogic.jcompany.domain.type.PlcYesNo;
@@ -43,6 +46,14 @@ public abstract class CompraVendaConfig extends Config {
 	@Column(length = 1)
 	private TipoMensagemSucessoVendaConfig tipoMensagemSucessoVenda = TipoMensagemSucessoVendaConfig.V;
 
+	@Enumerated(EnumType.STRING)
+	@Column(length = 1)
+	private PlcYesNo permitirVendaPagtoDivergente = PlcYesNo.S;
+
+	@Digits(integer = 10, fraction = 2)
+	private BigDecimal valorMaximoAjustePagtoDivergente = new BigDecimal(0.10);
+
+	
 	public Long getId() {
 		return id;
 	}
@@ -103,6 +114,24 @@ public abstract class CompraVendaConfig extends Config {
 	public void setTipoMensagemSucessoVenda(
 			TipoMensagemSucessoVendaConfig tipoMensagemSucessoVenda) {
 		this.tipoMensagemSucessoVenda = tipoMensagemSucessoVenda;
+	}
+
+	public PlcYesNo getPermitirVendaPagtoDivergente() {
+		return permitirVendaPagtoDivergente;
+	}
+
+	public void setPermitirVendaPagtoDivergente(
+			PlcYesNo permitirVendaPagtoDivergente) {
+		this.permitirVendaPagtoDivergente = permitirVendaPagtoDivergente;
+	}
+
+	public BigDecimal getValorMaximoAjustePagtoDivergente() {
+		return valorMaximoAjustePagtoDivergente;
+	}
+
+	public void setValorMaximoAjustePagtoDivergente(
+			BigDecimal valorMaximoAjustePagtoDivergente) {
+		this.valorMaximoAjustePagtoDivergente = valorMaximoAjustePagtoDivergente;
 	}
 
 }

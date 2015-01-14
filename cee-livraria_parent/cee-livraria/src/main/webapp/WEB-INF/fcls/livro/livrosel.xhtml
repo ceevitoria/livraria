@@ -16,11 +16,11 @@
 						<plcf:linha> 
 							<plcf:celula> 
 								<plcf:titulo value="#{msg['label.codigoBarras']}"/>  
-								<plcf:texto id="codigoBarras" value="#{livro.codigoBarras}" ajudaChave="ajuda.codigoBarras" tamanho="40"/> 
+								<plcf:texto id="codigoBarras" value="#{livro.codigoBarras}" ajudaChave="ajuda.codigoBarras" tamanho="15"/> 
 							</plcf:celula>  
 							<plcf:celula><!-- columnSpan="2" --> 
 								<plcf:titulo value="#{msg['label.titulo']}"/>  
-								<plcf:texto id="titulo" value="#{livro.titulo}" ajudaChave="ajuda.titulo" tamanho="50"/> 
+								<plcf:texto id="titulo" value="#{livro.titulo}" ajudaChave="ajuda.titulo" tamanho="30"/> 
 							</plcf:celula>  
 							<plcf:celula> 
 								<plcf:titulo value="#{msg['label.edicao']}"/>  
@@ -34,7 +34,7 @@
 							</plcf:celula>  
 							<plcf:celula > 
 								<plcf:titulo value="#{msg['label.palavrasChave']}"/>  
-								<plcf:texto id="palavrasChave" value="#{livro.palavrasChave}" ajudaChave="ajuda.palavrasChave" tamanho="50"/> 
+								<plcf:texto id="palavrasChave" value="#{livro.palavrasChave}" ajudaChave="ajuda.palavrasChave" tamanho="30"/> 
 							</plcf:celula>  
 							<plcf:celula> 
 								<plcf:titulo value="#{msg['label.editora']}"/>  
@@ -52,7 +52,7 @@
 							</plcf:celula>  
 							<plcf:celula columnSpan="2"> 
 								<plcf:titulo value="#{msg['label.isbn']}"/>  
-								<plcf:texto id="isbn" value="#{livro.isbn}" ajudaChave="ajuda.isbn"/> 
+								<plcf:texto id="isbn" value="#{livro.isbn}" tamanho="15" ajudaChave="ajuda.isbn"/> 
 							</plcf:celula> 
 						</plcf:linha> 
 					</plcf:tabela> 
