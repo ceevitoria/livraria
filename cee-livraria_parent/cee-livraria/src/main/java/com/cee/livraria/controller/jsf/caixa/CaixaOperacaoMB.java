@@ -1,11 +1,14 @@
 package com.cee.livraria.controller.jsf.caixa;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.cee.livraria.commons.AppConstants;
+import com.cee.livraria.commons.AppUserProfileVO;
 import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.StatusCaixa;

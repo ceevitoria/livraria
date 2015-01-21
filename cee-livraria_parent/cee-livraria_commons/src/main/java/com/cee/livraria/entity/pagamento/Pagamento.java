@@ -4,19 +4,19 @@ import java.math.BigDecimal;
 
 public class Pagamento {
 
-	private FormaPagLivro formaPag;
+	private FormaPagto formaPagto;
 	private BigDecimal valor;
 
 	public Pagamento() {
 		super();
 	}
 	
-	public FormaPagLivro getFormaPag() {
-		return formaPag;
+	public FormaPagto getFormaPagto() {
+		return formaPagto;
 	}
 
-	public void setFormaPag(FormaPagLivro formaPag) {
-		this.formaPag = formaPag;
+	public void setFormaPagto(FormaPagto formaPagto) {
+		this.formaPagto = formaPagto;
 	}
 
 	public BigDecimal getValor() {

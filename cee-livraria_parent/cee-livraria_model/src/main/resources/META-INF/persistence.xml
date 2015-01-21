@@ -26,6 +26,7 @@
 		<class>com.cee.livraria.entity.estoque.ItemMovimentoEntity</class>
 		<class>com.cee.livraria.entity.caixa.CaixaEntity</class>
 		<class>com.cee.livraria.entity.caixa.CaixaMovimentoEntity</class>
+		<class>com.cee.livraria.entity.caixa.CaixaFormaPagtoEntity</class>
 		<class>com.cee.livraria.entity.config.CompraVendaConfigEntity</class>
 		<class>com.cee.livraria.entity.config.OperacaoCaixaConfigEntity</class>
 		<class>com.cee.livraria.entity.estoque.conferencia.ConferenciaEntity</class>

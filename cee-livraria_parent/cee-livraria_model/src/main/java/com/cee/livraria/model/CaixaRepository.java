@@ -9,7 +9,10 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
+import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
+import com.cee.livraria.entity.caixa.CaixaFormaPagto;
+import com.cee.livraria.entity.caixa.CaixaFormaPagtoEntity;
 import com.cee.livraria.entity.caixa.CaixaMovimento;
 import com.cee.livraria.entity.caixa.CaixaMovimentoEntity;
 import com.cee.livraria.entity.caixa.StatusCaixa;
@@ -17,6 +20,8 @@ import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.config.OperacaoCaixaConfig;
 import com.cee.livraria.entity.config.OperacaoCaixaConfigEntity;
 import com.cee.livraria.entity.config.RetornoConfig;
+import com.cee.livraria.entity.pagamento.Pagamento;
+import com.cee.livraria.entity.pagamento.PagamentoList;
 import com.cee.livraria.persistence.jpa.caixa.CaixaDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
@@ -232,7 +237,7 @@ public class CaixaRepository extends PlcBaseRepository {
 	private void atualizaStatusSaldoCaixa(PlcBaseContextVO context, CaixaEntity caixa, Date data, StatusCaixa status) {
 		caixa.setStatus(status);
 		
-		if (caixa.getValor() != null && caixa.getValor().doubleValue() > 0.0) {
+		if (caixa.getValor() != null && caixa.getValor().doubleValue() != 0.0) {
 			caixa.setSaldo(caixa.getSaldo().add(caixa.getValor()));
 		}
 
@@ -320,5 +325,22 @@ public class CaixaRepository extends PlcBaseRepository {
 		jpa.insert(context, movAjusteCaixa);
 	}
 
+	public PagamentoList obterPagamentosCaixa(PlcBaseContextVO context, Caixa caixa) {
+		PagamentoList lista = new PagamentoList();
+		
+		@SuppressWarnings("unchecked")
+		List<CaixaFormaPagto> l = (List<CaixaFormaPagto>)jpa.findByFields(context, CaixaFormaPagtoEntity.class, "querySelByCaixa", new String[]{"caixa"}, new Object[]{caixa});
+		
+		for (CaixaFormaPagto caixaFormaPagto : l) {
+			Pagamento pagto = new Pagamento();
+			
+			pagto.setFormaPagto(caixaFormaPagto.getFormaPagto());
+			pagto.setValor(caixaFormaPagto.getValor());
+			
+			lista.getItens().add(pagto);	
+		}
+		
+		return lista;
+	}
 	
 }

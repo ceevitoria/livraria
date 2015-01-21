@@ -13,6 +13,8 @@ import com.cee.livraria.entity.Livro;
 import com.cee.livraria.entity.LivroEntity;
 import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
+import com.cee.livraria.entity.caixa.CaixaFormaPagto;
+import com.cee.livraria.entity.caixa.CaixaFormaPagtoEntity;
 import com.cee.livraria.entity.caixa.CaixaMovimento;
 import com.cee.livraria.entity.caixa.CaixaMovimentoEntity;
 import com.cee.livraria.entity.caixa.StatusCaixa;
@@ -30,6 +32,8 @@ import com.cee.livraria.entity.estoque.Movimento;
 import com.cee.livraria.entity.estoque.MovimentoEntity;
 import com.cee.livraria.entity.estoque.TipoMovimento;
 import com.cee.livraria.entity.estoque.apoio.VendaLivro;
+import com.cee.livraria.entity.pagamento.FormaPagLivro;
+import com.cee.livraria.entity.pagamento.FormaPagto;
 import com.cee.livraria.entity.pagamento.Pagamento;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.persistence.jpa.livro.LivroDAO;
@@ -69,11 +73,14 @@ public class VendaLivroRepository {
 		
 		try {
 			carregaConfiguracao(context);
-			validarValorPagamento(entityList, pagtoList);
 			
-			double valor = registraMovimento(entityList, dataVenda);
+			double valorPago = validarValorPagamento(entityList, pagtoList);
+			
+			registraMovimento(entityList, dataVenda, valorPago);
+			
 			int quantidade = atualizaEstoque(entityList, dataVenda);
-			atualizaCaixa(entityList, dataVenda, valor, quantidade);
+			
+			atualizaCaixa(entityList, pagtoList, dataVenda, valorPago, quantidade);
 			
 		} catch (PlcException plcE) {
 			throw plcE;
@@ -85,7 +92,7 @@ public class VendaLivroRepository {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void validarValorPagamento(List itensVenda, List pagtoList) throws PlcException {
+	private double validarValorPagamento(List itensVenda, List pagtoList) throws PlcException {
 		
 		// Calcula o valor todos dos itens a serem vendidos
 		double valorItens = 0.0;
@@ -130,6 +137,7 @@ public class VendaLivroRepository {
 								  String.format("R$ %,.02f", new Object[]{valorFormasPagto})});
 		}
 		
+		return valorFormasPagto; 
 	}
 	
 	/**
@@ -198,28 +206,35 @@ public class VendaLivroRepository {
 	/**
 	 * Atualiza o saldo do caixa e cria um movimento de caixa para a venda atual.
 	 * Valida se existe um registro para o caixa e se o mesmo encontra-se aberto.
-	 * @param relacaoLivros Relação dos livros sendo vendidos
+	 * @param livros Relação dos livros sendo vendidos
+	 * @param pagtos Relação dos pagamentos realizados
 	 * @param dataVenda Data em que a venda foi realizada
 	 * @param valor Valor total da venda
 	 * @param quantidade Quantidade total de livros vendidos
 	 */
-	private void atualizaCaixa(List relacaoLivros, Date dataVenda, double valor, int quantidade) throws PlcException {
-
+	private void atualizaCaixa(List livros, List pagtos, Date dataVenda, double valor, int quantidade) throws PlcException {
+		Caixa caixa = null;
+		
 		//recupera o caixa existente (só deve existir um único registro de caixa)
 		@SuppressWarnings("rawtypes")
 		List lista = jpa.findAll(context, CaixaEntity.class, null);
 		
-		if (lista.size() != 1) {
+		for (Object object : lista) {
+			
+			if ("LIV".equals(((Caixa)object).getSistema())) {
+				caixa = (Caixa)object;
+			}
+		}
+		
+		if (caixa == null) {
 			throw new PlcException("{erro.caixa.inexistente}");
 		}
 		
-		Caixa caixa = (Caixa)lista.get(0);
-
 		if (caixa.getStatus() != StatusCaixa.A) {
 			throw new PlcException("{erro.caixa.fechado}");
 		}
 		
-		List<String> listaObs = montaObservacao(relacaoLivros);
+		List<String> listaObs = montaObservacao(livros);
 
 		configuraMensagens(listaObs, valor, quantidade);
 		
@@ -228,6 +243,58 @@ public class VendaLivroRepository {
 
 		//atualiza o saldo do caixa
 		atualizaSaldoCaixa(dataVenda, caixa, movCaixa);
+		
+		atualizaPagtosCaixa(dataVenda, caixa, pagtos);
+	}
+
+	/**
+	 * Atualiza o caixa para cada tipo de pagamento realizado
+	 * @param dataVenda
+	 * @param caixa
+	 * @param pagtos Lista dos pagamentos realizados
+	 */
+	@SuppressWarnings("unchecked")
+	private void atualizaPagtosCaixa(Date dataVenda, Caixa caixa, List pagtos) throws PlcException {
+		List<CaixaFormaPagto> formasPagtoCaixa = caixa.getCaixaFormaPagto();
+		
+		for (Object o : pagtos) {
+			boolean achou = false;
+			Pagamento pagto = (Pagamento)o;
+			FormaPagto formaPagto = pagto.getFormaPagto();
+			
+			if (formaPagto != null) {
+				
+				for (CaixaFormaPagto caixaFormaPagto : formasPagtoCaixa) {
+					caixaFormaPagto = (CaixaFormaPagto)jpa.findById(context, CaixaFormaPagtoEntity.class, caixaFormaPagto.getId());
+					
+					if (caixaFormaPagto.getFormaPagto().getId().equals(formaPagto.getId())) {
+						caixaFormaPagto.setValor(caixaFormaPagto.getValor().add(pagto.getValor()));
+						
+						caixaFormaPagto.setDataUltAlteracao(dataVenda);
+						caixaFormaPagto.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
+						
+						jpa.update(context, caixaFormaPagto);
+						
+						achou = true;
+					}
+				}
+
+				if (!achou) {
+					CaixaFormaPagto caixaFormaPagto = new CaixaFormaPagtoEntity();
+					caixaFormaPagto.setCaixa(caixa);
+					caixaFormaPagto.setData(dataVenda);
+					caixaFormaPagto.setFormaPagto(formaPagto);
+					caixaFormaPagto.setValor(pagto.getValor());
+					caixaFormaPagto.setSistema("LIV");
+					caixaFormaPagto.setSitHistoricoPlc("A");
+
+					caixaFormaPagto.setDataUltAlteracao(dataVenda);
+					caixaFormaPagto.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
+					
+					jpa.insert(context, caixaFormaPagto);
+				}
+			}
+		}
 	}
 
 	/**
@@ -335,10 +402,10 @@ public class VendaLivroRepository {
 	 * Registra o movimento de venda do tipo normal para os livros relacionados
 	 * @param relacaoLivros Relação dos livros sendo vendidos
 	 * @param dataVenda Data em que a venda foi realizada
-	 * @return valorGeral 
+	 * @param valorPago Valor efetivamente pago nesta venda (soma das formas de pagamento)
 	 */
-	private double registraMovimento(@SuppressWarnings("rawtypes") List relacaoLivros, Date dataVenda) throws PlcException {
-		double valorGeral = 0.0;
+	private void registraMovimento(@SuppressWarnings("rawtypes") List relacaoLivros, Date dataVenda, double valorPago) throws PlcException {
+//		double valorGeral = 0.0;
 		Movimento mov = new MovimentoEntity();
 		List<ItemMovimento> itens = new ArrayList<ItemMovimento>();
 		
@@ -367,16 +434,16 @@ public class VendaLivroRepository {
 				
 				itens.add(item);
 				
-				valorGeral += valorTotalItem;
+//				valorGeral += valorTotalItem;
 			}
 		}
 
-		valorGeral = Math.round(valorGeral * 100.00) / 100.00;
+//		valorGeral = Math.round(valorGeral * 100.00) / 100.00;
 		
 		mov.setData(dataVenda);
 		mov.setTipo(TipoMovimento.S);
 		mov.setModo(ModoMovimento.N);
-		mov.setValor(BigDecimal.valueOf(valorGeral));
+		mov.setValor(BigDecimal.valueOf(valorPago));
 		mov.setItemMovimento(itens);
 
 		mov.setDataUltAlteracao(dataVenda);
@@ -384,7 +451,7 @@ public class VendaLivroRepository {
 
 		jpa.insert(context, mov);
 
-		return valorGeral;
+//		return valorGeral;
 	}
 
 	/**

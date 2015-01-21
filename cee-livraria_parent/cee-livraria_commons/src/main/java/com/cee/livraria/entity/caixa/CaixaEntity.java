@@ -23,8 +23,10 @@ import javax.validation.constraints.Size;
 @Table(name = "CAIXA")
 @SequenceGenerator(name = "SE_CAIXA", sequenceName = "SE_CAIXA")
 @Access(AccessType.FIELD)
-@NamedQueries({ 
-	@NamedQuery(name = "CaixaEntity.querySelLookup", query = "select id as id, saldo as saldo from CaixaEntity where id = ? order by id asc") })
+@NamedQueries({
+	@NamedQuery(name="CaixaEntity.queryMan", query="from CaixaEntity where sistema = 'LIV'"),
+	@NamedQuery(name="CaixaEntity.querySel", query="select id as id, status as status, saldo as saldo from CaixaEntity where sistema = 'LIV'"),
+	@NamedQuery(name="CaixaEntity.querySelLookup", query="select id as id, saldo as saldo from CaixaEntity where id = ? and sistema = 'LIV' order by id asc") })
 public class CaixaEntity extends Caixa {
 
 	private static final long serialVersionUID = 1L;
@@ -61,7 +63,11 @@ public class CaixaEntity extends Caixa {
 
 	@Override
 	public String toString() {
-		return getSaldo().toString();
+		if (getStatus() != null && getSaldo() != null) {
+			return ("A".equals(getStatus().toString()) ? "[Aberto" : "[Fechado") + " - R$ " + getSaldo().toString() + "]";
+		} else {
+			return "Caixa";
+		}
 	}
 
 }

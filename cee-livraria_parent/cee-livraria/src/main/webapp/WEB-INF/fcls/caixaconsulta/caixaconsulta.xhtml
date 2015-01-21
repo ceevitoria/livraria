@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:p="http://primefaces.prime.com.tr/ui" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition template="/fcls/template/PlcGeralTemplate.xhtml"> 
+		<ui:define name="plc-corpo-formulario"> 
+			<div id="plc-corpo-formulario" class="plc-corpo-formulario plc-form-simples"> 
+				<plcf:tabela tituloChave="caixa.mestre.titulo.comp"> 
+					<plcf:linha> 
+						<plcf:celula> 
+							<plcf:titulo tituloChave="label.saldo"/>  
+							<plcf:exibe value="#{caixaconsulta.saldo}"/> 
+						</plcf:celula>  
+						<plcf:celula> 
+							<plcf:titulo tituloChave="label.status"/>  
+							<plcf:exibe value="#{caixaconsulta.status}" /> 
+						</plcf:celula> 
+					</plcf:linha> 
+				</plcf:tabela> 
+			</div> 
+			<div id="plc-corpo-formulario" class="plc-corpo-formulario plc-form-tabular"> 
+				<fieldset class="plc-fieldset"> 
+					<legend class="plc-fieldset-legend">#{msg['caixaconsulta.formasPagto']}</legend>  
+					<plcf:iteracao var="pagamento" id="pagamento" value="#{pagtoLista.itens}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
+						<h:column> 
+							<h:outputText value="#{rowCounter.index}."/>
+						</h:column>  
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.formaPagto']}"/>  
+							</f:facet>  
+							<plcf:comboDinamico id="formaPagto" value="#{pagamento.formaPagto}" dominio="FormaPagtoEntity" somenteLeitura="S" exibeBranco="S" ajudaChave="ajuda.formaPagtoGeral"/> 
+						</h:column>  
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.valorTotal']}"/>  
+							</f:facet>  
+							<plcf:numerico id="valor" value="#{pagamento.valor}" tamanho="8" numCasas="2" somenteLeitura="S" ajudaChave="ajuda.valorTotalGeral"/> 
+						</h:column>  
+					</plcf:iteracao> 
+				</fieldset> 
+			</div> 
+		</ui:define> 
+	</ui:composition> 
+</html>

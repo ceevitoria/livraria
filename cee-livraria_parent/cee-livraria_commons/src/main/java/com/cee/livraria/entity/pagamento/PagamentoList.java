@@ -1,26 +1,25 @@
 package com.cee.livraria.entity.pagamento;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public final class PagamentoList implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private List<Object> itens;
+	private List itens;
 
 	public PagamentoList() {
 		super();
+		itens = new ArrayList();
 	}
 
-	public List<Object> getItens() {
+	public List getItens() {
 		return itens;
 	}
 
-	public void setItens(List<Object> itens) {
+	public void setItens(List itens) {
 		this.itens = itens;
 	}
     

@@ -3,6 +3,7 @@ package com.cee.livraria.facade;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.config.RetornoConfig;
@@ -47,4 +48,11 @@ public interface IAppFacade extends IPlcFacade {
 	 */
 	public RetornoConfig registrarOperacaoCaixa(PlcBaseContextVO context, TipoMovimentoCaixa tipo, CaixaEntity caixa) throws PlcException;
 	
+	/**
+	 * Recupera os pagamentos do caixa informado separados por forma de pagamento
+	 * @param context
+	 * @param caixa
+	 * @return PagamentoList
+	 */
+	public PagamentoList obterPagamentosCaixa(PlcBaseContextVO context, Caixa caixa) throws PlcException;
 }

@@ -14,8 +14,8 @@ import com.cee.livraria.controller.jsf.AppMB;
 import com.cee.livraria.entity.config.CompraVendaConfig;
 import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.estoque.apoio.VendaLivro;
-import com.cee.livraria.entity.pagamento.FormaPagLivro;
-import com.cee.livraria.entity.pagamento.FormaPagLivroEntity;
+import com.cee.livraria.entity.pagamento.FormaPagto;
+import com.cee.livraria.entity.pagamento.FormaPagtoEntity;
 import com.cee.livraria.entity.pagamento.Pagamento;
 import com.cee.livraria.entity.pagamento.PagamentoList;
 import com.cee.livraria.facade.IAppFacade;
@@ -111,7 +111,7 @@ public class VendaLivroMB extends AppMB  {
 		if (this.pagamentoList==null) {
 			this.pagamentoList = new PagamentoList();
 			
-			List itens = new ArrayList<Object>();
+			List<Pagamento> itens = pagamentoList.getItens();
 			
 			Pagamento pagto = null;
 			
@@ -180,7 +180,7 @@ public class VendaLivroMB extends AppMB  {
 		for (Object o : itens) {
 			Pagamento vl = (Pagamento)o;
 			vl.setValor(null);
-			vl.setFormaPag(null);
+			vl.setFormaPagto(null);
 		}
 	}
 
@@ -243,17 +243,16 @@ public class VendaLivroMB extends AppMB  {
 		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 
 		List itens = entityListPlc.getItensPlc();
-		entityListPlc.setItensPlc(itens);
 
 		BigDecimal valor = iocControleFacadeUtil.getFacade(IAppFacade.class).buscarDadosVendaLivros(context, itens);
 		
-		Collection formasPag = iocControleFacadeUtil.getFacade(IAppFacade.class).findSimpleList(context, FormaPagLivroEntity.class, "id");
+		Collection formasPagto = iocControleFacadeUtil.getFacade(IAppFacade.class).findSimpleList(context, FormaPagtoEntity.class, "id");
 		
 		//Setar o primeiro item para o pagamento integral
-		FormaPagLivro formaPag = (FormaPagLivro)formasPag.iterator().next();
+		FormaPagto formaPagto = (FormaPagto)formasPagto.iterator().next();
 		Pagamento pagto = (Pagamento)pagamentoList.getItens().get(0);
 		pagto.setValor(valor);
-		pagto.setFormaPag(formaPag);
+		pagto.setFormaPagto(formaPagto);
 		
 		limpaItensSemLivros(itens);
 		

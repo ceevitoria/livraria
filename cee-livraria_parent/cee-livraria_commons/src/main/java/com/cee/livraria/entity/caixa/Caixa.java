@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.ForeignKey;
 
@@ -25,11 +26,19 @@ import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
 
 @MappedSuperclass
 public abstract class Caixa extends AppBaseEntity {
+	
+//	@NotNull
+//	@Size(max = 1)
+//	private String sitHistoricoPlc="A";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_CAIXA")
 	private Long id;
 
+	@NotNull
+	@Column(length = 3)
+	private String sistema = "LIV";
+	
 	@Enumerated(EnumType.STRING)
 	@NotNull
 	@Column(length = 1)
@@ -45,6 +54,13 @@ public abstract class Caixa extends AppBaseEntity {
 	@PlcValMultiplicity(referenceProperty = "observacao", message = "{jcompany.aplicacao.mestredetalhe.multiplicidade.CaixaMovimentoEntity}")
 	@Valid
 	private List<CaixaMovimento> caixaMovimento;
+
+	@OneToMany(targetEntity = com.cee.livraria.entity.caixa.CaixaFormaPagtoEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "caixa")
+	@ForeignKey(name = "FK_CAIXAFORMAPAGTO_CAIXA")
+	@PlcValDuplicity(property = "observacao")
+	@PlcValMultiplicity(referenceProperty = "observacao", message = "{jcompany.aplicacao.mestredetalhe.multiplicidade.CaixaFormaPagtoEntity}")
+	@Valid
+	private List<CaixaFormaPagto> caixaFormaPagto;
 	
 	public Long getId() {
 		return id;
@@ -52,6 +68,14 @@ public abstract class Caixa extends AppBaseEntity {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getSistema() {
+		return sistema;
+	}
+
+	public void setSistema(String sistema) {
+		this.sistema = sistema;
 	}
 
 	public StatusCaixa getStatus() {
@@ -77,5 +101,21 @@ public abstract class Caixa extends AppBaseEntity {
 	public void setCaixaMovimento(List<CaixaMovimento> caixaMovimento) {
 		this.caixaMovimento = caixaMovimento;
 	}
+
+	public List<CaixaFormaPagto> getCaixaFormaPagto() {
+		return caixaFormaPagto;
+	}
+
+	public void setCaixaFormaPagto(List<CaixaFormaPagto> caixaFormaPagto) {
+		this.caixaFormaPagto = caixaFormaPagto;
+	}
+
+//	public String getSitHistoricoPlc() {
+//		return sitHistoricoPlc;
+//	}
+//
+//	public void setSitHistoricoPlc(String sitHistoricoPlc) {
+//		this.sitHistoricoPlc=sitHistoricoPlc;
+//	}
 
 }

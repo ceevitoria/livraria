@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
 
+import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.config.RetornoConfig;
@@ -26,7 +27,7 @@ import com.powerlogic.jcompany.model.annotation.PlcTransactional;
 public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 
 	@Inject
-	private LivroDAO livroDAO;
+	private LivroDAO jpaDAO;
 	
 	@Inject
 	private VendaLivroRepository vendaLivroRepository;
@@ -38,7 +39,7 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
 	@Override
 	public PrecoTabela findPrecoTabela(PlcBaseContextVO context, Long idLivro) throws PlcException {
-		return livroDAO.obterPrecoTabela(context, idLivro);
+		return jpaDAO.obterPrecoTabela(context, idLivro);
 	}
 
 	@PlcTransactional(commit=true)
@@ -61,4 +62,12 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	public RetornoConfig registrarOperacaoCaixa(PlcBaseContextVO context, TipoMovimentoCaixa tipo,  CaixaEntity caixa) throws PlcException {
 		return caixaRepository.registrarOperacaoCaixa(context, tipo, caixa);
 	}
+	
+	@PlcTransactional(commit=false)
+	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
+	@Override
+	public PagamentoList obterPagamentosCaixa(PlcBaseContextVO context, Caixa caixa) throws PlcException {
+		return caixaRepository.obterPagamentosCaixa(context, caixa);
+	}
+	
 }

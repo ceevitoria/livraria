@@ -39,6 +39,8 @@ public class AppUserProfileUtil extends PlcBaseUserProfileUtil {
 		// Importante transformar o valor de String para Object
 		Map<String,Object> m = new HashMap<String,Object>();
 
+//		m.put("sistema", "LIV");
+		
 		AppUserProfileVO appUsuarioPerfilVO = (AppUserProfileVO) plcPerfilVO;
 
 		// Deve estar ao final da montagem do Map
@@ -52,6 +54,6 @@ public class AppUserProfileUtil extends PlcBaseUserProfileUtil {
 
 		// Retorna objeto modificado
 		return plcPerfilVO;
-
-		}
+	}
+	
 }
