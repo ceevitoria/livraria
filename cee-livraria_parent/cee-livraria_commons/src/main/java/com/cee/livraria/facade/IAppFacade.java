@@ -44,9 +44,10 @@ public interface IAppFacade extends IPlcFacade {
 	 * Registra um movimento do caixa 
 	 * @param context Contexto da aplicacao
 	 * @param CaixaEntity O caixa
+	 * @param List itens Formas de pagamento relacionadas à operacao do caixa
 	 * @return RetornoConfig Retorna com informacoes sobre a operacao do caixa (@see RetornoConfig)
 	 */
-	public RetornoConfig registrarOperacaoCaixa(PlcBaseContextVO context, TipoMovimentoCaixa tipo, CaixaEntity caixa) throws PlcException;
+	public RetornoConfig registrarOperacaoCaixa(PlcBaseContextVO context, TipoMovimentoCaixa tipo, CaixaEntity caixa, List itens) throws PlcException;
 	
 	/**
 	 * Recupera os pagamentos do caixa informado separados por forma de pagamento

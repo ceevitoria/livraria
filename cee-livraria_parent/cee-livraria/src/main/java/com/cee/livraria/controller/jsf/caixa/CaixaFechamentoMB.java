@@ -1,12 +1,19 @@
 package com.cee.livraria.controller.jsf.caixa;
 
+import java.util.List;
+
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.cee.livraria.controller.jsf.AppMB;
+import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
+import com.cee.livraria.entity.caixa.StatusCaixa;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
+import com.cee.livraria.entity.config.RetornoConfig;
+import com.cee.livraria.entity.pagamento.Pagamento;
+import com.cee.livraria.entity.pagamento.PagamentoList;
 import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.commons.annotation.PlcUriIoC;
 import com.powerlogic.jcompany.commons.config.qualifiers.QPlcDefault;
@@ -34,18 +41,40 @@ public class CaixaFechamentoMB extends AppMB {
 	@Inject @QPlcDefault 
 	protected CaixaOperacaoMB caixaOperacaoMB;
 	
+	protected PagamentoList pagamentoList;
+	
 	/**
 	 * Entidade da ação injetado pela CDI
 	 */
 	@Produces
 	@Named("caixafechamento")
 	public CaixaEntity createEntityPlc() {
+
 		if (this.entityPlc == null) {
 			this.entityPlc = new CaixaEntity();
 			this.newEntity();
 		}
 
 		return (CaixaEntity) this.entityPlc;
+	}
+	
+	@Produces  @Named("pagtoListaFechamento") 
+	public PagamentoList criaListaPagamento() {
+		
+		if (this.pagamentoList==null) {
+    		pagamentoList = new PagamentoList();
+
+			List<Pagamento> itens = pagamentoList.getItens();
+			
+			Pagamento pagto = null;
+			
+			for (int i=0; i<2; i++) {
+				pagto = new Pagamento();
+				itens.add(pagto);
+			}
+		}
+
+		return pagamentoList;
 	}
 	
 	public void handleButtonsAccordingFormPattern() {
@@ -58,8 +87,23 @@ public class CaixaFechamentoMB extends AppMB {
 	 * @throws PlcException 
 	 */
 	public String registrarFechamentoCaixa() throws PlcException, Exception  {
-		caixaOperacaoMB.registrarOperacaoCaixa(TipoMovimentoCaixa.FE, this.entityPlc);
+		RetornoConfig ret = caixaOperacaoMB.registrarOperacaoCaixa(TipoMovimentoCaixa.FE, this.entityPlc, this.pagamentoList.getItens());
 		
+		Caixa caixa = (Caixa) ret.getObject();
+
+		this.entityPlc = caixa;
+		
+		pagamentoList = new PagamentoList();
+
+		List<Pagamento> itens = pagamentoList.getItens();
+		
+		Pagamento pagto = null;
+		
+		for (int i=0; i<2; i++) {
+			pagto = new Pagamento();
+			itens.add(pagto);
+		}
+
 		return baseEditMB.getDefaultNavigationFlow(); 
 	}
 	

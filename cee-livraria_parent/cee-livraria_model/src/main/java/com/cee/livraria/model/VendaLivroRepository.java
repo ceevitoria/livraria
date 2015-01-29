@@ -88,7 +88,7 @@ public class VendaLivroRepository {
 			throw new PlcException("VendaLivroRepository", "registrarVendaLivros",	e, log, "");
 		}
 		
-		return new RetornoConfig(config, alertas, mensagens);
+		return new RetornoConfig(null, config, alertas, mensagens);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -215,7 +215,7 @@ public class VendaLivroRepository {
 	private void atualizaCaixa(List livros, List pagtos, Date dataVenda, double valor, int quantidade) throws PlcException {
 		Caixa caixa = null;
 		
-		//recupera o caixa existente (só deve existir um único registro de caixa)
+		//recupera o caixa existente (só deve existir um único registro de caixa para o sistema "LIV")
 		@SuppressWarnings("rawtypes")
 		List lista = jpa.findAll(context, CaixaEntity.class, null);
 		

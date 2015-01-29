@@ -70,7 +70,7 @@
 			<ui:insert name="livraria_acao_registrarAberturaCaixa">	 	           
 				<plcf:botaoAcao id="botaoAcaoRegistrarAberturaCaixa" urlIcone="ico iGravar" acao="registrarAberturaCaixa" 
 					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
-					label="cee.evt.registrar" limpaForm="true"  
+					label="cee.evt.registrar" limpaForm="true"   
 					botaoArrayID="REGISTRAR_ABERTURA_CAIXA" rendered="#{requestScope.exibeBtnRegistrarAberturaCaixa=='S'}" 
 					onclick="beforeSubmit();">
 					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>

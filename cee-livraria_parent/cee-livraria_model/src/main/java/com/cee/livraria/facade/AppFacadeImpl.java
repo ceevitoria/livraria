@@ -59,8 +59,8 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	@PlcTransactional(commit=true)
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.REQUIRED)
 	@Override
-	public RetornoConfig registrarOperacaoCaixa(PlcBaseContextVO context, TipoMovimentoCaixa tipo,  CaixaEntity caixa) throws PlcException {
-		return caixaRepository.registrarOperacaoCaixa(context, tipo, caixa);
+	public RetornoConfig registrarOperacaoCaixa(PlcBaseContextVO context, TipoMovimentoCaixa tipo,  CaixaEntity caixa, List itens) throws PlcException {
+		return caixaRepository.registrarOperacaoCaixa(context, tipo, caixa, itens);
 	}
 	
 	@PlcTransactional(commit=false)

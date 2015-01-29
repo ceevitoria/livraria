@@ -1,5 +1,6 @@
 package com.cee.livraria.controller.jsf.caixa;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,31 +81,50 @@ public class CaixaConsultaMB extends AppMB  {
     		caixaConsulta = new CaixaConsulta();
     		
     		caixaConsulta.setStatus(caixa.getStatus());
-    		caixaConsulta.setSaldo(caixa.getSaldo());
+    		
+    		if(contextUtil.getRequest().isUserInRole("Gestor")) {
+    			caixaConsulta.setSaldo(caixa.getSaldo());
+    		}
+    		
         }
         
         return caixaConsulta;     	
 	}
 	
-	@Produces  @Named("pagtoLista") 
+	@Produces  @Named("pagtoListaConsulta") 
 	public PagamentoList criaListaPagamento() {
 		if (this.pagamentoList==null) {
 
+			
     		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
     		
     		Caixa caixa = new CaixaEntity();
     		caixa.setSistema("LIV");
 
-    		List<Caixa> caixaList = (List<Caixa>)iocControleFacadeUtil.getFacade(IAppFacade.class).findList(context, caixa, "", 0, 0);
+    		if(contextUtil.getRequest().isUserInRole("Gestor")) {
+    			List<Caixa> caixaList = (List<Caixa>)iocControleFacadeUtil.getFacade(IAppFacade.class).findList(context, caixa, "", 0, 0);
+    			
+    			caixa = (Caixa)caixaList.get(0);
+    			
+    			this.entityPlc = new CaixaConsulta();
+    			
+    			((CaixaConsulta)this.entityPlc).setStatus(caixa.getStatus());
+    			((CaixaConsulta)this.entityPlc).setSaldo(caixa.getSaldo());
+    			
+    			pagamentoList = (PagamentoList)iocControleFacadeUtil.getFacade(IAppFacade.class).obterPagamentosCaixa(context, caixa);
+    		} else {
+        		pagamentoList = new PagamentoList();
+
+    			List<Pagamento> itens = pagamentoList.getItens();
+    			
+    			Pagamento pagto = null;
+    			
+    			for (int i=0; i<2; i++) {
+    				pagto = new Pagamento();
+    				itens.add(pagto);
+    			}
+    		}
     		
-    		caixa = (Caixa)caixaList.get(0);
-    		
-    		this.entityPlc = new CaixaConsulta();
-    		
-    		((CaixaConsulta)this.entityPlc).setStatus(caixa.getStatus());
-    		((CaixaConsulta)this.entityPlc).setSaldo(caixa.getSaldo());
-    		
-    		pagamentoList = (PagamentoList)iocControleFacadeUtil.getFacade(IAppFacade.class).obterPagamentosCaixa(context, caixa);
 		}
 
 		return pagamentoList;
@@ -132,8 +152,5 @@ public class CaixaConsultaMB extends AppMB  {
 	
     public void handleButtonsAccordingFormPattern() {
 		contextUtil.getRequest().setAttribute(PlcConstants.ACAO.EXIBE_BT_GRAVAR, PlcConstants.NAO_EXIBIR);
-//		contextUtil.getRequest().setAttribute(PlcConstants.ACAO.EXIBE_BT_ABRIR, PlcConstants.EXIBIR);
-//		contextUtil.getRequest().setAttribute(PlcConstants.ACAO.EXIBE_JCOMPANY_EVT_INCLUIR_SUBDETALHE, PlcConstants.NAO_EXIBIR);
-//		contextUtil.getRequest().setAttribute(PlcConstants.ACAO.EVT_INCLUIR_DETALHE, PlcConstants.NAO_EXIBIR);
     }
 }

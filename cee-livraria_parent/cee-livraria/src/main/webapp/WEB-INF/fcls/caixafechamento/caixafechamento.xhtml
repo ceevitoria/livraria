@@ -23,16 +23,38 @@
 						</plcf:celula> 
 					</plcf:linha>  
 					<plcf:linha> 
-						<plcf:celula> 
-							<plcf:titulo value="#{msg['label.fechamento.caixa.valor']}"/>  
-							<plcf:numerico id="valor" value="#{caixafechamento.valor}" ajudaChave="ajuda.fechamento.caixa.valor"/> 
-						</plcf:celula>  
-						<plcf:celula> 
+						<plcf:celula columnSpan="2"> 
 							<plcf:titulo value="#{msg['label.observacao']}"/>  
 							<plcf:area id="observacao" value="#{caixafechamento.observacao}" numLinhas="5" colunas="100" ajudaChave="ajuda.observacao"/> 
 						</plcf:celula> 
+						<!-- plcf:celula> 
+							<plcf:titulo value="#{msg['label.fechamento.caixa.valor']}"/>  
+							<plcf:numerico id="valor" value="#{caixafechamento.valor}" ajudaChave="ajuda.fechamento.caixa.valor"/> 
+						</plcf:celula-->  
 					</plcf:linha> 
 				</plcf:tabela> 
+			</div> 
+			<div id="plc-corpo-formulario" class="plc-corpo-formulario plc-form-tabular"> 
+				<fieldset class="plc-fieldset"> 
+					<legend class="plc-fieldset-legend">#{msg['caixafechamento.formasPagto']}</legend>  
+					<plcf:iteracao var="pagamento" id="pagamento" value="#{pagtoListaFechamento.itens}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
+						<h:column> 
+							<h:outputText value="#{rowCounter.index}."/>
+						</h:column>  
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.formaPagto']}"/>  
+							</f:facet>  
+							<plcf:comboDinamico id="formaPagto" value="#{pagamento.formaPagto}" dominio="FormaPagtoEntity" somenteLeitura="N" exibeBranco="S" ajudaChave="ajuda.formaPagtoGeral"/> 
+						</h:column>  
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.valorTotal']}"/>  
+							</f:facet>  
+							<plcf:numerico id="valor" value="#{pagamento.valor}" somenteLeitura="N" ajudaChave="ajuda.valorTotalGeral"/> 
+						</h:column>  
+					</plcf:iteracao> 
+				</fieldset> 
 			</div> 
 		</ui:define> 
 	</ui:composition> 

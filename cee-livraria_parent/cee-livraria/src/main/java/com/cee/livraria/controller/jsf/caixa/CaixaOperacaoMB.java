@@ -1,14 +1,12 @@
 package com.cee.livraria.controller.jsf.caixa;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.cee.livraria.commons.AppConstants;
-import com.cee.livraria.commons.AppUserProfileVO;
 import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.StatusCaixa;
@@ -56,6 +54,10 @@ public class CaixaOperacaoMB extends PlcBaseParentMB implements Serializable {
 		
 		contextUtil.getRequest().setAttribute(PlcConstants.ACAO.EXIBE_BT_GRAVAR, PlcConstants.NAO_EXIBIR);
 		
+		if(!contextUtil.getRequest().isUserInRole("Gestor")) {
+			caixa.setSaldo(null);
+		}
+		
 		String url = urlUtil.resolveCollaborationNameFromUrl(contextUtil.getRequest());
 		
 		if (url.contains("abertura")) {
@@ -67,10 +69,6 @@ public class CaixaOperacaoMB extends PlcBaseParentMB implements Serializable {
 			}
 		} else if (url.contains("sangria")) {
 			
-			if(!contextUtil.getRequest().isUserInRole("Gestor")) {
-				caixa.setSaldo(null);
-			}
-			
 			// Só exisbe o botão para registrar sangria do Caixa se ele estiver aberto
 			if (caixa != null && StatusCaixa.A.equals(caixa.getStatus())) {
 				contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_REGISTRAR_SANGRIA_CAIXA, PlcConstants.EXIBIR);
@@ -79,10 +77,6 @@ public class CaixaOperacaoMB extends PlcBaseParentMB implements Serializable {
 			}
 		} else if (url.contains("suprimento")) {
 			
-			if(!contextUtil.getRequest().isUserInRole("Gestor")) {
-				caixa.setSaldo(null);
-			}
-			
 			// Só exisbe o botão para registrar suprimento do Caixa se ele estiver aberto
 			if (caixa != null && StatusCaixa.A.equals(caixa.getStatus())) {
 				contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_REGISTRAR_SUPRIMENTO_CAIXA, PlcConstants.EXIBIR);
@@ -90,10 +84,6 @@ public class CaixaOperacaoMB extends PlcBaseParentMB implements Serializable {
 				contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_REGISTRAR_SUPRIMENTO_CAIXA, PlcConstants.NAO_EXIBIR);
 			}
 		} else if (url.contains("fechamento")) {
-			
-			if(!contextUtil.getRequest().isUserInRole("Gestor")) {
-				caixa.setSaldo(null);
-			}
 			
 			// Só exisbe o botão para registrar fechamento do Caixa se ele estiver aberto
 			if (caixa != null && StatusCaixa.A.equals(caixa.getStatus())) {
@@ -109,13 +99,13 @@ public class CaixaOperacaoMB extends PlcBaseParentMB implements Serializable {
 	 * @throws Exception 
 	 * @throws PlcException 
 	 */
-	public void registrarOperacaoCaixa(TipoMovimentoCaixa tipo, Object entityPlc) throws PlcException, Exception  {
+	public RetornoConfig registrarOperacaoCaixa(TipoMovimentoCaixa tipo, Object entityPlc, List itens) throws PlcException, Exception  {
 		RetornoConfig ret = null;
 		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 		
 		CaixaEntity caixa = (CaixaEntity)entityPlc;
 
-		ret = iocControleFacadeUtil.getFacade(IAppFacade.class).registrarOperacaoCaixa(context, tipo, caixa);
+		ret = iocControleFacadeUtil.getFacade(IAppFacade.class).registrarOperacaoCaixa(context, tipo, caixa, itens);
 		
 		if (ret.getAlertas().size() > 0) {
 			
@@ -131,6 +121,7 @@ public class CaixaOperacaoMB extends PlcBaseParentMB implements Serializable {
 			}
 		}
 		
+		return ret;
 	}
 	
 }

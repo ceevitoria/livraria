@@ -15,20 +15,28 @@
 				<plcf:tabela tituloChave="caixa.mestre.titulo.comp"> 
 					<plcf:linha> 
 						<plcf:celula> 
+							<plcf:titulo value="#{msg['label.saldo.atual']}"/>  
+							<plcf:numerico id="saldo" value="#{caixaconsulta.saldo}" disabled="true" ajudaChave="ajuda.saldo"/> 
+						</plcf:celula>  
+						<plcf:celula> 
+							<plcf:titulo value="#{msg['label.status.atual']}"/>  
+							<plcf:comboEstatico id="status" value="#{caixaconsulta.status}" disabled="true" dominio="StatusCaixa" exibeBranco="N" ajudaChave="ajuda.status"/> 
+						</plcf:celula> 
+						<!-- plcf:celula> 
 							<plcf:titulo tituloChave="label.saldo"/>  
-							<plcf:exibe value="#{caixaconsulta.saldo}"/> 
+							<plcf:exibe value="#{caixaconsulta.saldo}"  /> 
 						</plcf:celula>  
 						<plcf:celula> 
 							<plcf:titulo tituloChave="label.status"/>  
 							<plcf:exibe value="#{caixaconsulta.status}" /> 
-						</plcf:celula> 
+						</plcf:celula--> 
 					</plcf:linha> 
 				</plcf:tabela> 
 			</div> 
 			<div id="plc-corpo-formulario" class="plc-corpo-formulario plc-form-tabular"> 
 				<fieldset class="plc-fieldset"> 
 					<legend class="plc-fieldset-legend">#{msg['caixaconsulta.formasPagto']}</legend>  
-					<plcf:iteracao var="pagamento" id="pagamento" value="#{pagtoLista.itens}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
+					<plcf:iteracao var="pagamento" id="pagamento" value="#{pagtoListaConsulta.itens}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
 						<h:column> 
 							<h:outputText value="#{rowCounter.index}."/>
 						</h:column>  
@@ -42,7 +50,7 @@
 							<f:facet name="header">
 								<plcf:titulo value="#{msg['label.valorTotal']}"/>  
 							</f:facet>  
-							<plcf:numerico id="valor" value="#{pagamento.valor}" tamanho="8" numCasas="2" somenteLeitura="S" ajudaChave="ajuda.valorTotalGeral"/> 
+							<plcf:numerico id="valor" value="#{pagamento.valor}" somenteLeitura="S" ajudaChave="ajuda.valorTotalGeral"/> 
 						</h:column>  
 					</plcf:iteracao> 
 				</fieldset> 

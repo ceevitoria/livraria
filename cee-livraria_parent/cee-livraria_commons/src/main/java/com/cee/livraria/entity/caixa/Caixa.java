@@ -16,7 +16,6 @@ import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.ForeignKey;
 
@@ -27,10 +26,6 @@ import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
 @MappedSuperclass
 public abstract class Caixa extends AppBaseEntity {
 	
-//	@NotNull
-//	@Size(max = 1)
-//	private String sitHistoricoPlc="A";
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_CAIXA")
 	private Long id;
@@ -109,13 +104,5 @@ public abstract class Caixa extends AppBaseEntity {
 	public void setCaixaFormaPagto(List<CaixaFormaPagto> caixaFormaPagto) {
 		this.caixaFormaPagto = caixaFormaPagto;
 	}
-
-//	public String getSitHistoricoPlc() {
-//		return sitHistoricoPlc;
-//	}
-//
-//	public void setSitHistoricoPlc(String sitHistoricoPlc) {
-//		this.sitHistoricoPlc=sitHistoricoPlc;
-//	}
 
 }
