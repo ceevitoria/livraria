@@ -9,7 +9,7 @@
 	xmlns:tr="http://myfaces.apache.org/trinidad" 
 	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
 	<ui:composition template="/fcls/template/PlcGeralTemplate.xhtml"> 
-		<ui:define name="plc-corpo-formulario"> 
+		<ui:define name="plc-corpo-formulario">
 			<div id="plc-corpo-formulario" class="plc-corpo-formulario plc-form-simples"> 
 				<plcf:tabela tituloChave="compravendaconfig.titulo"> 
 					<plcf:linha> 
@@ -50,27 +50,43 @@
 									<plcf:comboEstatico id="tipoMensagemSucessoVenda" value="#{compravendaconfig.tipoMensagemSucessoVenda}" dominio="TipoMensagemSucessoVendaConfig" exibeBranco="S" ajudaChave="ajuda.tipoMensagemSucessoVenda"/> 
 								</plcf:celula> 
 							</plcf:linha> 
-							
 							<plcf:linha> 
 								<plcf:celula> 
 									<plcf:titulo value="#{msg['label.permitirVendaPagtoDivergente']}"/>  
 									<plcf:radio id="permitirVendaPagtoDivergente" 
 										layout="horizontal" 
 										value="#{compravendaconfig.permitirVendaPagtoDivergente}" 
-										dominio="PlcYesNo" 
+										dominio="PlcYesNo"
 										ajudaChave="ajuda.permitirVendaPagtoDivergente"/> 
 								</plcf:celula> 
 								<plcf:celula> 
-									<plcf:titulo value="#{msg['label.valorMaximoAjustePagtoDivergente']}"/>  
+									<plcf:titulo id="tituloValorMaximoAjustePagtoDivergente" value="#{msg['label.valorMaximoAjustePagtoDivergente']}"/>  
 									<plcf:numerico id="valorMaximoAjustePagtoDivergente" 
 										value="#{compravendaconfig.valorMaximoAjustePagtoDivergente}"
 										ajudaChave="ajuda.valorMaximoAjustePagtoDivergente"/> 
 								</plcf:celula> 
 							</plcf:linha>  
-							
 						</plcf:tabela> 
 					</plcf:linha>  
 				</plcf:tabela> 
+				<script type="text/javascript">//<![CDATA[
+					plc.jq("#corpo\\:formulario\\:exibirMensagemSucessoVenda\\:_0").click(function(){
+					    plc.jq("#corpo\\:formulario\\:tipoMensagemSucessoVenda").prop('disabled', false);
+					    plc.jq("#corpo\\:formulario\\:tipoMensagemSucessoVenda").focus();
+					});
+					plc.jq("#corpo\\:formulario\\:exibirMensagemSucessoVenda\\:_1").click(function(){
+					    plc.jq("#corpo\\:formulario\\:tipoMensagemSucessoVenda").val("");					    
+					    plc.jq("#corpo\\:formulario\\:tipoMensagemSucessoVenda").prop('disabled', true);
+					});
+					plc.jq("#corpo\\:formulario\\:permitirVendaPagtoDivergente\\:_0").click(function(){
+					    plc.jq("#corpo\\:formulario\\:valorMaximoAjustePagtoDivergente").prop('disabled', false);
+					    plc.jq("#corpo\\:formulario\\:valorMaximoAjustePagtoDivergente").focus();
+					});
+					plc.jq("#corpo\\:formulario\\:permitirVendaPagtoDivergente\\:_1").click(function(){
+					    plc.jq("#corpo\\:formulario\\:valorMaximoAjustePagtoDivergente").prop('disabled', true);
+					});
+				//]]>
+				</script>		 	
 			</div> 
 		</ui:define> 
 	</ui:composition> 

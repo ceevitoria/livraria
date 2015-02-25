@@ -481,7 +481,7 @@ public class VendaLivroRepository {
 						cl.setValorUnitario(preco.getPrecoTabela());
 					} else {
 						Livro livro = (Livro)jpa.findById(context, LivroEntity.class, cl.getLivro().getId());
-						cl.setValorUnitario(livro.getPreco());
+						cl.setValorUnitario(livro.getPrecoVendaSugerido());
 					}
 					
 					if (cl.getQuantidade() == null || cl.getQuantidade() == 0) {

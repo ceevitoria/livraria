@@ -47,7 +47,7 @@ public class LivroDAO extends AppJpaDAO  {
 		@PlcQueryParameter(name="autor", expression="obj2 = :autor") Autor autor,
 		@PlcQueryParameter(name="editora", expression="obj3 = :editora") Editora editora,
 		@PlcQueryParameter(name="colecao", expression="obj4 = :colecao") Colecao colecao,
-		@PlcQueryParameter(name="preco", expression="obj.preco = :preco") BigDecimal preco
+		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal precoUltCompra
 	);
 
 	@PlcQuery("querySel")
@@ -63,7 +63,7 @@ public class LivroDAO extends AppJpaDAO  {
 		@PlcQueryParameter(name="autor", expression="obj2 = :autor") Autor autor,
 		@PlcQueryParameter(name="editora", expression="obj3 = :editora") Editora editora,
 		@PlcQueryParameter(name="colecao", expression="obj4 = :colecao") Colecao colecao,
-		@PlcQueryParameter(name="preco", expression="obj.preco = :preco") BigDecimal preco
+		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal preco
 	);
 	
 	public PrecoTabela obterPrecoTabela(PlcBaseContextVO context, Long idLivro) throws PlcException {

@@ -62,10 +62,12 @@ abstract public class Livro extends AppBaseEntity implements Estocavel {
 	@ForeignKey(name = "FK_LIVRO_COLECAO")
 	private Colecao colecao;
 	
-	//@DecimalMax(value="1000")
 	@Digits(integer = 10, fraction = 2)
-	private BigDecimal preco;
+	private BigDecimal precoUltCompra;
 
+	@Digits(integer = 10, fraction = 2)
+	private BigDecimal precoVendaSugerido;
+	
 	public Long getId() {
 		return id;
 	}
@@ -146,12 +148,21 @@ abstract public class Livro extends AppBaseEntity implements Estocavel {
 		this.colecao = colecao;
 	}
 
-	public BigDecimal getPreco() {
-		return preco;
+	public BigDecimal getPrecoUltCompra() {
+		return precoUltCompra;
 	}
 
-	public void setPreco(BigDecimal preco) {
-		this.preco = preco;
+	public void setPrecoUltCompra(BigDecimal precoUltCompra) {
+		this.precoUltCompra = precoUltCompra;
 	}
 
+	public BigDecimal getPrecoVendaSugerido() {
+		return precoVendaSugerido;
+	}
+
+	public void setPrecoVendaSugerido(BigDecimal precoVendaSugerido) {
+		this.precoVendaSugerido = precoVendaSugerido;
+	}
+
+	
 }

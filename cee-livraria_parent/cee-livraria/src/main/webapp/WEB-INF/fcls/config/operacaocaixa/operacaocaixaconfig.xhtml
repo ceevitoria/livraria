@@ -23,11 +23,6 @@
 							<plcf:linha> 
 								<plcf:celula> 
 									<plcf:titulo value="#{msg['label.permitirFechamentoSaldoDivergente']}"/>  
-									<!-- plcf:radio id="permitirFechamentoSaldoDivergente" layout="horizontal" value="#{operacaocaixaconfig.permitirFechamentoSaldoDivergente}" dominio="PlcYesNo" ajudaChave="ajuda.permitirFechamentoSaldoDivergente">
-										<f:ajax event="change" 
-											render="permitirAjusteSaldoDivergente valorMaximoAjusteSaldoDivergente" 
-											onerror="plc.manipulaErroAjax"/> 
-									</plcf:radio-->
 									<plcf:radio id="permitirFechamentoSaldoDivergente" layout="horizontal" value="#{operacaocaixaconfig.permitirFechamentoSaldoDivergente}" dominio="PlcYesNo" ajudaChave="ajuda.permitirFechamentoSaldoDivergente">
 									</plcf:radio> 
 								</plcf:celula>  
@@ -35,13 +30,6 @@
 							<plcf:linha> 
 								<plcf:celula> 
 									<plcf:titulo value="#{msg['label.permitirAjusteSaldoDivergente']}"/>  
-									<!-- plcf:radio id="permitirAjusteSaldoDivergente" 
-										layout="horizontal" 
-										skipCacheControl="true" 
-										value="#{operacaocaixaconfig.permitirAjusteSaldoDivergente}" 
-										dominio="PlcYesNo" 
-										disabled="#{operacaocaixaconfig.permitirFechamentoSaldoDivergente=='N'}" 
-										ajudaChave="ajuda.permitirAjusteSaldoDivergente"/--> 
 									<plcf:radio id="permitirAjusteSaldoDivergente" 
 										layout="horizontal" 
 										value="#{operacaocaixaconfig.permitirAjusteSaldoDivergente}" 
@@ -60,6 +48,17 @@
 						</plcf:tabela> 
 					</plcf:linha>  
 				</plcf:tabela> 
+				<script type="text/javascript">//<![CDATA[
+					plc.jq("#corpo\\:formulario\\:permitirAjusteSaldoDivergente\\:_0").click(function(){
+					    plc.jq("#corpo\\:formulario\\:valorMaximoAjusteSaldoDivergente").prop('disabled', false);
+					    plc.jq("#corpo\\:formulario\\:valorMaximoAjusteSaldoDivergente").focus();
+					    //plc.jq('#corpo\\:formulario\\:valorMaximoAjusteSaldoDivergente').fadeOut(100).fadeIn(1000);					    
+					});
+					plc.jq("#corpo\\:formulario\\:permitirAjusteSaldoDivergente\\:_1").click(function(){
+					    plc.jq("#corpo\\:formulario\\:valorMaximoAjusteSaldoDivergente").prop('disabled', true);
+					});
+				//]]>
+				</script>		 	
 			</div> 
 		</ui:define> 
 	</ui:composition> 

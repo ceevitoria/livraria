@@ -5,7 +5,8 @@
 	xmlns:h="http://java.sun.com/jsf/html" 
 	xmlns:f="http://java.sun.com/jsf/core" 
 	xmlns:ui="http://java.sun.com/jsf/facelets" 
-	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf"
+	xmlns:plct="http://www.powerlogic.com.br/plct" 
 	xmlns:tr="http://myfaces.apache.org/trinidad" 
 	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
 	<ui:composition> 
@@ -13,23 +14,23 @@
 			<plcf:linha> 
 				<plcf:celula columnSpan="2"> 
 					<plcf:titulo value="#{msg['label.codigoBarras']}"/>  
-					<plcf:texto id="codigoBarras" value="#{livro.codigoBarras}" ajudaChave="ajuda.codigoBarras" tamanho="50"/> 
+					<plcf:texto id="codigoBarras" value="#{livro.codigoBarras}" ajudaChave="ajuda.codigoBarras" tamanho="30"/> 
 				</plcf:celula>  
 			</plcf:linha>  
 			<plcf:linha> 
 				<plcf:celula columnSpan="2"> 
 					<plcf:titulo value="#{msg['label.titulo']}"/>  
-					<plcf:texto id="titulo" value="#{livro.titulo}" ajudaChave="ajuda.titulo" tamanho="100"/> 
+					<plcf:texto id="titulo" value="#{livro.titulo}" ajudaChave="ajuda.titulo" tamanho="60"/> 
 				</plcf:celula> 
 			</plcf:linha>  
 			<plcf:linha> 
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.isbn']}"/>  
-					<plcf:texto id="isbn" value="#{livro.isbn}" tamanho="30" ajudaChave="ajuda.isbn"/> 
+					<plcf:texto id="isbn" value="#{livro.isbn}" tamanho="20" ajudaChave="ajuda.isbn"/> 
 				</plcf:celula>  
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.palavrasChave']}"/>  
-					<plcf:texto id="palavrasChave" value="#{livro.palavrasChave}" ajudaChave="ajuda.palavrasChave" tamanho="40"/> 
+					<plcf:texto id="palavrasChave" value="#{livro.palavrasChave}" ajudaChave="ajuda.palavrasChave" tamanho="30"/> 
 				</plcf:celula> 
 			</plcf:linha>  
 			<plcf:linha> 
@@ -58,11 +59,11 @@
 					<plcf:comboDinamico id="colecao" value="#{livro.colecao}" dominio="ColecaoEntity" exibeBranco="S" ajudaChave="ajuda.colecao"/> 
 				</plcf:celula> 
 				<plcf:celula> 
-					<plcf:titulo value="#{msg['label.preco.original']}"/>
-					<plcf:numerico id="precoOrig1" value="#{livro.preco}" somenteLeitura="S" rendered="#{not plct:execOneArg(request,'isUserInRole','Gestor')}" 
-						tamanho="10" ajudaChave="ajuda.preco.original"/> 
-					<plcf:numerico id="precoOrig2" value="#{livro.preco}" somenteLeitura="N" rendered="#{plct:execOneArg(request,'isUserInRole','Gestor')}"
-						tamanho="10" ajudaChave="ajuda.preco.original"/> 
+					<plcf:titulo value="#{msg['label.preco.ultima.compra']}"/>
+					<plcf:numerico id="precoOrig1" value="#{livro.precoUltCompra}" somenteLeitura="S" rendered="#{not plct:execOneArg(request,'isUserInRole','Gestor')}" 
+						tamanho="10" ajudaChave="ajuda.preco.ultima.compra"/> 
+					<plcf:numerico id="precoOrig2" value="#{livro.precoUltCompra}" somenteLeitura="N" rendered="#{plct:execOneArg(request,'isUserInRole','Gestor')}"
+						tamanho="10" ajudaChave="ajuda.preco.ultima.compra"/> 
 				</plcf:celula>  
 			</plcf:linha> 
 			<plcf:linha> 
@@ -77,7 +78,15 @@
 				</plcf:celula> 
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.preco.venda']}"/>  
-					<plcf:numerico id="precoTabela" value="#{livro.precoTabela}" somenteLeitura="S" tamanho="10" ajudaChave="ajuda.preco.venda"/> 
+					<plcf:numerico id="precoTabela" value="#{livro.precoTabela}" 
+						somenteLeitura="S" tamanho="10" ajudaChave="ajuda.preco.venda"
+						exibeSe="#{not empty livro.idTabela}" />
+					<plcf:numerico id="precoVendaSugerido1" value="#{livro.precoVendaSugerido}" 
+						somenteLeitura="N" tamanho="10" ajudaChave="ajuda.preco.venda.sugerido"
+						exibeSe="#{empty livro.idTabela and plct:execOneArg(request,'isUserInRole','Gestor')}" /> 
+					<plcf:numerico id="precoVendaSugerido2" value="#{livro.precoVendaSugerido}" 
+						somenteLeitura="S" tamanho="10" ajudaChave="ajuda.preco.venda.sugerido"
+						exibeSe="#{empty livro.idTabela and plct:execOneArg(request,'isUserInRole','Vendedor')}" /> 
 				</plcf:celula>  
 			</plcf:linha> 
 		</plcf:tabela> 

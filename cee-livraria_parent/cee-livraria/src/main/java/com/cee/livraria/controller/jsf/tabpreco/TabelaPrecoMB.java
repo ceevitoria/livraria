@@ -174,7 +174,7 @@ public class TabelaPrecoMB extends AppMB  {
 		double fator = 0;
 		
 		variacao = tabPreco.getVariacao().doubleValue();
-		preco = livro.getPreco().doubleValue();
+		preco = livro.getPrecoUltCompra().doubleValue();
 		
 		if (tabPreco.getTipoPrecificacao().equals(TipoPrecificacao.A)) {
 			
