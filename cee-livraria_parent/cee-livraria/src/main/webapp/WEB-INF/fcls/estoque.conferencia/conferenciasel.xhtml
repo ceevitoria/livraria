@@ -23,8 +23,12 @@
 								<plcf:data id="data" value="#{conferencia.data}" tamanho="12" ajudaChave="ajuda.data"/> 
 							</plcf:celula>  
 							<plcf:celula> 
-								<plcf:titulo value="#{msg['label.status']}"/>  
-								<plcf:comboEstatico id="status" value="#{conferencia.status}" dominio="StatusConferencia" exibeBranco="S" ajudaChave="ajuda.status"/> 
+								<plcf:titulo value="#{msg['label.statusConferencia']}"/>  
+								<plcf:comboEstatico id="status" value="#{conferencia.status}" dominio="StatusConferencia" exibeBranco="S" ajudaChave="ajuda.statusConferencia"/> 
+							</plcf:celula> 
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.resultadoConferencia']}"/>  
+								<plcf:comboEstatico id="resultado" value="#{conferencia.resultado}" dominio="ResultadoConferencia" exibeBranco="S" ajudaChave="ajuda.resultadoConferencia"/> 
 							</plcf:celula> 
 						</plcf:linha> 
 					</plcf:tabela> 
@@ -42,11 +46,13 @@
 				colNames:
 					['#{msg['label.nome']}',
 					'#{msg['label.data']}',
-					'#{msg['label.status']}'],
+					'#{msg['label.statusConferencia']}',
+					'#{msg['label.resultadoConferencia']}'],
 				colModel:[
-					{name:'nome',index:'nome'},
-					{name:'data',index:'data'},
-					{name:'status',index:'status'}]},
+					{name:'nome',index:'nome',width:'40%'},
+					{name:'data',index:'data',width:'20%'},
+					{name:'status',index:'status',width:'20%'},
+					{name:'resultado',index:'resultado',width:'20%'}]},
 			urlEdicao:'#{request.contextPath}/f/n/conferenciamdt'});});//]]> </script>  
 					<table id="plc-grid" width="100%" class="scroll" cellpadding="0" cellspacing="0"/>  
 					<div id="plc-grid-navegador" class="scroll" style="text-align:center;"/> 

@@ -19,7 +19,7 @@ import javax.persistence.Entity;
 @Access(AccessType.FIELD)
 @NamedQueries({
 	@NamedQuery(name="ConferenciaEntity.queryMan", query="from ConferenciaEntity"),
-	@NamedQuery(name="ConferenciaEntity.querySel", query="select id as id, nome as nome, data as data, status as status from ConferenciaEntity order by nome asc"), 
+	@NamedQuery(name="ConferenciaEntity.querySel", query="select id as id, nome as nome, data as data, status as status, resultado as resultado from ConferenciaEntity order by nome asc"), 
 	@NamedQuery(name="ConferenciaEntity.querySelLookup", query="select id as id, nome as nome from ConferenciaEntity where id = ? order by id asc") })
 public class ConferenciaEntity extends Conferencia {
 

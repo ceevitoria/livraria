@@ -164,5 +164,13 @@ abstract public class Livro extends AppBaseEntity implements Estocavel {
 		this.precoVendaSugerido = precoVendaSugerido;
 	}
 
+	@Override
+	public String toString() {
+		if (getTitulo() != null) {
+			return getTitulo();
+		} else {
+			return "Livro";
+		}
+	}
 	
 }

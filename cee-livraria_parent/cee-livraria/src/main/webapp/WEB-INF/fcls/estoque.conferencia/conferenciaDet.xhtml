@@ -7,6 +7,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets" 
 	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
 	xmlns:plct="http://www.powerlogic.com.br/plct" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:tr="http://myfaces.apache.org/trinidad" 
 	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
 	<ui:composition> 
@@ -19,58 +20,66 @@
 					<plcf:tituloExclusao>Exc.</plcf:tituloExclusao>
 				</f:facet>  
 				<span class="celulaFormularioCaixaMarcacao">
-					<plcf:caixaExclusao id="indExcPlc" value="#{itemConferencia.indExcPlc}"/>
+					<plcf:caixaExclusao id="indExcPlc" value="#{itemConferencia.indExcPlc}" disabled="#{conferencia.status!='F'}" />
 				</span> 
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.livro']}"/>
-				</f:facet>  
-				<!--
-				<plcf:vinculado id="livro" value="#{itemConferencia.livro}" 
-					propSelPop="livro" idExibe="S" idSomenteLeitura="N" 
-					autoRecuperacaoClasse="com.cee.livraria.entity.LivroEntity" 
-					actionSel="livrosel" modal="S" ajudaChave="ajuda.livro" 
-					onkeydown="selecionaPorTecla(event,this);"/>
-				-->
-				<plcf:vinculado id="livro" value="#{itemConferencia.livro}" 
-					propSelPop="livro" idExibe="S" lookupTamanho="40"
-					autoRecuperacaoPropriedade="codigoBarras"
-					autoComplete="true" idTamanho="15" evento="y"
-					idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.LivroEntity" 
-					actionSel="livrosel" modal="S" ajudaChave="ajuda.livro" 
-					onkeydown="selecionaPorTecla(event,this);" larg="900"
-					riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.livro?q=titulo')"/> 
+				</f:facet>
+				
+				<c:if test="#{conferencia.status=='F'}">
+					<plcf:vinculado id="livro" value="#{itemConferencia.livro}" 
+						propSelPop="livro" idExibe="S" lookupTamanho="40"
+						autoRecuperacaoPropriedade="codigoBarras"
+						autoComplete="true" idTamanho="15" evento="y"
+						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.LivroEntity" 
+						actionSel="livrosel" modal="S" ajudaChave="ajuda.livro" 
+						onkeydown="selecionaPorTecla(event,this);" larg="900"
+						disabled="#{conferencia.status!='F'}" 
+						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.livro?q=titulo')"/> 
+				</c:if>
+				<c:if test="#{conferencia.status!='F'}">
+					<plcf:vinculado id="livro" value="#{itemConferencia.livro}" 
+						propSelPop="livro" idExibe="N" lookupTamanho="40"
+						autoComplete="true" idTamanho="15" evento="y"
+						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.LivroEntity" 
+						actionSel="livrosel" modal="S" ajudaChave="ajuda.livro" 
+						onkeydown="selecionaPorTecla(event,this);" larg="900"
+						disabled="#{conferencia.status!='F'}" 
+						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.livro?q=titulo')"/> 
+				</c:if>
+				  
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.autor']}"/>
 				</f:facet>  
-				<plcf:comboDinamico id="autor" value="#{itemConferencia.autor}" dominio="AutorEntity" exibeBranco="S" ajudaChave="ajuda.autor"/> 
+				<plcf:comboDinamico id="autor" value="#{itemConferencia.autor}" disabled="#{conferencia.status!='F'}" dominio="AutorEntity" exibeBranco="S" ajudaChave="ajuda.autor"/> 
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.espirito']}"/>
 				</f:facet>  
-				<plcf:comboDinamico id="espirito" value="#{itemConferencia.espirito}" dominio="EspiritoEntity" exibeBranco="S" ajudaChave="ajuda.espirito"/> 
+				<plcf:comboDinamico id="espirito" value="#{itemConferencia.espirito}" disabled="#{conferencia.status!='F'}" dominio="EspiritoEntity" exibeBranco="S" ajudaChave="ajuda.espirito"/> 
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.edicao']}"/>
 				</f:facet>  
-				<plcf:numerico id="edicao" value="#{itemConferencia.edicao}" ajudaChave="ajuda.edicao"/> 
+				<plcf:numerico id="edicao" value="#{itemConferencia.edicao}" numCasas="0" disabled="#{conferencia.status!='F'}" ajudaChave="ajuda.edicao"/> 
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.localizacao']}"/>
 				</f:facet>  
-				<plcf:comboDinamico id="localizacao" value="#{itemConferencia.localizacao}" dominio="LocalizacaoEntity" exibeBranco="S" ajudaChave="ajuda.localizacao"/> 
+				<plcf:comboDinamico id="localizacao" value="#{itemConferencia.localizacao}" disabled="#{conferencia.status=='C'}" dominio="LocalizacaoEntity" exibeBranco="S" ajudaChave="ajuda.localizacao"/> 
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.quantidade']}"/>
 				</f:facet>  
-				<plcf:numerico id="quantidade" tamanho="12" value="#{itemConferencia.quantidade}" ajudaChave="ajuda.quantidade"/> 
+				<plcf:numerico id="quantidade" tamanho="10" value="#{itemConferencia.quantidade}" numCasas="0" disabled="#{conferencia.status=='C'}" ajudaChave="ajuda.quantidade"/> 
 			</h:column> 
 		</plcf:iteracao> 
 	</ui:composition> 

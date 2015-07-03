@@ -9,8 +9,10 @@
 	classesDiscreteDomain={
 		com.powerlogic.jcompany.domain.type.PlcYesNo.class,
 		com.cee.livraria.entity.estoque.conferencia.StatusConferencia.class,
+		com.cee.livraria.entity.estoque.conferencia.ResultadoConferencia.class,
 		com.cee.livraria.entity.caixa.StatusCaixa.class,
 		com.cee.livraria.entity.config.TipoMensagemSucessoVendaConfig.class,
+		com.cee.livraria.entity.config.TipoMensagemConferenciaConfig.class,
 		com.cee.livraria.entity.tabpreco.TipoPrecificacao.class,
 		com.cee.livraria.entity.tabpreco.TipoVariacao.class,
 		com.cee.livraria.entity.tabpreco.TipoArredondamento.class},

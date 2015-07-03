@@ -29,13 +29,6 @@ import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
 @MappedSuperclass
 public abstract class Conferencia extends AppBaseEntity {
 	
-	@OneToMany (targetEntity = com.cee.livraria.entity.estoque.conferencia.ItemConferenciaEntity.class, fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="conferencia")
-	@ForeignKey(name="FK_ITEMCONFERENCIA_CONFERENCIA")
-	@PlcValDuplicity(property="livro")
-	@PlcValMultiplicity(referenceProperty="livro",  message="{jcompany.aplicacao.mestredetalhe.multiplicidade.ItemConferenciaEntity}")
-	@Valid
-	private List<ItemConferencia> itemConferencia;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_CONFERENCIA")
 	private Long id;
@@ -56,10 +49,21 @@ public abstract class Conferencia extends AppBaseEntity {
 	@Column(length = 1)
 	private StatusConferencia status = StatusConferencia.F;
 
+	@Enumerated(EnumType.STRING)
+	@Column(length = 1)
+	private ResultadoConferencia resultado;
+	
 	@Embedded
 	@NotNull
 	@Valid
 	private RegraPesquisaLivros regra;
+
+	@OneToMany (targetEntity = com.cee.livraria.entity.estoque.conferencia.ItemConferenciaEntity.class, fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="conferencia")
+	@ForeignKey(name="FK_ITEMCONFERENCIA_CONFERENCIA")
+	@PlcValDuplicity(property="livro")
+	@PlcValMultiplicity(referenceProperty="livro",  message="{jcompany.aplicacao.mestredetalhe.multiplicidade.ItemConferenciaEntity}")
+	@Valid
+	private List<ItemConferencia> itemConferencia;
 
 	public Long getId() {
 		return id;
@@ -101,6 +105,14 @@ public abstract class Conferencia extends AppBaseEntity {
 		this.status = status;
 	}
 
+	public ResultadoConferencia getResultado() {
+		return resultado;
+	}
+	
+	public void setResultado(ResultadoConferencia resultado) {
+		this.resultado = resultado;
+	}
+	
 	public RegraPesquisaLivros getRegra() {
 		return regra;
 	}

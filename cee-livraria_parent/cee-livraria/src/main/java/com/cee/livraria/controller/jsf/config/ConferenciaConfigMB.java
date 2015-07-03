@@ -1,10 +1,10 @@
-package com.cee.livraria.controller.jsf.operacaocaixaconfig;
+package com.cee.livraria.controller.jsf.config;
 
 import javax.enterprise.inject.Produces;
 import javax.inject.Named;
 
 import com.cee.livraria.controller.jsf.AppMB;
-import com.cee.livraria.entity.config.OperacaoCaixaConfigEntity;
+import com.cee.livraria.entity.config.ConferenciaConfigEntity;
 import com.powerlogic.jcompany.commons.annotation.PlcUriIoC;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcMB;
 import com.powerlogic.jcompany.config.aggregation.PlcConfigAggregation;
@@ -14,12 +14,12 @@ import com.powerlogic.jcompany.config.collaboration.PlcConfigFormLayout;
 import com.powerlogic.jcompany.controller.jsf.annotations.PlcHandleException;
 
 @PlcConfigAggregation(
-		entity= com.cee.livraria.entity.config.OperacaoCaixaConfigEntity.class
-	)
+	entity= com.cee.livraria.entity.config.ConferenciaConfigEntity.class
+)
 
 @PlcConfigForm (
 	formPattern=FormPattern.Apl,
-	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/config/operacaocaixa")
+	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/config/conferencia")
 )
 
 /**
@@ -27,24 +27,23 @@ import com.powerlogic.jcompany.controller.jsf.annotations.PlcHandleException;
  */
  
 @SPlcMB
-@PlcUriIoC("operacaocaixaconfig")
+@PlcUriIoC("conferenciaconfig")
 @PlcHandleException
-public class OperacaoCaixaConfigMB extends AppMB  {
+public class ConferenciaConfigMB extends AppMB  {
 
 	private static final long serialVersionUID = 1L;
 	
 	/**
 	* Entidade da ação injetado pela CDI
 	*/
-	@Produces  @Named("operacaocaixaconfig")
-	public OperacaoCaixaConfigEntity createEntityPlc() {
-        
-		if (this.entityPlc==null) {
-              this.entityPlc = new OperacaoCaixaConfigEntity();
+	@Produces  @Named("conferenciaconfig")
+	public ConferenciaConfigEntity createEntityPlc() {
+        if (this.entityPlc==null) {
+              this.entityPlc = new ConferenciaConfigEntity();
               this.newEntity();
         }
         
-        return (OperacaoCaixaConfigEntity)this.entityPlc;     	
+        return (ConferenciaConfigEntity)this.entityPlc;     	
 	}
 		
 }

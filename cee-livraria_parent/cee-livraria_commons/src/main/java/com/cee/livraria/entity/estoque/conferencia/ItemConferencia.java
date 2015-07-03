@@ -6,7 +6,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
@@ -54,7 +53,7 @@ public abstract class ItemConferencia extends AppBaseEntity {
 	@ForeignKey(name = "FK_ITEMCONFERENCIA_EDITORA")
 	private Editora editora;
 
-	@Digits(integer = 5, fraction = 0)
+	@Digits(integer = 8, fraction = 0)
 	private Integer edicao;
 
 	@ManyToOne(targetEntity = ColecaoEntity.class, fetch = FetchType.LAZY)
@@ -66,7 +65,6 @@ public abstract class ItemConferencia extends AppBaseEntity {
 	private Localizacao localizacao;
 
 	@Digits(integer = 5, fraction = 0)
-	@Transient
 	private Integer quantidade;
 
 	public Long getId() {

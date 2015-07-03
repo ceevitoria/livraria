@@ -2,20 +2,24 @@ package com.cee.livraria.entity.estoque;
 
 import java.util.Date;
 
-import com.cee.livraria.entity.AppBaseEntity;
-import com.cee.livraria.entity.Livro;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
-import javax.persistence.Id;
-import com.cee.livraria.entity.LivroEntity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Digits;
-import javax.persistence.FetchType;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.annotations.ForeignKey;
-import javax.persistence.GeneratedValue;
+
+import com.cee.livraria.entity.AppBaseEntity;
+import com.cee.livraria.entity.Livro;
+import com.cee.livraria.entity.LivroEntity;
+import com.cee.livraria.entity.Localizacao;
+import com.cee.livraria.entity.LocalizacaoEntity;
 
 @MappedSuperclass
 public abstract class Estoque extends AppBaseEntity {
@@ -45,10 +49,10 @@ public abstract class Estoque extends AppBaseEntity {
 	private Date dataConferencia;
 
 //TODO Criar atributo para a localização para o livro no estoque
-//	@ManyToOne(targetEntity = LocalizacaoEntity.class, fetch = FetchType.LAZY)
-//	@ForeignKey(name = "FK_ESTOQUE_LOCALIZACAO")
-//	@NotNull
-//	private Localizacao localizacao;
+	@ManyToOne(targetEntity = LocalizacaoEntity.class, fetch = FetchType.LAZY)
+	@ForeignKey(name = "FK_ESTOQUE_LOCALIZACAO")
+	@NotNull
+	private Localizacao localizacao;
 	
 	public Long getId() {
 		return id;
@@ -97,5 +101,14 @@ public abstract class Estoque extends AppBaseEntity {
 	public void setDataConferencia(Date dataConferencia) {
 		this.dataConferencia = dataConferencia;
 	}
+
+	public Localizacao getLocalizacao() {
+		return localizacao;
+	}
+	
+	public void setLocalizacao(Localizacao localizacao) {
+		this.localizacao = localizacao;
+	}
 }
+
 

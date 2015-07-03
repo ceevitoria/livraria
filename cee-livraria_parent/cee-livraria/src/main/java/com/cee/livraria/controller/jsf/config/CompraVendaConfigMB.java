@@ -1,4 +1,4 @@
-package com.cee.livraria.controller.jsf.compravendaconfig;
+package com.cee.livraria.controller.jsf.config;
 
 import javax.enterprise.inject.Produces;
 import javax.inject.Named;

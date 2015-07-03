@@ -7,6 +7,7 @@ import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.config.RetornoConfig;
+import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.pagamento.PagamentoList;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
@@ -56,4 +57,12 @@ public interface IAppFacade extends IPlcFacade {
 	 * @return PagamentoList
 	 */
 	public PagamentoList obterPagamentosCaixa(PlcBaseContextVO context, Caixa caixa) throws PlcException;
+
+	/**
+	 * Efetua a conclusão de uma conferencia de livros
+	 * @param context
+	 * @param conferencia
+	 * @return RetornoConfig com informacoes sobre a conclusao da conferencia (@see RetornoConfig)
+	 */
+	public RetornoConfig concluirConferenciaLivros(PlcBaseContextVO context, Conferencia conferencia) throws PlcException;
 }
