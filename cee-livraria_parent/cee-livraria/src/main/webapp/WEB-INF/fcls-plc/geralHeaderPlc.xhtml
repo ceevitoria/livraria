@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html  xmlns:h="http://java.sun.com/jsf/html" >  
+Jaguar. Nova Arquitetura unificada para Javascript e CSS com Theme Roller
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<!--[if IE]> <meta http-equiv="X-UA-Compatible" content="IE=7; IE=8; IE=9" /> <![endif]-->
+	
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	
+	<link rel="shortcut icon" href="#{request.contextPath}/res/midia/favicon.ico"/>
+	<link rel="icon" href="#{request.contextPath}/res/midia/favicon.ico" type="image/x-icon"/>	
+	<link rel="StyleSheet" href="#{request.contextPath}/res-plc/css/#{sessionScope['SESSION_CACHE'].pele}/pele.css" type="text/css" charset="UTF-8" />
+	<link rel="StyleSheet" href="#{request.contextPath}/res-plc/css/plc.comuns.css" type="text/css" charset="UTF-8" />
+		
+	<script type="text/javascript" charset="UTF-8">
+		function setValuesInPlcGeral() {
+			plcGeral.contextPath = "#{request.contextPath}";
+			plcGeral.formPattern = "#{requestScope['formPattern']}";
+		}
+	</script>
+	
+	<script src="#{request.contextPath}/res-plc/javascript/plc.comuns.js" type="text/javascript" charset="UTF-8" />		
+	
+	<script type="text/javascript">
+	  plc.jq(function(){
+			plc.jq("a.ui-state-default").hover(
+				function(){ plc.jq(this).addClass("ui-state-hover"); },
+				function(){ plc.jq(this).removeClass("ui-state-hover"); }
+			)
+			plc.jq("span.ui-state-default").hover(
+				function(){ plc.jq(this).addClass("ui-state-hover"); },
+				function(){ plc.jq(this).removeClass("ui-state-hover"); }
+			)
+			plc.jq("button.ui-state-default").hover(
+				function(){ plc.jq(this).addClass("ui-state-hover"); },
+				function(){ plc.jq(this).removeClass("ui-state-hover"); }
+			)
+		});
+	</script>
+
+	<ui:insert name="plc-header-complemento"></ui:insert>
+	
+	<script type="text/javascript" charset="utf-8">
+	//<![CDATA[
+
+		jQuery(document).ready(function (){
+					
+			jQuery("#corpo\\:formulario\\:botaoAcaoPesquisar").click(function(){
+				jQuery("input").each(function(i){
+					if ((jQuery(this).hasClass('af_inputText_content') || (jQuery(this).hasClass('af_inputDate_content')))&& jQuery(this).val() != null && jQuery(this).val() != ''){
+						jQuery('##{plcAliasPrefixoAction}Arg').append('<input type="hidden" id="impressao:'+jQuery(this).attr('id')+'" value="'+jQuery(this).val()+'" class="campo_impressao"/>');
+					}
+				});
+			});
+		});
+				
+	//]]>
+	</script>	
+
+</ui:composition>
+</html>

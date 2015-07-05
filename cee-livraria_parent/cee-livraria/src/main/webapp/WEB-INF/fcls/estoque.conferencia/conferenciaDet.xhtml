@@ -30,7 +30,7 @@
 				
 				<c:if test="#{conferencia.status=='F'}">
 					<plcf:vinculado id="livro" value="#{itemConferencia.livro}" 
-						propSelPop="livro" idExibe="S" lookupTamanho="40"
+						propSelPop="livro" idExibe="S" lookupTamanho="35"
 						autoRecuperacaoPropriedade="codigoBarras"
 						autoComplete="true" idTamanho="15" evento="y"
 						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.LivroEntity" 
@@ -41,7 +41,7 @@
 				</c:if>
 				<c:if test="#{conferencia.status!='F'}">
 					<plcf:vinculado id="livro" value="#{itemConferencia.livro}" 
-						propSelPop="livro" idExibe="N" lookupTamanho="40"
+						propSelPop="livro" idExibe="N" lookupTamanho="35"
 						autoComplete="true" idTamanho="15" evento="y"
 						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.LivroEntity" 
 						actionSel="livrosel" modal="S" ajudaChave="ajuda.livro" 
@@ -67,7 +67,7 @@
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.edicao']}"/>
 				</f:facet>  
-				<plcf:numerico id="edicao" value="#{itemConferencia.edicao}" numCasas="0" disabled="#{conferencia.status!='F'}" ajudaChave="ajuda.edicao"/> 
+				<plcf:numerico id="edicao" value="#{itemConferencia.edicao}" tamanho="5" numCasas="0" disabled="#{conferencia.status!='F'}" ajudaChave="ajuda.edicao"/> 
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
