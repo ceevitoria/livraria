@@ -75,11 +75,17 @@
 				</f:facet>  
 				<plcf:comboDinamico id="localizacao" value="#{itemConferencia.localizacao}" disabled="#{conferencia.status=='C'}" dominio="LocalizacaoEntity" exibeBranco="S" ajudaChave="ajuda.localizacao"/> 
 			</h:column>  
+			<h:column rendered="#{conferencia.status=='C'}"> 
+				<f:facet name="header" rendered="#{conferencia.status=='C'}">
+					<plcf:titulo value="#{msg['label.quantidade.estoque']}" rendered="#{conferencia.status=='C'}"/>
+				</f:facet>  
+				<plcf:numerico id="quantidadeEstoque" tamanho="10" value="#{itemConferencia.quantidadeEstoque}" numCasas="0" rendered="#{conferencia.status=='C'}" ajudaChave="ajuda.quantidade.estoque"/> 
+			</h:column> 
 			<h:column> 
 				<f:facet name="header">
-					<plcf:titulo value="#{msg['label.quantidade']}"/>
+					<plcf:titulo value="#{msg['label.quantidade.conferida']}"/>
 				</f:facet>  
-				<plcf:numerico id="quantidade" tamanho="10" value="#{itemConferencia.quantidade}" numCasas="0" disabled="#{conferencia.status=='C'}" ajudaChave="ajuda.quantidade"/> 
+				<plcf:numerico id="quantidadeConferida" tamanho="10" value="#{itemConferencia.quantidadeConferida}" numCasas="0" disabled="#{conferencia.status=='C'}" ajudaChave="ajuda.quantidade.conferida"/> 
 			</h:column> 
 		</plcf:iteracao> 
 	</ui:composition> 

@@ -67,7 +67,7 @@ public class ConferenciaRepository extends PlcBaseRepository {
 						throw new PlcException("{conferencia.err.item.sem.localizacao}");
 					}
 	
-					if (item.getQuantidade() == null ) {
+					if (item.getQuantidadeConferida() == null ) {
 						throw new PlcException("{conferencia.err.item.sem.quantidade}");
 					}
 				}
@@ -121,14 +121,17 @@ public class ConferenciaRepository extends PlcBaseRepository {
 						
 						totalItensLocalizacaoDivergente++;
 					}
-
-					if (itemConferencia.getQuantidade().compareTo(itemEstoque.getQuantidade())!=0) {
+					
+					// Grava no item da conferencia a quantidade que existe atualmente contabilizada no estoque
+					itemConferencia.setQuantidadeEstoque(itemEstoque.getQuantidade());
+					
+					if (itemConferencia.getQuantidadeConferida().compareTo(itemEstoque.getQuantidade())!=0) {
 
 						if (config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.D) ) {
 							alertas.add(String.format("Quantidade divergente para o livro '%s'. Registrado: '%d'. Informado: '%d'", 
 									new Object[]{itemConferencia.getLivro().getTitulo(),
 									itemEstoque.getQuantidade(),
-									itemConferencia.getQuantidade()}));
+									itemConferencia.getQuantidadeConferida()}));
 						}
 						
 						totalItensQuantidadeDivergente++;

@@ -65,7 +65,10 @@ public abstract class ItemConferencia extends AppBaseEntity {
 	private Localizacao localizacao;
 
 	@Digits(integer = 5, fraction = 0)
-	private Integer quantidade;
+	private Integer quantidadeConferida;
+
+	@Digits(integer = 5, fraction = 0)
+	private Integer quantidadeEstoque;
 
 	public Long getId() {
 		return id;
@@ -131,12 +134,20 @@ public abstract class ItemConferencia extends AppBaseEntity {
 		this.localizacao = localizacao;
 	}
 
-	public Integer getQuantidade() {
-		return quantidade;
+	public Integer getQuantidadeConferida() {
+		return quantidadeConferida;
 	}
 
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
+	public void setQuantidadeConferida(Integer quantidadeConferida) {
+		this.quantidadeConferida = quantidadeConferida;
+	}
+
+	public Integer getQuantidadeEstoque() {
+		return quantidadeEstoque;
+	}
+
+	public void setQuantidadeEstoque(Integer quantidadeEstoque) {
+		this.quantidadeEstoque = quantidadeEstoque;
 	}
 
 	public Conferencia getConferencia() {
