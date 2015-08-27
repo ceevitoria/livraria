@@ -69,7 +69,7 @@
 				</f:facet>  
 				<plcf:numerico id="edicao" value="#{itemConferencia.edicao}" tamanho="5" numCasas="0" disabled="#{conferencia.status!='F'}" ajudaChave="ajuda.edicao"/> 
 			</h:column>  
-			<h:column> 
+			<h:column rendered="#{requestScope.utilizaLocalizacaoConferencia=='S'}"> 
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.localizacao']}"/>
 				</f:facet>  
@@ -79,7 +79,7 @@
 				<f:facet name="header" rendered="#{conferencia.status=='C'}">
 					<plcf:titulo value="#{msg['label.quantidade.estoque']}" rendered="#{conferencia.status=='C'}"/>
 				</f:facet>  
-				<plcf:numerico id="quantidadeEstoque" tamanho="10" value="#{itemConferencia.quantidadeEstoque}" numCasas="0" rendered="#{conferencia.status=='C'}" ajudaChave="ajuda.quantidade.estoque"/> 
+				<plcf:numerico id="quantidadeEstoque" tamanho="10" value="#{itemConferencia.quantidadeEstoque}" numCasas="0" disabled="#{conferencia.status=='C'}" rendered="#{conferencia.status=='C'}" ajudaChave="ajuda.quantidade.estoque"/> 
 			</h:column> 
 			<h:column> 
 				<f:facet name="header">

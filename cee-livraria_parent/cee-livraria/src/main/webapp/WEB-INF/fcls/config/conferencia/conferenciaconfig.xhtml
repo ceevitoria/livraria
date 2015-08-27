@@ -14,6 +14,16 @@
 				<plcf:tabela tituloChave="conferenciaconfig.titulo"> 
 					<plcf:linha> 
 						<plcf:celula> 
+							<plcf:titulo value="#{msg['label.utilizaLocalizacaoLivros']}"/>  
+							<plcf:radio id="utilizaLocalizacaoLivros" layout="horizontal" value="#{conferenciaconfig.utilizaLocalizacaoLivros}" dominio="PlcYesNo" ajudaChave="ajuda.utilizaLocalizacaoLivros"/> 
+						</plcf:celula>  
+						<plcf:celula> 
+							<plcf:titulo value="#{msg['label.ajusteAutomaticoLocalizacaoLivros']}"/>  
+							<plcf:radio id="ajusteAutomaticoLocalizacaoLivros" layout="horizontal" value="#{conferenciaconfig.ajusteAutomaticoLocalizacaoLivros}" dominio="PlcYesNo" ajudaChave="ajuda.ajusteAutomaticoLocalizacaoLivros"/> 
+						</plcf:celula>  
+					</plcf:linha> 
+					<plcf:linha> 
+						<plcf:celula> 
 							<plcf:titulo value="#{msg['label.alertaTrocaLocalizacaoLivros']}"/>  
 							<plcf:radio id="alertaTrocaLocalizacaoLivros" layout="horizontal" value="#{conferenciaconfig.alertaTrocaLocalizacaoLivros}" dominio="PlcYesNo" ajudaChave="ajuda.alertaTrocaLocalizacaoLivros"/> 
 						</plcf:celula>  
@@ -21,7 +31,9 @@
 							<plcf:titulo value="#{msg['label.permiteTrocaLocalizacaoLivros']}"/>  
 							<plcf:radio id="permiteTrocaLocalizacaoLivros" layout="horizontal" value="#{conferenciaconfig.permiteTrocaLocalizacaoLivros}" dominio="PlcYesNo" ajudaChave="ajuda.permiteTrocaLocalizacaoLivros"/> 
 						</plcf:celula>  
-						<plcf:celula > 
+					</plcf:linha> 
+					<plcf:linha> 
+						<plcf:celula columnSpan="2"> 
 							<plcf:titulo value="#{msg['label.tipoMensagemConferencia']}"/>  
 							<plcf:comboEstatico id="tipoMensagem" value="#{conferenciaconfig.tipoMensagem}" dominio="TipoMensagemConferenciaConfig" exibeBranco="S" ajudaChave="ajuda.tipoMensagemConferencia"/> 
 						</plcf:celula> 

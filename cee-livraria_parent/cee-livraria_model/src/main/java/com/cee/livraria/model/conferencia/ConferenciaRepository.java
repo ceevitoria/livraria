@@ -96,30 +96,35 @@ public class ConferenciaRepository extends PlcBaseRepository {
 					//TODO: 
 				} else if (estoqueList.size() == 1) {
 					Estoque itemEstoque = estoqueList.get(0);
-					
-					if (itemConferencia.getLocalizacao().getId().compareTo(itemEstoque.getLocalizacao().getId())!=0) {
-						
-						if (PlcYesNo.S.equals(config.getAlertaTrocaLocalizacaoLivros())) {
-							
-							if (config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.D) ) {
-								alertas.add(String.format("O livro '%s' teve sua localização trocada de '%s' para '%s'", 
-										new Object[]{itemConferencia.getLivro().getTitulo(),
-										itemEstoque.getLocalizacao().getDescricao(),
-										itemConferencia.getLocalizacao().getDescricao()}));
-							}
-							
-						}
-						
-						if (PlcYesNo.N.equals(config.getPermiteTrocaLocalizacaoLivros())) {
 
-							if (config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.D) ) {
-								alertas.add("A troca da localização não está permitida nas configurações do sistema!");
+					// Se foi configurado para utilizar a localização do livros na conferencia de estoque
+					if (PlcYesNo.S.equals(config.getUtilizaLocalizacaoLivros())) {
+						
+						if (itemConferencia.getLocalizacao().getId().compareTo(itemEstoque.getLocalizacao().getId())!=0) {
+							
+							if (PlcYesNo.S.equals(config.getAlertaTrocaLocalizacaoLivros())) {
+								
+								if (config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.D) ) {
+									alertas.add(String.format("O livro '%s' teve sua localização trocada de '%s' para '%s'", 
+											new Object[]{itemConferencia.getLivro().getTitulo(),
+											itemEstoque.getLocalizacao().getDescricao(),
+											itemConferencia.getLocalizacao().getDescricao()}));
+								}
+								
 							}
 							
-							autorizaGravacao = false;
+							if (PlcYesNo.N.equals(config.getPermiteTrocaLocalizacaoLivros())) {
+	
+								if (config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.D) ) {
+									alertas.add("A troca da localização não está permitida nas configurações do sistema!");
+								}
+								
+								autorizaGravacao = false;
+								
+							}
+							
+							totalItensLocalizacaoDivergente++;
 						}
-						
-						totalItensLocalizacaoDivergente++;
 					}
 					
 					// Grava no item da conferencia a quantidade que existe atualmente contabilizada no estoque
@@ -139,15 +144,19 @@ public class ConferenciaRepository extends PlcBaseRepository {
 				}
 			}
 
-			if (!config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.B) ) {
-				mensagens.add(String.format("Total de itens com divergência na localização: %d", new Object[]{totalItensLocalizacaoDivergente})); 
+			if (!config.getTipoMensagem().equals(TipoMensagemConferenciaConfig.B) ) {
+
+				if (PlcYesNo.S.equals(config.getUtilizaLocalizacaoLivros()) && PlcYesNo.N.equals(config.getAjusteAutomaticoLocalizacaoLivros())) {
+					mensagens.add(String.format("Total de itens com divergência na localização: %d", new Object[]{totalItensLocalizacaoDivergente})); 
+				}
+				
 				mensagens.add(String.format("Total de itens com divergência na quantidade: %d", new Object[]{totalItensQuantidadeDivergente}));
 			}
 
 			if (autorizaGravacao) {
 
 				mensagens.add("     "); 
-				if (totalItensQuantidadeDivergente == 0) {
+				if (totalItensQuantidadeDivergente+totalItensLocalizacaoDivergente == 0) {
 					conferencia.setResultado(ResultadoConferencia.S);
 					mensagens.add("Conferência gravada com sucesso sem divergência!"); 
 				} else {
@@ -162,7 +171,7 @@ public class ConferenciaRepository extends PlcBaseRepository {
 
 			} else {
 				alertas.add("Não está autorizado a conclusão da conferência com divergência de localização!"); 
-				alertas.add("Favor gravar a conferência e depois alterar a configuração do sistema caso necessário!"); 
+				alertas.add("Solicite ao gestor para ajustar a configuração da conferência para aceitar a troca de localização!"); 
 			}
 			
 		} catch (PlcException plcE) {

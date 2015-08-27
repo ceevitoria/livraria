@@ -24,5 +24,9 @@ public interface AppConstants extends PlcConstants {
     	String EXIBE_BT_CONCLUIR_CONFERENCIA = "exibeBtnConcluirConferencia";
     }
     
+    interface TELA_CONFEERENCIA {
+    	String UTILIZA_lOCALIZACAO_CONFERENCIA = "utilizaLocalizacaoConferencia";
+    	
+    }
     
 }

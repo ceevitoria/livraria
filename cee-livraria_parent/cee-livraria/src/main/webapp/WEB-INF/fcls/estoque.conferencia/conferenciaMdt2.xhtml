@@ -50,7 +50,7 @@
 					<plcf:texto id="regra_palavraChave" value="#{conferencia.regra.palavraChave}" disabled="#{conferencia.status!='F'}" ajudaChave="ajuda.regra.palavraChave"/> 
 				</plcf:celula> 
 			</plcf:linha>  
-			<plcf:linha> 
+			<plcf:linha rendered="#{requestScope.utilizaLocalizacaoConferencia=='S'}" > 
 				<plcf:celula columnSpan="2"> 
 					<plcf:titulo value="#{msg['label.regra.localizacao']}"/>  
 					<plcf:comboDinamico id="regra_localizacao" value="#{conferencia.regra.localizacao}" disabled="#{conferencia.status!='F'}" dominio="LocalizacaoEntity" exibeBranco="S" ajudaChave="ajuda.regra.localizacao"/> 

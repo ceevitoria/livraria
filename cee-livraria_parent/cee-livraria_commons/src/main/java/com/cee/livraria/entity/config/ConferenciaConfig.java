@@ -20,6 +20,14 @@ public abstract class ConferenciaConfig extends Config {
 
 	@Enumerated(EnumType.STRING)
 	@Column(length = 1)
+	private PlcYesNo utilizaLocalizacaoLivros = PlcYesNo.S;
+
+	@Enumerated(EnumType.STRING)
+	@Column(length = 1)
+	private PlcYesNo ajusteAutomaticoLocalizacaoLivros = PlcYesNo.S;
+
+	@Enumerated(EnumType.STRING)
+	@Column(length = 1)
 	private PlcYesNo alertaTrocaLocalizacaoLivros = PlcYesNo.N;
 
 	@Enumerated(EnumType.STRING)
@@ -38,6 +46,23 @@ public abstract class ConferenciaConfig extends Config {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public PlcYesNo getUtilizaLocalizacaoLivros() {
+		return utilizaLocalizacaoLivros;
+	}
+
+	public void setUtilizaLocalizacaoLivros(PlcYesNo utilizaLocalizacaoLivros) {
+		this.utilizaLocalizacaoLivros = utilizaLocalizacaoLivros;
+	}
+
+	public PlcYesNo getAjusteAutomaticoLocalizacaoLivros() {
+		return ajusteAutomaticoLocalizacaoLivros;
+	}
+
+	public void setAjusteAutomaticoLocalizacaoLivros(
+			PlcYesNo ajusteAutomaticoLocalizacaoLivros) {
+		this.ajusteAutomaticoLocalizacaoLivros = ajusteAutomaticoLocalizacaoLivros;
 	}
 
 	public PlcYesNo getAlertaTrocaLocalizacaoLivros() {

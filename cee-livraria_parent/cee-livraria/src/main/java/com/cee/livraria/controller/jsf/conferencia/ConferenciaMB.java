@@ -10,8 +10,10 @@ import com.cee.livraria.commons.AppConstants;
 import com.cee.livraria.controller.jsf.AppMB;
 import com.cee.livraria.entity.Livro;
 import com.cee.livraria.entity.LivroEntity;
-import com.cee.livraria.entity.config.CompraVendaConfig;
+import com.cee.livraria.entity.config.ConferenciaConfig;
+import com.cee.livraria.entity.config.ConferenciaConfigEntity;
 import com.cee.livraria.entity.config.RetornoConfig;
+import com.cee.livraria.entity.config.TipoMensagemConferenciaConfig;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.estoque.conferencia.ConferenciaEntity;
 import com.cee.livraria.entity.estoque.conferencia.ItemConferencia;
@@ -21,6 +23,7 @@ import com.cee.livraria.entity.estoque.conferencia.StatusConferencia;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcConstants;
+import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.commons.annotation.PlcUriIoC;
 import com.powerlogic.jcompany.commons.config.qualifiers.QPlcDefault;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcMB;
@@ -64,6 +67,8 @@ public class ConferenciaMB extends AppMB {
 	@Inject @QPlcDefault 
 	protected PlcIocControllerFacadeUtil iocControleFacadeUtil;
 	
+	private ConferenciaConfig config; 
+	
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -72,6 +77,10 @@ public class ConferenciaMB extends AppMB {
 	@Produces
 	@Named("conferencia")
 	public ConferenciaEntity createEntityPlc() {
+
+		if (this.config == null) {
+			carregaConfiguracao();
+		}
 		
 		if (this.entityPlc == null) {
 			this.entityPlc = new ConferenciaEntity();
@@ -79,6 +88,18 @@ public class ConferenciaMB extends AppMB {
 		}
 		
 		return (ConferenciaEntity) this.entityPlc;
+	}
+
+	private void carregaConfiguracao() {
+		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
+
+		List listaConfig = (List)iocControleFacadeUtil.getFacade().findSimpleList(context, ConferenciaConfigEntity.class, null);
+		
+		if (listaConfig == null || listaConfig.size() != 1) {
+			throw new PlcException("{conferencia.err.configuracao.inexistente}");
+		}
+		
+		config = (ConferenciaConfig)listaConfig.get(0);
 	}
 
 	private Livro criaArgumentoPesquisaLivro(RegraPesquisaLivros regra) {
@@ -100,7 +121,18 @@ public class ConferenciaMB extends AppMB {
 
 		if (this.entityPlc!=null) {
 			Conferencia conferencia = (Conferencia)this.entityPlc;
+			
 			List<ItemConferencia> listaItensExistentes = conferencia.getItemConferencia();
+			
+			for (int i=listaItensExistentes.size()-1; i>=0; i--) {
+				ItemConferencia itemExistente = (ItemConferencia)listaItensExistentes.get(i);
+
+				if (itemExistente.getId() == null || itemExistente.getLivro() == null) {
+					listaItensExistentes.remove(itemExistente);
+				}
+				
+			}
+				
 			boolean ok = false;
 			
 			if (StatusConferencia.F.equals(conferencia.getStatus())) {
@@ -131,10 +163,13 @@ public class ConferenciaMB extends AppMB {
 						
 						for (ItemConferencia itemExistente : listaItensExistentes) {
 							
-							if (livro.getId().compareTo(itemExistente.getLivro().getId())==0) {
-								existe = true;
-								totalExistente++;
-								break;
+							if (itemExistente.getId() != null && itemExistente.getLivro() != null) {
+								
+								if (livro.getId().compareTo(itemExistente.getLivro().getId())==0) {
+									existe = true;
+									totalExistente++;
+									break;
+								}
 							}
 						}
 						
@@ -221,6 +256,14 @@ public class ConferenciaMB extends AppMB {
 		String nomeAction = (String) contextUtil.getRequestAttribute(PlcConstants.PlcJsfConstantes.URL_SEM_BARRA);
 		
 		if ("conferencia".equalsIgnoreCase(nomeAction)) {
+
+			if (config != null) {
+				if (PlcYesNo.S.equals(config.getUtilizaLocalizacaoLivros())) {
+					contextUtil.getRequest().setAttribute(AppConstants.TELA_CONFEERENCIA.UTILIZA_lOCALIZACAO_CONFERENCIA, PlcConstants.SIM);
+				} else {
+					contextUtil.getRequest().setAttribute(AppConstants.TELA_CONFEERENCIA.UTILIZA_lOCALIZACAO_CONFERENCIA, PlcConstants.NAO);
+				}
+			}
 			
 			if (this.entityPlc!=null) {
 				Conferencia conferencia = (Conferencia)this.entityPlc;
@@ -230,10 +273,12 @@ public class ConferenciaMB extends AppMB {
 					contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_ABRIR_CONFERENCIA, PlcConstants.EXIBIR);
 				} else {
 					contextUtil.getRequest().setAttribute("exibeBuscarItensPorRegra", PlcConstants.NAO);
+					contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_ABRIR_CONFERENCIA, PlcConstants.NAO_EXIBIR);
 				}
 
 				if (StatusConferencia.A.equals(conferencia.getStatus())) {
 					contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_CONCLUIR_CONFERENCIA, PlcConstants.EXIBIR);
+					contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_ABRIR_CONFERENCIA, PlcConstants.NAO_EXIBIR);
 				}
 
 				if (StatusConferencia.C.equals(conferencia.getStatus())) {
