@@ -17,7 +17,6 @@ import javax.persistence.Entity;
 @Table(name = "ESTOQUE")
 @SequenceGenerator(name = "SE_ESTOQUE", sequenceName = "SE_ESTOQUE")
 @Access(AccessType.FIELD)
-//@NamedQueries({ @NamedQuery(name = "EstoqueEntity.querySelLookup", query = "select id as id, livro as livro, quantidade as quantidade from EstoqueEntity where id = ? order by id asc") })
 @NamedQueries({ 
 	@NamedQuery(name = "EstoqueEntity.querySelByLivro", query = "from EstoqueEntity where livro = :livro"),
 	@NamedQuery(name = "EstoqueEntity.querySelLookup", query = "select id as id, livro as livro from EstoqueEntity where id = ? order by id asc")})

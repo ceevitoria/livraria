@@ -9,6 +9,10 @@ import javax.validation.constraints.NotNull;
 import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfType;
 import javax.persistence.Id;
 import com.cee.livraria.entity.LivroEntity;
+
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.GenerationType;
 import org.hibernate.annotations.ForeignKey;
@@ -18,6 +22,10 @@ import javax.persistence.FetchType;
 import javax.validation.constraints.Digits;
 import javax.persistence.GeneratedValue;
 
+/**
+ * @author joao.machado
+ *
+ */
 @MappedSuperclass
 public abstract class ItemMovimento extends AppBaseEntity {
 
@@ -51,6 +59,11 @@ public abstract class ItemMovimento extends AppBaseEntity {
 	@Digits(integer = 10, fraction = 2)
 	private BigDecimal valorTotal;
 
+	@Enumerated(EnumType.STRING)
+	@NotNull
+	@Column(length = 1)
+	private TipoMovimento tipo;
+	
 	public Long getId() {
 		return id;
 	}
@@ -97,6 +110,14 @@ public abstract class ItemMovimento extends AppBaseEntity {
 
 	public void setMovimento(Movimento movimento) {
 		this.movimento = movimento;
+	}
+
+	public TipoMovimento getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoMovimento tipo) {
+		this.tipo = tipo;
 	}
 
 }

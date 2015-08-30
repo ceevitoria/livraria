@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition> 
+		<plcf:tabela tituloChave="ajusteEstoque.mestre.titulo.comp"> 
+			<plcf:linha> 
+				<plcf:celula  columnSpan="2"> 
+					<plcf:titulo value="#{msg['label.nome']}"/>  
+					<plcf:texto id="nome" value="#{ajusteEstoque.nome}" disabled="#{ajusteEstoque.status!='F'}" tamanho="100" ajudaChave="ajuda.nome"/> 
+				</plcf:celula>  
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula columnSpan="2"> 
+					<plcf:titulo value="#{msg['label.descricao']}"/>  
+					<plcf:area id="descricao" value="#{ajusteEstoque.descricao}" disabled="#{ajusteEstoque.status!='F'}" numLinhas="3" colunas="100" ajudaChave="ajuda.descricao"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.data']}"/>  
+					<plcf:data id="data" tamanho="12" value="#{ajusteEstoque.data}" disabled="#{ajusteEstoque.status!='F'}" ajudaChave="ajuda.data"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.statusAjusteEstoque']}"/>  
+					<plcf:comboEstatico id="status" value="#{ajusteEstoque.status}" dominio="StatusAjuste" disabled="true" exibeBranco="N" ajudaChave="ajuda.statusAjusteEstoque"/> 
+				</plcf:celula> 
+			</plcf:linha> 
+		</plcf:tabela> 
+	</ui:composition> 
+</html>

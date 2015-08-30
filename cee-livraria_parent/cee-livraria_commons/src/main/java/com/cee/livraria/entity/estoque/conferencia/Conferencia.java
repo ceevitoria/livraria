@@ -34,10 +34,10 @@ public abstract class Conferencia extends AppBaseEntity {
 	private Long id;
 
 	@NotNull
-	@Size(max = 100)
+	@Size(max = 200)
 	private String nome;
 
-	@Size(max = 300)
+	@Size(max = 2048)
 	private String descricao;
 
 	@NotNull

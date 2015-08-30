@@ -34,6 +34,26 @@
 				</plcf:botaoAcao>
 			</ui:insert>
 
+			<ui:insert name="livraria_acao_abrirAjusteEstoque">	 
+				<plcf:botaoAcao id="botaoAcaoAbrirAjusteEstoque" urlIcone="ico iGravar" acao="abrirAjusteEstoque" 
+					limpaForm="false" partialSubmit="#{!partialSubmit}" label="ajusteEstoque.evt.abrirAjusteEstoque" 
+					botaoArrayID="AJUSTEESTOQUE" validaForm="false" immediate="false" blocking="true" 
+					rendered="#{requestScope.exibeBtnAbrirAjusteEstoque=='S'}" onclick="beforeSubmit();">
+					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
+					<f:param name="skipValidation" value="true"/>
+				</plcf:botaoAcao>
+			</ui:insert>
+
+			<ui:insert name="livraria_acao_concluirAjusteEstoque">	 
+				<plcf:botaoAcao id="botaoAcaoConcluirAjusteEstoque" urlIcone="ico iGravar" acao="concluirAjusteEstoque" 
+					limpaForm="false" partialSubmit="#{!partialSubmit}" label="ajusteEstoque.evt.concluirAjusteEstoque" 
+					botaoArrayID="AJUSTEESTOQUE" validaForm="false" immediate="false" blocking="true" 
+					rendered="#{requestScope.exibeBtnConcluirAjusteEstoque=='S'}" onclick="beforeSubmit();">
+					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
+					<f:param name="skipValidation" value="true"/>
+				</plcf:botaoAcao>
+			</ui:insert>
+
 			<ui:insert name="livraria_acao_buscarItensPorRegra">	 
 				<plcf:botaoAcao id="botaoAcaoBuscarItensPorRegra" urlIcone="ico iEspecifico" acao="buscarItensPorRegra" 
 					limpaForm="false" partialSubmit="#{!partialSubmit}" label="tabpreco.evt.buscarItensPorRegra" 

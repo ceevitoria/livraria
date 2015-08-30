@@ -22,11 +22,17 @@ public interface AppConstants extends PlcConstants {
     	
     	String EXIBE_BT_ABRIR_CONFERENCIA = "exibeBtnAbrirConferencia";
     	String EXIBE_BT_CONCLUIR_CONFERENCIA = "exibeBtnConcluirConferencia";
+
+    	String EXIBE_BT_ABRIR_AJUSTE_ESTOQUE  = "exibeBtnAbrirAjusteEstoque";
+    	String EXIBE_BT_CONCLUIR_AJUSTE_ESTOQUE = "exibeBtnConcluirAjusteEstoque";
     }
     
     interface TELA_CONFEERENCIA {
-    	String UTILIZA_lOCALIZACAO_CONFERENCIA = "utilizaLocalizacaoConferencia";
-    	
+    	String UTILIZA_lOCALIZACAO = "utilizaLocalizacaoConferencia";
     }
-    
+
+    interface TELA_AJUSTE_ESTOQUE {
+    	String UTILIZA_lOCALIZACAO = "utilizaLocalizacaoAjusteEstoque";
+    }
+
 }

@@ -16,9 +16,13 @@ import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.config.TipoMensagemConferenciaConfig;
 import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.estoque.EstoqueEntity;
+import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
+import com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque;
+import com.cee.livraria.entity.estoque.ajuste.StatusAjuste;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.estoque.conferencia.ConferenciaEntity;
 import com.cee.livraria.entity.estoque.conferencia.ItemConferencia;
+import com.cee.livraria.entity.estoque.conferencia.RegraPesquisaLivros;
 import com.cee.livraria.entity.estoque.conferencia.ResultadoConferencia;
 import com.cee.livraria.entity.estoque.conferencia.StatusConferencia;
 import com.cee.livraria.persistence.jpa.conferencia.ConferenciaDAO;
@@ -110,17 +114,21 @@ public class ConferenciaRepository extends PlcBaseRepository {
 											itemEstoque.getLocalizacao().getDescricao(),
 											itemConferencia.getLocalizacao().getDescricao()}));
 								}
-								
 							}
 							
 							if (PlcYesNo.N.equals(config.getPermiteTrocaLocalizacaoLivros())) {
 	
-								if (config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.D) ) {
+								if (config.getTipoMensagem().equals(TipoMensagemConferenciaConfig.D) ) {
 									alertas.add("A troca da localização não está permitida nas configurações do sistema!");
 								}
 								
 								autorizaGravacao = false;
-								
+							} else if (PlcYesNo.S.equals(config.getAjusteAutomaticoLocalizacaoLivros())) {
+								itemEstoque.setLocalizacao(itemConferencia.getLocalizacao());
+								itemEstoque.setDataConferencia(dataConferencia);
+								itemEstoque.setDataUltAlteracao(dataConferencia);
+								itemEstoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
+								dao.update(context, itemEstoque);
 							}
 							
 							totalItensLocalizacaoDivergente++;
@@ -169,9 +177,15 @@ public class ConferenciaRepository extends PlcBaseRepository {
 				conferencia.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
 				dao.update(context, conferencia);
 
+				
+				if (ResultadoConferencia.D.equals(conferencia.getResultado())) {
+					criarAjusteEstoqueParaDivergencia(context, conferencia, dataConferencia);
+					mensagens.add("Foi cadastrado um novo 'Ajuste de Estoque' para tratar esta divergência!"); 
+				}
+				
 			} else {
 				alertas.add("Não está autorizado a conclusão da conferência com divergência de localização!"); 
-				alertas.add("Solicite ao gestor para ajustar a configuração da conferência para aceitar a troca de localização!"); 
+				alertas.add("Solicite o Gestor para ajustar a configuração da conferência para aceitar a troca de localização!"); 
 			}
 			
 		} catch (PlcException plcE) {
@@ -183,6 +197,51 @@ public class ConferenciaRepository extends PlcBaseRepository {
 		return new RetornoConfig(null, config, alertas, mensagens);
 	}
 	
+	private void criarAjusteEstoqueParaDivergencia(PlcBaseContextVO context, Conferencia conferencia, Date dataConferencia) throws PlcException {
+		AjusteEstoque ajusteEstoque = new AjusteEstoque();
+
+		ajusteEstoque.setData(dataConferencia);
+		ajusteEstoque.setNome("Ajuste Conferencia: '" + conferencia.getNome() + "'");
+		ajusteEstoque.setDescricao("Ajuste criado automaticamente devido a conferência concluída com divergência");
+		ajusteEstoque.setRegra(new RegraPesquisaLivros());
+		ajusteEstoque.setStatus(StatusAjuste.A);
+		ajusteEstoque.setConferencia(conferencia);
+
+		dao.insert(context, ajusteEstoque);
+
+		List<ItemConferencia> itensConferencia = conferencia.getItemConferencia();
+		List<ItemAjusteEstoque> itensAjuste = new ArrayList<ItemAjusteEstoque>(itensConferencia.size());
+		
+		for (ItemConferencia itemConferencia : itensConferencia) {
+			
+			if (itemConferencia.getQuantidadeConferida().compareTo(itemConferencia.getQuantidadeEstoque())!=0) {
+				ItemAjusteEstoque itemAjuste = new ItemAjusteEstoque();
+				
+				itemAjuste.setLivro(itemConferencia.getLivro());
+				itemAjuste.setAutor(itemConferencia.getAutor());
+				itemAjuste.setEspirito(itemConferencia.getEspirito());
+				itemAjuste.setColecao(itemConferencia.getColecao());
+				itemAjuste.setEdicao(itemConferencia.getEdicao());
+				itemAjuste.setEditora(itemConferencia.getEditora());
+				itemAjuste.setLocalizacao(itemConferencia.getLocalizacao());
+				itemAjuste.setQuantidadeEstoque(itemConferencia.getQuantidadeEstoque());
+				itemAjuste.setQuantidadeInformada(itemConferencia.getQuantidadeConferida());
+				itemAjuste.setAjusteEstoque(ajusteEstoque);
+				
+				itemAjuste.setDataUltAlteracao(dataConferencia);
+				itemAjuste.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
+				
+				dao.insert(context, itemAjuste);
+				
+				itensAjuste.add(itemAjuste);
+			}
+		}
+		
+		ajusteEstoque.setItemAjusteEstoque(itensAjuste);
+
+		dao.update(context, ajusteEstoque);
+	}
+
 	private void carregaConfiguracao(PlcBaseContextVO context) throws PlcException {
 		List listaConfig = (List)dao.findAll(context, ConferenciaConfigEntity.class, null);
 		

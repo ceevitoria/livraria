@@ -427,6 +427,7 @@ public class VendaLivroRepository {
 				item.setQuantidade(cl.getQuantidade());
 				item.setValorUnitario(cl.getValorUnitario());
 				item.setValorTotal(cl.getValorTotal());
+				item.setTipo(TipoMovimento.S);
 				item.setMovimento(mov);
 				
 				item.setDataUltAlteracao(dataVenda);

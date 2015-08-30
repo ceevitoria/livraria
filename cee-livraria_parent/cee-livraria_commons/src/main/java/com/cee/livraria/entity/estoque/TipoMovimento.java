@@ -5,9 +5,9 @@ package com.cee.livraria.entity.estoque;
  */
 public enum TipoMovimento {
     
+	A("{tipoMovimento.A}"),
 	E("{tipoMovimento.E}"),
 	S("{tipoMovimento.S}");
-
 	
     /**
      * @return Retorna o codigo.

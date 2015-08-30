@@ -28,7 +28,7 @@ public abstract class Estoque extends AppBaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_ESTOQUE")
 	private Long id;
 
-	@ManyToOne(targetEntity = LivroEntity.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = LivroEntity.class, fetch = FetchType.EAGER)
 	@ForeignKey(name = "FK_ESTOQUE_LIVRO")
 	@NotNull
 	private Livro livro;
@@ -48,8 +48,7 @@ public abstract class Estoque extends AppBaseEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataConferencia;
 
-//TODO Criar atributo para a localização para o livro no estoque
-	@ManyToOne(targetEntity = LocalizacaoEntity.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = LocalizacaoEntity.class, fetch = FetchType.EAGER)
 	@ForeignKey(name = "FK_ESTOQUE_LOCALIZACAO")
 	@NotNull
 	private Localizacao localizacao;

@@ -26,7 +26,6 @@ import org.hibernate.annotations.ForeignKey;
 
 @MappedSuperclass
 public abstract class Movimento extends AppBaseEntity {
-
 	
 	@OneToMany (targetEntity = com.cee.livraria.entity.estoque.ItemMovimentoEntity.class, fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="movimento")
 	@ForeignKey(name="FK_ITEMMOVIMENTO_MOVIMENTO")
@@ -34,7 +33,6 @@ public abstract class Movimento extends AppBaseEntity {
 	@PlcValMultiplicity(referenceProperty="livro",  message="{jcompany.aplicacao.mestredetalhe.multiplicidade.ItemMovimentoEntity}")
 	@Valid
 	private List<ItemMovimento> itemMovimento;
-
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_MOVIMENTO")

@@ -66,6 +66,11 @@
 							<label jsfc="plcf:titulo" tituloChave="menu.conferencia.titulo">Conferência</label>
 						</a>
 					</li>
+					<li style="#{plct:execOneArg(request,'isUserInRole','Gestor')?'':'display:none;'}">
+						<a href="#{request.contextPath}/f/n/ajusteEstoque">
+							<label jsfc="plcf:titulo" tituloChave="menu.ajusteEstoque.titulo">Ajuste Estoque</label>
+						</a>
+					</li>
 				</ul>
 			</li>
 			<li>
@@ -120,6 +125,11 @@
 					<li>
 						<a href="#{request.contextPath}/f/n/conferenciaconfig">
 							<label jsfc="plcf:titulo" tituloChave="menu.conferenciaconfig.titulo">Conferencia Config</label>
+						</a>
+					</li>
+					<li>
+						<a href="#{request.contextPath}/f/n/ajusteestoqueconfig">
+							<label jsfc="plcf:titulo" tituloChave="menu.ajusteestoqueconfig.titulo">Ajuste Estoque Config</label>
 						</a>
 					</li>
 				</ul>

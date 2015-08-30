@@ -3,10 +3,13 @@ package com.cee.livraria.facade;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.cee.livraria.entity.Livro;
 import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.config.RetornoConfig;
+import com.cee.livraria.entity.estoque.Estoque;
+import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.pagamento.PagamentoList;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
@@ -65,4 +68,21 @@ public interface IAppFacade extends IPlcFacade {
 	 * @return RetornoConfig com informacoes sobre a conclusao da conferencia (@see RetornoConfig)
 	 */
 	public RetornoConfig concluirConferenciaLivros(PlcBaseContextVO context, Conferencia conferencia) throws PlcException;
+	
+	/**
+	 * Efetua a conclusão de um ajuste de estoque de livros
+	 * @param context
+	 * @param ajusteEstoque
+	 * @return RetornoConfig com informacoes sobre a conclusao da conferencia (@see RetornoConfig)
+	 */
+	public RetornoConfig concluirAjusteEstoqueLivros(PlcBaseContextVO context, AjusteEstoque ajusteEstoque) throws PlcException;
+
+	/**
+	 * Busca os referidos livros do estoque
+	 * @param context
+	 * @param entityList relação de livros a serem recuperados do estoque
+	 * @return itens do estoque relativos ao livros informados
+	 */
+	public List<Estoque> buscarLivrosEstoque(PlcBaseContextVO context, List<Livro> listaLivros) throws PlcException;
+	
 }
