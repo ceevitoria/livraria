@@ -30,9 +30,9 @@
 				
 				<c:if test="#{ajusteEstoque.status=='F'}">
 					<plcf:vinculado id="livro" value="#{itemAjusteEstoque.livro}" 
-						propSelPop="livro" idExibe="S" lookupTamanho="35"
+						propSelPop="livro" idExibe="S" lookupTamanho="32"
 						autoRecuperacaoPropriedade="codigoBarras"
-						autoComplete="true" idTamanho="15" evento="y"
+						autoComplete="true" idTamanho="13" evento="y"
 						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.LivroEntity" 
 						actionSel="livrosel" modal="S" ajudaChave="ajuda.livro" 
 						onkeydown="selecionaPorTecla(event,this);" larg="900"
@@ -67,7 +67,7 @@
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.edicao']}"/>
 				</f:facet>  
-				<plcf:numerico id="edicao" value="#{itemAjusteEstoque.edicao}" tamanho="5" numCasas="0" disabled="#{ajusteEstoque.status!='F'}" ajudaChave="ajuda.edicao"/> 
+				<plcf:numerico id="edicao" value="#{itemAjusteEstoque.edicao}" tamanho="3" numCasas="0" disabled="#{ajusteEstoque.status!='F'}" ajudaChave="ajuda.edicao"/> 
 			</h:column>  
 			<h:column rendered="#{requestScope.utilizaLocalizacaoAjusteEstoque=='S'}"> 
 				<f:facet name="header">
@@ -79,13 +79,13 @@
 				<f:facet name="header" >
 					<plcf:titulo value="#{msg['label.quantidade.estoque']}" />
 				</f:facet>  
-				<plcf:numerico id="quantidadeEstoque" tamanho="10" value="#{itemAjusteEstoque.quantidadeEstoque}" numCasas="0" disabled="true" ajudaChave="ajuda.quantidade.estoque"/> 
+				<plcf:numerico id="quantidadeEstoque" tamanho="7" value="#{itemAjusteEstoque.quantidadeEstoque}" numCasas="0" disabled="true" ajudaChave="ajuda.quantidade.estoque"/> 
 			</h:column> 
 			<h:column> 
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.quantidade.informada']}"/>
 				</f:facet>  
-				<plcf:numerico id="quantidadeInformada" tamanho="10" value="#{itemAjusteEstoque.quantidadeInformada}" numCasas="0" disabled="#{ajusteEstoque.status=='C'}" ajudaChave="ajuda.quantidade.informada"/> 
+				<plcf:numerico id="quantidadeInformada" tamanho="7" value="#{itemAjusteEstoque.quantidadeInformada}" numCasas="0" disabled="#{ajusteEstoque.status=='C'}" ajudaChave="ajuda.quantidade.informada"/> 
 			</h:column> 
 		</plcf:iteracao> 
 	</ui:composition> 

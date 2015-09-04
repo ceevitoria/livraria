@@ -112,8 +112,14 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 					throw new PlcException("ajusteEstoque.err.item.sem.quantidade");
 				}
 				
-				int qtdInformada = itemAjuste.getQuantidadeInformada();
+				if (itemAjuste.getQuantidadeEstoque() == null) {
+					insereEstoque(context, itemAjuste, dataMovimento);
+					itemAjuste.setQuantidadeEstoque(itemAjuste.getQuantidadeInformada());
+				}
+				
 				int qtdExistente = itemAjuste.getQuantidadeEstoque();
+				int qtdInformada = itemAjuste.getQuantidadeInformada();
+				
 				int qtdSaldo = 0;
 				int sinal = 1;
 				
@@ -165,18 +171,38 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 			tipoMovimento = TipoMovimento.S;
 		}
 		
-		mov.setData(dataMovimento);
-		mov.setTipo(tipoMovimento);
-		mov.setModo(ModoMovimento.A);
-		mov.setValor(BigDecimal.valueOf(valorMovimento));
-		mov.setItemMovimento(itens);
-
-		mov.setDataUltAlteracao(dataMovimento);
-		mov.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
-
-		dao.insert(context, mov);
+		if (tipoMovimento != null) {
+			mov.setData(dataMovimento);
+			mov.setTipo(tipoMovimento);
+			mov.setModo(ModoMovimento.A);
+			mov.setValor(BigDecimal.valueOf(valorMovimento));
+			mov.setItemMovimento(itens);
+			
+			mov.setDataUltAlteracao(dataMovimento);
+			mov.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
+			
+			dao.insert(context, mov);
+		}
 	}
 	
+	private void insereEstoque(PlcBaseContextVO context, ItemAjusteEstoque itemAjuste, Date data)  throws PlcException {
+		Livro livro = itemAjuste.getLivro();
+
+		Estoque estoque = new EstoqueEntity();
+		
+		estoque.setLivro(livro);
+		estoque.setQuantidadeMinima(1);
+		estoque.setQuantidade(itemAjuste.getQuantidadeInformada());
+		estoque.setQuantidadeMaxima(20);
+		estoque.setDataConferencia(data);
+		estoque.setLocalizacao(itemAjuste.getLocalizacao());
+		
+		estoque.setDataUltAlteracao(data);
+		estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
+		
+		dao.insert(context, estoque);
+	}
+
 	/**
 	 * Atualiza o saldo dos livros sendo vendidos no estoque
 	 * OBS: Não faz crítica para saldo negativo.
@@ -224,6 +250,7 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 								}
 							}
 						}
+						
 						estoque.setDataConferencia(dataAjuste);
 
 						estoque.setDataUltAlteracao(dataAjuste);

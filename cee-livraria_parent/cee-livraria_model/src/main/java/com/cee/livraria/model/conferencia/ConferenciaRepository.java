@@ -84,6 +84,7 @@ public class ConferenciaRepository extends PlcBaseRepository {
 		boolean autorizaGravacao = true;
 		int totalItensQuantidadeDivergente=0;
 		int totalItensLocalizacaoDivergente=0;
+		int quantidadeLivrosSemEstoque=0;
 
 		mensagens.clear();
 		alertas.clear();
@@ -97,38 +98,44 @@ public class ConferenciaRepository extends PlcBaseRepository {
 				List<Estoque> estoqueList = dao.findByFields(context, EstoqueEntity.class, "querySelByLivro", new String[] {"livro"}, new Object[] {livro});
 				
 				if (estoqueList == null || estoqueList.size() == 0) {
-					//TODO: 
+					quantidadeLivrosSemEstoque++;
+					
+					if (config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.D) ) {
+						alertas.add(String.format("O livro '%s' não possui estoque associado.", 
+							new Object[]{itemConferencia.getLivro().getTitulo()}));
+					}
+					
 				} else if (estoqueList.size() == 1) {
-					Estoque itemEstoque = estoqueList.get(0);
+					Estoque estoque = estoqueList.get(0);
 
 					// Se foi configurado para utilizar a localização do livros na conferencia de estoque
 					if (PlcYesNo.S.equals(config.getUtilizaLocalizacaoLivros())) {
 						
-						if (itemConferencia.getLocalizacao().getId().compareTo(itemEstoque.getLocalizacao().getId())!=0) {
+						if (itemConferencia.getLocalizacao().getId().compareTo(estoque.getLocalizacao().getId())!=0) {
 							
 							if (PlcYesNo.S.equals(config.getAlertaTrocaLocalizacaoLivros())) {
 								
 								if (config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.D) ) {
 									alertas.add(String.format("O livro '%s' teve sua localização trocada de '%s' para '%s'", 
 											new Object[]{itemConferencia.getLivro().getTitulo(),
-											itemEstoque.getLocalizacao().getDescricao(),
+											estoque.getLocalizacao().getDescricao(),
 											itemConferencia.getLocalizacao().getDescricao()}));
 								}
 							}
 							
 							if (PlcYesNo.N.equals(config.getPermiteTrocaLocalizacaoLivros())) {
+								autorizaGravacao = false;
 	
 								if (config.getTipoMensagem().equals(TipoMensagemConferenciaConfig.D) ) {
 									alertas.add("A troca da localização não está permitida nas configurações do sistema!");
 								}
 								
-								autorizaGravacao = false;
 							} else if (PlcYesNo.S.equals(config.getAjusteAutomaticoLocalizacaoLivros())) {
-								itemEstoque.setLocalizacao(itemConferencia.getLocalizacao());
-								itemEstoque.setDataConferencia(dataConferencia);
-								itemEstoque.setDataUltAlteracao(dataConferencia);
-								itemEstoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
-								dao.update(context, itemEstoque);
+								estoque.setLocalizacao(itemConferencia.getLocalizacao());
+								estoque.setDataConferencia(dataConferencia);
+								estoque.setDataUltAlteracao(dataConferencia);
+								estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
+								dao.update(context, estoque);
 							}
 							
 							totalItensLocalizacaoDivergente++;
@@ -136,14 +143,14 @@ public class ConferenciaRepository extends PlcBaseRepository {
 					}
 					
 					// Grava no item da conferencia a quantidade que existe atualmente contabilizada no estoque
-					itemConferencia.setQuantidadeEstoque(itemEstoque.getQuantidade());
+					itemConferencia.setQuantidadeEstoque(estoque.getQuantidade());
 					
-					if (itemConferencia.getQuantidadeConferida().compareTo(itemEstoque.getQuantidade())!=0) {
+					if (itemConferencia.getQuantidadeConferida().compareTo(estoque.getQuantidade()) != 0) {
 
-						if (config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.D) ) {
+						if (config.getTipoMensagem().equals(TipoMensagemConferenciaConfig.D) ) {
 							alertas.add(String.format("Quantidade divergente para o livro '%s'. Registrado: '%d'. Informado: '%d'", 
 									new Object[]{itemConferencia.getLivro().getTitulo(),
-									itemEstoque.getQuantidade(),
+									estoque.getQuantidade(),
 									itemConferencia.getQuantidadeConferida()}));
 						}
 						
@@ -159,6 +166,14 @@ public class ConferenciaRepository extends PlcBaseRepository {
 				}
 				
 				mensagens.add(String.format("Total de itens com divergência na quantidade: %d", new Object[]{totalItensQuantidadeDivergente}));
+				
+				if (quantidadeLivrosSemEstoque == 1) {
+					alertas.add("Apenas um livro não possui estoque associado. Será criado automaticamente ao 'Ajustar Estoque'.");
+				} else if (quantidadeLivrosSemEstoque > 1) {
+					alertas.add(String.format("'%d' livros não possuem estoque associado. Será criado automaticamente ao 'Ajustar Estoque'.", 
+						new Object[]{quantidadeLivrosSemEstoque}));
+				}
+				
 			}
 
 			if (autorizaGravacao) {
