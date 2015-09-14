@@ -69,7 +69,7 @@
 				'#{msg['livro.titulo']}',
 				colNames:[
 				//	['#{msg['label.id']}',
-				//	'#{msg['label.codigoBarras']}',
+					'#{msg['label.codigoBarras']}',
 					'#{msg['label.titulo']}',
 					'#{msg['label.edicao']}',
 				//	'#{msg['label.palavrasChave']}',
@@ -81,9 +81,9 @@
 					],
 				colModel:[
 				//	{name:'id',index:'id'},
-				//	{name:'codigoBarras',index:'codigoBarras'},
-					{name:'titulo',index:'titulo'},
-					{name:'edicao',index:'edicao'},
+					{name:'codigoBarras',index:'codigoBarras', width:'80', align:'center'},
+					{name:'titulo',index:'titulo', width:'300'},
+					{name:'edicao',index:'edicao', width:'40', align:'center'},
 				//	{name:'palavrasChave',index:'palavrasChave'},
 					{name:'autor',index:'autor'},
 					{name:'espirito',index:'espirito'},

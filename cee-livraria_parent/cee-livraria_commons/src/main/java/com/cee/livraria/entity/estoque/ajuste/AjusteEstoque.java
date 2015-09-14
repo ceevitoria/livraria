@@ -65,7 +65,7 @@ public class AjusteEstoque extends AppBaseEntity {
 	@Enumerated(EnumType.STRING)
 	@NotNull
 	@Column(length = 1)
-	private StatusAjuste status = StatusAjuste.F;
+	private StatusAjuste status; 
 
 	@Embedded
 	@NotNull

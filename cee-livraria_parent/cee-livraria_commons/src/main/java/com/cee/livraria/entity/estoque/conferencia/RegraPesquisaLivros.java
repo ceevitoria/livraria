@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
+import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
@@ -28,12 +29,15 @@ public class RegraPesquisaLivros implements Serializable {
 	private String codigoBarras;
 
 	@Transient
+	@OrderBy(value="nome")
 	private Autor autor;
 
 	@Transient
+	@OrderBy(value="nome")
 	private Espirito espirito;
 
 	@Transient
+	@OrderBy(value="nome")
 	private Editora editora;
 
 	@Digits(integer = 5, fraction = 0)
@@ -41,6 +45,7 @@ public class RegraPesquisaLivros implements Serializable {
 	private Integer edicao;
 
 	@Transient
+	@OrderBy(value="nome")
 	private Colecao colecao;
 
 	@Size(max = 40)
@@ -48,6 +53,7 @@ public class RegraPesquisaLivros implements Serializable {
 	private String palavraChave;
 
 	@Transient
+	@OrderBy(value="codigo")
 	private Localizacao localizacao;
 
 	public RegraPesquisaLivros() {

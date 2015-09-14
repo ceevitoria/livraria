@@ -15,7 +15,8 @@ import com.cee.livraria.entity.config.ConferenciaConfig;
 import com.cee.livraria.entity.config.ConferenciaConfigEntity;
 import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.estoque.Estoque;
-import com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque;
+import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
+import com.cee.livraria.entity.estoque.ajuste.StatusAjuste;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.estoque.conferencia.ConferenciaEntity;
 import com.cee.livraria.entity.estoque.conferencia.ItemConferencia;
@@ -92,6 +93,15 @@ public class ConferenciaMB extends AppMB {
 		return (ConferenciaEntity) this.entityPlc;
 	}
 
+	@Override
+	public String create() {
+		String ret = super.create();
+		
+		((Conferencia)this.entityPlc).setStatus(StatusConferencia.F);
+		
+		return ret;
+	}
+	
 	private void carregaConfiguracao() {
 		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 
@@ -234,6 +244,8 @@ public class ConferenciaMB extends AppMB {
 		} else {
 			item.setEspirito(null);
 		}
+		
+		item.setIndExcPlc("N");
 		
 		//TODO: Definir a localizacao
 		item.setLocalizacao(null);

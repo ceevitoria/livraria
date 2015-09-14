@@ -47,7 +47,7 @@ public abstract class Conferencia extends AppBaseEntity {
 	@Enumerated(EnumType.STRING)
 	@NotNull
 	@Column(length = 1)
-	private StatusConferencia status = StatusConferencia.F;
+	private StatusConferencia status; 
 
 	@Enumerated(EnumType.STRING)
 	@Column(length = 1)

@@ -50,6 +50,18 @@ e explicações sobre como se obter ajuda para a aplicação. Esta pagina é um 
 			<a href="#{request.contextPath}/f/n/livrosel" class="ui-state-default ui-corner-all plc-botao-quiosque">
 			<div><img class="ui-state-default plc-imagem" style="border: none;" src="#{request.contextPath}/res/midia/home-quiosque-livro.png"/></div><div>Livro</div></a>
 		</div>
+		<div style="#{plct:execOneArg(request,'isUserInRole','Vendedor')?'':'display:none;'}">
+			<a href="#{request.contextPath}/f/n/vendalivro" class="ui-state-default ui-corner-all plc-botao-quiosque">
+			<div><img class="ui-state-default plc-imagem" style="border: none;" src="#{request.contextPath}/res/midia/home-quiosque-vender.png"/></div><div>Vender Livro</div></a>
+		</div>
+		<div style="#{plct:execOneArg(request,'isUserInRole','Vendedor')?'':'display:none;'}">
+			<a href="#{request.contextPath}/f/n/caixaabertura" class="ui-state-default ui-corner-all plc-botao-quiosque">
+			<div><img class="ui-state-default plc-imagem" style="border: none;" src="#{request.contextPath}/res/midia/home-quiosque-caixa-abrir.png"/></div><div>Abrir Caixa</div></a>
+		</div>
+		<div style="#{plct:execOneArg(request,'isUserInRole','Vendedor')?'':'display:none;'}">
+			<a href="#{request.contextPath}/f/n/caixafechamento" class="ui-state-default ui-corner-all plc-botao-quiosque">
+			<div><img class="ui-state-default plc-imagem" style="border: none;" src="#{request.contextPath}/res/midia/home-quiosque-caixa-fechar.png"/></div><div>Fechar Caixa</div></a>
+		</div>
 		<div style="#{plct:execOneArg(request,'isUserInRole','Gestor')?'':'display:none;'}">
 			<a href="#{request.contextPath}/f/n/tabprecosel" class="ui-state-default ui-corner-all plc-botao-quiosque">
 			<div><img class="ui-state-default plc-imagem" style="border: none;" src="#{request.contextPath}/res/midia/home-quiosque-precificacao.png"/></div><div>Precificação</div></a>

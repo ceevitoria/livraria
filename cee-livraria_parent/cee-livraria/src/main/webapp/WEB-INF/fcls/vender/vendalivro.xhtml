@@ -100,12 +100,14 @@ function formataVlUnitario(indice) {
 								<plcf:titulo value="#{msg['label.livro']}"/>
 							</f:facet>
 							<plcf:vinculado id="livro" value="#{vendalivro.livro}" 
-								propSelPop="livro" idExibe="S" lookupTamanho="25"
+								propSelPop="livro" idExibe="S" 
+								idTamanho="12" lookupTamanho="60"
+								larg="1200" alt="800"
 								autoRecuperacaoPropriedade="codigoBarras"
-								autoComplete="true" idTamanho="8" evento="y"
+								autoComplete="true" evento="y"
 								idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.LivroEntity" 
 								actionSel="livrosel" modal="S" ajudaChave="ajuda.livro" 
-								onkeydown="selecionaPorTecla(event,this);" larg="950"
+								onkeydown="selecionaPorTecla(event,this);" 
 								riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.livro?q=titulo')"/> 
 						</h:column>  
 						<h:column> 

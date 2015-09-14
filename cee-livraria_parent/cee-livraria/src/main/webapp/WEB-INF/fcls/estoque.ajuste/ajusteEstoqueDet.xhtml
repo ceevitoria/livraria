@@ -20,7 +20,7 @@
 					<plcf:tituloExclusao>Exc.</plcf:tituloExclusao>
 				</f:facet>  
 				<span class="celulaFormularioCaixaMarcacao">
-					<plcf:caixaExclusao id="indExcPlc" value="#{itemAjusteEstoque.indExcPlc}" disabled="#{ajusteEstoque.status!='F'}" />
+					<plcf:caixaMarcacao id="indExcPlc" value="#{itemAjusteEstoque.indExcPlc}" disabled="#{ajusteEstoque.status!='F'}" />
 				</span> 
 			</h:column>  
 			<h:column> 
@@ -31,11 +31,12 @@
 				<c:if test="#{ajusteEstoque.status=='F'}">
 					<plcf:vinculado id="livro" value="#{itemAjusteEstoque.livro}" 
 						propSelPop="livro" idExibe="S" lookupTamanho="32"
+						larg="1200" alt="800"
 						autoRecuperacaoPropriedade="codigoBarras"
 						autoComplete="true" idTamanho="13" evento="y"
 						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.LivroEntity" 
 						actionSel="livrosel" modal="S" ajudaChave="ajuda.livro" 
-						onkeydown="selecionaPorTecla(event,this);" larg="900"
+						onkeydown="selecionaPorTecla(event,this);" 
 						disabled="#{ajusteEstoque.status!='F'}" 
 						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.livro?q=titulo')"/> 
 				</c:if>
@@ -67,7 +68,7 @@
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.edicao']}"/>
 				</f:facet>  
-				<plcf:numerico id="edicao" value="#{itemAjusteEstoque.edicao}" tamanho="3" numCasas="0" disabled="#{ajusteEstoque.status!='F'}" ajudaChave="ajuda.edicao"/> 
+				<plcf:numerico id="edicao" value="#{itemAjusteEstoque.edicao}" tamanho="5" numCasas="0" disabled="#{ajusteEstoque.status!='F'}" ajudaChave="ajuda.edicao"/> 
 			</h:column>  
 			<h:column rendered="#{requestScope.utilizaLocalizacaoAjusteEstoque=='S'}"> 
 				<f:facet name="header">

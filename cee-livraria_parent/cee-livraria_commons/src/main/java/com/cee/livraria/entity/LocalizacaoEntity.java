@@ -20,7 +20,9 @@ import javax.persistence.Transient;
 @Access(AccessType.FIELD)
 @NamedQueries({
 	@NamedQuery(name="LocalizacaoEntity.queryMan", query="from LocalizacaoEntity"), 
-	@NamedQuery(name = "LocalizacaoEntity.querySelLookup", query = "select id as id, codigo as codigo from LocalizacaoEntity where id = ? order by id asc") })
+	@NamedQuery(name="LocalizacaoEntity.querySel", query="select id as id, codigo as codigo from LocalizacaoEntity order by codigo asc"), 
+	@NamedQuery(name="LocalizacaoEntity.querySelLookup", query="select id as id, codigo as codigo from LocalizacaoEntity where id = ? order by codigo asc") 
+})
 public class LocalizacaoEntity extends Localizacao {
 
 	private static final long serialVersionUID = 1L;

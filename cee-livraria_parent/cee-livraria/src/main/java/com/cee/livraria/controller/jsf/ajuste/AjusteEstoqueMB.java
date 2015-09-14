@@ -17,7 +17,9 @@ import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.StatusAjuste;
+import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.estoque.conferencia.RegraPesquisaLivros;
+import com.cee.livraria.entity.estoque.conferencia.StatusConferencia;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcConstants;
@@ -86,6 +88,15 @@ public class AjusteEstoqueMB extends AppMB {
 		}
 		
 		return (AjusteEstoque) this.entityPlc;
+	}
+
+	@Override
+	public String create() {
+		String ret = super.create();
+		
+		((AjusteEstoque)this.entityPlc).setStatus(StatusAjuste.F);
+		
+		return ret;
 	}
 
 	private void carregaConfiguracao() {
@@ -269,6 +280,7 @@ public class AjusteEstoqueMB extends AppMB {
 	}
 	
 	
+	
 	public void handleButtonsAccordingFormPattern() {
 		String nomeAction = (String) contextUtil.getRequestAttribute(PlcConstants.PlcJsfConstantes.URL_SEM_BARRA);
 		
@@ -310,7 +322,7 @@ public class AjusteEstoqueMB extends AppMB {
 		
 		super.handleButtonsAccordingFormPattern();
 	}
-
+	
 }
 
 

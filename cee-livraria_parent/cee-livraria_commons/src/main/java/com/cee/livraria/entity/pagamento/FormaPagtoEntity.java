@@ -20,6 +20,7 @@ import javax.persistence.Transient;
 @Access(AccessType.FIELD)
 @NamedQueries({
 	@NamedQuery(name="FormaPagtoEntity.queryMan", query="from FormaPagtoEntity"), 
+	@NamedQuery(name="FormaPagtoEntity.querySel", query="select id as id, nome as nome from FormaPagtoEntity order by nome asc"), 
 	@NamedQuery(name="FormaPagtoEntity.querySelLookup", query="select id as id, nome as nome from FormaPagtoEntity where id = ? order by id asc") })
 public class FormaPagtoEntity extends FormaPagto {
 

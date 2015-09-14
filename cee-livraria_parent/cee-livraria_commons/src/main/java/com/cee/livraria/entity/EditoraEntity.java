@@ -19,7 +19,10 @@ import javax.persistence.Transient;
 @SequenceGenerator(name = "SE_EDITORA", sequenceName = "SE_EDITORA")
 @Access(AccessType.FIELD)
 @NamedQueries({
-	@NamedQuery(name="EditoraEntity.queryMan", query="from EditoraEntity"), @NamedQuery(name = "EditoraEntity.querySelLookup", query = "select id as id, nome as nome from EditoraEntity where id = ? order by id asc") })
+	@NamedQuery(name="EditoraEntity.queryMan", query="from EditoraEntity"), 
+	@NamedQuery(name="EditoraEntity.querySel", query="select id as id, nome as nome from EditoraEntity order by nome asc"), 
+	@NamedQuery(name="EditoraEntity.querySelLookup", query="select id as id, nome as nome from EditoraEntity where id = ? order by nome asc") 
+})
 public class EditoraEntity extends Editora {
 
 	private static final long serialVersionUID = 1L;

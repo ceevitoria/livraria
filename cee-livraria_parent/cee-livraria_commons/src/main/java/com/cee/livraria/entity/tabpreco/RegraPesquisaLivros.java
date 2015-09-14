@@ -21,6 +21,7 @@ import org.hibernate.annotations.ForeignKey;
 import javax.persistence.Access;
 import javax.persistence.Embeddable;
 import javax.persistence.AccessType;
+import javax.persistence.OrderBy;
 
 @Embeddable
 @Access(AccessType.FIELD)
@@ -35,14 +36,17 @@ public class RegraPesquisaLivros implements Serializable {
 
 	@ManyToOne(targetEntity = AutorEntity.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_REGRATABELAPRECO_AUTOR")
+	@OrderBy(value="nome")
 	private Autor autor;
 
 	@ManyToOne(targetEntity = EspiritoEntity.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_REGRATABELAPRECO_ESPIRITO")
+	@OrderBy(value="nome")
 	private Espirito espirito;
 
 	@ManyToOne(targetEntity = EditoraEntity.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_REGRATABELAPRECO_EDITORA")
+	@OrderBy(value="nome")
 	private Editora editora;
 
 	@Digits(integer = 5, fraction = 0)
@@ -50,6 +54,7 @@ public class RegraPesquisaLivros implements Serializable {
 
 	@ManyToOne(targetEntity = ColecaoEntity.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_REGRATABELAPRECO_COLECAO")
+	@OrderBy(value="nome")
 	private Colecao colecao;
 
 	@Size(max = 40)
@@ -57,6 +62,7 @@ public class RegraPesquisaLivros implements Serializable {
 
 	@ManyToOne(targetEntity = LocalizacaoEntity.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_REGRATABELAPRECO_LOCALIZACAO")
+	@OrderBy(value="codigo")
 	private Localizacao localizacao;
 
 	public RegraPesquisaLivros() {

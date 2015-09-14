@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OrderBy;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
@@ -46,20 +47,24 @@ abstract public class Livro extends AppBaseEntity implements Estocavel {
 
 	@ManyToOne(targetEntity = EspiritoEntity.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_LIVRO_ESPIRITO")
+	@OrderBy(value="nome")
 	private Espirito espirito;
 
 	@ManyToOne(targetEntity = AutorEntity.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_LIVRO_AUTOR")
 	@NotNull
+	@OrderBy(value="nome")
 	private Autor autor;
 
 	@ManyToOne(targetEntity = EditoraEntity.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_LIVRO_EDITORA")
 	@NotNull
+	@OrderBy(value="nome")
 	private Editora editora;
 
 	@ManyToOne(targetEntity = ColecaoEntity.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_LIVRO_COLECAO")
+	@OrderBy(value="nome")
 	private Colecao colecao;
 	
 	@Digits(integer = 10, fraction = 2)
