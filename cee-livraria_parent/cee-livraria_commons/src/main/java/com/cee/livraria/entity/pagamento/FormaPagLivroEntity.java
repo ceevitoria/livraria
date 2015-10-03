@@ -20,7 +20,7 @@ import javax.persistence.Transient;
 @Access(AccessType.FIELD)
 @NamedQueries({
 	@NamedQuery(name="FormaPagLivroEntity.queryMan", query="from FormaPagLivroEntity"), 
-	@NamedQuery(name="FormaPagLivroEntity.querySel", query="select obj.id as id, obj2.id as formaPagto_id, obj2.nome as formaPagto_nome from FormaPagLivroEntity obj inner join obj.formaPagto obj2 order by obj2.nome asc"), 
+	@NamedQuery(name="FormaPagLivroEntity.querySel", query="select obj.id as id, obj.isGeraCaixa as isGeraCaixa, obj2.id as formaPagto_id, obj2.nome as formaPagto_nome from FormaPagLivroEntity obj inner join obj.formaPagto obj2 order by obj2.nome asc"), 
 	@NamedQuery(name="FormaPagLivroEntity.querySelLookup", query="select id as id, formaPagto as formaPagto from FormaPagLivroEntity where id = ? order by id asc") })
 public class FormaPagLivroEntity extends FormaPagLivro {
 

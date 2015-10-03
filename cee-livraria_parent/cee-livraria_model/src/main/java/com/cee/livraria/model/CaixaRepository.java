@@ -43,42 +43,38 @@ public class CaixaRepository extends PlcBaseRepository {
 	@Inject
 	protected transient Logger log;
 
-	private OperacaoCaixaConfig config;
 	private List<String> alertas = new ArrayList<String>();
 	private List<String> mensagens = new ArrayList<String>();
-	private List<FormaPagLivro> formasPagLivro;
-	private CaixaEntity caixa;
-	private PlcBaseContextVO context;
-	private List itens;
 	
-	private double valorGeraCaixa = 0.0;
+	private double valorGeraCaixa;
 	
-	public RetornoConfig registrarOperacaoCaixa(PlcBaseContextVO context, TipoMovimentoCaixa tipo, CaixaEntity caixa, List itens) throws PlcException {
+	public RetornoConfig registrarOperacaoCaixa(PlcBaseContextVO context, TipoMovimentoCaixa tipo, CaixaEntity caixa, List<Pagamento> pagamentos) throws PlcException {
+		OperacaoCaixaConfig config;
+		List<FormaPagLivro> formasPagLivro;
+		
+		valorGeraCaixa = 0.0;
+
 		mensagens.clear();
 		alertas.clear();
 		
-		this.context = context;
-		this.caixa = caixa;
-		this.itens = itens;
-
-		carregaConfiguracao();
-		recarregaSaldoCaixa();
-		inicializaFormasPagLivro();
-		inicializaValorCaixa();
+		config = carregaConfiguracao(context);
+		recarregaSaldoCaixa(context, caixa);
+		formasPagLivro = inicializaFormasPagLivro(context);
+		inicializaValorCaixa(context, caixa, pagamentos, formasPagLivro);
 
 		try {
 			switch (tipo) {
 			case AB:
-				registrarAberturaCaixa();
+				registrarAberturaCaixa(context, caixa, pagamentos, formasPagLivro);
 				break;
 			case SA:
-				registrarSangriaCaixa();
+				registrarSangriaCaixa(context, caixa, pagamentos, formasPagLivro, config);
 				break;
 			case SU:
-				registrarSuprimentoCaixa();
+				registrarSuprimentoCaixa(context, caixa, pagamentos, formasPagLivro);
 				break;
 			case FE:
-				registrarFechamentoCaixa();
+				registrarFechamentoCaixa(context, caixa, pagamentos, formasPagLivro, config);
 				break;
 				
 			default:
@@ -91,25 +87,28 @@ public class CaixaRepository extends PlcBaseRepository {
 			throw new PlcException("CaixaRepository", "registrarOperacaoCaixa", e, log, tipo.getLabel());
 		}
 		
-		return new RetornoConfig(this.caixa, this.config, this.alertas, this.mensagens);
+		return new RetornoConfig(caixa, config, this.alertas, this.mensagens);
 	}
 	
-	private void inicializaFormasPagLivro() throws PlcException {
-		formasPagLivro = (List<FormaPagLivro>)jpa.findAll(context, FormaPagLivroEntity.class, null);
+	@SuppressWarnings("unchecked")
+	private List<FormaPagLivro> inicializaFormasPagLivro(PlcBaseContextVO context) throws PlcException {
+		List<FormaPagLivro> formasPagLivro = (List<FormaPagLivro>)jpa.findAll(context, FormaPagLivroEntity.class, null);
 		
 		if (formasPagLivro == null || formasPagLivro.size() == 0) {
 			throw new PlcException("erro.caixa.formasPagLivro.nao.cadastradas");
 		}
+		
+		return formasPagLivro;
 	}
 
-	private void inicializaValorCaixa() {
+	@SuppressWarnings("unchecked")
+	private void inicializaValorCaixa(PlcBaseContextVO context, CaixaEntity caixa, List<Pagamento> pagamentos, List<FormaPagLivro> formasPagLivro) {
 		FormaPagLivro formaPagLivro = null;
 		double valorInformado = 0.0;
 		valorGeraCaixa = 0.0;
 
 		// Calculo o valor total informado nas formas de pagamento
-		for (Object object : itens) {
-			Pagamento pagamento = (Pagamento)object;
+		for (Pagamento pagamento : pagamentos) {
 			
 			if (pagamento.getFormaPagto() != null) {
 				// Localiza a Forma de Pagamento Livro relacionada ao pagamento do caixa
@@ -128,8 +127,7 @@ public class CaixaRepository extends PlcBaseRepository {
 			}
 		}
 		
-		List<CaixaFormaPagto> formasPagtoCaixa = null;
-		formasPagtoCaixa = (List<CaixaFormaPagto>)jpa.findByFields(context, CaixaFormaPagtoEntity.class, "querySelByCaixa", new String[]{"caixa"}, new Object[]{caixa});
+		List<CaixaFormaPagto> formasPagtoCaixa = (List<CaixaFormaPagto>)jpa.findByFields(context, CaixaFormaPagtoEntity.class, "querySelByCaixa", new String[]{"caixa"}, new Object[]{caixa});
 		
 		for (CaixaFormaPagto caixaFormaPagto: formasPagtoCaixa) {
 
@@ -143,7 +141,7 @@ public class CaixaRepository extends PlcBaseRepository {
 			}
 			
 			// Se a forma de pagamento do caixa gera caixa
-			if (formaPagLivro != null && PlcYesNo.S.equals(formaPagLivro.getIsGeraCaixa()) && caixaFormaPagto.getValor() != null) {
+			if (formaPagLivro != null && formaPagLivro.getIsGeraCaixa() !=null && PlcYesNo.S.equals(formaPagLivro.getIsGeraCaixa()) && caixaFormaPagto.getValor() != null) {
 				valorGeraCaixa += caixaFormaPagto.getValor().doubleValue();
 			}
 		}
@@ -151,7 +149,7 @@ public class CaixaRepository extends PlcBaseRepository {
 		caixa.setValor(new BigDecimal(valorInformado));
 	}
 
-	private void registrarAberturaCaixa() throws PlcException, Exception {
+	private void registrarAberturaCaixa(PlcBaseContextVO context, CaixaEntity caixa, List<Pagamento> pagamentos, List<FormaPagLivro> formasPagLivro) throws PlcException, Exception {
 		Date data = new Date();
 		
 		// Verifica se o caixa já estava aberto
@@ -160,18 +158,18 @@ public class CaixaRepository extends PlcBaseRepository {
 		}
 
 		// Criar um movimento de abertura do caixa
-		criaMovimentoCaixa(data, TipoMovimentoCaixa.AB);
+		criaMovimentoCaixa(context, caixa, data, TipoMovimentoCaixa.AB);
 		
 		// Atualiza o saldo de cada forma de pagamento
-		atualizaSaldoFormasPagto(data, TipoMovimentoCaixa.AB);
+		atualizaSaldoFormasPagto(context, caixa, data, pagamentos, formasPagLivro, TipoMovimentoCaixa.AB);
 
 		// Atualiza o saldo e abre o caixa 
-		atualizaStatusSaldoCaixa(data, StatusCaixa.A, TipoMovimentoCaixa.AB);
+		atualizaStatusSaldoCaixa(context, caixa, data, StatusCaixa.A, TipoMovimentoCaixa.AB);
 		
 		mensagens.add(0,"{msg.caixa.abertura.ok}");
 	}
 
-	private void registrarSangriaCaixa() throws PlcException, Exception {
+	private void registrarSangriaCaixa(PlcBaseContextVO context, CaixaEntity caixa, List<Pagamento> pagamentos, List<FormaPagLivro> formasPagLivro, OperacaoCaixaConfig config) throws PlcException, Exception {
 		Date data = new Date();
 		
 		// Verifica se o caixa já estava aberto
@@ -200,18 +198,18 @@ public class CaixaRepository extends PlcBaseRepository {
 		}
 		
 		// Criar um movimento de abertura do caixa
-		criaMovimentoCaixa(data, TipoMovimentoCaixa.SA);
+		criaMovimentoCaixa(context, caixa, data, TipoMovimentoCaixa.SA);
 
 		// Atualiza o saldo de cada forma de pagamento
-		atualizaSaldoFormasPagto(data, TipoMovimentoCaixa.SA);
+		atualizaSaldoFormasPagto(context, caixa, data, pagamentos, formasPagLivro, TipoMovimentoCaixa.SA);
 
 		// Atualiza o saldo e abre o caixa 
-		atualizaStatusSaldoCaixa(data, StatusCaixa.A, TipoMovimentoCaixa.SA);
+		atualizaStatusSaldoCaixa(context, caixa, data, StatusCaixa.A, TipoMovimentoCaixa.SA);
 		
 		mensagens.add(0,"{msg.caixa.sangria.ok}");
 	}
 	
-	private void registrarSuprimentoCaixa() throws PlcException, Exception {
+	private void registrarSuprimentoCaixa(PlcBaseContextVO context, CaixaEntity caixa, List<Pagamento> pagamentos, List<FormaPagLivro> formasPagLivro) throws PlcException, Exception {
 		Date data = new Date();
 		
 		// Verifica se o caixa já estava aberto
@@ -220,18 +218,18 @@ public class CaixaRepository extends PlcBaseRepository {
 		}
 		
 		// Criar um movimento de abertura do caixa
-		criaMovimentoCaixa(data, TipoMovimentoCaixa.SU);
+		criaMovimentoCaixa(context, caixa, data, TipoMovimentoCaixa.SU);
 		
 		// Atualiza o saldo de cada forma de pagamento
-		atualizaSaldoFormasPagto(data, TipoMovimentoCaixa.SU);
+		atualizaSaldoFormasPagto(context, caixa, data, pagamentos, formasPagLivro, TipoMovimentoCaixa.SU);
 		
 		// Atualiza o saldo e abre o caixa 
-		atualizaStatusSaldoCaixa(data, StatusCaixa.A, TipoMovimentoCaixa.SU);
+		atualizaStatusSaldoCaixa(context, caixa, data, StatusCaixa.A, TipoMovimentoCaixa.SU);
 		
 		mensagens.add(0,"{msg.caixa.suprimento.ok}");
 	}
 	
-	protected void registrarFechamentoCaixa() throws PlcException, Exception {
+	protected void registrarFechamentoCaixa(PlcBaseContextVO context, CaixaEntity caixa, List<Pagamento> pagamentos, List<FormaPagLivro> formasPagLivro, OperacaoCaixaConfig config) throws PlcException, Exception {
 		Date data = new Date();
 		
 		// Verifica se o caixa já estava fechado
@@ -274,25 +272,29 @@ public class CaixaRepository extends PlcBaseRepository {
 		}
 
 		// Criar um movimento de fechamento do caixa
-		criaMovimentoCaixa(data, TipoMovimentoCaixa.FE);
+		criaMovimentoCaixa(context, caixa, data, TipoMovimentoCaixa.FE);
 		
 		// Atualiza o saldo de cada forma de pagamento
-		atualizaSaldoFormasPagto(data, TipoMovimentoCaixa.FE);
+		atualizaSaldoFormasPagto(context, caixa, data, pagamentos, formasPagLivro, TipoMovimentoCaixa.FE);
 
 		// Atualiza o saldo e fecha o caixa 
-		atualizaStatusSaldoCaixa(data, StatusCaixa.F, TipoMovimentoCaixa.FE);
+		atualizaStatusSaldoCaixa(context, caixa, data, StatusCaixa.F, TipoMovimentoCaixa.FE);
 
 		mensagens.add(0, "{msg.caixa.fechamento.ok}");
 	}
 
 	/**
 	 * Atualiza o caixa para cada tipo de pagamento realizado
+	 * @param context 
+	 * @param caixa 
 	 * @param caixa
 	 * @param data
+	 * @param pagamentos 
+	 * @param formasPagLivro 
 	 * @param itens Lista dos valores por forma de pagamentos
 	 */
 	@SuppressWarnings("unchecked")
-	private void atualizaSaldoFormasPagto(Date data, TipoMovimentoCaixa tipo) throws PlcException {
+	private void atualizaSaldoFormasPagto(PlcBaseContextVO context, CaixaEntity caixa, Date data, List<Pagamento> pagamentos, List<FormaPagLivro> formasPagLivro, TipoMovimentoCaixa tipo) throws PlcException {
 		List<CaixaFormaPagto> formasPagtoCaixa = null;
 		formasPagtoCaixa = (List<CaixaFormaPagto>)jpa.findByFields(context, CaixaFormaPagtoEntity.class, "querySelByCaixa", new String[]{"caixa"}, new Object[]{caixa});
 		
@@ -303,8 +305,7 @@ public class CaixaRepository extends PlcBaseRepository {
 			Pagamento pagto = null;
 			
 			// Localiza o pagamento relativo ao pagamento do caixa
-			for (Object o : itens) {
-				Pagamento p = (Pagamento)o;
+			for (Pagamento p : pagamentos) {
 				FormaPagto fp = p.getFormaPagto();
 			
 				if (fp != null) {
@@ -378,20 +379,20 @@ public class CaixaRepository extends PlcBaseRepository {
 	}
 
 	
-	/**
-	 * @param context
-	 */
-	private void carregaConfiguracao() {
-		List listaConfig = (List)jpa.findAll(context, OperacaoCaixaConfigEntity.class, null);
+	@SuppressWarnings("unchecked")
+	private OperacaoCaixaConfig carregaConfiguracao(PlcBaseContextVO context) {
+		List<OperacaoCaixaConfig> listaConfig = (List<OperacaoCaixaConfig>)jpa.findAll(context, OperacaoCaixaConfigEntity.class, null);
 		
 		if (listaConfig == null || listaConfig.size() != 1) {
 			throw new PlcException("{erro.caixa.configuracao.inexistente}");
 		}
 		
-		config = (OperacaoCaixaConfig)listaConfig.get(0);
+		OperacaoCaixaConfig config = (OperacaoCaixaConfig)listaConfig.get(0);
+		
+		return config;
 	}
 
-	private void recarregaSaldoCaixa() {
+	private void recarregaSaldoCaixa(PlcBaseContextVO context, CaixaEntity caixa) {
 		
 		// Só precisa recarregar o sado do caixa se o usuário não for um gestor
 		if (!context.getUserProfile().isUserInRole("Gestor")) {
@@ -409,11 +410,13 @@ public class CaixaRepository extends PlcBaseRepository {
 
 	/**
 	 * Atualiza o status e o saldo do caixa
+	 * @param caixa 
+	 * @param context 
 	 * @param context
 	 * @param caixa
 	 * @param data
 	 */
-	private void atualizaStatusSaldoCaixa(Date data, StatusCaixa status, TipoMovimentoCaixa tipo) throws PlcException {
+	private void atualizaStatusSaldoCaixa(PlcBaseContextVO context, CaixaEntity caixa, Date data, StatusCaixa status, TipoMovimentoCaixa tipo) throws PlcException {
 		Caixa caixaAtual = (CaixaEntity) jpa.findById(context, CaixaEntity.class, caixa.getId());
 		
 		caixaAtual.setStatus(status);
@@ -445,6 +448,8 @@ public class CaixaRepository extends PlcBaseRepository {
 	}
 
 	/**
+	 * @param caixa 
+	 * @param context 
 	 * @param context
 	 * @param caixa
 	 * @param data
@@ -452,7 +457,7 @@ public class CaixaRepository extends PlcBaseRepository {
 	 * @throws Exception 
 	 * @throws PlcException 
 	 */
-	private void criaMovimentoCaixa(Date data, TipoMovimentoCaixa tipo) throws PlcException, Exception {
+	private void criaMovimentoCaixa(PlcBaseContextVO context, CaixaEntity caixa, Date data, TipoMovimentoCaixa tipo) throws PlcException, Exception {
 		
 		if (caixa.getValor() != null && caixa.getValor().doubleValue() > 0.00) {
 
@@ -527,10 +532,10 @@ public class CaixaRepository extends PlcBaseRepository {
 		jpa.insert(context, movAjusteCaixa);
 	}
 
+	@SuppressWarnings("unchecked")
 	public PagamentoList obterPagamentosCaixa(PlcBaseContextVO context, Caixa caixa) {
 		PagamentoList lista = new PagamentoList();
 		
-		@SuppressWarnings("unchecked")
 		List<CaixaFormaPagto> l = (List<CaixaFormaPagto>)jpa.findByFields(context, CaixaFormaPagtoEntity.class, "querySelByCaixa", new String[]{"caixa"}, new Object[]{caixa});
 		
 		for (CaixaFormaPagto caixaFormaPagto : l) {

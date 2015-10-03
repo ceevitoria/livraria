@@ -156,6 +156,15 @@ function formataVlUnitario(indice) {
 					</plcf:iteracao> 
 				</fieldset> 
 			</div> 
+			<script type="text/javascript">//<![CDATA[
+			plc.jq(document).ready(function(){
+				plc.jq(document).keypress(function(e) {
+					if(e.which == 13) {
+						plc.jq( "#corpo\\:formulario\\:botaoAcaoBuscarDadosVenda" ).trigger( "click" );
+					}
+				});
+			});
+			//]]> </script>
 		</ui:define> 
 	</ui:composition> 
 </html>
