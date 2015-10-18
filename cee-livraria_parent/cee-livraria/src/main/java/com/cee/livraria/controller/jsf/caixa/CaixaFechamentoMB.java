@@ -9,9 +9,10 @@ import javax.inject.Named;
 import com.cee.livraria.controller.jsf.AppMB;
 import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
-import com.cee.livraria.entity.caixa.StatusCaixa;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.config.RetornoConfig;
+import com.cee.livraria.entity.pagamento.FormaPagLivro;
+import com.cee.livraria.entity.pagamento.FormaPagto;
 import com.cee.livraria.entity.pagamento.Pagamento;
 import com.cee.livraria.entity.pagamento.PagamentoList;
 import com.powerlogic.jcompany.commons.PlcException;
@@ -23,6 +24,7 @@ import com.powerlogic.jcompany.config.collaboration.FormPattern;
 import com.powerlogic.jcompany.config.collaboration.PlcConfigForm;
 import com.powerlogic.jcompany.config.collaboration.PlcConfigFormLayout;
 import com.powerlogic.jcompany.controller.jsf.annotations.PlcHandleException;
+import com.powerlogic.jcompany.domain.type.PlcYesNo;
 
 @PlcConfigAggregation(entity = com.cee.livraria.entity.caixa.CaixaEntity.class)
 @PlcConfigForm(
@@ -68,9 +70,15 @@ public class CaixaFechamentoMB extends AppMB {
 			
 			Pagamento pagto = null;
 			
-			for (int i=0; i<2; i++) {
-				pagto = new Pagamento();
-				itens.add(pagto);
+			List<FormaPagLivro> formasPagLivro = caixaOperacaoMB.recuperarFormasPagamentoLivro();
+			
+			for (FormaPagLivro formaPagLivro : formasPagLivro) {
+				
+				if (PlcYesNo.S.equals(formaPagLivro.getIsGeraCaixa())) {
+					pagto = new Pagamento();
+					pagto.setFormaPagto(formaPagLivro.getFormaPagto());
+					itens.add(pagto);
+				}
 			}
 		}
 
@@ -99,9 +107,15 @@ public class CaixaFechamentoMB extends AppMB {
 		
 		Pagamento pagto = null;
 		
-		for (int i=0; i<2; i++) {
-			pagto = new Pagamento();
-			itens.add(pagto);
+		List<FormaPagLivro> formasPagLivro = caixaOperacaoMB.recuperarFormasPagamentoLivro();
+		
+		for (FormaPagLivro formaPagLivro : formasPagLivro) {
+			
+			if (PlcYesNo.S.equals(formaPagLivro.getIsGeraCaixa())) {
+				pagto = new Pagamento();
+				pagto.setFormaPagto(formaPagLivro.getFormaPagto());
+				itens.add(pagto);
+			}
 		}
 
 		return baseEditMB.getDefaultNavigationFlow(); 

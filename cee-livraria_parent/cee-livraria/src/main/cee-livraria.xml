@@ -8,7 +8,22 @@
 <Resource name="jdbc/cee-apps" type="javax.sql.DataSource"
 		auth="Container" driverClassName="com.mysql.jdbc.Driver" 
        url="jdbc:mysql://localhost:3306/ceedb" username="ceeuser" password="xjtq28"
-       maxActive="50" maxWait="-1" maxIdle="10" removeAbandoned="true" logAbandoned="true" />
+		  maxActive="500"
+	      maxWait="30000" 
+		  maxIdle="40"
+		  testWhileIdle="true"
+		  initialSize="20"
+		  minIdle="20"   
+		  removeAbandoned="true" 
+		  logAbandoned="true"
+		  removeAbandonedTimeout="60"
+		  timeBetweenEvictionRunsMillis="30000"
+		  minEvictableIdleTimeMillis="24000"
+		  numTestsPerEvictionRun="3"
+		  defaultAutoCommit="false"
+		  fairQueue="true"
+		  testOnBorrow="true"
+		  validationQuery="select 1" />
 
 <!-- 
  <Resource name="jdbc/cee-livraria" type="javax.sql.DataSource"

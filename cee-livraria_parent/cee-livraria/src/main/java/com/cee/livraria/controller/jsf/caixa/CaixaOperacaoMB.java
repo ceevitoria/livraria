@@ -12,6 +12,8 @@ import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.StatusCaixa;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.config.RetornoConfig;
+import com.cee.livraria.entity.pagamento.FormaPagLivro;
+import com.cee.livraria.entity.pagamento.FormaPagLivroEntity;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcConstants;
@@ -124,4 +126,11 @@ public class CaixaOperacaoMB extends PlcBaseParentMB implements Serializable {
 		return ret;
 	}
 	
+	public List<FormaPagLivro> recuperarFormasPagamentoLivro() {
+		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
+		
+		List<FormaPagLivro> ret = (List<FormaPagLivro>) iocControleFacadeUtil.getFacade(IAppFacade.class).findSimpleList(context, FormaPagLivroEntity.class, null);
+		
+		return ret;
+	}
 }

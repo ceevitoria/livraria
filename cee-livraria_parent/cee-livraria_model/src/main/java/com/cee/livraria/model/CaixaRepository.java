@@ -327,7 +327,7 @@ public class CaixaRepository extends PlcBaseRepository {
 			}
 			
 			// Se localizar é por que o usuário informou esta forma de pagamento
-			if (pagto != null) {
+			if (pagto != null && pagto.getValor() != null && pagto.getValor().doubleValue() > 0.0) {
 				double valorPagto = pagto.getValor().doubleValue();
 				
 				switch (tipo) {
@@ -350,7 +350,7 @@ public class CaixaRepository extends PlcBaseRepository {
 				valorCaixaFormaPagto = valorCaixaFormaPagto + valorPagto;
 				
 				if (valorCaixaFormaPagto < 0.0) {
-					throw new PlcException("{erro.caixa.operacao.saldo.formaPagamento.negativo}");
+					throw new PlcException("{erro.caixa.operacao.saldo.formaPagamento.negativo}", new Object[]{caixaFormaPagto.getFormaPagto().getNome()});
 				}
 
 				caixaFormaPagto.setValor(new BigDecimal(valorCaixaFormaPagto));
