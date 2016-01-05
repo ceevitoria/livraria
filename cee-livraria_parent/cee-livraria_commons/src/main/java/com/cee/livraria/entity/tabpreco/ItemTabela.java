@@ -23,6 +23,8 @@ import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfTyp
 import javax.persistence.Id;
 import javax.persistence.Embedded;
 import com.cee.livraria.entity.LivroEntity;
+import com.cee.livraria.entity.estoque.MovimentoEntity;
+
 import javax.persistence.MappedSuperclass;
 import javax.persistence.GenerationType;
 import org.hibernate.annotations.ForeignKey;
@@ -61,24 +63,29 @@ public abstract class ItemTabela extends AppBaseEntity {
 	private String codigoBarras;
 
 	@ManyToOne(targetEntity = AutorEntity.class, fetch = FetchType.LAZY)
+	@ForeignKey(name = "FK_ITEMTABELA_AUTOR")
 	private Autor autor;
 
 	@ManyToOne(targetEntity = EspiritoEntity.class, fetch = FetchType.LAZY)
+	@ForeignKey(name = "FK_ITEMTABELA_ESPIRITO")
 	private Espirito espirito;
 
 	@ManyToOne(targetEntity = EditoraEntity.class, fetch = FetchType.LAZY)
+	@ForeignKey(name = "FK_ITEMTABELA_EDITORA")
 	private Editora editora;
 
 	@Digits(integer = 5, fraction = 0)
 	private Integer edicao;
 
 	@ManyToOne(targetEntity = ColecaoEntity.class, fetch = FetchType.LAZY)
+	@ForeignKey(name = "FK_ITEMTABELA_COLECAO")
 	private Colecao colecao;
 
 	@Size(max = 40)
 	private String palavraChave;
 
 	@ManyToOne(targetEntity = LocalizacaoEntity.class, fetch = FetchType.LAZY)
+	@ForeignKey(name = "FK_ITEMTABELA_LOCALIZACAO")
 	private Localizacao localizacao;
 	
 	@NotNull(groups = PlcValGroupEntityList.class)

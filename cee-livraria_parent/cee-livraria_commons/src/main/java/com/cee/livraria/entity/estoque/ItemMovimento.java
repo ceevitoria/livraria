@@ -13,6 +13,7 @@ import com.cee.livraria.entity.LivroEntity;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.GenerationType;
 import org.hibernate.annotations.ForeignKey;
@@ -28,6 +29,8 @@ import javax.persistence.GeneratedValue;
  */
 @MappedSuperclass
 public abstract class ItemMovimento extends AppBaseEntity {
+
+	private static final long serialVersionUID = -417905658827262392L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_ITEM_MOVIMENTO")
