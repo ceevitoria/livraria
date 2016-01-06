@@ -3,7 +3,6 @@ package com.cee.livraria.facade;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.cee.livraria.entity.Livro;
 import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
@@ -12,6 +11,7 @@ import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.pagamento.PagamentoList;
+import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
@@ -28,21 +28,21 @@ public interface IAppFacade extends IPlcFacade {
 	public PrecoTabela findPrecoTabela(PlcBaseContextVO context, Long idLivro) throws PlcException;
 
 	/**
-	 * Registra a venda de livros
+	 * Registra a venda de produtos
 	 * @param context Contexto da aplicacao
 	 * @param entityList Relacao dos livros sendo vendidos
 	 * @param pagtoList Relacao dos pagamentos para a venda sendo realizada
 	 * @return RetornoConfig Retorna com informacoes sobre a venda realizada (@see RetornoConfig)
 	 */
-	public RetornoConfig registrarVendaLivros(PlcBaseContextVO context, List entityList, List pagtoList) throws PlcException;
+	public RetornoConfig registrarVendaProdutos(PlcBaseContextVO context, List entityList, List pagtoList) throws PlcException;
 
 	/**
-	 * Busca os dados para a venda dos livros
+	 * Busca os dados para a venda dos produtos
 	 * @param context
 	 * @param entityList
 	 * @return BigDecimal Valor total da venda 
 	 */
-	public BigDecimal buscarDadosVendaLivros(PlcBaseContextVO context, List entityList) throws PlcException;
+	public BigDecimal buscarDadosVendaProdutos(PlcBaseContextVO context, List entityList) throws PlcException;
 
 	/**
 	 * Registra um movimento do caixa 

@@ -9,8 +9,6 @@ import javax.inject.Named;
 
 import com.cee.livraria.commons.AppConstants;
 import com.cee.livraria.controller.jsf.AppMB;
-import com.cee.livraria.entity.Livro;
-import com.cee.livraria.entity.LivroEntity;
 import com.cee.livraria.entity.config.ConferenciaConfig;
 import com.cee.livraria.entity.config.ConferenciaConfigEntity;
 import com.cee.livraria.entity.config.RetornoConfig;
@@ -23,6 +21,8 @@ import com.cee.livraria.entity.estoque.conferencia.ItemConferencia;
 import com.cee.livraria.entity.estoque.conferencia.ItemConferenciaEntity;
 import com.cee.livraria.entity.estoque.conferencia.RegraPesquisaLivros;
 import com.cee.livraria.entity.estoque.conferencia.StatusConferencia;
+import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcConstants;
@@ -115,7 +115,7 @@ public class ConferenciaMB extends AppMB {
 	}
 
 	private Livro criaArgumentoPesquisaLivro(RegraPesquisaLivros regra) {
-		Livro livroArg = (Livro)new LivroEntity();
+		Livro livroArg = (Livro)new Livro();
 		livroArg.setTitulo(regra.getTitulo());
 		livroArg.setAutor(regra.getAutor());
 		livroArg.setCodigoBarras(regra.getCodigoBarras());

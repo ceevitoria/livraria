@@ -16,10 +16,10 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.ForeignKey;
 
 import com.cee.livraria.entity.AppBaseEntity;
-import com.cee.livraria.entity.Livro;
-import com.cee.livraria.entity.LivroEntity;
 import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.LocalizacaoEntity;
+import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Livro;
 
 @MappedSuperclass
 public abstract class Estoque extends AppBaseEntity {
@@ -28,7 +28,7 @@ public abstract class Estoque extends AppBaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_ESTOQUE")
 	private Long id;
 
-	@ManyToOne(targetEntity = LivroEntity.class, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = Livro.class, fetch = FetchType.EAGER)
 	@ForeignKey(name = "FK_ESTOQUE_LIVRO")
 	@NotNull
 	private Livro livro;

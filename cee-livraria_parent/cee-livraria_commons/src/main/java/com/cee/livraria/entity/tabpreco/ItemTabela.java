@@ -11,7 +11,6 @@ import com.cee.livraria.entity.Editora;
 import com.cee.livraria.entity.EditoraEntity;
 import com.cee.livraria.entity.Espirito;
 import com.cee.livraria.entity.EspiritoEntity;
-import com.cee.livraria.entity.Livro;
 import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.LocalizacaoEntity;
 
@@ -22,8 +21,9 @@ import javax.validation.Valid;
 import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfType;
 import javax.persistence.Id;
 import javax.persistence.Embedded;
-import com.cee.livraria.entity.LivroEntity;
 import com.cee.livraria.entity.estoque.MovimentoEntity;
+import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Livro;
 
 import javax.persistence.MappedSuperclass;
 import javax.persistence.GenerationType;
@@ -50,7 +50,7 @@ public abstract class ItemTabela extends AppBaseEntity {
 	@NotNull
 	private TabelaPreco tabelaPreco;
 
-	@ManyToOne(targetEntity = LivroEntity.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Livro.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_ITEMTABELA_LIVRO")
 	@NotNull(groups = PlcValGroupEntityList.class)
 	@RequiredIf(valueOf = "id", is = RequiredIfType.not_empty)

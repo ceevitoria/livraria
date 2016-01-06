@@ -3,12 +3,13 @@ package com.cee.livraria.entity.estoque;
 import java.math.BigDecimal;
 
 import com.cee.livraria.entity.AppBaseEntity;
-import com.cee.livraria.entity.Livro;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfType;
 import javax.persistence.Id;
-import com.cee.livraria.entity.LivroEntity;
+
+import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Livro;
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
@@ -41,7 +42,7 @@ public abstract class ItemMovimento extends AppBaseEntity {
 	@NotNull
 	private Movimento movimento;
 
-	@ManyToOne(targetEntity = LivroEntity.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Livro.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_ITEMMOVIMENTO_LIVRO")
 	@NotNull(groups = PlcValGroupEntityList.class)
 	@RequiredIf(valueOf = "id", is = RequiredIfType.not_empty)

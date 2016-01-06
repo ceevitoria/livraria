@@ -10,8 +10,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.cee.livraria.controller.jsf.AppMB;
-import com.cee.livraria.entity.Livro;
-import com.cee.livraria.entity.LivroEntity;
+import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.entity.tabpreco.ItemTabela;
 import com.cee.livraria.entity.tabpreco.ItemTabelaEntity;
 import com.cee.livraria.entity.tabpreco.RegraPesquisaLivros;
@@ -157,7 +157,7 @@ public class TabelaPrecoMB extends AppMB  {
 	}
 
 	private Livro criaArgumentoPesquisaLivro(RegraPesquisaLivros regra) {
-		Livro livroArg = (Livro)new LivroEntity();
+		Livro livroArg = (Livro)new Livro();
 		livroArg.setTitulo(regra.getTitulo());
 		livroArg.setAutor(regra.getAutor());
 		livroArg.setCodigoBarras(regra.getCodigoBarras());
@@ -262,7 +262,7 @@ public class TabelaPrecoMB extends AppMB  {
 				plcControleConversacao.setAlertaAlteracaoPlc("S");
 			} else {
 				for (ItemTabela item : listaItens) {
-					Livro livro = (Livro)iocControleFacadeUtil.getFacade().edit(context, LivroEntity.class, item.getLivro().getId())[0] ;
+					Livro livro = (Livro)iocControleFacadeUtil.getFacade().edit(context, Livro.class, item.getLivro().getId())[0] ;
 					
 					item.setTitulo(livro.getTitulo());
 					item.setAutor(livro.getAutor());

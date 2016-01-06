@@ -20,10 +20,10 @@ import com.cee.livraria.entity.Editora;
 import com.cee.livraria.entity.EditoraEntity;
 import com.cee.livraria.entity.Espirito;
 import com.cee.livraria.entity.EspiritoEntity;
-import com.cee.livraria.entity.Livro;
-import com.cee.livraria.entity.LivroEntity;
 import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.LocalizacaoEntity;
+import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Livro;
 
 @MappedSuperclass
 public abstract class ItemConferencia extends AppBaseEntity {
@@ -37,7 +37,7 @@ public abstract class ItemConferencia extends AppBaseEntity {
 	@NotNull
 	private Conferencia conferencia;
 
-	@ManyToOne(targetEntity = LivroEntity.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Livro.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_ITEMCONFERENCIA_LIVRO")
 	private Livro livro;
 

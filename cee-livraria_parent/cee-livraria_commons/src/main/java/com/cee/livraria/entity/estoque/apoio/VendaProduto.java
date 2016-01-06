@@ -7,22 +7,11 @@ import javax.persistence.AccessType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
 
-import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIf;
-import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfType;
+import com.cee.livraria.entity.produto.Livro;
 
-import com.cee.livraria.entity.Livro;
-import com.powerlogic.jcompany.config.domain.PlcReference;
-import com.powerlogic.jcompany.domain.validation.PlcValGroupEntityList;
-
-//@SPlcEntity
-//@Entity
-//@SequenceGenerator(name = "", sequenceName = "")
 @Access(AccessType.FIELD)
-//@NamedQueries({
-//	@NamedQuery(name="VendaLivro.queryMan", query="from VendaLivro"), @NamedQuery(name = "VendaLivro.querySelLookup", query = "select id as id from VendaLivro where id = ? order by id asc") })
-public class VendaLivro {
+public class VendaProduto {
 
 	@Id
 	private Long id;

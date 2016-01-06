@@ -1,6 +1,7 @@
-#Tue Mar 19 22:23:29 BRT 2013
+#Tue Jan 05 15:29:13 BRST 2016
 eclipse.preferences.version=1
 encoding//src/main=UTF-8
+encoding//src/main/java=UTF-8
 encoding//src/main/resources/ApplicationResources_en_US.properties=UTF-8
 encoding//src/main/resources/ApplicationResources_es_ES.properties=UTF-8
 encoding//src/main/resources/ApplicationResources_pt_BR.properties=UTF-8
@@ -8,4 +9,5 @@ encoding//src/main/resources/META-INF/org.apache.myfaces.trinidad.render.Interna
 encoding//src/main/resources/log4j.properties=UTF-8
 encoding//src/main/resources/logging.properties=UTF-8
 encoding//src/test=UTF-8
+encoding//src/test/java=UTF-8
 encoding//src/test/resources/performance/jmeter.properties=UTF-8

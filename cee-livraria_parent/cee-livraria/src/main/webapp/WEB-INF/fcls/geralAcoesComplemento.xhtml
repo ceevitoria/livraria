@@ -75,7 +75,7 @@
 			</ui:insert>
 
 			<ui:insert name="livraria_acao_buscarDadosVenda">	 	           
-				<plcf:botaoAcao id="botaoAcaoBuscarDadosVenda" urlIcone="ico iEspecifico" acao="buscarDadosVendaLivros" 
+				<plcf:botaoAcao id="botaoAcaoBuscarDadosVenda" urlIcone="ico iEspecifico" acao="buscarDadosVendaProdutos" 
 					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
 					label="cee.evt.buscar" limpaForm="true"  
 					botaoArrayID="BUSCAR" rendered="#{requestScope.exibeBtnBuscarDadosVenda=='S'}" 
@@ -86,7 +86,7 @@
 			</ui:insert>
 
 			<ui:insert name="livraria_acao_registrarVenda">	 	           
-				<plcf:botaoAcao id="botaoAcaoRegistrarVenda" urlIcone="ico iGravar" acao="registrarVendaLivros" 
+				<plcf:botaoAcao id="botaoAcaoRegistrarVenda" urlIcone="ico iGravar" acao="registrarVendaProdutos" 
 					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
 					label="cee.evt.registrar" limpaForm="false"  
 					botaoArrayID="REGISTRAR_VENDA" rendered="#{requestScope.exibeBtnRegistrarVenda=='S'}" 

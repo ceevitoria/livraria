@@ -9,7 +9,7 @@ import com.cee.livraria.entity.Autor;
 import com.cee.livraria.entity.Colecao;
 import com.cee.livraria.entity.Editora;
 import com.cee.livraria.entity.Espirito;
-import com.cee.livraria.entity.LivroEntity;
+import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.persistence.jpa.AppJpaDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
@@ -26,13 +26,13 @@ import com.powerlogic.jcompany.persistence.jpa.PlcQueryService;
  * Classe de Persistência gerada pelo assistente
  */
 
-@PlcAggregationDAOIoC(LivroEntity.class)
+@PlcAggregationDAOIoC(Livro.class)
 @SPlcDataAccessObject
 @PlcQueryService
 public class LivroDAO extends AppJpaDAO  {
 
 	@PlcQuery("querySel")
-	public native List<LivroEntity> findList(
+	public native List<Livro> findList(
 		PlcBaseContextVO context,
 		@PlcQueryOrderBy String dynamicOrderByPlc,
 		@PlcQueryFirstLine Integer primeiraLinhaPlc, 
@@ -70,15 +70,15 @@ public class LivroDAO extends AppJpaDAO  {
 		String queryPrecoTabela = null;
 		PrecoTabela preco = null;
 		
-		if(context!=null && annotationPersistenceUtil.getNamedQueryByName(LivroEntity.class, "queryPrecoTabela") != null) {
-			queryPrecoTabela = annotationPersistenceUtil.getNamedQueryByName(LivroEntity.class, "queryPrecoTabela").query();
+		if(context!=null && annotationPersistenceUtil.getNamedQueryByName(Livro.class, "queryPrecoTabela") != null) {
+			queryPrecoTabela = annotationPersistenceUtil.getNamedQueryByName(Livro.class, "queryPrecoTabela").query();
 		}
 		
 		if (queryPrecoTabela != null) {
 			List entities = null;
 
 			try {
-				entities = apiCreateQuery(context, LivroEntity.class, queryPrecoTabela).setParameter("id", idLivro).getResultList();
+				entities = apiCreateQuery(context, Livro.class, queryPrecoTabela).setParameter("id", idLivro).getResultList();
 			} catch (NoResultException nre) {
 				entities = null;
 			}
@@ -88,7 +88,7 @@ public class LivroDAO extends AppJpaDAO  {
 			if (entities == null || entities.isEmpty()) {
 				preco.setNomeTabela("Nenhuma precificação!");
 			} else {
-				LivroEntity livro = (LivroEntity)entities.get(0);
+				Livro livro = (Livro)entities.get(0);
 				preco.setIdTabela(livro.getIdTabela());
 				preco.setNomeTabela(livro.getNomeTabela());
 				preco.setPrecoTabela(livro.getPrecoTabela());

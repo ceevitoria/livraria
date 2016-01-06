@@ -9,11 +9,8 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
-import com.cee.livraria.entity.Livro;
-import com.cee.livraria.entity.LivroEntity;
 import com.cee.livraria.entity.config.AjusteEstoqueConfig;
 import com.cee.livraria.entity.config.RetornoConfig;
-import com.cee.livraria.entity.config.TipoMensagemAjusteEstoqueConfig;
 import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.estoque.EstoqueEntity;
 import com.cee.livraria.entity.estoque.ItemMovimento;
@@ -25,7 +22,7 @@ import com.cee.livraria.entity.estoque.TipoMovimento;
 import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.StatusAjuste;
-import com.cee.livraria.entity.estoque.apoio.VendaLivro;
+import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.persistence.jpa.ajuste.AjusteEstoqueDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
@@ -142,7 +139,7 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 				if (qtdSaldo != 0) {
 					ItemMovimento itemMovimento = new ItemMovimentoEntity();
 					
-					Livro livro = (Livro)dao.findById(context, LivroEntity.class, itemAjuste.getLivro().getId());
+					Livro livro = (Livro)dao.findById(context, Livro.class, itemAjuste.getLivro().getId());
 					
 					itemMovimento.setLivro(livro);
 					itemMovimento.setTipo(tipoMovimento);

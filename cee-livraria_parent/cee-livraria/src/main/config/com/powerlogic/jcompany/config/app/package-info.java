@@ -18,7 +18,8 @@
 		com.cee.livraria.entity.tabpreco.TipoPrecificacao.class,
 		com.cee.livraria.entity.tabpreco.TipoVariacao.class,
 		com.cee.livraria.entity.tabpreco.TipoArredondamento.class,
-		com.cee.livraria.entity.estoque.ajuste.StatusAjuste.class},
+		com.cee.livraria.entity.estoque.ajuste.StatusAjuste.class,
+		com.cee.livraria.entity.produto.TipoProduto.class},
 	classesLookup={
 		com.cee.livraria.entity.LocalizacaoEntity.class,
 		com.cee.livraria.entity.EspiritoEntity.class,

@@ -9,8 +9,6 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
-import com.cee.livraria.entity.Livro;
-import com.cee.livraria.entity.LivroEntity;
 import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.CaixaFormaPagto;
@@ -31,18 +29,18 @@ import com.cee.livraria.entity.estoque.ModoMovimento;
 import com.cee.livraria.entity.estoque.Movimento;
 import com.cee.livraria.entity.estoque.MovimentoEntity;
 import com.cee.livraria.entity.estoque.TipoMovimento;
-import com.cee.livraria.entity.estoque.apoio.VendaLivro;
-import com.cee.livraria.entity.pagamento.FormaPagLivro;
+import com.cee.livraria.entity.estoque.apoio.VendaProduto;
 import com.cee.livraria.entity.pagamento.FormaPagto;
 import com.cee.livraria.entity.pagamento.Pagamento;
+import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.persistence.jpa.livro.LivroDAO;
-import com.cee.livraria.persistence.jpa.vendalivro.VendaLivroDAO;
+import com.cee.livraria.persistence.jpa.vendaproduto.VendaProdutoDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.domain.type.PlcYesNo;
 
-public class VendaLivroRepository {
+public class VendaProdutosRepository {
 	
 	@Inject
 	private LivroDAO livroDAO;
@@ -55,16 +53,16 @@ public class VendaLivroRepository {
 	private List<String> mensagens = new ArrayList<String>();
 	
 	@Inject
-	private VendaLivroDAO jpa;
+	private VendaProdutoDAO jpa;
 	
 	private PlcBaseContextVO context;
 	
 	/** 
-	 * Registra de venda dos livros se o caixa estiver aberto
+	 * Registra de venda dos produtos se o caixa estiver aberto
 	 * @param entityList
 	 * @throws PlcException
 	 */
-	public RetornoConfig registrarVendaLivros(PlcBaseContextVO context, List entityList, List pagtoList) throws PlcException {
+	public RetornoConfig registrarVendaProdutos(PlcBaseContextVO context, List entityList, List pagtoList) throws PlcException {
 		this.context = context;
 		Date dataVenda = new Date();
 
@@ -85,7 +83,7 @@ public class VendaLivroRepository {
 		} catch (PlcException plcE) {
 			throw plcE;
 		} catch (Exception e) {
-			throw new PlcException("VendaLivroRepository", "registrarVendaLivros",	e, log, "");
+			throw new PlcException("VendaProdutosRepository", "registrarVendaProdutos",	e, log, "");
 		}
 		
 		return new RetornoConfig(null, config, alertas, mensagens);
@@ -98,7 +96,7 @@ public class VendaLivroRepository {
 		double valorItens = 0.0;
 		
 		for (Object o : itensVenda) {
-			VendaLivro cl = (VendaLivro)o;
+			VendaProduto cl = (VendaProduto)o;
 			
 			// Evita os itens em branco
 			if (cl.getLivro() != null && cl.getLivro().getId() != null) {
@@ -126,13 +124,13 @@ public class VendaLivroRepository {
 		valorFormasPagto = Math.round(valorFormasPagto * 100.00) / 100.00;
 		
 		if (config.getPermitirVendaPagtoDivergente().equals(PlcYesNo.N) && valorFormasPagto != valorItens) {
-			throw new PlcException("{erro.vendaLivro.valorPagto.diverge.valorTotal}", 
+			throw new PlcException("{erro.vendaProduto.valorPagto.diverge.valorTotal}", 
 				new Object[] {String.format("R$ %,.02f", new Object[]{valorItens}), 
 							  String.format("R$ %,.02f", new Object[]{valorFormasPagto})});
 			
 		} else if (config.getPermitirVendaPagtoDivergente().equals(PlcYesNo.S) && 
 				config.getValorMaximoAjustePagtoDivergente().doubleValue() < Math.abs(valorFormasPagto-valorItens)) {
-			throw new PlcException("{erro.vendaLivro.valorPagto.diverge.valorTotal}", 
+			throw new PlcException("{erro.vendaProduto.valorPagto.diverge.valorTotal}", 
 					new Object[] {String.format("R$ %,.02f", new Object[]{valorItens}), 
 								  String.format("R$ %,.02f", new Object[]{valorFormasPagto})});
 		}
@@ -147,7 +145,7 @@ public class VendaLivroRepository {
 		List listaConfig = (List)jpa.findAll(context, CompraVendaConfigEntity.class, null);
 		
 		if (listaConfig == null || listaConfig.size() != 1) {
-			throw new PlcException("{erro.vendaLivro.configuracao.inexistente}");
+			throw new PlcException("{erro.vendaProduto.configuracao.inexistente}");
 		}
 		
 		config = (CompraVendaConfig)listaConfig.get(0);
@@ -166,7 +164,7 @@ public class VendaLivroRepository {
 		int qtVendida = 0;
 		
 		for (Object o : relacaoLivros) {
-			VendaLivro vl = (VendaLivro)o;
+			VendaProduto vl = (VendaProduto)o;
 
 			if (vl.getLivro() != null) {
 				@SuppressWarnings("unchecked")
@@ -179,7 +177,7 @@ public class VendaLivroRepository {
 					qtEstoque = estoque.getQuantidade() - vl.getQuantidade();
 					
 					if (config.getPermiteVendaParaEstoqueNegativo().equals(PlcYesNo.N) && qtEstoque < 0) {
-						throw new PlcException("{erro.vendaLivro.estoque.negativo.atingido}", new Object[]{vl.getLivro().getCodigoBarras(), vl.getLivro().getTitulo()});
+						throw new PlcException("{erro.vendaProduto.estoque.negativo.atingido}", new Object[]{vl.getLivro().getCodigoBarras(), vl.getLivro().getTitulo()});
 					}
 					
 					if (config.getAlertaEstoqueNegativoAtingido().equals(PlcYesNo.S) && qtEstoque < 0) {
@@ -195,7 +193,7 @@ public class VendaLivroRepository {
 
 					jpa.update(context, estoque);
 				} else {
-					throw new PlcException("{erro.vendaLivro.estoque.livro.inexistente}", new Object[]{vl.getLivro().getCodigoBarras(), vl.getLivro().getTitulo()});
+					throw new PlcException("{erro.vendaProduto.estoque.livro.inexistente}", new Object[]{vl.getLivro().getCodigoBarras(), vl.getLivro().getTitulo()});
 				}
 			}
 		}
@@ -376,7 +374,7 @@ public class VendaLivroRepository {
 
 		//monta o texto para a observação do movimento do caixa
 		for (Object o : relacaoLivros) {
-			VendaLivro cl = (VendaLivro)o;
+			VendaProduto cl = (VendaProduto)o;
 
 			if (cl.getLivro() != null) {
 				StringBuilder obs = new StringBuilder();
@@ -410,7 +408,7 @@ public class VendaLivroRepository {
 		List<ItemMovimento> itens = new ArrayList<ItemMovimento>();
 		
 		for (Object o : relacaoLivros) {
-			VendaLivro cl = (VendaLivro)o;
+			VendaProduto cl = (VendaProduto)o;
 			
 			// Evita os itens em branco
 			if (cl.getLivro() != null && cl.getLivro().getId() != null) {
@@ -421,7 +419,7 @@ public class VendaLivroRepository {
 				valorTotalItem = Math.round(valorTotalItem * 100.00) / 100.00;
 				item.setValorTotal(BigDecimal.valueOf(valorTotalItem));
 				
-				Livro livro = (Livro)jpa.findById(context, LivroEntity.class, cl.getLivro().getId());
+				Livro livro = (Livro)jpa.findById(context, Livro.class, cl.getLivro().getId());
 				
 				item.setLivro(livro);
 				item.setQuantidade(cl.getQuantidade());
@@ -462,7 +460,7 @@ public class VendaLivroRepository {
 	 * @throws PlcException
 	 */
 	@SuppressWarnings("rawtypes")
-	public BigDecimal buscarDadosVendaLivros(PlcBaseContextVO context, List entityList) throws PlcException {
+	public BigDecimal buscarDadosVendaProdutos(PlcBaseContextVO context, List entityList) throws PlcException {
 		this.context = context;
 		double totalGeral = 0.0;
 		double mult = 0.0;
@@ -470,7 +468,7 @@ public class VendaLivroRepository {
 		try {
 			
 			for (Object o : entityList) {
-				VendaLivro cl = (VendaLivro)o;
+				VendaProduto cl = (VendaProduto)o;
 				
 				if (cl.getLivro() != null) {
 					
@@ -481,7 +479,7 @@ public class VendaLivroRepository {
 					if (preco.getIdTabela() != null) {
 						cl.setValorUnitario(preco.getPrecoTabela());
 					} else {
-						Livro livro = (Livro)jpa.findById(context, LivroEntity.class, cl.getLivro().getId());
+						Livro livro = (Livro)jpa.findById(context, Livro.class, cl.getLivro().getId());
 						cl.setValorUnitario(livro.getPrecoVendaSugerido());
 					}
 					
@@ -502,8 +500,8 @@ public class VendaLivroRepository {
 		} catch (PlcException plcE) {
 			throw plcE;
 		} catch (Exception e) {
-			throw new PlcException("VendaLivroRepository",
-					"buscarDadosVendaLivros", e, log, "");
+			throw new PlcException("VendaProdutosRepository",
+					"buscarDadosvendaProdutos", e, log, "");
 		}
 		
 		return BigDecimal.valueOf(totalGeral);

@@ -7,7 +7,6 @@ import java.util.List;
 import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
 
-import com.cee.livraria.entity.Livro;
 import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
@@ -17,9 +16,10 @@ import com.cee.livraria.entity.estoque.EstoqueEntity;
 import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.pagamento.PagamentoList;
+import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.model.CaixaRepository;
-import com.cee.livraria.model.VendaLivroRepository;
+import com.cee.livraria.model.VendaProdutosRepository;
 import com.cee.livraria.model.ajuste.AjusteEstoqueRepository;
 import com.cee.livraria.model.conferencia.ConferenciaRepository;
 import com.cee.livraria.persistence.jpa.livro.LivroDAO;
@@ -38,7 +38,7 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	private LivroDAO jpaDAO;
 	
 	@Inject
-	private VendaLivroRepository vendaLivroRepository;
+	private VendaProdutosRepository vendaProdutoRepository;
 	
 	@Inject
 	private ConferenciaRepository conferenciaRepository;
@@ -59,15 +59,15 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	@PlcTransactional(commit=true)
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.REQUIRED)
 	@Override
-	public RetornoConfig registrarVendaLivros(PlcBaseContextVO context, List entityList, List pagtoList) throws PlcException {
-		return vendaLivroRepository.registrarVendaLivros(context, entityList, pagtoList);
+	public RetornoConfig registrarVendaProdutos(PlcBaseContextVO context, List entityList, List pagtoList) throws PlcException {
+		return vendaProdutoRepository.registrarVendaProdutos(context, entityList, pagtoList);
 	}
 	
 	@PlcTransactional(commit=false)
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
 	@Override
-	public BigDecimal buscarDadosVendaLivros(PlcBaseContextVO context, List entityList) throws PlcException {
-		return vendaLivroRepository.buscarDadosVendaLivros(context, entityList);
+	public BigDecimal buscarDadosVendaProdutos(PlcBaseContextVO context, List entityList) throws PlcException {
+		return vendaProdutoRepository.buscarDadosVendaProdutos(context, entityList);
 	}
 
 	@PlcTransactional(commit=true)

@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.cee.livraria.controller.jsf.AppMB;
-import com.cee.livraria.entity.LivroEntity;
+import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
@@ -17,17 +17,19 @@ import com.powerlogic.jcompany.config.aggregation.PlcConfigAggregation;
 import com.powerlogic.jcompany.config.collaboration.FormPattern;
 import com.powerlogic.jcompany.config.collaboration.PlcConfigForm;
 import com.powerlogic.jcompany.config.collaboration.PlcConfigFormLayout;
+import com.powerlogic.jcompany.config.collaboration.PlcConfigSelection;
 import com.powerlogic.jcompany.controller.jsf.action.util.PlcConversationControl;
 import com.powerlogic.jcompany.controller.jsf.annotations.PlcHandleException;
 import com.powerlogic.jcompany.controller.jsf.util.PlcCreateContextUtil;
 import com.powerlogic.jcompany.controller.util.PlcIocControllerFacadeUtil;
 
 @PlcConfigAggregation(
-	entity = com.cee.livraria.entity.LivroEntity.class
+	entity = com.cee.livraria.entity.produto.Livro.class
 )
 
 @PlcConfigForm (
 	formPattern=FormPattern.Man,
+	selection=@PlcConfigSelection(apiQuerySel="querySel"),
 	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/livro"),
 	behavior = @com.powerlogic.jcompany.config.collaboration.PlcConfigBehavior(batchInput=false)
 )
@@ -57,12 +59,12 @@ public class LivroMB extends AppMB  {
 	* Entidade da ação injetado pela CDI
 	*/
 	@Produces  @Named("livro")
-	public LivroEntity createEntityPlc() {
+	public Livro createEntityPlc() {
         if (this.entityPlc==null) {
-              this.entityPlc = new LivroEntity();
+              this.entityPlc = new Livro();
               this.newEntity();
         }
-        return (LivroEntity)this.entityPlc;     	
+        return (Livro)this.entityPlc;     	
 	}
 	
 	/**
@@ -75,7 +77,7 @@ public class LivroMB extends AppMB  {
         if (this.entityPlc!=null) {
     		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 
-    		LivroEntity livro = (LivroEntity)entityPlc;
+    		Livro livro = (Livro)entityPlc;
         	
         	PrecoTabela preco = iocControleFacadeUtil.getFacade(IAppFacade.class).findPrecoTabela(context, livro.getId());
         	

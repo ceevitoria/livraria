@@ -1,4 +1,4 @@
-package com.cee.livraria.controller.jsf.vendalivro;
+package com.cee.livraria.controller.jsf.vendaproduto;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import com.cee.livraria.commons.AppConstants;
 import com.cee.livraria.controller.jsf.AppMB;
 import com.cee.livraria.entity.config.CompraVendaConfig;
 import com.cee.livraria.entity.config.RetornoConfig;
-import com.cee.livraria.entity.estoque.apoio.VendaLivro;
+import com.cee.livraria.entity.estoque.apoio.VendaProduto;
 import com.cee.livraria.entity.pagamento.FormaPagto;
 import com.cee.livraria.entity.pagamento.FormaPagtoEntity;
 import com.cee.livraria.entity.pagamento.Pagamento;
@@ -37,7 +37,7 @@ import com.powerlogic.jcompany.controller.util.PlcIocControllerFacadeUtil;
 import com.powerlogic.jcompany.domain.type.PlcYesNo;
 import com.powerlogic.jcompany.domain.validation.PlcMessage;
 	
-@PlcConfigAggregation(entity = com.cee.livraria.entity.estoque.apoio.VendaLivro.class)
+@PlcConfigAggregation(entity = com.cee.livraria.entity.estoque.apoio.VendaProduto.class)
 
 @PlcConfigForm(
 	formPattern=FormPattern.Tab,
@@ -51,9 +51,9 @@ import com.powerlogic.jcompany.domain.validation.PlcMessage;
  */
  
 @SPlcMB
-@PlcUriIoC("vendalivro")	
+@PlcUriIoC("vendaproduto")	
 @PlcHandleException
-public class VendaLivroMB extends AppMB  {
+public class VendaProdutoMB extends AppMB  {
 
 	@Inject @QPlcDefault 
 	protected PlcCreateContextUtil contextMontaUtil;
@@ -81,7 +81,7 @@ public class VendaLivroMB extends AppMB  {
 	/**
 	 * Entidade da ação injetado pela CDI
 	*/
-	@Produces  @Named("vendalivroLista") 
+	@Produces  @Named("vendaprodutoLista") 
 	public PlcEntityList createEntityListPlc() {
 		criaNovaLista();
 		return this.entityListPlc;
@@ -96,10 +96,10 @@ public class VendaLivroMB extends AppMB  {
 	private void novosItens() {
 		List itens = new ArrayList<Object>();
 		
-		VendaLivro cl = null;
+		VendaProduto cl = null;
 		
 		for (int i=0; i<4; i++) {
-			cl = new VendaLivro();
+			cl = new VendaProduto();
 			itens.add(cl);
 		}
 		
@@ -159,7 +159,7 @@ public class VendaLivroMB extends AppMB  {
 	private void limpaItens(List itens) {
 
 		for (Object o : itens) {
-			VendaLivro vl = (VendaLivro)o;
+			VendaProduto vl = (VendaProduto)o;
 			vl.setId(null);
 			vl.setLivro(null);
 			vl.setNomeTabela(null);
@@ -184,10 +184,10 @@ public class VendaLivroMB extends AppMB  {
 		}
 	}
 
-	private void limpaItensSemLivros(List itens) {
+	private void limpaItensSemProdutos(List itens) {
 
 		for (Object o : itens) {
-			VendaLivro vl = (VendaLivro)o;
+			VendaProduto vl = (VendaProduto)o;
 			
 			if (vl.getLivro() == null || vl.getLivro().getCodigoBarras() == null || "".compareTo(vl.getLivro().getCodigoBarras().trim()) == 0) {
 				vl.setId(null);
@@ -204,13 +204,13 @@ public class VendaLivroMB extends AppMB  {
 	 * 
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public String registrarVendaLivros()  {
+	public String registrarVendaProdutos()  {
 		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 		
 		List itensPlc = entityListPlc.getItensPlc();
 		List itensPagamento = pagamentoList.getItens();
 
-		RetornoConfig ret = iocControleFacadeUtil.getFacade(IAppFacade.class).registrarVendaLivros(context, itensPlc, itensPagamento);
+		RetornoConfig ret = iocControleFacadeUtil.getFacade(IAppFacade.class).registrarVendaProdutos(context, itensPlc, itensPagamento);
 		
 		if (ret.getAlertas().size() > 0) {
 			
@@ -239,12 +239,12 @@ public class VendaLivroMB extends AppMB  {
 	 * 
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public String buscarDadosVendaLivros()  {
+	public String buscarDadosVendaProdutos()  {
 		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 
 		List itens = entityListPlc.getItensPlc();
 
-		BigDecimal valor = iocControleFacadeUtil.getFacade(IAppFacade.class).buscarDadosVendaLivros(context, itens);
+		BigDecimal valor = iocControleFacadeUtil.getFacade(IAppFacade.class).buscarDadosVendaProdutos(context, itens);
 		
 		Collection formasPagto = iocControleFacadeUtil.getFacade(IAppFacade.class).findSimpleList(context, FormaPagtoEntity.class, "id");
 		
@@ -254,7 +254,7 @@ public class VendaLivroMB extends AppMB  {
 		pagto.setValor(valor);
 		pagto.setFormaPagto(formaPagto);
 		
-		limpaItensSemLivros(itens);
+		limpaItensSemProdutos(itens);
 		
 		return baseEditMB.getDefaultNavigationFlow(); 
 	}

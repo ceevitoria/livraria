@@ -68,29 +68,21 @@
 			jqGrid:{caption:
 				'#{msg['livro.titulo']}',
 				colNames:[
-				//	['#{msg['label.id']}',
 					'#{msg['label.codigoBarras']}',
 					'#{msg['label.titulo']}',
 					'#{msg['label.edicao']}',
-				//	'#{msg['label.palavrasChave']}',
 					'#{msg['label.autor']}',
 					'#{msg['label.espirito']}',
 					'#{msg['label.editora']}',
-					'#{msg['label.colecao']}',
-				//	'#{msg['label.isbn']}'
-					],
+					'#{msg['label.colecao']}'],
 				colModel:[
-				//	{name:'id',index:'id'},
 					{name:'codigoBarras',index:'codigoBarras', width:'80', align:'center'},
 					{name:'titulo',index:'titulo', width:'300'},
 					{name:'edicao',index:'edicao', width:'40', align:'center'},
-				//	{name:'palavrasChave',index:'palavrasChave'},
 					{name:'autor',index:'autor'},
 					{name:'espirito',index:'espirito'},
 					{name:'editora',index:'editora'},
-					{name:'colecao',index:'colecao'},
-				//	{name:'isbn',index:'isbn'}
-					]},
+					{name:'colecao',index:'colecao'}]},
 			urlEdicao:'#{request.contextPath}/f/n/livroman'});});//]]> </script>  
 					<table id="plc-grid" width="100%" class="scroll" cellpadding="0" cellspacing="0"/>  
 					<div id="plc-grid-navegador" class="scroll" style="text-align:center;"/> 

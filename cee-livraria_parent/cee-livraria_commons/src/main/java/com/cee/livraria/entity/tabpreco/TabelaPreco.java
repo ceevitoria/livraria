@@ -2,31 +2,33 @@ package com.cee.livraria.entity.tabpreco;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
-import com.cee.livraria.entity.AppBaseEntity;
-import com.powerlogic.jcompany.domain.type.PlcYesNo;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
-import javax.validation.Valid;
-import javax.persistence.TemporalType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.Embedded;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.GenerationType;
-import javax.persistence.EnumType;
-import javax.persistence.Temporal;
 import javax.validation.constraints.Size;
-import javax.persistence.GeneratedValue;
-import java.util.List;
+
+import org.hibernate.annotations.ForeignKey;
+
+import com.cee.livraria.entity.AppBaseEntity;
+import com.powerlogic.jcompany.domain.type.PlcYesNo;
 import com.powerlogic.jcompany.domain.validation.PlcValDuplicity;
 import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
-import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import org.hibernate.annotations.ForeignKey;
 
 @MappedSuperclass
 public abstract class TabelaPreco extends AppBaseEntity {

@@ -9,7 +9,6 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
-import com.cee.livraria.entity.Livro;
 import com.cee.livraria.entity.config.ConferenciaConfig;
 import com.cee.livraria.entity.config.ConferenciaConfigEntity;
 import com.cee.livraria.entity.config.RetornoConfig;
@@ -25,6 +24,7 @@ import com.cee.livraria.entity.estoque.conferencia.ItemConferencia;
 import com.cee.livraria.entity.estoque.conferencia.RegraPesquisaLivros;
 import com.cee.livraria.entity.estoque.conferencia.ResultadoConferencia;
 import com.cee.livraria.entity.estoque.conferencia.StatusConferencia;
+import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.persistence.jpa.conferencia.ConferenciaDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;

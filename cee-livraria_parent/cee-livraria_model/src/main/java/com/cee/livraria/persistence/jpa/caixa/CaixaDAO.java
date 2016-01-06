@@ -2,8 +2,8 @@ package com.cee.livraria.persistence.jpa.caixa;
 
 import java.util.List;
 
-import com.cee.livraria.entity.LivroEntity;
 import com.cee.livraria.entity.caixa.CaixaEntity;
+import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.persistence.jpa.AppJpaDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.annotation.PlcAggregationDAOIoC;
@@ -25,7 +25,7 @@ import com.powerlogic.jcompany.persistence.jpa.PlcQueryService;
 public class CaixaDAO extends AppJpaDAO  {
 
 	@PlcQuery("querySel")
-	public native List<LivroEntity> findList(
+	public native List<Livro> findList(
 		PlcBaseContextVO context,
 		@PlcQueryOrderBy String dynamicOrderByPlc,
 		@PlcQueryFirstLine Integer primeiraLinhaPlc, 
