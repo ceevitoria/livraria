@@ -15,36 +15,14 @@
 					<plcf:titulo value="#{msg['label.regra.codigoBarras']}"/>  
 					<plcf:texto id="regra_codigoBarras" value="#{conferencia.regra.codigoBarras}" disabled="#{conferencia.status!='F'}" ajudaChave="ajuda.regra.codigoBarras"/> 
 				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.regra.titulo']}"/>  
 					<plcf:texto id="regra_titulo" value="#{conferencia.regra.titulo}" disabled="#{conferencia.status!='F'}" ajudaChave="ajuda.regra.titulo"/> 
 				</plcf:celula>  
 			</plcf:linha>  
 			<plcf:linha> 
-				<plcf:celula> 
-					<plcf:titulo value="#{msg['label.regra.autor']}"/>  
-					<plcf:comboDinamico id="regra_autor" value="#{conferencia.regra.autor}" disabled="#{conferencia.status!='F'}" dominio="AutorEntity" exibeBranco="S" ajudaChave="ajuda.regra.autor"/> 
-				</plcf:celula>  
-				<plcf:celula> 
-					<plcf:titulo value="#{msg['label.regra.espirito']}"/>  
-					<plcf:comboDinamico id="regra_espirito" value="#{conferencia.regra.espirito}" disabled="#{conferencia.status!='F'}" dominio="EspiritoEntity" exibeBranco="S" ajudaChave="ajuda.regra.espirito"/> 
-				</plcf:celula> 
-			</plcf:linha>  
-			<plcf:linha> 
-				<plcf:celula> 
-					<plcf:titulo value="#{msg['label.regra.editora']}"/>  
-					<plcf:comboDinamico id="regra_editora" value="#{conferencia.regra.editora}" disabled="#{conferencia.status!='F'}" dominio="EditoraEntity" exibeBranco="S" ajudaChave="ajuda.regra.editora"/> 
-				</plcf:celula>  
-				<plcf:celula> 
-					<plcf:titulo value="#{msg['label.regra.edicao']}"/>  
-					<plcf:numerico id="regra_edicao" value="#{conferencia.regra.edicao}" disabled="#{conferencia.status!='F'}" ajudaChave="ajuda.regra.edicao"/> 
-				</plcf:celula> 
-			</plcf:linha>  
-			<plcf:linha> 
-				<plcf:celula> 
-					<plcf:titulo value="#{msg['label.regra.colecao']}"/>  
-					<plcf:comboDinamico id="regra_colecao" value="#{conferencia.regra.colecao}" disabled="#{conferencia.status!='F'}" dominio="ColecaoEntity" exibeBranco="S" ajudaChave="ajuda.regra.colecao"/> 
-				</plcf:celula>  
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.regra.palavraChave']}"/>  
 					<plcf:texto id="regra_palavraChave" value="#{conferencia.regra.palavraChave}" disabled="#{conferencia.status!='F'}" ajudaChave="ajuda.regra.palavraChave"/> 

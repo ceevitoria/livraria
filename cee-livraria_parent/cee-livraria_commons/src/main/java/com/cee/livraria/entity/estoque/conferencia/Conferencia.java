@@ -16,6 +16,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,12 +24,14 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.ForeignKey;
 
 import com.cee.livraria.entity.AppBaseEntity;
+import com.cee.livraria.entity.produto.RegraPesquisaProdutos;
 import com.powerlogic.jcompany.domain.validation.PlcValDuplicity;
 import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
 
 @MappedSuperclass
 public abstract class Conferencia extends AppBaseEntity {
-	
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_CONFERENCIA")
 	private Long id;
@@ -53,11 +56,6 @@ public abstract class Conferencia extends AppBaseEntity {
 	@Column(length = 1)
 	private ResultadoConferencia resultado;
 	
-	@Embedded
-	@NotNull
-	@Valid
-	private RegraPesquisaLivros regra;
-
 	@OneToMany (targetEntity = com.cee.livraria.entity.estoque.conferencia.ItemConferenciaEntity.class, fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="conferencia")
 	@ForeignKey(name="FK_ITEMCONFERENCIA_CONFERENCIA")
 	@PlcValDuplicity(property="livro")
@@ -113,14 +111,6 @@ public abstract class Conferencia extends AppBaseEntity {
 		this.resultado = resultado;
 	}
 	
-	public RegraPesquisaLivros getRegra() {
-		return regra;
-	}
-
-	public void setRegra(RegraPesquisaLivros regra) {
-		this.regra = regra;
-	}
-
 	public List<ItemConferencia> getItemConferencia() {
 		return itemConferencia;
 	}
@@ -128,5 +118,20 @@ public abstract class Conferencia extends AppBaseEntity {
 	public void setItemConferencia(List<ItemConferencia> itemConferencia) {
 		this.itemConferencia=itemConferencia;
 	}
+	
+	@Embedded
+	@NotNull
+	@Valid
+	@Transient
+	private transient RegraPesquisaProdutos regra;
+	
+	public RegraPesquisaProdutos getRegra() {
+		return regra;
+	}
 
+	public void setRegra(RegraPesquisaProdutos regra) {
+		this.regra = regra;
+	}
+	
+	
 }

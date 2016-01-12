@@ -25,7 +25,8 @@ import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
 
 @MappedSuperclass
 public abstract class Caixa extends AppBaseEntity {
-	
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_CAIXA")
 	private Long id;

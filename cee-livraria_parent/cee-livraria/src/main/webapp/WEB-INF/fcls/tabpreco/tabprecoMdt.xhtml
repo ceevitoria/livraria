@@ -17,11 +17,11 @@
 				</plcf:celula>  
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.dataInicio']}"/>  
-					<plcf:data id="dataInicio" value="#{tabpreco.dataInicio}" tamanho="13" ajudaChave="ajuda.dataInicio"/> 
+					<plcf:data id="dataInicio" value="#{tabpreco.dataInicio}" tamanho="12" ajudaChave="ajuda.dataInicio"/> 
 				</plcf:celula>  
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.dataFim']}"/>  
-					<plcf:data id="dataFim" value="#{tabpreco.dataFim}" tamanho="13" ajudaChave="ajuda.dataFim"/> 
+					<plcf:data id="dataFim" value="#{tabpreco.dataFim}" tamanho="12" ajudaChave="ajuda.dataFim"/> 
 				</plcf:celula> 
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.ativa']}"/>  
@@ -40,20 +40,24 @@
 			</plcf:linha>  
 			<plcf:linha> 
 				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.fontePrecificacao']}"/>  
+					<plcf:radio id="fontePrecificacao" value="#{tabpreco.fontePrecificacao}" dominio="FontePrecificacao" layout="horizontal" ajudaChave="ajuda.fontePrecificacao"/> 
+				</plcf:celula> 
+				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.tipoPrecificacao']}"/>  
-					<plcf:radio id="tipoPrecificacao" value="#{tabpreco.tipoPrecificacao}" dominio="TipoPrecificacao" layout="horizontal" inlineStyle="width:180px;" ajudaChave="ajuda.tipoPrecificacao"/> 
+					<plcf:radio id="tipoPrecificacao" value="#{tabpreco.tipoPrecificacao}" dominio="TipoPrecificacao" layout="horizontal" ajudaChave="ajuda.tipoPrecificacao"/> 
 				</plcf:celula> 
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.tipoVariacao']}"/>  
-					<plcf:radio id="tipoVariacao" value="#{tabpreco.tipoVariacao}" dominio="TipoVariacao" layout="horizontal" inlineStyle="width:180px;" ajudaChave="ajuda.tipoVariacao"/> 
+					<plcf:radio id="tipoVariacao" value="#{tabpreco.tipoVariacao}" dominio="TipoVariacao" layout="horizontal" ajudaChave="ajuda.tipoVariacao"/> 
 				</plcf:celula> 
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.variacao']}"/>  
-					<plcf:numerico id="variacao" value="#{tabpreco.variacao}" tamanho="10" ajudaChave="ajuda.variacao"/> 
+					<plcf:numerico id="variacao" value="#{tabpreco.variacao}" tamanho="7" ajudaChave="ajuda.variacao"/> 
 				</plcf:celula>  
 				<plcf:celula columnSpan="2"> 
 					<plcf:titulo value="#{msg['label.tipoArredondamento']}"/>  
-					<plcf:radio id="tipoArredondamento" value="#{tabpreco.tipoArredondamento}" dominio="TipoArredondamento" layout="horizontal" inlineStyle="width:180px;" ajudaChave="ajuda.tipoArredondamento"/> 
+					<plcf:radio id="tipoArredondamento" value="#{tabpreco.tipoArredondamento}" dominio="TipoArredondamento" layout="horizontal" ajudaChave="ajuda.tipoArredondamento"/> 
 				</plcf:celula> 
 			</plcf:linha>  
 		</plcf:tabela> 

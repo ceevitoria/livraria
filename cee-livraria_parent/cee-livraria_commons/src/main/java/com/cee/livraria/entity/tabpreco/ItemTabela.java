@@ -2,44 +2,31 @@ package com.cee.livraria.entity.tabpreco;
 
 import java.math.BigDecimal;
 
-import com.cee.livraria.entity.AppBaseEntity;
-import com.cee.livraria.entity.Autor;
-import com.cee.livraria.entity.AutorEntity;
-import com.cee.livraria.entity.Colecao;
-import com.cee.livraria.entity.ColecaoEntity;
-import com.cee.livraria.entity.Editora;
-import com.cee.livraria.entity.EditoraEntity;
-import com.cee.livraria.entity.Espirito;
-import com.cee.livraria.entity.EspiritoEntity;
-import com.cee.livraria.entity.Localizacao;
-import com.cee.livraria.entity.LocalizacaoEntity;
-
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.validation.Valid;
-import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfType;
-import javax.persistence.Id;
-import javax.persistence.Embedded;
-import com.cee.livraria.entity.estoque.MovimentoEntity;
-import com.cee.livraria.entity.produto.Livro;
-import com.cee.livraria.entity.produto.Livro;
-
-import javax.persistence.MappedSuperclass;
-import javax.persistence.GenerationType;
-import org.hibernate.annotations.ForeignKey;
-import com.powerlogic.jcompany.domain.validation.PlcValGroupEntityList;
-import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIf;
-import javax.validation.constraints.Digits;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIf;
+import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfType;
+import org.hibernate.annotations.ForeignKey;
+
+import com.cee.livraria.entity.AppBaseEntity;
+import com.cee.livraria.entity.produto.Produto;
+import com.cee.livraria.entity.produto.TipoProduto;
+import com.powerlogic.jcompany.domain.validation.PlcValGroupEntityList;
 
 @MappedSuperclass
 public abstract class ItemTabela extends AppBaseEntity {
-
-	@NotNull
-	@Size(max = 1)
-	private String sitHistoricoPlc = "A";
+	private static final long serialVersionUID = 6970771560739108643L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_ITEM_TABELA")
@@ -50,48 +37,39 @@ public abstract class ItemTabela extends AppBaseEntity {
 	@NotNull
 	private TabelaPreco tabelaPreco;
 
-	@ManyToOne(targetEntity = Livro.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_ITEMTABELA_LIVRO")
+	@ManyToOne(targetEntity = Produto.class, fetch = FetchType.LAZY)
+	@ForeignKey(name = "FK_ITEMTABELA_PRODUTO")
 	@NotNull(groups = PlcValGroupEntityList.class)
 	@RequiredIf(valueOf = "id", is = RequiredIfType.not_empty)
-	private Livro livro;
+	private Produto produto;
 
-	@Size(max = 40)
+	@Column(length=1)
+	@Enumerated(EnumType.STRING)
+	private TipoProduto tipoProduto;
+
+	@Size(max = 200)
 	private String titulo;
 
 	@Size(max = 40)
 	private String codigoBarras;
 
-	@ManyToOne(targetEntity = AutorEntity.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_ITEMTABELA_AUTOR")
-	private Autor autor;
-
-	@ManyToOne(targetEntity = EspiritoEntity.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_ITEMTABELA_ESPIRITO")
-	private Espirito espirito;
-
-	@ManyToOne(targetEntity = EditoraEntity.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_ITEMTABELA_EDITORA")
-	private Editora editora;
-
-	@Digits(integer = 5, fraction = 0)
-	private Integer edicao;
-
-	@ManyToOne(targetEntity = ColecaoEntity.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_ITEMTABELA_COLECAO")
-	private Colecao colecao;
-
-	@Size(max = 40)
+	@Size(max = 200)
 	private String palavraChave;
 
-	@ManyToOne(targetEntity = LocalizacaoEntity.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_ITEMTABELA_LOCALIZACAO")
-	private Localizacao localizacao;
-	
 	@NotNull(groups = PlcValGroupEntityList.class)
-	@RequiredIf(valueOf = "livro", is = RequiredIfType.not_empty)
+	@RequiredIf(valueOf = "produto", is = RequiredIfType.not_empty)
 	@Digits(integer = 8, fraction = 2)
 	private BigDecimal preco;
+
+	@Digits(integer = 10, fraction = 2)
+	private BigDecimal precoUltCompra;
+
+	@Digits(integer = 10, fraction = 2)
+	private BigDecimal precoVendaSugerido;
+	
+	@NotNull
+	@Size(max = 1)
+	private String sitHistoricoPlc = "A";
 
 	public Long getId() {
 		return id;
@@ -101,12 +79,20 @@ public abstract class ItemTabela extends AppBaseEntity {
 		this.id = id;
 	}
 
-	public Livro getLivro() {
-		return livro;
+	public Produto getProduto() {
+		return produto;
 	}
 
-	public void setLivro(Livro livro) {
-		this.livro = livro;
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
+
+	public TipoProduto getTipoProduto() {
+		return tipoProduto;
+	}
+
+	public void setTipoProduto(TipoProduto tipoProduto) {
+		this.tipoProduto = tipoProduto;
 	}
 
 	public String getTitulo() {
@@ -125,60 +111,12 @@ public abstract class ItemTabela extends AppBaseEntity {
 		this.codigoBarras = codigoBarras;
 	}
 
-	public Autor getAutor() {
-		return autor;
-	}
-
-	public void setAutor(Autor autor) {
-		this.autor = autor;
-	}
-
-	public Espirito getEspirito() {
-		return espirito;
-	}
-
-	public void setEspirito(Espirito espirito) {
-		this.espirito = espirito;
-	}
-
-	public Editora getEditora() {
-		return editora;
-	}
-
-	public void setEditora(Editora editora) {
-		this.editora = editora;
-	}
-
-	public Integer getEdicao() {
-		return edicao;
-	}
-
-	public void setEdicao(Integer edicao) {
-		this.edicao = edicao;
-	}
-
-	public Colecao getColecao() {
-		return colecao;
-	}
-
-	public void setColecao(Colecao colecao) {
-		this.colecao = colecao;
-	}
-
 	public String getPalavraChave() {
 		return palavraChave;
 	}
 
 	public void setPalavraChave(String palavraChave) {
 		this.palavraChave = palavraChave;
-	}
-
-	public Localizacao getLocalizacao() {
-		return localizacao;
-	}
-
-	public void setLocalizacao(Localizacao localizacao) {
-		this.localizacao = localizacao;
 	}
 
 	public BigDecimal getPreco() {
@@ -197,6 +135,22 @@ public abstract class ItemTabela extends AppBaseEntity {
 		this.tabelaPreco = tabelaPreco;
 	}
 
+	public BigDecimal getPrecoUltCompra() {
+		return precoUltCompra;
+	}
+
+	public void setPrecoUltCompra(BigDecimal precoUltCompra) {
+		this.precoUltCompra = precoUltCompra;
+	}
+
+	public BigDecimal getPrecoVendaSugerido() {
+		return precoVendaSugerido;
+	}
+
+	public void setPrecoVendaSugerido(BigDecimal precoVendaSugerido) {
+		this.precoVendaSugerido = precoVendaSugerido;
+	}
+
 	public String getSitHistoricoPlc() {
 		return sitHistoricoPlc;
 	}
@@ -205,5 +159,4 @@ public abstract class ItemTabela extends AppBaseEntity {
 		this.sitHistoricoPlc = sitHistoricoPlc;
 	}
 
-	
 }

@@ -161,7 +161,7 @@ public class VendaProdutoMB extends AppMB  {
 		for (Object o : itens) {
 			VendaProduto vl = (VendaProduto)o;
 			vl.setId(null);
-			vl.setLivro(null);
+			vl.setProduto(null);
 			vl.setNomeTabela(null);
 			vl.setQuantidade(null);
 			vl.setValorUnitario(null);
@@ -189,9 +189,9 @@ public class VendaProdutoMB extends AppMB  {
 		for (Object o : itens) {
 			VendaProduto vl = (VendaProduto)o;
 			
-			if (vl.getLivro() == null || vl.getLivro().getCodigoBarras() == null || "".compareTo(vl.getLivro().getCodigoBarras().trim()) == 0) {
+			if (vl.getProduto() == null || vl.getProduto().getCodigoBarras() == null || "".compareTo(vl.getProduto().getCodigoBarras().trim()) == 0) {
 				vl.setId(null);
-				vl.setLivro(null);
+				vl.setProduto(null);
 				vl.setNomeTabela(null);
 				vl.setQuantidade(null);
 				vl.setValorUnitario(null);

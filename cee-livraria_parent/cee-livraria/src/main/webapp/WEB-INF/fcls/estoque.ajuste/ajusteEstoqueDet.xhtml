@@ -25,50 +25,32 @@
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
-					<plcf:titulo value="#{msg['label.livro']}"/>
+					<plcf:titulo value="#{msg['label.produto']}"/>
 				</f:facet>
 				
 				<c:if test="#{ajusteEstoque.status=='F'}">
-					<plcf:vinculado id="livro" value="#{itemAjusteEstoque.livro}" 
-						propSelPop="livro" idExibe="S" lookupTamanho="32"
+					<plcf:vinculado id="produto" value="#{itemAjusteEstoque.produto}" 
+						propSelPop="produto" idExibe="S" lookupTamanho="32"
 						larg="1200" alt="800"
 						autoRecuperacaoPropriedade="codigoBarras"
 						autoComplete="true" idTamanho="13" evento="y"
-						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.LivroEntity" 
-						actionSel="livrosel" modal="S" ajudaChave="ajuda.livro" 
+						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.Produto" 
+						actionSel="produtosel" modal="S" ajudaChave="ajuda.produto" 
 						onkeydown="selecionaPorTecla(event,this);" 
 						disabled="#{ajusteEstoque.status!='F'}" 
-						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.livro?q=titulo')"/> 
+						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.produto?q=titulo')"/> 
 				</c:if>
 				<c:if test="#{ajusteEstoque.status!='F'}">
-					<plcf:vinculado id="livro" value="#{itemAjusteEstoque.livro}" 
-						propSelPop="livro" idExibe="N" lookupTamanho="35"
+					<plcf:vinculado id="produto" value="#{itemAjusteEstoque.produto}" 
+						propSelPop="produto" idExibe="N" lookupTamanho="35"
 						autoComplete="true" idTamanho="15" evento="y"
-						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.LivroEntity" 
-						actionSel="livrosel" modal="S" ajudaChave="ajuda.livro" 
+						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.Produto" 
+						actionSel="produtosel" modal="S" ajudaChave="ajuda.produto" 
 						onkeydown="selecionaPorTecla(event,this);" larg="900"
 						disabled="#{ajusteEstoque.status!='F'}" 
-						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.livro?q=titulo')"/> 
+						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.produto?q=titulo')"/> 
 				</c:if>
 				  
-			</h:column>  
-			<h:column> 
-				<f:facet name="header">
-					<plcf:titulo value="#{msg['label.autor']}"/>
-				</f:facet>  
-				<plcf:comboDinamico id="autor" value="#{itemAjusteEstoque.autor}" disabled="#{ajusteEstoque.status!='F'}" dominio="AutorEntity" exibeBranco="S" ajudaChave="ajuda.autor"/> 
-			</h:column>  
-			<h:column> 
-				<f:facet name="header">
-					<plcf:titulo value="#{msg['label.espirito']}"/>
-				</f:facet>  
-				<plcf:comboDinamico id="espirito" value="#{itemAjusteEstoque.espirito}" disabled="#{ajusteEstoque.status!='F'}" dominio="EspiritoEntity" exibeBranco="S" ajudaChave="ajuda.espirito"/> 
-			</h:column>  
-			<h:column> 
-				<f:facet name="header">
-					<plcf:titulo value="#{msg['label.edicao']}"/>
-				</f:facet>  
-				<plcf:numerico id="edicao" value="#{itemAjusteEstoque.edicao}" tamanho="5" numCasas="0" disabled="#{ajusteEstoque.status!='F'}" ajudaChave="ajuda.edicao"/> 
 			</h:column>  
 			<h:column rendered="#{requestScope.utilizaLocalizacaoAjusteEstoque=='S'}"> 
 				<f:facet name="header">

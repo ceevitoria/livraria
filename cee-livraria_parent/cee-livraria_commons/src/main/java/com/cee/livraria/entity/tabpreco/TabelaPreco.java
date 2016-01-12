@@ -17,6 +17,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.Digits;
@@ -26,23 +27,14 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.ForeignKey;
 
 import com.cee.livraria.entity.AppBaseEntity;
+import com.cee.livraria.entity.produto.RegraPesquisaProdutos;
 import com.powerlogic.jcompany.domain.type.PlcYesNo;
 import com.powerlogic.jcompany.domain.validation.PlcValDuplicity;
 import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
 
 @MappedSuperclass
 public abstract class TabelaPreco extends AppBaseEntity {
-
-	@OneToMany(targetEntity = com.cee.livraria.entity.tabpreco.ItemTabelaEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "tabelaPreco")
-	@ForeignKey(name = "FK_ITEMTABELA_TABELAPRECO")
-	@PlcValDuplicity(property = "livro")
-	@PlcValMultiplicity(referenceProperty = "livro", message = "{jcompany.aplicacao.mestredetalhe.multiplicidade.ItemTabelaEntity}")
-	@Valid
-	private List<ItemTabela> itemTabela;
-
-	@NotNull
-	@Size(max = 1)
-	private String sitHistoricoPlc = "A";
+	private static final long serialVersionUID = -2465750378390266238L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_TABELA_PRECO")
@@ -79,6 +71,11 @@ public abstract class TabelaPreco extends AppBaseEntity {
 
 	@Enumerated(EnumType.STRING)
 	@NotNull
+	@Column(length = 2)
+	private FontePrecificacao fontePrecificacao = FontePrecificacao.PV;
+
+	@Enumerated(EnumType.STRING)
+	@NotNull
 	@Column(length = 1)
 	private TipoPrecificacao tipoPrecificacao = TipoPrecificacao.A;
 
@@ -91,12 +88,17 @@ public abstract class TabelaPreco extends AppBaseEntity {
 	@Digits(integer = 8, fraction = 2)
 	private BigDecimal variacao =  new BigDecimal(0.00);
 
-	@Embedded
 	@NotNull
+	@Size(max = 1)
+	private String sitHistoricoPlc = "A";
+	
+	@OneToMany(targetEntity = com.cee.livraria.entity.tabpreco.ItemTabelaEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "tabelaPreco")
+	@ForeignKey(name = "FK_ITEMTABELA_TABELAPRECO")
+	@PlcValDuplicity(property = "produto")
+	@PlcValMultiplicity(referenceProperty = "produto", message = "{jcompany.aplicacao.mestredetalhe.multiplicidade.ItemTabelaEntity}")
 	@Valid
-	private RegraPesquisaLivros regra;
-	
-	
+	private List<ItemTabela> itemTabela;
+
 	public Long getId() {
 		return id;
 	}
@@ -157,6 +159,14 @@ public abstract class TabelaPreco extends AppBaseEntity {
 		return tipoVariacao;
 	}
 
+	public FontePrecificacao getFontePrecificacao() {
+		return fontePrecificacao;
+	}
+
+	public void setFontePrecificacao(FontePrecificacao fontePrecificacao) {
+		this.fontePrecificacao = fontePrecificacao;
+	}
+
 	public void setTipoVariacao(TipoVariacao tipoVariacao) {
 		this.tipoVariacao = tipoVariacao;
 	}
@@ -185,14 +195,6 @@ public abstract class TabelaPreco extends AppBaseEntity {
 		this.variacao = variacao;
 	}
 
-	public RegraPesquisaLivros getRegra() {
-		return regra;
-	}
-
-	public void setRegra(RegraPesquisaLivros regra) {
-		this.regra = regra;
-	}
-
 	public List<ItemTabela> getItemTabela() {
 		return itemTabela;
 	}
@@ -209,4 +211,18 @@ public abstract class TabelaPreco extends AppBaseEntity {
 		this.sitHistoricoPlc = sitHistoricoPlc;
 	}
 
+	@Embedded
+	@NotNull
+	@Valid
+	@Transient
+	private transient RegraPesquisaProdutos regra;
+	
+	public RegraPesquisaProdutos getRegra() {
+		return regra;
+	}
+
+	public void setRegra(RegraPesquisaProdutos regra) {
+		this.regra = regra;
+	}
+	
 }

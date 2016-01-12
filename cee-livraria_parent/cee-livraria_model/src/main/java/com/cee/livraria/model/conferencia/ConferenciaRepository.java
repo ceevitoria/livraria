@@ -21,10 +21,10 @@ import com.cee.livraria.entity.estoque.ajuste.StatusAjuste;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.estoque.conferencia.ConferenciaEntity;
 import com.cee.livraria.entity.estoque.conferencia.ItemConferencia;
-import com.cee.livraria.entity.estoque.conferencia.RegraPesquisaLivros;
 import com.cee.livraria.entity.estoque.conferencia.ResultadoConferencia;
 import com.cee.livraria.entity.estoque.conferencia.StatusConferencia;
-import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Produto;
+import com.cee.livraria.entity.produto.RegraPesquisaProdutos;
 import com.cee.livraria.persistence.jpa.conferencia.ConferenciaDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
@@ -94,15 +94,15 @@ public class ConferenciaRepository extends PlcBaseRepository {
 			List<ItemConferencia> itensConferencia = conferencia.getItemConferencia();
 			
 			for (ItemConferencia itemConferencia : itensConferencia) {
-				Livro livro = itemConferencia.getLivro();
-				List<Estoque> estoqueList = dao.findByFields(context, EstoqueEntity.class, "querySelByLivro", new String[] {"livro"}, new Object[] {livro});
+				Produto produto = itemConferencia.getProduto();
+				List<Estoque> estoqueList = dao.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
 				
 				if (estoqueList == null || estoqueList.size() == 0) {
 					quantidadeLivrosSemEstoque++;
 					
 					if (config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.D) ) {
 						alertas.add(String.format("O livro '%s' não possui estoque associado.", 
-							new Object[]{itemConferencia.getLivro().getTitulo()}));
+							new Object[]{itemConferencia.getProduto().getTitulo()}));
 					}
 					
 				} else if (estoqueList.size() == 1) {
@@ -117,7 +117,7 @@ public class ConferenciaRepository extends PlcBaseRepository {
 								
 								if (config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.D) ) {
 									alertas.add(String.format("O livro '%s' teve sua localização trocada de '%s' para '%s'", 
-											new Object[]{itemConferencia.getLivro().getTitulo(),
+											new Object[]{itemConferencia.getProduto().getTitulo(),
 											estoque.getLocalizacao().getDescricao(),
 											itemConferencia.getLocalizacao().getDescricao()}));
 								}
@@ -148,8 +148,8 @@ public class ConferenciaRepository extends PlcBaseRepository {
 					if (itemConferencia.getQuantidadeConferida().compareTo(estoque.getQuantidade()) != 0) {
 
 						if (config.getTipoMensagem().equals(TipoMensagemConferenciaConfig.D) ) {
-							alertas.add(String.format("Quantidade divergente para o livro '%s'. Registrado: '%d'. Informado: '%d'", 
-									new Object[]{itemConferencia.getLivro().getTitulo(),
+							alertas.add(String.format("Quantidade divergente para o produto '%s'. Registrado: '%d'. Informado: '%d'", 
+									new Object[]{itemConferencia.getProduto().getTitulo(),
 									estoque.getQuantidade(),
 									itemConferencia.getQuantidadeConferida()}));
 						}
@@ -218,7 +218,7 @@ public class ConferenciaRepository extends PlcBaseRepository {
 		ajusteEstoque.setData(dataConferencia);
 		ajusteEstoque.setNome("Ajuste Conferencia: '" + conferencia.getNome() + "'");
 		ajusteEstoque.setDescricao("Ajuste criado automaticamente devido a conferência concluída com divergência");
-		ajusteEstoque.setRegra(new RegraPesquisaLivros());
+		ajusteEstoque.setRegra(new RegraPesquisaProdutos());
 		ajusteEstoque.setStatus(StatusAjuste.A);
 		ajusteEstoque.setConferencia(conferencia);
 
@@ -232,12 +232,7 @@ public class ConferenciaRepository extends PlcBaseRepository {
 			if (itemConferencia.getQuantidadeConferida().compareTo(itemConferencia.getQuantidadeEstoque())!=0) {
 				ItemAjusteEstoque itemAjuste = new ItemAjusteEstoque();
 				
-				itemAjuste.setLivro(itemConferencia.getLivro());
-				itemAjuste.setAutor(itemConferencia.getAutor());
-				itemAjuste.setEspirito(itemConferencia.getEspirito());
-				itemAjuste.setColecao(itemConferencia.getColecao());
-				itemAjuste.setEdicao(itemConferencia.getEdicao());
-				itemAjuste.setEditora(itemConferencia.getEditora());
+				itemAjuste.setProduto(itemConferencia.getProduto());
 				itemAjuste.setLocalizacao(itemConferencia.getLocalizacao());
 				itemAjuste.setQuantidadeEstoque(itemConferencia.getQuantidadeEstoque());
 				itemAjuste.setQuantidadeInformada(itemConferencia.getQuantidadeConferida());

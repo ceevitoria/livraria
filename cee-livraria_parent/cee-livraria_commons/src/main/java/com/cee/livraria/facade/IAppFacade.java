@@ -11,7 +11,7 @@ import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.pagamento.PagamentoList;
-import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
@@ -20,12 +20,12 @@ import com.powerlogic.jcompany.commons.facade.IPlcFacade;
 public interface IAppFacade extends IPlcFacade {
 	
 	/**
-	 * Encontra a tabela de preco vigente para livro informado
+	 * Encontra a tabela de preco vigente para produto informado
 	 * @param context
-	 * @param idLivro
+	 * @param idProduto
 	 * @return PrecoTabela
 	 */
-	public PrecoTabela findPrecoTabela(PlcBaseContextVO context, Long idLivro) throws PlcException;
+	public PrecoTabela findPrecoTabela(PlcBaseContextVO context, Long idProduto) throws PlcException;
 
 	/**
 	 * Registra a venda de produtos
@@ -78,11 +78,11 @@ public interface IAppFacade extends IPlcFacade {
 	public RetornoConfig concluirAjusteEstoqueLivros(PlcBaseContextVO context, AjusteEstoque ajusteEstoque) throws PlcException;
 
 	/**
-	 * Busca os referidos livros do estoque
+	 * Busca os referidos produtos do estoque
 	 * @param context
-	 * @param entityList relação de livros a serem recuperados do estoque
-	 * @return itens do estoque relativos ao livros informados
+	 * @param entityList relação de produtos a serem recuperados do estoque
+	 * @return itens do estoque relativos aos produtos informados
 	 */
-	public List<Estoque> buscarLivrosEstoque(PlcBaseContextVO context, List<Livro> listaLivros) throws PlcException;
+	public List<Estoque> buscarProdutosEstoque(PlcBaseContextVO context, List<Produto> listaProdutos) throws PlcException;
 	
 }

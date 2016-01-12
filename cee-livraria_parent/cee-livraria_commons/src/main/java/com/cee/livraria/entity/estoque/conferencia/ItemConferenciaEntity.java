@@ -19,7 +19,7 @@ import javax.persistence.Transient;
 @SequenceGenerator(name = "SE_ITEM_CONFERENCIA", sequenceName = "SE_ITEM_CONFERENCIA")
 @Access(AccessType.FIELD)
 @NamedQueries({ 
-	@NamedQuery(name="ItemConferenciaEntity.querySelLookup", query = "select id as id, livro as livro from ItemConferenciaEntity where id = ? order by id asc") })
+	@NamedQuery(name="ItemConferenciaEntity.querySelLookup", query = "select id as id, produto as produto from ItemConferenciaEntity where id = ? order by id asc") })
 public class ItemConferenciaEntity extends ItemConferencia {
 
 	private transient String livroAuxLookup;
@@ -35,8 +35,8 @@ public class ItemConferenciaEntity extends ItemConferencia {
 	@Override
 	public String toString() {
 
-		if (getLivro() != null && getLivro().getTitulo() != null) {
-			return getLivro().getTitulo();
+		if (getProduto() != null && getProduto().getTitulo() != null) {
+			return getProduto().getTitulo();
 		}
 
 		return "";

@@ -2,27 +2,26 @@ package com.cee.livraria.entity.estoque;
 
 import java.math.BigDecimal;
 
-import com.cee.livraria.entity.AppBaseEntity;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
-import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfType;
-import javax.persistence.Id;
-
-import com.cee.livraria.entity.produto.Livro;
-import com.cee.livraria.entity.produto.Livro;
-
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.GenerationType;
-import org.hibernate.annotations.ForeignKey;
-import com.powerlogic.jcompany.domain.validation.PlcValGroupEntityList;
-import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIf;
 import javax.persistence.FetchType;
-import javax.validation.constraints.Digits;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+
+import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIf;
+import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfType;
+import org.hibernate.annotations.ForeignKey;
+
+import com.cee.livraria.entity.AppBaseEntity;
+import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Produto;
+import com.powerlogic.jcompany.domain.validation.PlcValGroupEntityList;
 
 /**
  * @author joao.machado
@@ -42,11 +41,11 @@ public abstract class ItemMovimento extends AppBaseEntity {
 	@NotNull
 	private Movimento movimento;
 
-	@ManyToOne(targetEntity = Livro.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_ITEMMOVIMENTO_LIVRO")
+	@ManyToOne(targetEntity = Produto.class, fetch = FetchType.LAZY)
+	@ForeignKey(name = "FK_ITEMMOVIMENTO_PRODUTO")
 	@NotNull(groups = PlcValGroupEntityList.class)
 	@RequiredIf(valueOf = "id", is = RequiredIfType.not_empty)
-	private Livro livro;
+	private Produto produto;
 
 	@NotNull(groups = PlcValGroupEntityList.class)
 	@RequiredIf(valueOf = "livro", is = RequiredIfType.not_empty)
@@ -76,12 +75,12 @@ public abstract class ItemMovimento extends AppBaseEntity {
 		this.id = id;
 	}
 
-	public Livro getLivro() {
-		return livro;
+	public Produto getProduto() {
+		return produto;
 	}
 
-	public void setLivro(Livro livro) {
-		this.livro = livro;
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 
 	public Integer getQuantidade() {

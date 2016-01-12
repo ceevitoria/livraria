@@ -20,8 +20,8 @@ import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.config.OperacaoCaixaConfig;
 import com.cee.livraria.entity.config.OperacaoCaixaConfigEntity;
 import com.cee.livraria.entity.config.RetornoConfig;
-import com.cee.livraria.entity.pagamento.FormaPagLivro;
-import com.cee.livraria.entity.pagamento.FormaPagLivroEntity;
+import com.cee.livraria.entity.pagamento.FormaPagProduto;
+import com.cee.livraria.entity.pagamento.FormaPagProdutoEntity;
 import com.cee.livraria.entity.pagamento.FormaPagto;
 import com.cee.livraria.entity.pagamento.Pagamento;
 import com.cee.livraria.entity.pagamento.PagamentoList;
@@ -50,7 +50,7 @@ public class CaixaRepository extends PlcBaseRepository {
 	
 	public RetornoConfig registrarOperacaoCaixa(PlcBaseContextVO context, TipoMovimentoCaixa tipo, CaixaEntity caixa, List<Pagamento> pagamentos) throws PlcException {
 		OperacaoCaixaConfig config;
-		List<FormaPagLivro> formasPagLivro;
+		List<FormaPagProduto> formasPagLivro;
 		
 		valorGeraCaixa = 0.0;
 
@@ -91,8 +91,8 @@ public class CaixaRepository extends PlcBaseRepository {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<FormaPagLivro> inicializaFormasPagLivro(PlcBaseContextVO context) throws PlcException {
-		List<FormaPagLivro> formasPagLivro = (List<FormaPagLivro>)jpa.findAll(context, FormaPagLivroEntity.class, null);
+	private List<FormaPagProduto> inicializaFormasPagLivro(PlcBaseContextVO context) throws PlcException {
+		List<FormaPagProduto> formasPagLivro = (List<FormaPagProduto>)jpa.findAll(context, FormaPagProdutoEntity.class, null);
 		
 		if (formasPagLivro == null || formasPagLivro.size() == 0) {
 			throw new PlcException("erro.caixa.formasPagLivro.nao.cadastradas");
@@ -102,8 +102,8 @@ public class CaixaRepository extends PlcBaseRepository {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void inicializaValorCaixa(PlcBaseContextVO context, CaixaEntity caixa, List<Pagamento> pagamentos, List<FormaPagLivro> formasPagLivro) {
-		FormaPagLivro formaPagLivro = null;
+	private void inicializaValorCaixa(PlcBaseContextVO context, CaixaEntity caixa, List<Pagamento> pagamentos, List<FormaPagProduto> formasPagLivro) {
+		FormaPagProduto formaPagProduto = null;
 		double valorInformado = 0.0;
 		valorGeraCaixa = 0.0;
 
@@ -112,17 +112,17 @@ public class CaixaRepository extends PlcBaseRepository {
 			
 			if (pagamento.getFormaPagto() != null) {
 				// Localiza a Forma de Pagamento Livro relacionada ao pagamento do caixa
-				for (FormaPagLivro fpl : formasPagLivro) {
+				for (FormaPagProduto fpl : formasPagLivro) {
 					
 					if (fpl.getFormaPagto().getId().equals(pagamento.getFormaPagto().getId())) {
-						formaPagLivro = fpl;
+						formaPagProduto = fpl;
 						break;
 					}
 				}
 			}
 			
 			// Se a forma de pagamento do caixa gera caixa
-			if (formaPagLivro != null && PlcYesNo.S.equals(formaPagLivro.getIsGeraCaixa()) && pagamento.getValor() != null) {
+			if (formaPagProduto != null && PlcYesNo.S.equals(formaPagProduto.getIsGeraCaixa()) && pagamento.getValor() != null) {
 				valorInformado += pagamento.getValor().doubleValue(); 
 			}
 		}
@@ -132,16 +132,16 @@ public class CaixaRepository extends PlcBaseRepository {
 		for (CaixaFormaPagto caixaFormaPagto: formasPagtoCaixa) {
 
 			// Localiza a Forma de Pagamento Livro relacionada ao pagamento do caixa
-			for (FormaPagLivro fpl : formasPagLivro) {
+			for (FormaPagProduto fpl : formasPagLivro) {
 				
 				if (fpl.getFormaPagto().getId().equals(caixaFormaPagto.getFormaPagto().getId())) {
-					formaPagLivro = fpl;
+					formaPagProduto = fpl;
 					break;
 				}
 			}
 			
 			// Se a forma de pagamento do caixa gera caixa
-			if (formaPagLivro != null && formaPagLivro.getIsGeraCaixa() !=null && PlcYesNo.S.equals(formaPagLivro.getIsGeraCaixa()) && caixaFormaPagto.getValor() != null) {
+			if (formaPagProduto != null && formaPagProduto.getIsGeraCaixa() !=null && PlcYesNo.S.equals(formaPagProduto.getIsGeraCaixa()) && caixaFormaPagto.getValor() != null) {
 				valorGeraCaixa += caixaFormaPagto.getValor().doubleValue();
 			}
 		}
@@ -149,7 +149,7 @@ public class CaixaRepository extends PlcBaseRepository {
 		caixa.setValor(new BigDecimal(valorInformado));
 	}
 
-	private void registrarAberturaCaixa(PlcBaseContextVO context, CaixaEntity caixa, List<Pagamento> pagamentos, List<FormaPagLivro> formasPagLivro) throws PlcException, Exception {
+	private void registrarAberturaCaixa(PlcBaseContextVO context, CaixaEntity caixa, List<Pagamento> pagamentos, List<FormaPagProduto> formasPagLivro) throws PlcException, Exception {
 		Date data = new Date();
 		
 		// Verifica se o caixa já estava aberto
@@ -169,7 +169,7 @@ public class CaixaRepository extends PlcBaseRepository {
 		mensagens.add(0,"{msg.caixa.abertura.ok}");
 	}
 
-	private void registrarSangriaCaixa(PlcBaseContextVO context, CaixaEntity caixa, List<Pagamento> pagamentos, List<FormaPagLivro> formasPagLivro, OperacaoCaixaConfig config) throws PlcException, Exception {
+	private void registrarSangriaCaixa(PlcBaseContextVO context, CaixaEntity caixa, List<Pagamento> pagamentos, List<FormaPagProduto> formasPagLivro, OperacaoCaixaConfig config) throws PlcException, Exception {
 		Date data = new Date();
 		
 		// Verifica se o caixa já estava aberto
@@ -209,7 +209,7 @@ public class CaixaRepository extends PlcBaseRepository {
 		mensagens.add(0,"{msg.caixa.sangria.ok}");
 	}
 	
-	private void registrarSuprimentoCaixa(PlcBaseContextVO context, CaixaEntity caixa, List<Pagamento> pagamentos, List<FormaPagLivro> formasPagLivro) throws PlcException, Exception {
+	private void registrarSuprimentoCaixa(PlcBaseContextVO context, CaixaEntity caixa, List<Pagamento> pagamentos, List<FormaPagProduto> formasPagLivro) throws PlcException, Exception {
 		Date data = new Date();
 		
 		// Verifica se o caixa já estava aberto
@@ -229,7 +229,7 @@ public class CaixaRepository extends PlcBaseRepository {
 		mensagens.add(0,"{msg.caixa.suprimento.ok}");
 	}
 	
-	protected void registrarFechamentoCaixa(PlcBaseContextVO context, CaixaEntity caixa, List<Pagamento> pagamentos, List<FormaPagLivro> formasPagLivro, OperacaoCaixaConfig config) throws PlcException, Exception {
+	protected void registrarFechamentoCaixa(PlcBaseContextVO context, CaixaEntity caixa, List<Pagamento> pagamentos, List<FormaPagProduto> formasPagLivro, OperacaoCaixaConfig config) throws PlcException, Exception {
 		Date data = new Date();
 		
 		// Verifica se o caixa já estava fechado
@@ -294,14 +294,14 @@ public class CaixaRepository extends PlcBaseRepository {
 	 * @param itens Lista dos valores por forma de pagamentos
 	 */
 	@SuppressWarnings("unchecked")
-	private void atualizaSaldoFormasPagto(PlcBaseContextVO context, CaixaEntity caixa, Date data, List<Pagamento> pagamentos, List<FormaPagLivro> formasPagLivro, TipoMovimentoCaixa tipo) throws PlcException {
+	private void atualizaSaldoFormasPagto(PlcBaseContextVO context, CaixaEntity caixa, Date data, List<Pagamento> pagamentos, List<FormaPagProduto> formasPagLivro, TipoMovimentoCaixa tipo) throws PlcException {
 		List<CaixaFormaPagto> formasPagtoCaixa = null;
 		formasPagtoCaixa = (List<CaixaFormaPagto>)jpa.findByFields(context, CaixaFormaPagtoEntity.class, "querySelByCaixa", new String[]{"caixa"}, new Object[]{caixa});
 		
 		for (CaixaFormaPagto caixaFormaPagto: formasPagtoCaixa) {
 			caixaFormaPagto = (CaixaFormaPagto)jpa.findById(context, CaixaFormaPagtoEntity.class, caixaFormaPagto.getId());
 			
-			FormaPagLivro formaPagLivro = null;
+			FormaPagProduto formaPagProduto = null;
 			Pagamento pagto = null;
 			
 			// Localiza o pagamento relativo ao pagamento do caixa
@@ -318,10 +318,10 @@ public class CaixaRepository extends PlcBaseRepository {
 			}
 
 			// Localiza a Forma de Pagamento Livro relacionada ao pagamento do caixa
-			for (FormaPagLivro fpl : formasPagLivro) {
+			for (FormaPagProduto fpl : formasPagLivro) {
 				
 				if (fpl.getFormaPagto().getId().equals(caixaFormaPagto.getFormaPagto().getId())) {
-					formaPagLivro = fpl;
+					formaPagProduto = fpl;
 					break;
 				}
 			}
@@ -359,7 +359,7 @@ public class CaixaRepository extends PlcBaseRepository {
 				// o tipo de operação for Fechamento do Caixa e 
 				// a forma de pag livro associada não gera caixa 
 				// --> devo zerar esta forma de pagamento
-				if (pagto == null && TipoMovimentoCaixa.FE.equals(tipo) && PlcYesNo.N.equals(formaPagLivro.getIsGeraCaixa())) {
+				if (pagto == null && TipoMovimentoCaixa.FE.equals(tipo) && PlcYesNo.N.equals(formaPagProduto.getIsGeraCaixa())) {
 					// TODO: Cuidar para que este caixa pagamento já tenha gerado crédito na conta apropriada do Plano de Contas da CEE
 					caixaFormaPagto.setValor(new BigDecimal(0.0));
 				}

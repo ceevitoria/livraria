@@ -15,21 +15,21 @@ import javax.persistence.Transient;
  */
 @SPlcEntity
 @Entity
-@Table(name = "FORMA_PAG_LIVRO")
-@SequenceGenerator(name = "SE_FORMA_PAG_LIVRO", sequenceName = "SE_FORMA_PAG_LIVRO")
+@Table(name = "FORMA_PAG_PRODUTO")
+@SequenceGenerator(name = "SE_FORMA_PAG_PRODUTO", sequenceName = "SE_FORMA_PAG_PRODUTO")
 @Access(AccessType.FIELD)
 @NamedQueries({
-	@NamedQuery(name="FormaPagLivroEntity.queryMan", query="from FormaPagLivroEntity"), 
-	@NamedQuery(name="FormaPagLivroEntity.querySel", query="select obj.id as id, obj.isGeraCaixa as isGeraCaixa, obj2.id as formaPagto_id, obj2.nome as formaPagto_nome from FormaPagLivroEntity obj inner join obj.formaPagto obj2 order by obj2.nome asc"), 
-	@NamedQuery(name="FormaPagLivroEntity.querySelLookup", query="select id as id, formaPagto as formaPagto from FormaPagLivroEntity where id = ? order by id asc") })
-public class FormaPagLivroEntity extends FormaPagLivro {
+	@NamedQuery(name="FormaPagProdutoEntity.queryMan", query="from FormaPagProdutoEntity"), 
+	@NamedQuery(name="FormaPagProdutoEntity.querySel", query="select obj.id as id, obj.isGeraCaixa as isGeraCaixa, obj2.id as formaPagto_id, obj2.nome as formaPagto_nome from FormaPagProdutoEntity obj inner join obj.formaPagto obj2 order by obj2.nome asc"), 
+	@NamedQuery(name="FormaPagProdutoEntity.querySelLookup", query="select id as id, formaPagto as formaPagto from FormaPagProdutoEntity where id = ? order by id asc") })
+public class FormaPagProdutoEntity extends FormaPagProduto {
 
 	private static final long serialVersionUID = 1L;
 
 	/*
 	 * Construtor padrao
 	 */
-	public FormaPagLivroEntity() {
+	public FormaPagProdutoEntity() {
 	}
 
 	@Override

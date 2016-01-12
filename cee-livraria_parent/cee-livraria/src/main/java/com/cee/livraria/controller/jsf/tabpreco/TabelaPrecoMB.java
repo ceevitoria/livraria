@@ -11,10 +11,11 @@ import javax.inject.Named;
 
 import com.cee.livraria.controller.jsf.AppMB;
 import com.cee.livraria.entity.produto.Livro;
-import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Produto;
+import com.cee.livraria.entity.produto.RegraPesquisaProdutos;
+import com.cee.livraria.entity.tabpreco.FontePrecificacao;
 import com.cee.livraria.entity.tabpreco.ItemTabela;
 import com.cee.livraria.entity.tabpreco.ItemTabelaEntity;
-import com.cee.livraria.entity.tabpreco.RegraPesquisaLivros;
 import com.cee.livraria.entity.tabpreco.TabelaPreco;
 import com.cee.livraria.entity.tabpreco.TabelaPrecoEntity;
 import com.cee.livraria.entity.tabpreco.TipoArredondamento;
@@ -36,155 +37,168 @@ import com.powerlogic.jcompany.controller.jsf.util.PlcCreateContextUtil;
 import com.powerlogic.jcompany.controller.util.PlcIocControllerFacadeUtil;
 import com.powerlogic.jcompany.domain.validation.PlcMessage;
 
-@PlcConfigAggregation(
-	entity = com.cee.livraria.entity.tabpreco.TabelaPrecoEntity.class
+@PlcConfigAggregation(entity = com.cee.livraria.entity.tabpreco.TabelaPrecoEntity.class, 
+	components = { @com.powerlogic.jcompany.config.aggregation.PlcConfigComponent(clazz = 
+		com.cee.livraria.entity.produto.RegraPesquisaProdutos.class, property = "regra", separate = true) }, details = { 
+	@com.powerlogic.jcompany.config.aggregation.PlcConfigDetail(clazz = com.cee.livraria.entity.tabpreco.ItemTabelaEntity.class, 
+			collectionName = "itemTabela", numNew = 0, onDemand = false, exclusionMode = ExclusionMode.LOGICAL) })
 
-	,components = {@com.powerlogic.jcompany.config.aggregation.PlcConfigComponent(
-		clazz=com.cee.livraria.entity.tabpreco.RegraPesquisaLivros.class, property="regra", separate=true)}
-	,details = { 		
-		@com.powerlogic.jcompany.config.aggregation.PlcConfigDetail(clazz = com.cee.livraria.entity.tabpreco.ItemTabelaEntity.class,
-			collectionName = "itemTabela", numNew = 2, onDemand = true, exclusionMode=ExclusionMode.LOGICAL)
-	}
-)
-
-@PlcConfigForm (
-	formPattern=FormPattern.Mdt,
-	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/tabpreco")
-	,exclusionMode=ExclusionMode.LOGICAL
-)
-
+@PlcConfigForm(formPattern = FormPattern.Mdt, formLayout = @PlcConfigFormLayout(dirBase = "/WEB-INF/fcls/tabpreco"), exclusionMode = ExclusionMode.LOGICAL)
 
 /**
  * Classe de Controle gerada pelo assistente
  */
- 
-
 @SPlcMB
 @PlcUriIoC("tabpreco")
 @PlcHandleException
-public class TabelaPrecoMB extends AppMB  {
-	
-	@Inject @QPlcDefault 
+public class TabelaPrecoMB extends AppMB {
+
+	@Inject
+	@QPlcDefault
 	protected PlcCreateContextUtil contextMontaUtil;
 
-	@Inject @Named(PlcConstants.PlcJsfConstantes.PLC_CONTROLE_CONVERSACAO)
-	protected PlcConversationControl plcControleConversacao;	
+	@Inject
+	@Named(PlcConstants.PlcJsfConstantes.PLC_CONTROLE_CONVERSACAO)
+	protected PlcConversationControl plcControleConversacao;
 
-	@Inject @QPlcDefault 
+	@Inject
+	@QPlcDefault
 	protected PlcIocControllerFacadeUtil iocControleFacadeUtil;
-	
+
 	private static final long serialVersionUID = 1L;
-     		
+
 	/**
-	* Entidade da ação injetado pela CDI
-	*/
-	@Produces  @Named("tabpreco")
+	 * Entidade da ação injetado pela CDI
+	 */
+	@Produces
+	@Named("tabpreco")
 	public TabelaPrecoEntity createEntityPlc() {
-        if (this.entityPlc==null) {
-              this.entityPlc = new TabelaPrecoEntity();
-              this.newEntity();
-        }
-        return (TabelaPrecoEntity)this.entityPlc;     	
-	}
+
+		if (this.entityPlc == null) {
+			this.entityPlc = new TabelaPrecoEntity();
+			this.newEntity();
+		}
 		
+		return (TabelaPrecoEntity) this.entityPlc;
+	}
+
 	/**
 	 * buscarItensPorRegraPrecificacao
 	 */
-	public String buscarItensPorRegra()  {
+	public String buscarItensPorRegra() {
 
-		if (this.entityPlc!=null) {
-			TabelaPreco tabPreco = (TabelaPreco)this.entityPlc;
+		if (this.entityPlc != null) {
+			TabelaPreco tabPreco = (TabelaPreco) this.entityPlc;
 			List<ItemTabela> listaItens = tabPreco.getItemTabela();
-			boolean possuiItens = false;
-			boolean ok = true;
-			
-			if (listaItens != null && !listaItens.isEmpty()) {
-				for (ItemTabela item : listaItens) {
-					
-					if (item.getId() != null) {
-						possuiItens = true;
-						break;
-					}
-				}
-				
-				if (possuiItens) {
-					msgUtil.msg("{tabpreco.err.buscar.itensExistentes}", PlcMessage.Cor.msgVermelhoPlc.name());
-					ok = false;
-				}
+			PlcBaseContextVO context = contextMontaUtil	.createContextParam(plcControleConversacao);
+
+			// Busca os livros que satisfazem às regras de pesquisa e os
+			// adiciona na listaItens
+			RegraPesquisaProdutos regra = tabPreco.getRegra();
+			Produto produtoArg = criaArgumentoPesquisaProduto(regra);
+
+			Long contaProdutos = (Long) iocControleFacadeUtil.getFacade().findCount(context, produtoArg);
+
+			if (contaProdutos.longValue() > 400) {
+				msgUtil.msg("{tabpreco.err.buscar.muitosItensExistentes}", new Object[] { contaProdutos }, PlcMessage.Cor.msgVermelhoPlc.name());
 			} else {
-				msgUtil.msg("{tabpreco.err.buscar.clicarAbaItens}", PlcMessage.Cor.msgAmareloPlc.name());
-				ok = false;
-			}
-			
-			if (ok) {
-				listaItens.clear();
-
-				//Busca os livros que satisfazem às regras de pesquisa e os adiciona na listaItens
-				RegraPesquisaLivros regra = tabPreco.getRegra();
-				
-				Livro livroArg = criaArgumentoPesquisaLivro(regra);
-
-				PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
-
-				Long contalivros = (Long)iocControleFacadeUtil.getFacade().findCount(context, livroArg);
-				
-				if (contalivros.longValue() > 400) {
-					msgUtil.msg("{tabpreco.err.buscar.muitosItensExistentes}", new Object[] {contalivros}, PlcMessage.Cor.msgVermelhoPlc.name());
-					ok = false;
-				} else {
-					List<Livro> livros = (List<Livro>)iocControleFacadeUtil.getFacade().findList(context, livroArg, plcControleConversacao.getOrdenacaoPlc(), 0, 0);
-					
-					for (Livro livro : livros) {
-						ItemTabela item = criaNovoItem(tabPreco, livro);
-						
-						//Definir o ajuste de preço
-						double preco = calcularAjustePrecoLivro(tabPreco, livro);
-						
-						item.setPreco(new BigDecimal(preco) );
-						
-						listaItens.add(item);
+				Comparator<ItemTabela> comparator = new Comparator<ItemTabela>() {
+					public int compare(ItemTabela o1, ItemTabela o2) {
+						if (o1.getCodigoBarras().equals(o2.getCodigoBarras())) {
+							return o1.getProduto().getId().compareTo(o2.getProduto().getId());
+						}
+						return o1.getCodigoBarras().compareTo(o2.getCodigoBarras());
 					}
-					
-					msgUtil.msg("{tabpreco.ok.buscar}", new Object[] {livros.size()}, PlcMessage.Cor.msgAzulPlc.name());
-					msgUtil.msg("{tabpreco.lembrar.gravar}", PlcMessage.Cor.msgAmareloPlc.name());
-					
-					plcControleConversacao.setAlertaAlteracaoPlc("S");
+				};
+
+				Collections.sort(listaItens, comparator); 
+
+				List<Produto> produtos = (List<Produto>) iocControleFacadeUtil.getFacade().findList(context, produtoArg, plcControleConversacao.getOrdenacaoPlc(), 0, 0);
+
+				for (Produto produto : produtos) {
+					ItemTabela item = criaNovoItem(tabPreco, produto);
+					double preco = calcularAjustePrecoProduto(tabPreco, produto);
+					item.setPreco(new BigDecimal(preco));
+
+					int i = Collections.binarySearch(listaItens, item,	comparator);
+
+					if (i < 0) {
+						listaItens.add(item);
+					} else {
+						item = listaItens.get(i);
+						item.setPreco(new BigDecimal(preco));
+					}
 				}
+
+				msgUtil.msg("{tabpreco.ok.buscar}",	new Object[] {produtos.size()}, PlcMessage.Cor.msgAzulPlc.name());
+				msgUtil.msg("{tabpreco.lembrar.gravar}", PlcMessage.Cor.msgAmareloPlc.name());
+
+				plcControleConversacao.setAlertaAlteracaoPlc("S");
 			}
 		}
-		
-		return baseEditMB.getDefaultNavigationFlow(); 
+
+		return baseEditMB.getDefaultNavigationFlow();
 	}
 
-	private Livro criaArgumentoPesquisaLivro(RegraPesquisaLivros regra) {
-		Livro livroArg = (Livro)new Livro();
-		livroArg.setTitulo(regra.getTitulo());
-		livroArg.setAutor(regra.getAutor());
-		livroArg.setCodigoBarras(regra.getCodigoBarras());
-		livroArg.setColecao(regra.getColecao());
-		livroArg.setEdicao(regra.getEdicao());
-		livroArg.setEditora(regra.getEditora());
-		livroArg.setEspirito(regra.getEspirito());
-		return livroArg;
+	private Produto criaArgumentoPesquisaProduto(RegraPesquisaProdutos regra) {
+		Produto produtoArg = null;
+
+		if (regra.getAutor() != null 
+				|| regra.getEdicao() != null
+				|| regra.getColecao() != null 
+				|| regra.getEditora() != null
+				|| regra.getEspirito() != null) {
+			produtoArg = new Livro();
+
+			((Livro) produtoArg).setAutor(regra.getAutor());
+			((Livro) produtoArg).setColecao(regra.getColecao());
+			((Livro) produtoArg).setEdicao(regra.getEdicao());
+			((Livro) produtoArg).setEditora(regra.getEditora());
+			((Livro) produtoArg).setEspirito(regra.getEspirito());
+		} else {
+			produtoArg = new Produto();
+		}
+
+		produtoArg.setTitulo(regra.getTitulo());
+		produtoArg.setCodigoBarras(regra.getCodigoBarras());
+		return produtoArg;
 	}
 
-	private double calcularAjustePrecoLivro(TabelaPreco tabPreco, Livro livro) {
+	private double calcularAjustePrecoProduto(TabelaPreco tabPreco, Produto produto) {
 		double variacao = 0;
 		double preco = 0;
 		double fator = 0;
-		
+
 		variacao = tabPreco.getVariacao().doubleValue();
-		preco = livro.getPrecoUltCompra().doubleValue();
-		
+
+		// Recupera o preço segundo a fonte apropriada
+		if (FontePrecificacao.PV.equals(tabPreco.getFontePrecificacao())) {
+
+			if (produto.getPrecoVendaSugerido() != null) {
+				preco = produto.getPrecoVendaSugerido().doubleValue();
+			} else {
+				preco = 0;
+			}
+
+		} else if (FontePrecificacao.PC.equals(tabPreco.getFontePrecificacao())) {
+
+			if (produto.getPrecoUltCompra() != null) {
+				preco = produto.getPrecoUltCompra().doubleValue();
+			} else {
+				preco = 0;
+			}
+
+		}
+
 		if (tabPreco.getTipoPrecificacao().equals(TipoPrecificacao.A)) {
-			
+
 			if (tabPreco.getTipoVariacao().equals(TipoVariacao.V)) {
 				preco += variacao;
 			} else {
 				preco *= (1 + (variacao / 100.0));
 			}
 		} else {
-			
+
 			if (tabPreco.getTipoVariacao().equals(TipoVariacao.V)) {
 				preco -= variacao;
 			} else {
@@ -192,15 +206,15 @@ public class TabelaPrecoMB extends AppMB  {
 			}
 		}
 
-		//Arredondamentos
+		// Arredondamentos
 		if (TipoArredondamento.DC.equals(tabPreco.getTipoArredondamento())) {
 			fator = 10;
-		} else  if (TipoArredondamento.UN.equals(tabPreco.getTipoArredondamento())) {
+		} else if (TipoArredondamento.UN.equals(tabPreco.getTipoArredondamento())) {
 			fator = 1;
-		} else  if (TipoArredondamento.DE.equals(tabPreco.getTipoArredondamento())) {
+		} else if (TipoArredondamento.DE.equals(tabPreco.getTipoArredondamento())) {
 			fator = 0.1;
 		}
-		
+
 		preco *= fator;
 		preco = Math.round(preco);
 		preco /= fator;
@@ -210,169 +224,76 @@ public class TabelaPrecoMB extends AppMB  {
 	/**
 	 * atualizarItensPorPrecificacao
 	 */
-	public String atualizarItensPorPrecificacao()  {
-		TabelaPreco tabPreco = (TabelaPreco)this.entityPlc;
+	public String atualizarItensPorPrecificacao() {
+		TabelaPreco tabPreco = (TabelaPreco) this.entityPlc;
 		List<ItemTabela> listaItens = tabPreco.getItemTabela();
-
-		//Busca os livros que satisfazem às regras de pesquisa e os adiciona na listaItens
-		RegraPesquisaLivros regra = tabPreco.getRegra();
-		
 		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 
-		Livro livroArg = criaArgumentoPesquisaLivro(regra);
+		for (ItemTabela item : listaItens) {
+			Produto produto = (Produto) iocControleFacadeUtil.getFacade().edit(context, Produto.class, item.getProduto().getId())[0];
 
-		Long contalivros = (Long)iocControleFacadeUtil.getFacade().findCount(context, livroArg);
-		
-		if (contalivros.longValue() > 400) {
-			msgUtil.msg("{tabpreco.err.buscar.muitosItensExistentes}", new Object[] {contalivros}, PlcMessage.Cor.msgVermelhoPlc.name());
-		} else {
-			
-			if (contalivros.longValue() > listaItens.size()) {
-				long numNovos = contalivros.longValue() - listaItens.size();
+			item.setTitulo(produto.getTitulo());
+			item.setTipoProduto(produto.getTipoProduto());
+			item.setCodigoBarras(produto.getCodigoBarras());
+			item.setPrecoUltCompra(produto.getPrecoUltCompra());
+			item.setPrecoVendaSugerido(produto.getPrecoVendaSugerido());
 
-				Comparator<ItemTabela> comparator = new Comparator<ItemTabela>() {
-					  public int compare(ItemTabela o1, ItemTabela o2) {
-					    if (o1.getCodigoBarras().equals(o2.getCodigoBarras())) {
-					      return o1.getLivro().getId().compareTo(o2.getLivro().getId());
-					    }
-					    return o1.getCodigoBarras().compareTo(o2.getCodigoBarras());
-					  }
-					};	
-				
-				Collections.sort(listaItens, comparator);
-				
-				List<Livro> livros = (List<Livro>)iocControleFacadeUtil.getFacade().findList(context, livroArg, plcControleConversacao.getOrdenacaoPlc(), 0, 0);
-				
-				for (Livro livro : livros) {
-					ItemTabela item = criaNovoItem(tabPreco, livro);
-					
-					double preco = calcularAjustePrecoLivro(tabPreco, livro);
-					
-					item.setPreco(new BigDecimal(preco) );
-					
-					int i = Collections.binarySearch(listaItens, item, comparator);
-					
-					if (i < 0) {
-						listaItens.add(item);
-					}
-				}
-				
-				msgUtil.msg("{tabpreco.ok.atualizar.inserir}", new Object[] {listaItens.size(), numNovos}, PlcMessage.Cor.msgAzulPlc.name());
-				msgUtil.msg("{tabpreco.lembrar.gravar}", PlcMessage.Cor.msgAmareloPlc.name());
-				plcControleConversacao.setAlertaAlteracaoPlc("S");
-			} else {
-				for (ItemTabela item : listaItens) {
-					Livro livro = (Livro)iocControleFacadeUtil.getFacade().edit(context, Livro.class, item.getLivro().getId())[0] ;
-					
-					item.setTitulo(livro.getTitulo());
-					item.setAutor(livro.getAutor());
-					item.setCodigoBarras(livro.getCodigoBarras());
-					item.setColecao(livro.getColecao());
-					item.setEdicao(livro.getEdicao());
-					item.setEditora(livro.getEditora());
-					item.setEspirito(livro.getEspirito());
-					
-					//TODO: Definir a localizacao
-					item.setLocalizacao(null);
-					
-					double preco = calcularAjustePrecoLivro(tabPreco, livro);
-					
-					item.setPreco(new BigDecimal(preco) );
-				}
-				
-				msgUtil.msg("{tabpreco.ok.atualizar}", new Object[] {listaItens.size()}, PlcMessage.Cor.msgAzulPlc.name());
-				msgUtil.msg("{tabpreco.lembrar.gravar}", PlcMessage.Cor.msgAmareloPlc.name());
-			}
-				
+			double preco = calcularAjustePrecoProduto(tabPreco, produto);
+
+			item.setPreco(new BigDecimal(preco));
 		}
 
-		return baseEditMB.getDefaultNavigationFlow(); 
+		msgUtil.msg("{tabpreco.ok.atualizar}", new Object[] { listaItens.size() }, PlcMessage.Cor.msgAzulPlc.name());
+		msgUtil.msg("{tabpreco.lembrar.gravar}", PlcMessage.Cor.msgAmareloPlc.name());
+		
+		return baseEditMB.getDefaultNavigationFlow();
 	}
 
-	private ItemTabela criaNovoItem(TabelaPreco tabPreco, Livro livro) {
+	private ItemTabela criaNovoItem(TabelaPreco tabPreco, Produto produto) {
 		ItemTabela item = new ItemTabelaEntity();
-		
+
 		item.setTabelaPreco(tabPreco);
-		item.setLivro(livro);
-		item.setTitulo(livro.getTitulo());
-		item.setAutor(livro.getAutor());
-		item.setCodigoBarras(livro.getCodigoBarras());
-		
-		if (livro.getColecao() != null && livro.getColecao().getId() != null) {
-			item.setColecao(livro.getColecao());
-		} else {
-			item.setColecao(null);
-		}
-		
-		item.setEdicao(livro.getEdicao());
-		item.setEditora(livro.getEditora());
-		
-		if (livro.getEspirito() != null && livro.getEspirito().getId() != null) {
-			item.setEspirito(livro.getEspirito());
-		} else {
-			item.setEspirito(null);
-		}
-		
-		//TODO: Definir a localizacao
-		item.setLocalizacao(null);
+		item.setProduto(produto);
+		item.setTipoProduto(produto.getTipoProduto());
+		item.setTitulo(produto.getTitulo());
+		item.setCodigoBarras(produto.getCodigoBarras());
+		item.setPrecoUltCompra(produto.getPrecoUltCompra());
+		item.setPrecoVendaSugerido(produto.getPrecoVendaSugerido());
+
 		return item;
 	}
-	
+
 	/**
 	 * Exclui grafo do Value Object principal (ie. Mestre, seus Detalhes e
-	 * Sub-Detalhe eventuais). Mas somente faz isso se já tiver recuperado os detalhes
+	 * Sub-Detalhe eventuais). Mas somente faz isso se já tiver recuperado os
+	 * detalhes
 	 */
 	@Override
-	public String delete()  {
-		
-		if (this.entityPlc!=null) {
-			TabelaPreco tabPreco = (TabelaPreco)this.entityPlc;
+	public String delete() {
+
+		if (this.entityPlc != null) {
+			TabelaPreco tabPreco = (TabelaPreco) this.entityPlc;
 			List<ItemTabela> listaItens = tabPreco.getItemTabela();
-			
-			if (listaItens == null ) {
-				msgUtil.msg("{tabpreco.err.buscar.clicarAbaItens}", PlcMessage.Cor.msgAmareloPlc.name());
-				return baseEditMB.getDefaultNavigationFlow(); 
-			}
-		}
-		
-		return baseDeleteMB.delete(entityPlc);
-	}
-	
-	public void handleButtonsAccordingFormPattern() {
-		String nomeAction = (String) contextUtil.getRequestAttribute(PlcConstants.PlcJsfConstantes.URL_COM_BARRA);
-		
-		if (nomeAction.contains("mdt")) {
-			boolean possuiItens = false;
-			
-			if (this.entityPlc!=null) {
-				TabelaPreco tabPreco = (TabelaPreco)this.entityPlc;
-				
-				if (tabPreco.getId() != null) {
-					List<ItemTabela> listaItens = tabPreco.getItemTabela();
-					
-					if (listaItens != null && !listaItens.isEmpty()) {
-						for (ItemTabela item : listaItens) {
-							
-							if (item.getId() != null) {
-								possuiItens = true;
-								break;
-							}
-						}
-					}
-				}
-			}
-			
-			if (possuiItens) {
-				contextUtil.getRequest().setAttribute("exibeBuscarItensPorRegra", PlcConstants.NAO);
-				contextUtil.getRequest().setAttribute("atualizarItensPorPrecificacao", PlcConstants.SIM);
-			} else {
-				contextUtil.getRequest().setAttribute("exibeBuscarItensPorRegra", PlcConstants.SIM);
-				contextUtil.getRequest().setAttribute("atualizarItensPorPrecificacao", PlcConstants.NAO);
+
+			if (listaItens == null) {
+				msgUtil.msg("{tabpreco.err.buscar.clicarAbaItens}",
+						PlcMessage.Cor.msgAmareloPlc.name());
+				return baseEditMB.getDefaultNavigationFlow();
 			}
 		}
 
-		
+		return baseDeleteMB.delete(entityPlc);
+	}
+
+	public void handleButtonsAccordingFormPattern() {
+		String nomeAction = (String) contextUtil.getRequestAttribute(PlcConstants.PlcJsfConstantes.URL_COM_BARRA);
+
+		if (nomeAction.contains("mdt")) {
+			contextUtil.getRequest().setAttribute("exibeBuscarItensPorRegra", PlcConstants.SIM);
+			contextUtil.getRequest().setAttribute("atualizarItensPorPrecificacao", PlcConstants.SIM);
+		}
+
 		super.handleButtonsAccordingFormPattern();
 	}
-	
+
 }

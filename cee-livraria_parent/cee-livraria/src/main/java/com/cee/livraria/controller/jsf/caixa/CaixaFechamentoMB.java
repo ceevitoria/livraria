@@ -11,7 +11,7 @@ import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.config.RetornoConfig;
-import com.cee.livraria.entity.pagamento.FormaPagLivro;
+import com.cee.livraria.entity.pagamento.FormaPagProduto;
 import com.cee.livraria.entity.pagamento.FormaPagto;
 import com.cee.livraria.entity.pagamento.Pagamento;
 import com.cee.livraria.entity.pagamento.PagamentoList;
@@ -70,13 +70,13 @@ public class CaixaFechamentoMB extends AppMB {
 			
 			Pagamento pagto = null;
 			
-			List<FormaPagLivro> formasPagLivro = caixaOperacaoMB.recuperarFormasPagamentoLivro();
+			List<FormaPagProduto> formasPagLivro = caixaOperacaoMB.recuperarFormasPagamentoLivro();
 			
-			for (FormaPagLivro formaPagLivro : formasPagLivro) {
+			for (FormaPagProduto formaPagProduto : formasPagLivro) {
 				
-				if (PlcYesNo.S.equals(formaPagLivro.getIsGeraCaixa())) {
+				if (PlcYesNo.S.equals(formaPagProduto.getIsGeraCaixa())) {
 					pagto = new Pagamento();
-					pagto.setFormaPagto(formaPagLivro.getFormaPagto());
+					pagto.setFormaPagto(formaPagProduto.getFormaPagto());
 					itens.add(pagto);
 				}
 			}
@@ -107,13 +107,13 @@ public class CaixaFechamentoMB extends AppMB {
 		
 		Pagamento pagto = null;
 		
-		List<FormaPagLivro> formasPagLivro = caixaOperacaoMB.recuperarFormasPagamentoLivro();
+		List<FormaPagProduto> formasPagLivro = caixaOperacaoMB.recuperarFormasPagamentoLivro();
 		
-		for (FormaPagLivro formaPagLivro : formasPagLivro) {
+		for (FormaPagProduto formaPagProduto : formasPagLivro) {
 			
-			if (PlcYesNo.S.equals(formaPagLivro.getIsGeraCaixa())) {
+			if (PlcYesNo.S.equals(formaPagProduto.getIsGeraCaixa())) {
 				pagto = new Pagamento();
-				pagto.setFormaPagto(formaPagLivro.getFormaPagto());
+				pagto.setFormaPagto(formaPagProduto.getFormaPagto());
 				itens.add(pagto);
 			}
 		}

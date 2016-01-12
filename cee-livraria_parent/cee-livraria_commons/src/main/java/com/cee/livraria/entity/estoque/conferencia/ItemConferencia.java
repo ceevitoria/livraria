@@ -12,21 +12,14 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.ForeignKey;
 
 import com.cee.livraria.entity.AppBaseEntity;
-import com.cee.livraria.entity.Autor;
-import com.cee.livraria.entity.AutorEntity;
-import com.cee.livraria.entity.Colecao;
-import com.cee.livraria.entity.ColecaoEntity;
-import com.cee.livraria.entity.Editora;
-import com.cee.livraria.entity.EditoraEntity;
-import com.cee.livraria.entity.Espirito;
-import com.cee.livraria.entity.EspiritoEntity;
 import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.LocalizacaoEntity;
-import com.cee.livraria.entity.produto.Livro;
-import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Produto;
 
 @MappedSuperclass
 public abstract class ItemConferencia extends AppBaseEntity {
+
+	private static final long serialVersionUID = 7570332784853063134L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_ITEM_CONFERENCIA")
@@ -37,28 +30,9 @@ public abstract class ItemConferencia extends AppBaseEntity {
 	@NotNull
 	private Conferencia conferencia;
 
-	@ManyToOne(targetEntity = Livro.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_ITEMCONFERENCIA_LIVRO")
-	private Livro livro;
-
-	@ManyToOne(targetEntity = AutorEntity.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_ITEMCONFERENCIA_AUTOR")
-	private Autor autor;
-
-	@ManyToOne(targetEntity = EspiritoEntity.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_ITEMCONFERENCIA_ESPIRITO")
-	private Espirito espirito;
-
-	@ManyToOne(targetEntity = EditoraEntity.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_ITEMCONFERENCIA_EDITORA")
-	private Editora editora;
-
-	@Digits(integer = 8, fraction = 0)
-	private Integer edicao;
-
-	@ManyToOne(targetEntity = ColecaoEntity.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_ITEMCONFERENCIA_COLECAO")
-	private Colecao colecao;
+	@ManyToOne(targetEntity = Produto.class, fetch = FetchType.LAZY)
+	@ForeignKey(name = "FK_ITEMCONFERENCIA_PRODUTO")
+	private Produto produto;
 
 	@ManyToOne(targetEntity = LocalizacaoEntity.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_ITEMCONFERENCIA_LOCALIZACAO")
@@ -78,52 +52,12 @@ public abstract class ItemConferencia extends AppBaseEntity {
 		this.id = id;
 	}
 
-	public Livro getLivro() {
-		return livro;
+	public Produto getProduto() {
+		return produto;
 	}
 
-	public void setLivro(Livro livro) {
-		this.livro = livro;
-	}
-
-	public Autor getAutor() {
-		return autor;
-	}
-
-	public void setAutor(Autor autor) {
-		this.autor = autor;
-	}
-
-	public Espirito getEspirito() {
-		return espirito;
-	}
-
-	public void setEspirito(Espirito espirito) {
-		this.espirito = espirito;
-	}
-
-	public Editora getEditora() {
-		return editora;
-	}
-
-	public void setEditora(Editora editora) {
-		this.editora = editora;
-	}
-
-	public Integer getEdicao() {
-		return edicao;
-	}
-
-	public void setEdicao(Integer edicao) {
-		this.edicao = edicao;
-	}
-
-	public Colecao getColecao() {
-		return colecao;
-	}
-
-	public void setColecao(Colecao colecao) {
-		this.colecao = colecao;
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 
 	public Localizacao getLocalizacao() {

@@ -20,40 +20,37 @@
 					<plcf:tituloExclusao>Exc.</plcf:tituloExclusao>
 				</f:facet>  
 				<span class="celulaFormularioCaixaMarcacao">
-					<!-- 
-					<plcf:caixaExclusao id="indExcPlc" value="#{itemConferencia.indExcPlc}" disabled="#{conferencia.status!='F'}" />
-					 -->
 					<plcf:caixaMarcacao id="indExcPlc" value="#{itemConferencia.indExcPlc}" disabled="#{conferencia.status!='F'}" />
 				</span> 
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
-					<plcf:titulo value="#{msg['label.livro']}"/>
+					<plcf:titulo value="#{msg['label.produto']}"/>
 				</f:facet>
 				
 				<c:if test="#{conferencia.status=='F'}">
-					<plcf:vinculado id="livro" value="#{itemConferencia.livro}" 
-						propSelPop="livro" idExibe="S" 
+					<plcf:vinculado id="produto" value="#{itemConferencia.produto}" 
+						propSelPop="produto" idExibe="S" 
 						idTamanho="12" lookupTamanho="60"
 						larg="1200" alt="800"
 						autoRecuperacaoPropriedade="codigoBarras"
 						autoComplete="true" evento="y"
-						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.LivroEntity" 
-						actionSel="livrosel" modal="S" ajudaChave="ajuda.livro" 
+						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.Produto" 
+						actionSel="produtosel" modal="S" ajudaChave="ajuda.produto" 
 						onkeydown="selecionaPorTecla(event,this);"
 						disabled="#{conferencia.status!='F'}" 
-						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.livro?q=titulo')"/> 
+						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.produto?q=titulo')"/> 
 				</c:if>
 				<c:if test="#{conferencia.status!='F'}">
-					<plcf:vinculado id="livro" value="#{itemConferencia.livro}" 
-						propSelPop="livro" idExibe="N" lookupTamanho="60"
+					<plcf:vinculado id="produto" value="#{itemConferencia.produto}" 
+						propSelPop="produto" idExibe="N" lookupTamanho="60"
 						larg="1200" alt="800"
 						autoComplete="true" idTamanho="15" evento="y"
-						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.LivroEntity" 
-						actionSel="livrosel" modal="S" ajudaChave="ajuda.livro" 
+						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.Produto" 
+						actionSel="produtosel" modal="S" ajudaChave="ajuda.produto" 
 						onkeydown="selecionaPorTecla(event,this);" 
 						disabled="#{conferencia.status!='F'}" 
-						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.livro?q=titulo')"/> 
+						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.produto?q=titulo')"/> 
 				</c:if>
 				  
 			</h:column>  

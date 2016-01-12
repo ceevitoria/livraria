@@ -16,7 +16,7 @@ import com.cee.livraria.entity.estoque.EstoqueEntity;
 import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.pagamento.PagamentoList;
-import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.model.CaixaRepository;
 import com.cee.livraria.model.VendaProdutosRepository;
@@ -52,8 +52,8 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	@PlcTransactional(commit=false)
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
 	@Override
-	public PrecoTabela findPrecoTabela(PlcBaseContextVO context, Long idLivro) throws PlcException {
-		return jpaDAO.obterPrecoTabela(context, idLivro);
+	public PrecoTabela findPrecoTabela(PlcBaseContextVO context, Long idProduto) throws PlcException {
+		return jpaDAO.obterPrecoTabela(context, idProduto);
 	}
 
 	@PlcTransactional(commit=true)
@@ -101,11 +101,11 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	@PlcTransactional(commit=false)
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
 	@Override
-	public List<Estoque> buscarLivrosEstoque(PlcBaseContextVO context,	List<Livro> listaLivros) throws PlcException {
-		List<Estoque> estoqueLista = new ArrayList<Estoque>(listaLivros.size());
+	public List<Estoque> buscarProdutosEstoque(PlcBaseContextVO context, List<Produto> listaProdutos) throws PlcException {
+		List<Estoque> estoqueLista = new ArrayList<Estoque>(listaProdutos.size());
 		
-		for (Livro livro: listaLivros) {
-			List<Estoque> itens = jpaDAO.findByFields(context, EstoqueEntity.class, "querySelByLivro", new String[] {"livro"}, new Object[] {livro});
+		for (Produto produto: listaProdutos) {
+			List<Estoque> itens = jpaDAO.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
 			estoqueLista.addAll(itens);
 		}
 		

@@ -15,6 +15,7 @@
 		com.cee.livraria.entity.config.TipoMensagemSucessoVendaConfig.class,
 		com.cee.livraria.entity.config.TipoMensagemConferenciaConfig.class,
 		com.cee.livraria.entity.config.TipoMensagemAjusteEstoqueConfig.class,
+		com.cee.livraria.entity.tabpreco.FontePrecificacao.class,
 		com.cee.livraria.entity.tabpreco.TipoPrecificacao.class,
 		com.cee.livraria.entity.tabpreco.TipoVariacao.class,
 		com.cee.livraria.entity.tabpreco.TipoArredondamento.class,
@@ -24,7 +25,7 @@
 		com.cee.livraria.entity.LocalizacaoEntity.class,
 		com.cee.livraria.entity.EspiritoEntity.class,
 		com.cee.livraria.entity.pagamento.FormaPagtoEntity.class,
-		com.cee.livraria.entity.pagamento.FormaPagLivroEntity.class,
+		com.cee.livraria.entity.pagamento.FormaPagProdutoEntity.class,
 		com.cee.livraria.entity.AutorEntity.class,
 		com.cee.livraria.entity.EditoraEntity.class,
 		com.cee.livraria.entity.ColecaoEntity.class}

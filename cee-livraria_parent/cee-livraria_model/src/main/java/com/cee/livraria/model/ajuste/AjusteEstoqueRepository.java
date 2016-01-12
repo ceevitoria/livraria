@@ -23,6 +23,7 @@ import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.StatusAjuste;
 import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.persistence.jpa.ajuste.AjusteEstoqueDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
@@ -103,7 +104,7 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 		for (ItemAjusteEstoque itemAjuste : itensAjusteEstoque) {
 			
 			// Evita os itens em branco
-			if (itemAjuste.getLivro() != null && itemAjuste.getLivro().getId() != null) {
+			if (itemAjuste.getProduto() != null && itemAjuste.getProduto().getId() != null) {
 				
 				if (itemAjuste.getQuantidadeInformada() == null) {
 					throw new PlcException("ajusteEstoque.err.item.sem.quantidade");
@@ -139,13 +140,13 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 				if (qtdSaldo != 0) {
 					ItemMovimento itemMovimento = new ItemMovimentoEntity();
 					
-					Livro livro = (Livro)dao.findById(context, Livro.class, itemAjuste.getLivro().getId());
+					Produto produto = (Produto)dao.findById(context, Produto.class, itemAjuste.getProduto().getId());
 					
-					itemMovimento.setLivro(livro);
+					itemMovimento.setProduto(produto);
 					itemMovimento.setTipo(tipoMovimento);
 					itemMovimento.setQuantidade(qtdSaldo);
-					itemMovimento.setValorUnitario(livro.getPrecoUltCompra());
-					itemMovimento.setValorTotal(livro.getPrecoUltCompra().multiply(new BigDecimal(qtdSaldo)));
+					itemMovimento.setValorUnitario(produto.getPrecoUltCompra());
+					itemMovimento.setValorTotal(produto.getPrecoUltCompra().multiply(new BigDecimal(qtdSaldo)));
 					itemMovimento.setMovimento(mov);
 					
 					itemMovimento.setDataUltAlteracao(dataMovimento);
@@ -153,7 +154,7 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 					
 					itens.add(itemMovimento);
 					
-					valorMovimento += (livro.getPrecoUltCompra().doubleValue() * qtdSaldo * sinal);
+					valorMovimento += (produto.getPrecoUltCompra().doubleValue() * qtdSaldo * sinal);
 				}
 			}
 		}
@@ -183,11 +184,11 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 	}
 	
 	private void insereEstoque(PlcBaseContextVO context, ItemAjusteEstoque itemAjuste, Date data)  throws PlcException {
-		Livro livro = itemAjuste.getLivro();
+		Produto produto = itemAjuste.getProduto();
 
 		Estoque estoque = new EstoqueEntity();
 		
-		estoque.setLivro(livro);
+		estoque.setProduto(produto);
 		estoque.setQuantidadeMinima(1);
 		estoque.setQuantidade(itemAjuste.getQuantidadeInformada());
 		estoque.setQuantidadeMaxima(20);
@@ -213,9 +214,9 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 		
 		for (ItemAjusteEstoque itemAjuste : itensAjusteEstoque) {
 
-			if (itemAjuste.getLivro() != null && itemAjuste.getLivro().getId() != null) {
+			if (itemAjuste.getProduto() != null && itemAjuste.getProduto().getId() != null) {
 				@SuppressWarnings("unchecked")
-				List<Estoque> lista = (List<Estoque>)dao.findByFields(context, EstoqueEntity.class, "querySelByLivro", new String[]{"livro"}, new Object[]{itemAjuste.getLivro()});
+				List<Estoque> lista = (List<Estoque>)dao.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[]{"produto"}, new Object[]{itemAjuste.getProduto()});
 				
 				if (lista != null && lista.size() == 1) {
 					int qtdInformada = itemAjuste.getQuantidadeInformada();
@@ -243,7 +244,7 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 								
 								if (estoque.getLocalizacao().getId().compareTo(itemAjuste.getLocalizacao().getId()) != 0) {
 									throw new PlcException("ajusteEstoque.err.item.localizacao.divergente", 
-										new Object[] {estoque.getLivro().getTitulo()});
+										new Object[] {estoque.getProduto().getTitulo()});
 								}
 							}
 						}

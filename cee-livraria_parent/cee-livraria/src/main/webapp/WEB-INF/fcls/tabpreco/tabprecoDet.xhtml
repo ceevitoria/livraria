@@ -24,39 +24,44 @@
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.codigoBarras']}"/>
+				</f:facet>  
+				<plcf:exibe id="codigoBarras" rendered="#{itemTabela.produto != null}" value="#{itemTabela.codigoBarras}" ajudaChave="ajuda.codigoBarras" tamanho="18" somenteLeitura="S" /> 
+				<plcf:texto id="codigoBarras2" rendered="#{itemTabela.produto == null}" value="#{itemTabela.codigoBarras}" ajudaChave="ajuda.codigoBarras" tamanho="18" somenteLeitura="S" /> 
+			</h:column>
+			<h:column> 
+				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.titulo']}"/>
 				</f:facet>  
-				<plcf:texto id="livro_titulo" value="#{itemTabela.titulo}" ajudaChave="ajuda.titulo" tamanho="40" somenteLeitura="S" /> 
-			</h:column>  
+				<plcf:exibe id="titulo" rendered="#{itemTabela.produto != null}" value="#{itemTabela.titulo}" ajudaChave="ajuda.titulo" tamanho="60" somenteLeitura="S" /> 
+				<plcf:texto id="titulo2" rendered="#{itemTabela.produto == null}" value="#{itemTabela.titulo}" ajudaChave="ajuda.titulo" tamanho="60" somenteLeitura="S" /> 
+			</h:column>
 			<h:column> 
 				<f:facet name="header">
-					<plcf:titulo value="#{msg['label.autor']}"/>
+					<plcf:titulo value="#{msg['label.tipoProduto']}"/>
 				</f:facet>  
-				<plcf:comboDinamico id="livro_autor" value="#{itemTabela.autor}" somenteLeitura="S" dominio="AutorEntity" exibeBranco="S" ajudaChave="ajuda.autor"/> 
-			</h:column>  
+				<plcf:exibe id="tipoProduto" rendered="#{itemTabela.produto != null}" value="#{itemTabela.tipoProduto}" ajudaChave="ajuda.tipoProduto" somenteLeitura="S" /> 
+				<plcf:texto id="tipoProduto2" rendered="#{itemTabela.produto == null}" value="#{itemTabela.tipoProduto}" ajudaChave="ajuda.tipoProduto" somenteLeitura="S" /> 
+			</h:column>
+_			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.preco.ultima.compra']}"/>
+				</f:facet>  
+				<plcf:exibe id="precoUltimaCompra" rendered="#{itemTabela.produto != null}" value="#{itemTabela.precoUltCompra}" ajudaChave="ajuda.preco.ultima.compra"/> 
+				<plcf:numerico id="precoUltimaCompra2" rendered="#{itemTabela.produto == null}" value="#{itemTabela.preco}" somenteLeitura="S" ajudaChave="ajuda.preco.ultima.compra"/> 
+			</h:column> 
 			<h:column> 
 				<f:facet name="header">
-					<plcf:titulo value="#{msg['label.espirito']}"/>
+					<plcf:titulo value="#{msg['label.preco.venda.atual']}"/>
 				</f:facet>  
-				<plcf:comboDinamico id="livro_espirito" value="#{itemTabela.espirito}" somenteLeitura="S" dominio="EspiritoEntity" exibeBranco="S" ajudaChave="ajuda.espirito"/> 
-			</h:column>  
+				<plcf:exibe id="precoVendaSugerido" rendered="#{itemTabela.produto != null}" value="#{itemTabela.precoVendaSugerido}" ajudaChave="ajuda.preco.venda.atual"/> 
+				<plcf:numerico id="precoVendaSugerido2" rendered="#{itemTabela.produto == null}" value="#{itemTabela.preco}" somenteLeitura="S" ajudaChave="ajuda.preco.venda.atual"/> 
+			</h:column> 
 			<h:column> 
 				<f:facet name="header">
-					<plcf:titulo value="#{msg['label.edicao']}"/>
+					<plcf:titulo value="#{msg['label.preco.venda.sugerido.novo']}"/>
 				</f:facet>  
-				<plcf:numerico id="livro_edicao" value="#{itemTabela.edicao}" numCasas="0" somenteLeitura="S" ajudaChave="ajuda.edicao"/> 
-			</h:column>  
-			<h:column> 
-				<f:facet name="header">
-					<plcf:titulo value="#{msg['label.localizacao']}"/>
-				</f:facet>  
-				<plcf:comboDinamico id="livro_localizacao" value="#{itemTabela.localizacao}" somenteLeitura="S" dominio="LocalizacaoEntity" exibeBranco="S" ajudaChave="ajuda.localizacao"/> 
-			</h:column>  
-			<h:column> 
-				<f:facet name="header">
-					<plcf:titulo value="#{msg['label.preco.venda']}"/>
-				</f:facet>  
-				<plcf:numerico id="preco" value="#{itemTabela.preco}" ajudaChave="ajuda.preco.venda"/> 
+				<plcf:numerico id="preco" value="#{itemTabela.preco}" ajudaChave="ajuda.preco.venda.sugerido.novo"/> 
 			</h:column> 
 		</plcf:iteracao> 
 	</ui:composition> 

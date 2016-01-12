@@ -23,6 +23,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -32,7 +33,7 @@ import org.hibernate.annotations.ForeignKey;
 import com.cee.livraria.entity.AppBaseEntity;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.estoque.conferencia.ConferenciaEntity;
-import com.cee.livraria.entity.estoque.conferencia.RegraPesquisaLivros;
+import com.cee.livraria.entity.produto.RegraPesquisaProdutos;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 import com.powerlogic.jcompany.domain.validation.PlcValDuplicity;
 import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
@@ -66,11 +67,6 @@ public class AjusteEstoque extends AppBaseEntity {
 	@NotNull
 	@Column(length = 1)
 	private StatusAjuste status; 
-
-	@Embedded
-	@NotNull
-	@Valid
-	private RegraPesquisaLivros regra;
 
 	@OneToMany (targetEntity = com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque.class, fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="ajusteEstoque")
 	@ForeignKey(name="FK_ITEMAJUSTEESTOQUE_AJUSTEESTOQUE")
@@ -123,14 +119,6 @@ public class AjusteEstoque extends AppBaseEntity {
 		this.status = status;
 	}
 
-	public RegraPesquisaLivros getRegra() {
-		return regra;
-	}
-
-	public void setRegra(RegraPesquisaLivros regra) {
-		this.regra = regra;
-	}
-
 	public List<ItemAjusteEstoque> getItemAjusteEstoque() {
 		return itemAjusteEstoque;
 	}
@@ -157,5 +145,20 @@ public class AjusteEstoque extends AppBaseEntity {
 	public String toString() {
 		return getNome();
 	}
+
+	@Embedded
+	@NotNull
+	@Valid
+	@Transient
+	private transient RegraPesquisaProdutos regra;
+	
+	public RegraPesquisaProdutos getRegra() {
+		return regra;
+	}
+
+	public void setRegra(RegraPesquisaProdutos regra) {
+		this.regra = regra;
+	}
+	
 	
 }

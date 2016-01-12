@@ -21,7 +21,7 @@ import com.powerlogic.jcompany.config.collaboration.PlcConfigFormLayout;
 import com.powerlogic.jcompany.config.collaboration.FormPattern;
 import com.powerlogic.jcompany.config.collaboration.PlcConfigForm.ExclusionMode;
 	
-@PlcConfigAggregation(entity = com.cee.livraria.entity.pagamento.FormaPagLivroEntity.class)
+@PlcConfigAggregation(entity = com.cee.livraria.entity.pagamento.FormaPagProdutoEntity.class)
 
 @PlcConfigForm(
 	formPattern=FormPattern.Tab,

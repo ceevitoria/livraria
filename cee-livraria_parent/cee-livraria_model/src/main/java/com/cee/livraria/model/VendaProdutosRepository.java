@@ -33,6 +33,7 @@ import com.cee.livraria.entity.estoque.apoio.VendaProduto;
 import com.cee.livraria.entity.pagamento.FormaPagto;
 import com.cee.livraria.entity.pagamento.Pagamento;
 import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.persistence.jpa.livro.LivroDAO;
 import com.cee.livraria.persistence.jpa.vendaproduto.VendaProdutoDAO;
@@ -96,11 +97,11 @@ public class VendaProdutosRepository {
 		double valorItens = 0.0;
 		
 		for (Object o : itensVenda) {
-			VendaProduto cl = (VendaProduto)o;
+			VendaProduto vp = (VendaProduto)o;
 			
 			// Evita os itens em branco
-			if (cl.getLivro() != null && cl.getLivro().getId() != null) {
-				double valorItem = cl.getQuantidade().doubleValue() * cl.getValorUnitario().doubleValue();
+			if (vp.getProduto() != null && vp.getProduto().getId() != null) {
+				double valorItem = vp.getQuantidade().doubleValue() * vp.getValorUnitario().doubleValue();
 				valorItem = Math.round(valorItem * 100.00) / 100.00;
 				valorItens += valorItem;
 			}
@@ -164,26 +165,26 @@ public class VendaProdutosRepository {
 		int qtVendida = 0;
 		
 		for (Object o : relacaoLivros) {
-			VendaProduto vl = (VendaProduto)o;
+			VendaProduto vp = (VendaProduto)o;
 
-			if (vl.getLivro() != null) {
+			if (vp.getProduto() != null) {
 				@SuppressWarnings("unchecked")
-				List<Estoque> lista = (List<Estoque>)jpa.findByFields(context, EstoqueEntity.class, "querySelByLivro", new String[]{"livro"}, new Object[]{vl.getLivro()});
+				List<Estoque> lista = (List<Estoque>)jpa.findByFields(context, EstoqueEntity.class, "querySelByLivro", new String[]{"livro"}, new Object[]{vp.getProduto()});
 				
 				if (lista != null && lista.size() == 1) {
 					Estoque estoque = (Estoque)lista.get(0);
 					
-					qtVendida += vl.getQuantidade();
-					qtEstoque = estoque.getQuantidade() - vl.getQuantidade();
+					qtVendida += vp.getQuantidade();
+					qtEstoque = estoque.getQuantidade() - vp.getQuantidade();
 					
 					if (config.getPermiteVendaParaEstoqueNegativo().equals(PlcYesNo.N) && qtEstoque < 0) {
-						throw new PlcException("{erro.vendaProduto.estoque.negativo.atingido}", new Object[]{vl.getLivro().getCodigoBarras(), vl.getLivro().getTitulo()});
+						throw new PlcException("{erro.vendaProduto.estoque.negativo.atingido}", new Object[]{vp.getProduto().getCodigoBarras(), vp.getProduto().getTitulo()});
 					}
 					
 					if (config.getAlertaEstoqueNegativoAtingido().equals(PlcYesNo.S) && qtEstoque < 0) {
-						alertas.add(String.format("Quantidade negativa em estoque atingida para o livro '%s-%s'", new Object[]{vl.getLivro().getCodigoBarras(), vl.getLivro().getTitulo()}));
+						alertas.add(String.format("Quantidade negativa em estoque atingida para o livro '%s-%s'", new Object[]{vp.getProduto().getCodigoBarras(), vp.getProduto().getTitulo()}));
 					} else if (config.getAlertaEstoqueMinimoAtingido().equals(PlcYesNo.S) && qtEstoque <= estoque.getQuantidadeMinima()) {
-						alertas.add(String.format("Quantidade minina em estoque atingida para o livro '%s-%s'", new Object[]{vl.getLivro().getCodigoBarras(), vl.getLivro().getTitulo()}));
+						alertas.add(String.format("Quantidade minina em estoque atingida para o livro '%s-%s'", new Object[]{vp.getProduto().getCodigoBarras(), vp.getProduto().getTitulo()}));
 					}
 					
 					estoque.setQuantidade(qtEstoque);
@@ -193,7 +194,7 @@ public class VendaProdutosRepository {
 
 					jpa.update(context, estoque);
 				} else {
-					throw new PlcException("{erro.vendaProduto.estoque.livro.inexistente}", new Object[]{vl.getLivro().getCodigoBarras(), vl.getLivro().getTitulo()});
+					throw new PlcException("{erro.vendaProduto.estoque.livro.inexistente}", new Object[]{vp.getProduto().getCodigoBarras(), vp.getProduto().getTitulo()});
 				}
 			}
 		}
@@ -374,20 +375,20 @@ public class VendaProdutosRepository {
 
 		//monta o texto para a observação do movimento do caixa
 		for (Object o : relacaoLivros) {
-			VendaProduto cl = (VendaProduto)o;
+			VendaProduto vp = (VendaProduto)o;
 
-			if (cl.getLivro() != null) {
+			if (vp.getProduto() != null) {
 				StringBuilder obs = new StringBuilder();
 				obs.append("Livro: '");
-				obs.append(cl.getLivro().getCodigoBarras());
+				obs.append(vp.getProduto().getCodigoBarras());
 				obs.append("-");
-				obs.append(cl.getLivro().getTitulo());
+				obs.append(vp.getProduto().getTitulo());
 				obs.append("' - Quant: '");
-				obs.append(String.format("%02d", cl.getQuantidade()));
+				obs.append(String.format("%02d", vp.getQuantidade()));
 				obs.append("' - Valor Unit: '");
-				obs.append(String.format("R$ %,.02f", cl.getValorUnitario()));
+				obs.append(String.format("R$ %,.02f", vp.getValorUnitario()));
 				obs.append("' - Valor Total: '");
-				obs.append(String.format("R$ %,.02f", cl.getValorTotal()));
+				obs.append(String.format("R$ %,.02f", vp.getValorTotal()));
 				obs.append("'");
 
 				listaObs.add(obs.toString());
@@ -408,23 +409,23 @@ public class VendaProdutosRepository {
 		List<ItemMovimento> itens = new ArrayList<ItemMovimento>();
 		
 		for (Object o : relacaoLivros) {
-			VendaProduto cl = (VendaProduto)o;
+			VendaProduto vp = (VendaProduto)o;
 			
 			// Evita os itens em branco
-			if (cl.getLivro() != null && cl.getLivro().getId() != null) {
+			if (vp.getProduto() != null && vp.getProduto().getId() != null) {
 				ItemMovimento item = new ItemMovimentoEntity();
 
-				double valorTotalItem = cl.getQuantidade().doubleValue() * cl.getValorUnitario().doubleValue();
+				double valorTotalItem = vp.getQuantidade().doubleValue() * vp.getValorUnitario().doubleValue();
 				
 				valorTotalItem = Math.round(valorTotalItem * 100.00) / 100.00;
 				item.setValorTotal(BigDecimal.valueOf(valorTotalItem));
 				
-				Livro livro = (Livro)jpa.findById(context, Livro.class, cl.getLivro().getId());
+				Produto produto = (Produto)jpa.findById(context, Produto.class, vp.getProduto().getId());
 				
-				item.setLivro(livro);
-				item.setQuantidade(cl.getQuantidade());
-				item.setValorUnitario(cl.getValorUnitario());
-				item.setValorTotal(cl.getValorTotal());
+				item.setProduto(produto);
+				item.setQuantidade(vp.getQuantidade());
+				item.setValorUnitario(vp.getValorUnitario());
+				item.setValorTotal(vp.getValorTotal());
 				item.setTipo(TipoMovimento.S);
 				item.setMovimento(mov);
 				
@@ -468,29 +469,29 @@ public class VendaProdutosRepository {
 		try {
 			
 			for (Object o : entityList) {
-				VendaProduto cl = (VendaProduto)o;
+				VendaProduto vp = (VendaProduto)o;
 				
-				if (cl.getLivro() != null) {
+				if (vp.getProduto() != null) {
 					
-					PrecoTabela preco = livroDAO.obterPrecoTabela(context, cl.getLivro().getId());
+					PrecoTabela preco = livroDAO.obterPrecoTabela(context, vp.getProduto().getId());
 					
-					cl.setNomeTabela(preco.getNomeTabela());
+					vp.setNomeTabela(preco.getNomeTabela());
 					
 					if (preco.getIdTabela() != null) {
-						cl.setValorUnitario(preco.getPrecoTabela());
+						vp.setValorUnitario(preco.getPrecoTabela());
 					} else {
-						Livro livro = (Livro)jpa.findById(context, Livro.class, cl.getLivro().getId());
-						cl.setValorUnitario(livro.getPrecoVendaSugerido());
+						Produto produto = (Produto)jpa.findById(context, Produto.class, vp.getProduto().getId());
+						vp.setValorUnitario(produto.getPrecoVendaSugerido());
 					}
 					
-					if (cl.getQuantidade() == null || cl.getQuantidade() == 0) {
-						cl.setQuantidade(1);
+					if (vp.getQuantidade() == null || vp.getQuantidade() == 0) {
+						vp.setQuantidade(1);
 					}
 					
-					if (cl.getValorUnitario() != null) { 
-						mult = cl.getQuantidade().intValue() * cl.getValorUnitario().doubleValue();
+					if (vp.getValorUnitario() != null) { 
+						mult = vp.getQuantidade().intValue() * vp.getValorUnitario().doubleValue();
 						mult = Math.round(mult * 100.00) / 100.00;
-						cl.setValorTotal(BigDecimal.valueOf(mult));
+						vp.setValorTotal(BigDecimal.valueOf(mult));
 					}
 					
 					totalGeral += mult;

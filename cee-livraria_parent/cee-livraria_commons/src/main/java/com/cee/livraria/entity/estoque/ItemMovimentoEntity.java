@@ -18,7 +18,7 @@ import javax.persistence.Transient;
 @Table(name = "ITEM_MOVIMENTO")
 @SequenceGenerator(name = "SE_ITEM_MOVIMENTO", sequenceName = "SE_ITEM_MOVIMENTO")
 @Access(AccessType.FIELD)
-@NamedQueries({ @NamedQuery(name = "ItemMovimentoEntity.querySelLookup", query = "select id as id, livro as livro from ItemMovimentoEntity where id = ? order by id asc") })
+@NamedQueries({ @NamedQuery(name = "ItemMovimentoEntity.querySelLookup", query = "select id as id, produto as produto from ItemMovimentoEntity where id = ? order by id asc") })
 public class ItemMovimentoEntity extends ItemMovimento {
 
 	private static final long serialVersionUID = 1L;
@@ -31,7 +31,7 @@ public class ItemMovimentoEntity extends ItemMovimento {
 
 	@Override
 	public String toString() {
-		return getLivro().toString();
+		return getProduto().toString();
 	}
 
 	@Transient

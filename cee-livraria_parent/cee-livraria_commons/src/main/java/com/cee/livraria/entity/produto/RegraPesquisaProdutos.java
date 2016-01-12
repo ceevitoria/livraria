@@ -1,4 +1,4 @@
-package com.cee.livraria.entity.tabpreco;
+package com.cee.livraria.entity.produto;
 
 import com.cee.livraria.entity.Autor;
 import com.cee.livraria.entity.Colecao;
@@ -25,8 +25,9 @@ import javax.persistence.OrderBy;
 
 @Embeddable
 @Access(AccessType.FIELD)
-@NamedQueries({ @NamedQuery(name = "RegraPesquisaLivros.querySelLookup", query = "select titulo as titulo from RegraPesquisaLivros where id = ? order by titulo asc") })
-public class RegraPesquisaLivros implements Serializable {
+@NamedQueries({ @NamedQuery(name = "RegraPesquisaProdutos.querySelLookup", query = "select titulo as titulo from RegraPesquisaProdutos where id = ? order by titulo asc") })
+public class RegraPesquisaProdutos implements Serializable {
+	private static final long serialVersionUID = -9182328388056088277L;
 
 	@Size(max = 40)
 	private String titulo;
@@ -65,7 +66,7 @@ public class RegraPesquisaLivros implements Serializable {
 	@OrderBy(value="codigo")
 	private Localizacao localizacao;
 
-	public RegraPesquisaLivros() {
+	public RegraPesquisaProdutos() {
 	}
 
 	public String getTitulo() {

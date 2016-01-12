@@ -9,6 +9,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Digits;
 
 import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Produto;
 
 @Access(AccessType.FIELD)
 public class VendaProduto {
@@ -16,7 +17,7 @@ public class VendaProduto {
 	@Id
 	private Long id;
 
-	private Livro livro;
+	private Produto produto;
 
 	@Transient
 	private String nomeTabela = " ";
@@ -57,12 +58,12 @@ public class VendaProduto {
 		this.nomeTabela = nomeTabela;
 	}
 	
-	public Livro getLivro() {
-		return livro;
+	public Produto getProduto() {
+		return produto;
 	}
 
-	public void setLivro(Livro livro) {
-		this.livro = livro;
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 
 	public Integer getQuantidade() {

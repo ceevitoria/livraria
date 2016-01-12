@@ -18,7 +18,8 @@ import javax.persistence.Transient;
 @Table(name = "ITEM_TABELA")
 @SequenceGenerator(name = "SE_ITEM_TABELA", sequenceName = "SE_ITEM_TABELA")
 @Access(AccessType.FIELD)
-@NamedQueries({ @NamedQuery(name = "ItemTabelaEntity.querySelLookup", query = "select id as id, livro as livro from ItemTabelaEntity where id = ? order by titulo asc") })
+@NamedQueries({ 
+	@NamedQuery(name = "ItemTabelaEntity.querySelLookup", query = "select id as id, produto as produto from ItemTabelaEntity where id = ? order by titulo asc") })
 public class ItemTabelaEntity extends ItemTabela {
 
 	private static final long serialVersionUID = 1L;
@@ -31,7 +32,11 @@ public class ItemTabelaEntity extends ItemTabela {
 
 	@Override
 	public String toString() {
-		return getLivro().toString();
+		if (getProduto() != null) {
+			return getProduto().getTitulo().toString();
+		} else {
+			return "Undefined";
+		}
 	}
 
 	@Transient

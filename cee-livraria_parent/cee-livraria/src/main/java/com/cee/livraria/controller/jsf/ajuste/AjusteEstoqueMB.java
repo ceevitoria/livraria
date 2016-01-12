@@ -15,8 +15,9 @@ import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.StatusAjuste;
-import com.cee.livraria.entity.estoque.conferencia.RegraPesquisaLivros;
 import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Produto;
+import com.cee.livraria.entity.produto.RegraPesquisaProdutos;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcConstants;
@@ -37,7 +38,7 @@ import com.powerlogic.jcompany.domain.validation.PlcMessage;
 
 @PlcConfigAggregation(entity = com.cee.livraria.entity.estoque.ajuste.AjusteEstoque.class, 
 	components = { @com.powerlogic.jcompany.config.aggregation.PlcConfigComponent(
-		clazz = com.cee.livraria.entity.estoque.conferencia.RegraPesquisaLivros.class, property = "regra", separate = true) }, 
+		clazz = com.cee.livraria.entity.produto.RegraPesquisaProdutos.class, property = "regra", separate = true) }, 
 		details = { @com.powerlogic.jcompany.config.aggregation.PlcConfigDetail(
 				clazz = com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque.class, 
 				collectionName = "itemAjusteEstoque", numNew = 4, onDemand = false, 
@@ -108,16 +109,16 @@ public class AjusteEstoqueMB extends AppMB {
 		config = (AjusteEstoqueConfig)listaConfig.get(0);
 	}
 
-	private Livro criaArgumentoPesquisaLivro(RegraPesquisaLivros regra) {
-		Livro livroArg = (Livro)new Livro();
-		livroArg.setTitulo(regra.getTitulo());
-		livroArg.setAutor(regra.getAutor());
-		livroArg.setCodigoBarras(regra.getCodigoBarras());
-		livroArg.setColecao(regra.getColecao());
-		livroArg.setEdicao(regra.getEdicao());
-		livroArg.setEditora(regra.getEditora());
-		livroArg.setEspirito(regra.getEspirito());
-		return livroArg;
+	private Produto criaArgumentoPesquisaProduto(RegraPesquisaProdutos regra) {
+		Produto produtoArg = (Produto)new Produto();
+		produtoArg.setTitulo(regra.getTitulo());
+		produtoArg.setCodigoBarras(regra.getCodigoBarras());
+//		produtoArg.setAutor(regra.getAutor());
+//		produtoArg.setColecao(regra.getColecao());
+//		produtoArg.setEdicao(regra.getEdicao());
+//		produtoArg.setEditora(regra.getEditora());
+//		produtoArg.setEspirito(regra.getEspirito());
+		return produtoArg;
 	}
 
 	/**
@@ -134,7 +135,7 @@ public class AjusteEstoqueMB extends AppMB {
 			for (int i=listaItensExistentes.size()-1; i>=0; i--) {
 				ItemAjusteEstoque itemExistente = (ItemAjusteEstoque)listaItensExistentes.get(i);
 
-				if (itemExistente.getId() == null && itemExistente.getLivro() == null) {
+				if (itemExistente.getId() == null && itemExistente.getProduto() == null) {
 					listaItensExistentes.remove(itemExistente);
 				}
 			}
@@ -149,27 +150,27 @@ public class AjusteEstoqueMB extends AppMB {
 			
 			if (ok) {
 				//Busca os livros que satisfazem às regras de pesquisa e os adiciona na listaItens caso ainda não tenham sido adicionados anteriormente
-				RegraPesquisaLivros regra = ajusteEstoque.getRegra();
+				RegraPesquisaProdutos regra = ajusteEstoque.getRegra();
 				
-				Livro livroArg = criaArgumentoPesquisaLivro(regra);
+				Produto produtoArg = criaArgumentoPesquisaProduto(regra);
 
 				PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 
-				Long contalivros = (Long)iocControleFacadeUtil.getFacade().findCount(context, livroArg);
+				Long contaProdutos = (Long)iocControleFacadeUtil.getFacade().findCount(context, produtoArg);
 				
-				if (contalivros.longValue() > 400) {
-					msgUtil.msg("{ajusteEstoque.err.buscar.muitosItensExistentes}", new Object[] {contalivros}, PlcMessage.Cor.msgVermelhoPlc.name());
+				if (contaProdutos.longValue() > 400) {
+					msgUtil.msg("{ajusteEstoque.err.buscar.muitosItensExistentes}", new Object[] {contaProdutos}, PlcMessage.Cor.msgVermelhoPlc.name());
 					ok = false;
 				} else {
-					List<Livro> livros = (List<Livro>)iocControleFacadeUtil.getFacade().findList(context, livroArg, plcControleConversacao.getOrdenacaoPlc(), 0, 0);
+					List<Produto> produtos = (List<Produto>)iocControleFacadeUtil.getFacade().findList(context, produtoArg, plcControleConversacao.getOrdenacaoPlc(), 0, 0);
 					int totalExistente = 0;
 					
-					for (Livro livro : livros) {
+					for (Produto produto : produtos) {
 						boolean existe = false;
 						
 						for (ItemAjusteEstoque itemExistente : listaItensExistentes) {
 							
-							if (livro.getId().compareTo(itemExistente.getLivro().getId())==0) {
+							if (produto.getId().compareTo(itemExistente.getProduto().getId())==0) {
 								existe = true;
 								totalExistente++;
 								break;
@@ -177,14 +178,14 @@ public class AjusteEstoqueMB extends AppMB {
 						}
 						
 						if (!existe) {
-							ItemAjusteEstoque itemAjusteEstoque = criaNovoItem(ajusteEstoque, livro);
+							ItemAjusteEstoque itemAjusteEstoque = criaNovoItem(ajusteEstoque, produto);
 							listaItensExistentes.add(itemAjusteEstoque);
 						}
 					}
 					
-					carregaEstoqueLivros(context, listaItensExistentes);
+					carregaEstoqueProdutos(context, listaItensExistentes);
 					
-					msgUtil.msg("{ajusteEstoque.ok.buscar}", new Object[] {livros.size()-totalExistente}, PlcMessage.Cor.msgAzulPlc.name());
+					msgUtil.msg("{ajusteEstoque.ok.buscar}", new Object[] {produtos.size()-totalExistente}, PlcMessage.Cor.msgAzulPlc.name());
 					msgUtil.msg("{ajusteEstoque.lembrar.gravar}", PlcMessage.Cor.msgAmareloPlc.name());
 					
 					plcControleConversacao.setAlertaAlteracaoPlc("S");
@@ -195,45 +196,29 @@ public class AjusteEstoqueMB extends AppMB {
 		return baseEditMB.getDefaultNavigationFlow(); 
 	}
 	
-	private ItemAjusteEstoque criaNovoItem(AjusteEstoque ajusteEstoque, Livro livro) {
+	private ItemAjusteEstoque criaNovoItem(AjusteEstoque ajusteEstoque, Produto produto) {
 		ItemAjusteEstoque item = new ItemAjusteEstoque();
 		
 		item.setAjusteEstoque(ajusteEstoque);
-		item.setLivro(livro);
-		item.setAutor(livro.getAutor());
-		
-		if (livro.getColecao() != null && livro.getColecao().getId() != null) {
-			item.setColecao(livro.getColecao());
-		} else {
-			item.setColecao(null);
-		}
-		
-		item.setEdicao(livro.getEdicao());
-		item.setEditora(livro.getEditora());
-		
-		if (livro.getEspirito() != null && livro.getEspirito().getId() != null) {
-			item.setEspirito(livro.getEspirito());
-		} else {
-			item.setEspirito(null);
-		}
+		item.setProduto(produto);
 		
 		return item;
 	}
 
-	private void carregaEstoqueLivros(PlcBaseContextVO context , List<ItemAjusteEstoque> itensAjuste) {
-		List<Livro> livros = new ArrayList<Livro>(itensAjuste.size());
+	private void carregaEstoqueProdutos(PlcBaseContextVO context , List<ItemAjusteEstoque> itensAjuste) {
+		List<Produto> produtos = new ArrayList<Produto>(itensAjuste.size());
 		
 		for (ItemAjusteEstoque itemAjusteEstoque : itensAjuste) {
-			livros.add(itemAjusteEstoque.getLivro());
+			produtos.add(itemAjusteEstoque.getProduto());
 		}
 		
-		List<Estoque> estoqueList = (List<Estoque>)iocControleFacadeUtil.getFacade(IAppFacade.class).buscarLivrosEstoque(context, livros);
+		List<Estoque> estoqueList = (List<Estoque>)iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoque(context, produtos);
 		
 		for (Estoque estoque : estoqueList) {
 			
 			for (ItemAjusteEstoque item : itensAjuste) {
 				
-				if (item.getLivro().getId().compareTo(estoque.getLivro().getId()) == 0) {
+				if (item.getProduto().getId().compareTo(estoque.getProduto().getId()) == 0) {
 					item.setQuantidadeEstoque(estoque.getQuantidade());
 					item.setLocalizacao(estoque.getLocalizacao());
 					break;

@@ -19,16 +19,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 
 @MappedSuperclass
-public abstract class FormaPagLivro extends AppBaseEntity {
+public abstract class FormaPagProduto extends AppBaseEntity {
 
 	private static final long serialVersionUID = -1359478287021337443L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_FORMA_PAG_LIVRO")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_FORMA_PAG_PRODUTO")
 	private Long id;
 
 	@ManyToOne(targetEntity = FormaPagtoEntity.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_FORMAPAGLIVRO_FORMAPAGTO")
+	@ForeignKey(name = "FK_FORMAPAGPROD_FORMAPAGTO")
 	@NotNull(groups = PlcValGroupEntityList.class)
 	@RequiredIf(valueOf = "id", is = RequiredIfType.not_empty)
 	@PlcReference(testDuplicity = true)

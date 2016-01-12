@@ -8,6 +8,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.cee.livraria.entity.produto.RegraPesquisaProdutos;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 
 /**
@@ -20,7 +21,8 @@ import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 @Access(AccessType.FIELD)
 @NamedQueries({
 	@NamedQuery(name="TabelaPrecoEntity.queryMan", query="from TabelaPrecoEntity where sitHistoricoPlc='A'"),
-	@NamedQuery(name="TabelaPrecoEntity.querySel", query="select id as id, nome as nome, ativa as ativa, dataInicio as dataInicio, dataFim as dataFim from TabelaPrecoEntity where sitHistoricoPlc='A' order by nome asc"), @NamedQuery(name = "TabelaPrecoEntity.querySelLookup", query = "select id as id, nome as nome from TabelaPrecoEntity where id = ? order by id asc") })
+	@NamedQuery(name="TabelaPrecoEntity.querySel", query="select id as id, nome as nome, ativa as ativa, dataInicio as dataInicio, dataFim as dataFim from TabelaPrecoEntity where sitHistoricoPlc='A' order by nome asc"), 
+	@NamedQuery(name="TabelaPrecoEntity.querySelLookup", query="select id as id, nome as nome from TabelaPrecoEntity where id = ? order by id asc") })
 public class TabelaPrecoEntity extends TabelaPreco {
 
 	private static final long serialVersionUID = 1L;
@@ -36,7 +38,7 @@ public class TabelaPrecoEntity extends TabelaPreco {
 //        localizacao,        palavra_chave,        titulo,     sit_historico_plc 
 		
 		
-		this.setRegra(new RegraPesquisaLivros());
+		this.setRegra(new RegraPesquisaProdutos());
 	}
 
 	@Override

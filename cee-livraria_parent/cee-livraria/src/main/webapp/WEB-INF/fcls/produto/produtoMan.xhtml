@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf"
+	xmlns:plct="http://www.powerlogic.com.br/plct" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition> 
+		<plcf:tabela tituloChave="produtoman.titulo"> 
+			<plcf:linha> 
+				<plcf:celula columnSpan="2"> 
+					<plcf:titulo value="#{msg['label.codigoBarras']}"/>  
+					<plcf:texto id="codigoBarras" value="#{produto.codigoBarras}" ajudaChave="ajuda.codigoBarras" tamanho="30"/> 
+				</plcf:celula>  
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula columnSpan="2"> 
+					<plcf:titulo value="#{msg['label.titulo']}"/>  
+					<plcf:texto id="titulo" value="#{produto.titulo}" ajudaChave="ajuda.titulo" tamanho="60"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.isbn']}"/>  
+					<plcf:texto id="isbn" value="#{produto.isbn}" tamanho="20" ajudaChave="ajuda.isbn"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.palavrasChave']}"/>  
+					<plcf:texto id="palavrasChave" value="#{produto.palavrasChave}" ajudaChave="ajuda.palavrasChave" tamanho="30"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.espirito']}"/>  
+					<plcf:comboDinamico id="espirito" value="#{produto.espirito}" dominio="EspiritoEntity" exibeBranco="S" ajudaChave="ajuda.espirito"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.autor']}"/>  
+					<plcf:comboDinamico id="autor" value="#{produto.autor}" dominio="AutorEntity" exibeBranco="S" ajudaChave="ajuda.autor"/> 
+				</plcf:celula>  
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.editora']}"/>  
+					<plcf:comboDinamico id="editora" value="#{produto.editora}" dominio="EditoraEntity" exibeBranco="S" ajudaChave="ajuda.editora"/> 
+				</plcf:celula> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.edicao']}"/>  
+					<plcf:numerico id="edicao" value="#{produto.edicao}" tamanho="10" numCasas="0" ajudaChave="ajuda.edicao"/> 
+				</plcf:celula>  
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.colecao']}"/>  
+					<plcf:comboDinamico id="colecao" value="#{produto.colecao}" dominio="ColecaoEntity" exibeBranco="S" ajudaChave="ajuda.colecao"/> 
+				</plcf:celula> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.preco.ultima.compra']}"/>
+					<plcf:numerico id="precoOrig1" value="#{produto.precoUltCompra}" somenteLeitura="S" rendered="#{not plct:execOneArg(request,'isUserInRole','Gestor')}" 
+						tamanho="10" ajudaChave="ajuda.preco.ultima.compra"/> 
+					<plcf:numerico id="precoOrig2" value="#{produto.precoUltCompra}" somenteLeitura="N" rendered="#{plct:execOneArg(request,'isUserInRole','Gestor')}"
+						tamanho="10" ajudaChave="ajuda.preco.ultima.compra"/> 
+				</plcf:celula>  
+			</plcf:linha> 
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.tabpreco']}"/>  
+					<plcf:texto id="nomeTabela" value="#{produto.nomeTabela}" somenteLeitura="S" tamanho="50" ajudaChave="ajuda.tabpreco"/> 
+	                <plcf:linkInteligente
+	                    link="#{request.contextPath}/f/n/tabprecomdt?id=#{produto.idTabela}"
+	                    tituloChave="label.tabpreco"
+	                    ajudaChave="ajuda.tabpreco"
+	                    exibeSe="#{not empty produto.idTabela and plct:execOneArg(request,'isUserInRole','Gestor')}" />
+				</plcf:celula> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.preco.venda']}"/>  
+					<plcf:numerico id="precoTabela" value="#{produto.precoTabela}" 
+						somenteLeitura="S" tamanho="10" ajudaChave="ajuda.preco.venda"
+						exibeSe="#{not empty produto.idTabela}" />
+					<plcf:numerico id="precoVendaSugerido1" value="#{produto.precoVendaSugerido}" 
+						somenteLeitura="N" tamanho="10" ajudaChave="ajuda.preco.venda.sugerido"
+						exibeSe="#{empty produto.idTabela and plct:execOneArg(request,'isUserInRole','Gestor')}" /> 
+					<plcf:numerico id="precoVendaSugerido2" value="#{produto.precoVendaSugerido}" 
+						somenteLeitura="S" tamanho="10" ajudaChave="ajuda.preco.venda.sugerido"
+						exibeSe="#{empty produto.idTabela and plct:execOneArg(request,'isUserInRole','Vendedor')}" /> 
+				</plcf:celula>  
+			</plcf:linha> 
+		</plcf:tabela> 
+	</ui:composition> 
+</html>

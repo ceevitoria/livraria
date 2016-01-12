@@ -8,25 +8,57 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.cee.livraria.entity.AppBaseEntity;
 import com.cee.livraria.entity.Estocavel;
+import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 
-@MappedSuperclass
+@SPlcEntity
+@Entity
+@Table(name = "PRODUTO")
+@SequenceGenerator(name = "SE_PRODUTO", sequenceName = "SE_PRODUTO")
+@Access(AccessType.FIELD)
+@NamedQueries({
+	@NamedQuery(name="Produto.queryMan", query="from Produto"),
+	@NamedQuery(name="Produto.querySel", query="select obj.id as id, obj.tipoProduto as tipoProduto, obj.titulo as titulo, obj.codigoBarras as codigoBarras, obj.palavrasChave as palavrasChave, obj.precoUltCompra as precoUltCompra, obj.precoVendaSugerido as precoVendaSugerido from Produto obj order by obj.titulo asc"),
+	@NamedQuery(name="Produto.queryEdita", query="select obj from Produto obj where obj.id = ?"),
+	@NamedQuery(name="Produto.queryPrecoTabela", query = 
+			" select t.id as idTabela, t.nome as nomeTabela, i.preco as precoTabela " +
+			"   from ItemTabelaEntity i " +
+			"     left outer join i.produto as p " +
+			"     left outer join i.tabelaPreco as t " +
+			"  where p.id = :id " +
+			"    and t.ativa = 'S' " +
+			"    and t.sitHistoricoPlc = 'A' " +
+			"    and i.sitHistoricoPlc = 'A' " +
+			"    and ((t.dataFim is null and t.dataInicio <= current_date()) " +
+			"     or  (t.dataFim is not null and current_date() between t.dataInicio and t.dataFim)) " +
+			"   order by t.dataInicio desc "),
+	@NamedQuery(name="Produto.querySelLookup", query="select id as id, codigoBarras as codigoBarras, titulo as titulo from Produto where id = ? order by id asc") })
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name="tipoProduto", length=1, discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue("P")
-@Access(AccessType.FIELD)
-public abstract class Produto extends AppBaseEntity implements Estocavel {
-	private static final long serialVersionUID = 7010726688930867174L;
+public class Produto extends AppBaseEntity implements Estocavel {
+	private static final long serialVersionUID = 7010726688922277123L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_PRODUTO")
+	private Long id;
 
 	@NotNull
 	@Column(length=1, insertable=false, updatable=false)
@@ -50,6 +82,14 @@ public abstract class Produto extends AppBaseEntity implements Estocavel {
 	@Digits(integer = 10, fraction = 2)
 	private BigDecimal precoVendaSugerido;
 	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public TipoProduto getTipoProduto() {
 		return tipoProduto;
 	}
@@ -97,5 +137,37 @@ public abstract class Produto extends AppBaseEntity implements Estocavel {
 	public void setPrecoVendaSugerido(BigDecimal precoVendaSugerido) {
 		this.precoVendaSugerido = precoVendaSugerido;
 	}
+
+	private transient Long idTabela;
+
+	private transient BigDecimal precoTabela;
+	
+	private transient String nomeTabela;
+
+	public Long getIdTabela() {
+		return idTabela;
+	}
+	
+	public void setIdTabela(Long idTabela) {
+		this.idTabela = idTabela;
+	}
+	
+	public String getNomeTabela() {
+		return nomeTabela;
+	}
+
+	public void setNomeTabela(String nomeTabela) {
+		this.nomeTabela = nomeTabela;
+	}
+
+	public void setPrecoTabela(BigDecimal precoTabela) {
+		this.precoTabela = precoTabela;
+	}
+	
+	public BigDecimal getPrecoTabela() {
+		return precoTabela;
+	}
+	
+	
 	
 }

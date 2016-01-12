@@ -19,19 +19,20 @@ import com.cee.livraria.entity.AppBaseEntity;
 import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.LocalizacaoEntity;
 import com.cee.livraria.entity.produto.Livro;
-import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.Produto;
 
 @MappedSuperclass
 public abstract class Estoque extends AppBaseEntity {
+	private static final long serialVersionUID = -1730467297686228589L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_ESTOQUE")
 	private Long id;
 
-	@ManyToOne(targetEntity = Livro.class, fetch = FetchType.EAGER)
-	@ForeignKey(name = "FK_ESTOQUE_LIVRO")
+	@ManyToOne(targetEntity = Produto.class, fetch = FetchType.EAGER)
+	@ForeignKey(name = "FK_ESTOQUE_PRODUTO")
 	@NotNull
-	private Livro livro;
+	private Produto produto;
 
 	@NotNull
 	@Digits(integer = 5, fraction = 0)
@@ -61,12 +62,12 @@ public abstract class Estoque extends AppBaseEntity {
 		this.id = id;
 	}
 
-	public Livro getLivro() {
-		return livro;
+	public Produto getProduto() {
+		return produto;
 	}
 
-	public void setLivro(Livro livro) {
-		this.livro = livro;
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 
 	public Integer getQuantidade() {
