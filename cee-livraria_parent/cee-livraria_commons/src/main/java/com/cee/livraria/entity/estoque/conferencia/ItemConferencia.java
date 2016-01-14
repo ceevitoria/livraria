@@ -1,5 +1,8 @@
 package com.cee.livraria.entity.estoque.conferencia;
 
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +18,7 @@ import com.cee.livraria.entity.AppBaseEntity;
 import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.LocalizacaoEntity;
 import com.cee.livraria.entity.produto.Produto;
+import com.cee.livraria.entity.produto.TipoProduto;
 
 @MappedSuperclass
 public abstract class ItemConferencia extends AppBaseEntity {
@@ -33,6 +37,10 @@ public abstract class ItemConferencia extends AppBaseEntity {
 	@ManyToOne(targetEntity = Produto.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_ITEMCONFERENCIA_PRODUTO")
 	private Produto produto;
+
+	@Column(length=1)
+	@Enumerated(EnumType.STRING)
+	private TipoProduto tipoProduto;
 
 	@ManyToOne(targetEntity = LocalizacaoEntity.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_ITEMCONFERENCIA_LOCALIZACAO")
@@ -58,6 +66,14 @@ public abstract class ItemConferencia extends AppBaseEntity {
 
 	public void setProduto(Produto produto) {
 		this.produto = produto;
+	}
+
+	public TipoProduto getTipoProduto() {
+		return tipoProduto;
+	}
+
+	public void setTipoProduto(TipoProduto tipoProduto) {
+		this.tipoProduto = tipoProduto;
 	}
 
 	public Localizacao getLocalizacao() {

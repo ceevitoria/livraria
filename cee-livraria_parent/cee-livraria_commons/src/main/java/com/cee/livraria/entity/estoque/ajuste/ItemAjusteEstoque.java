@@ -2,7 +2,10 @@ package com.cee.livraria.entity.estoque.ajuste;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +25,7 @@ import com.cee.livraria.entity.AppBaseEntity;
 import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.LocalizacaoEntity;
 import com.cee.livraria.entity.produto.Produto;
+import com.cee.livraria.entity.produto.TipoProduto;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 
 @SPlcEntity
@@ -46,6 +50,10 @@ public class ItemAjusteEstoque extends AppBaseEntity {
 	@ManyToOne(targetEntity = Produto.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_ITEMAJUSTEESTOQUE_PRODUTO")
 	private Produto produto;
+
+	@Column(length=1)
+	@Enumerated(EnumType.STRING)
+	private TipoProduto tipoProduto;
 
 	@ManyToOne(targetEntity = LocalizacaoEntity.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_ITEMAJUSTEESTOQUE_LOCALIZACAO")
@@ -79,6 +87,14 @@ public class ItemAjusteEstoque extends AppBaseEntity {
 
 	public void setProduto(Produto produto) {
 		this.produto = produto;
+	}
+
+	public TipoProduto getTipoProduto() {
+		return tipoProduto;
+	}
+
+	public void setTipoProduto(TipoProduto tipoProduto) {
+		this.tipoProduto = tipoProduto;
 	}
 
 	public Localizacao getLocalizacao() {

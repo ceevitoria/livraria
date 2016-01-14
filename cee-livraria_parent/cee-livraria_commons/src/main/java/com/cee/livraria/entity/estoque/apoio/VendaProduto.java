@@ -4,12 +4,17 @@ import java.math.BigDecimal;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 
 import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.entity.produto.Produto;
+import com.cee.livraria.entity.produto.TipoProduto;
 
 @Access(AccessType.FIELD)
 public class VendaProduto {
@@ -18,6 +23,10 @@ public class VendaProduto {
 	private Long id;
 
 	private Produto produto;
+
+	@Transient
+	@Enumerated(EnumType.STRING)
+	private TipoProduto tipoProduto;
 
 	@Transient
 	private String nomeTabela = " ";
@@ -50,14 +59,6 @@ public class VendaProduto {
 		this.id = id;
 	}
 
-	public String getNomeTabela() {
-		return nomeTabela;
-	}
-	
-	public void setNomeTabela(String nomeTabela) {
-		this.nomeTabela = nomeTabela;
-	}
-	
 	public Produto getProduto() {
 		return produto;
 	}
@@ -66,6 +67,22 @@ public class VendaProduto {
 		this.produto = produto;
 	}
 
+	public TipoProduto getTipoProduto() {
+		return tipoProduto;
+	}
+
+	public void setTipoProduto(TipoProduto tipoProduto) {
+		this.tipoProduto = tipoProduto;
+	}
+
+	public String getNomeTabela() {
+		return nomeTabela;
+	}
+	
+	public void setNomeTabela(String nomeTabela) {
+		this.nomeTabela = nomeTabela;
+	}
+	
 	public Integer getQuantidade() {
 		return quantidade;
 	}

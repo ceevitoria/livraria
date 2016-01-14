@@ -11,6 +11,23 @@
 	xmlns:tr="http://myfaces.apache.org/trinidad" 
 	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
 	<ui:composition> 
+	<script type="text/javascript">//<![CDATA[
+		plc.jq(document).ready(function(){
+			plc.jq("#itemAjusteEstoque").click(function(){
+				plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
+				
+				var status = plc.jq("#corpo\\:formulario\\:status option:selected").text();
+
+				if (status == "Formação") {
+					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
+				} else {
+					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").hide();
+				}
+			});
+		});
+		//]]></script>
 		<plcf:iteracao var="itemAjusteEstoque" id="itemAjusteEstoque" value="#{ajusteEstoque.itemAjusteEstoque}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
 			<h:column> 
 				<h:outputText value="#{rowCounter.index}."/> 
@@ -52,6 +69,13 @@
 				</c:if>
 				  
 			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.tipoProduto']}"/>
+				</f:facet>  
+				<plcf:exibe id="tipoProduto" rendered="#{itemAjusteEstoque.produto != null}" value="#{itemAjusteEstoque.tipoProduto}" ajudaChave="ajuda.tipoProduto" somenteLeitura="S" /> 
+				<plcf:texto id="tipoProduto2" rendered="#{itemAjusteEstoque.produto == null}" value="#{itemAjusteEstoque.tipoProduto}" ajudaChave="ajuda.tipoProduto" somenteLeitura="S" /> 
+			</h:column>
 			<h:column rendered="#{requestScope.utilizaLocalizacaoAjusteEstoque=='S'}"> 
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.localizacao']}"/>

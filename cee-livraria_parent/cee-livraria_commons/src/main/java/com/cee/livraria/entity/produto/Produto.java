@@ -168,6 +168,20 @@ public class Produto extends AppBaseEntity implements Estocavel {
 		return precoTabela;
 	}
 	
-	
+
+	/*
+	 * Construtor padrao
+	 */
+	public Produto() {
+	}
+
+	@Override
+	public String toString() {
+		if (getTitulo() != null) {
+			return getTitulo();
+		} else {
+			return "Livro";
+		}
+	}
 	
 }

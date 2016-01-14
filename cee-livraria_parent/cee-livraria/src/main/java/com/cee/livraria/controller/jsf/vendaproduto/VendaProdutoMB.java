@@ -162,6 +162,7 @@ public class VendaProdutoMB extends AppMB  {
 			VendaProduto vl = (VendaProduto)o;
 			vl.setId(null);
 			vl.setProduto(null);
+			vl.setTipoProduto(null);
 			vl.setNomeTabela(null);
 			vl.setQuantidade(null);
 			vl.setValorUnitario(null);
@@ -244,15 +245,27 @@ public class VendaProdutoMB extends AppMB  {
 
 		List itens = entityListPlc.getItensPlc();
 
-		BigDecimal valor = iocControleFacadeUtil.getFacade(IAppFacade.class).buscarDadosVendaProdutos(context, itens);
+		BigDecimal valorTotal = iocControleFacadeUtil.getFacade(IAppFacade.class).buscarDadosVendaProdutos(context, itens);
 		
 		Collection formasPagto = iocControleFacadeUtil.getFacade(IAppFacade.class).findSimpleList(context, FormaPagtoEntity.class, "id");
 		
 		//Setar o primeiro item para o pagamento integral
 		FormaPagto formaPagto = (FormaPagto)formasPagto.iterator().next();
 		Pagamento pagto = (Pagamento)pagamentoList.getItens().get(0);
-		pagto.setValor(valor);
-		pagto.setFormaPagto(formaPagto);
+		BigDecimal valorPrimeiraParcela = pagto.getValor();
+		
+		if (pagto.getAutomatico() == null || pagto.getAutomatico().booleanValue() == true) {
+			pagto.setValor(valorTotal);
+			pagto.setFormaPagto(formaPagto);
+			pagto.setAutomatico(true);
+		} else {
+			pagto = (Pagamento)pagamentoList.getItens().get(1);
+			BigDecimal valorSegundaParcela = valorTotal.subtract(valorPrimeiraParcela);
+			formaPagto = (FormaPagto)formasPagto.iterator().next();
+			pagto.setValor(valorSegundaParcela);
+			pagto.setFormaPagto(formaPagto);
+			pagto.setAutomatico(true);
+		}
 		
 		limpaItensSemProdutos(itens);
 		

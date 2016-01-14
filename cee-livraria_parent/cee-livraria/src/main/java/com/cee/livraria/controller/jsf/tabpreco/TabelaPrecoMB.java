@@ -41,7 +41,8 @@ import com.powerlogic.jcompany.domain.validation.PlcMessage;
 	components = { @com.powerlogic.jcompany.config.aggregation.PlcConfigComponent(clazz = 
 		com.cee.livraria.entity.produto.RegraPesquisaProdutos.class, property = "regra", separate = true) }, details = { 
 	@com.powerlogic.jcompany.config.aggregation.PlcConfigDetail(clazz = com.cee.livraria.entity.tabpreco.ItemTabelaEntity.class, 
-			collectionName = "itemTabela", numNew = 0, onDemand = false, exclusionMode = ExclusionMode.LOGICAL) })
+			collectionName = "itemTabela", numNew = 0, onDemand = false, exclusionMode = ExclusionMode.LOGICAL, 
+			navigation = @com.powerlogic.jcompany.config.aggregation.PlcConfigPagedDetail(numberByPage = 30)) })
 
 @PlcConfigForm(formPattern = FormPattern.Mdt, formLayout = @PlcConfigFormLayout(dirBase = "/WEB-INF/fcls/tabpreco"), exclusionMode = ExclusionMode.LOGICAL)
 

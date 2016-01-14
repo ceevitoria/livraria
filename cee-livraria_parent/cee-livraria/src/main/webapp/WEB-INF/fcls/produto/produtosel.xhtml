@@ -41,12 +41,14 @@
 				'#{msg['produto.titulo']}',
 				colNames:[
 					'#{msg['label.codigoBarras']}',
+					'#{msg['label.tipoProduto']}',
 					'#{msg['label.titulo']}',
-					'#{msg['label.palavrasChaves']}'],
+					'#{msg['label.palavrasChave']}'],
 				colModel:[
-					{name:'codigoBarras',index:'codigoBarras', width:'80', align:'center'},
-					{name:'titulo',index:'titulo', width:'300'},
-					{name:'palavrasChaves',index:'palavrasChaves', width:'200'}]},
+					{name:'codigoBarras',index:'codigoBarras', width:'70px', align:'center'},
+					{name:'tipoProduto',index:'tipoProduto', width:'40px', align:'center'},
+					{name:'titulo',index:'titulo', width:'300px'},
+					{name:'palavrasChave',index:'palavrasChave', width:'200px'}]},
 			urlEdicao:'#{request.contextPath}/f/n/produtoman'});});//]]> </script>  
 					<table id="plc-grid" width="100%" class="scroll" cellpadding="0" cellspacing="0"/>  
 					<div id="plc-grid-navegador" class="scroll" style="text-align:center;"/> 

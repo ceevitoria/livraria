@@ -110,14 +110,26 @@ public class AjusteEstoqueMB extends AppMB {
 	}
 
 	private Produto criaArgumentoPesquisaProduto(RegraPesquisaProdutos regra) {
-		Produto produtoArg = (Produto)new Produto();
+		Produto produtoArg = null;
+
+		if (regra.getAutor() != null 
+				|| regra.getEdicao() != null
+				|| regra.getColecao() != null 
+				|| regra.getEditora() != null
+				|| regra.getEspirito() != null) {
+			produtoArg = new Livro();
+
+			((Livro) produtoArg).setAutor(regra.getAutor());
+			((Livro) produtoArg).setColecao(regra.getColecao());
+			((Livro) produtoArg).setEdicao(regra.getEdicao());
+			((Livro) produtoArg).setEditora(regra.getEditora());
+			((Livro) produtoArg).setEspirito(regra.getEspirito());
+		} else {
+			produtoArg = new Produto();
+		}
+
 		produtoArg.setTitulo(regra.getTitulo());
 		produtoArg.setCodigoBarras(regra.getCodigoBarras());
-//		produtoArg.setAutor(regra.getAutor());
-//		produtoArg.setColecao(regra.getColecao());
-//		produtoArg.setEdicao(regra.getEdicao());
-//		produtoArg.setEditora(regra.getEditora());
-//		produtoArg.setEspirito(regra.getEspirito());
 		return produtoArg;
 	}
 

@@ -9,8 +9,25 @@
 	xmlns:plct="http://www.powerlogic.com.br/plct" 
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:tr="http://myfaces.apache.org/trinidad" 
-	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">
 	<ui:composition> 
+	<script type="text/javascript">//<![CDATA[
+		plc.jq(document).ready(function(){
+			plc.jq("#itemConferencia").click(function(){
+				plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
+				
+				var status = plc.jq("#corpo\\:formulario\\:status option:selected").text();
+
+				if (status == "Formação") {
+					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
+				} else {
+					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").hide();
+				}
+			});
+		});
+		//]]></script>
 		<plcf:iteracao var="itemConferencia" id="itemConferencia" value="#{conferencia.itemConferencia}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
 			<h:column> 
 				<h:outputText value="#{rowCounter.index}."/> 
@@ -56,22 +73,11 @@
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
-					<plcf:titulo value="#{msg['label.autor']}"/>
+					<plcf:titulo value="#{msg['label.tipoProduto']}"/>
 				</f:facet>  
-				<plcf:comboDinamico id="autor" value="#{itemConferencia.autor}" disabled="#{conferencia.status!='F'}" dominio="AutorEntity" exibeBranco="S" ajudaChave="ajuda.autor"/> 
-			</h:column>  
-			<h:column> 
-				<f:facet name="header">
-					<plcf:titulo value="#{msg['label.espirito']}"/>
-				</f:facet>  
-				<plcf:comboDinamico id="espirito" value="#{itemConferencia.espirito}" disabled="#{conferencia.status!='F'}" dominio="EspiritoEntity" exibeBranco="S" ajudaChave="ajuda.espirito"/> 
-			</h:column>  
-			<h:column> 
-				<f:facet name="header">
-					<plcf:titulo value="#{msg['label.edicao']}"/>
-				</f:facet>  
-				<plcf:numerico id="edicao" value="#{itemConferencia.edicao}" tamanho="3" numCasas="0" disabled="#{conferencia.status!='F'}" ajudaChave="ajuda.edicao"/> 
-			</h:column>  
+				<plcf:exibe id="tipoProduto" rendered="#{itemConferencia.produto != null}" value="#{itemConferencia.tipoProduto}" ajudaChave="ajuda.tipoProduto" somenteLeitura="S" /> 
+				<plcf:texto id="tipoProduto2" rendered="#{itemConferencia.produto == null}" value="#{itemConferencia.tipoProduto}" ajudaChave="ajuda.tipoProduto" somenteLeitura="S" /> 
+			</h:column>
 			<h:column rendered="#{requestScope.utilizaLocalizacaoConferencia=='S'}"> 
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.localizacao']}"/>

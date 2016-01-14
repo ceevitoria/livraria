@@ -24,5 +24,20 @@ public enum TipoProduto {
     public String getLabel() {
         return label;
     }
+
+    public String getName() {
+    	String name = null;
+    	
+    	if ("{tipoProduto.L}".equals(label)) {
+    		name = "Livro";
+		} else if (" {tipoProduto.C}".equals(label)) {
+    		name = "CD";
+		} else if (" {tipoProduto.D}".equals(label)) {
+    		name = "DVD";
+		}
+    	
+        return name;
+    }
 	
+    
 }

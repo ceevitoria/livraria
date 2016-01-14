@@ -9,6 +9,19 @@
 	xmlns:tr="http://myfaces.apache.org/trinidad" 
 	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
 	<ui:composition> 
+	<script type="text/javascript">//<![CDATA[
+		plc.jq(document).ready(function(){
+			plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
+			plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
+			plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
+			
+			plc.jq("#span-tab-1").click(function(){
+				plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
+				plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
+				plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
+			});
+		});
+		//]]></script>
 		<plcf:tabela tituloChave="ajusteEstoque.mestre.titulo.comp"> 
 			<plcf:linha> 
 				<plcf:celula  columnSpan="2"> 

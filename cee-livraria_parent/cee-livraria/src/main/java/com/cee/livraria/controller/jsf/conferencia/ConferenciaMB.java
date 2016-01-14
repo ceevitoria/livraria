@@ -113,14 +113,26 @@ public class ConferenciaMB extends AppMB {
 	}
 
 	private Produto criaArgumentoPesquisaProduto(RegraPesquisaProdutos regra) {
-		Produto produtoArg = (Produto)new Produto();
+		Produto produtoArg = null;
+
+		if (regra.getAutor() != null 
+				|| regra.getEdicao() != null
+				|| regra.getColecao() != null 
+				|| regra.getEditora() != null
+				|| regra.getEspirito() != null) {
+			produtoArg = new Livro();
+
+			((Livro) produtoArg).setAutor(regra.getAutor());
+			((Livro) produtoArg).setColecao(regra.getColecao());
+			((Livro) produtoArg).setEdicao(regra.getEdicao());
+			((Livro) produtoArg).setEditora(regra.getEditora());
+			((Livro) produtoArg).setEspirito(regra.getEspirito());
+		} else {
+			produtoArg = new Produto();
+		}
+
 		produtoArg.setTitulo(regra.getTitulo());
 		produtoArg.setCodigoBarras(regra.getCodigoBarras());
-//		produtoArg.setAutor(regra.getAutor());
-//		produtoArg.setColecao(regra.getColecao());
-//		produtoArg.setEdicao(regra.getEdicao());
-//		produtoArg.setEditora(regra.getEditora());
-//		produtoArg.setEspirito(regra.getEspirito());
 		return produtoArg;
 	}
 
@@ -131,22 +143,22 @@ public class ConferenciaMB extends AppMB {
 
 		if (this.entityPlc!=null) {
 			Conferencia conferencia = (Conferencia)this.entityPlc;
-			
 			List<ItemConferencia> listaItensExistentes = conferencia.getItemConferencia();
-			
-			// Remove os items vazios (sem livros)
-			for (int i=listaItensExistentes.size()-1; i>=0; i--) {
-				ItemConferencia itemExistente = (ItemConferencia)listaItensExistentes.get(i);
-
-				if (itemExistente.getId() == null && itemExistente.getProduto() == null) {
-					listaItensExistentes.remove(itemExistente);
-				}
-			}
+			PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 				
 			boolean ok = false;
 			
 			if (StatusConferencia.F.equals(conferencia.getStatus())) {
 				ok = true;
+				
+				// Remove os items vazios (sem livros)
+				for (int i=listaItensExistentes.size()-1; i>=0; i--) {
+					ItemConferencia itemExistente = (ItemConferencia)listaItensExistentes.get(i);
+					
+					if (itemExistente.getId() == null && itemExistente.getProduto() == null) {
+						listaItensExistentes.remove(itemExistente);
+					}
+				}
 			} else {
 				msgUtil.msg("{conferencia.err.buscar.emformacao}", PlcMessage.Cor.msgVermelhoPlc.name());
 			}
@@ -157,12 +169,11 @@ public class ConferenciaMB extends AppMB {
 				
 				Produto produtoArg = criaArgumentoPesquisaProduto(regra);
 
-				PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 
-				Long contalivros = (Long)iocControleFacadeUtil.getFacade().findCount(context, produtoArg);
+				Long contaProdutos = (Long)iocControleFacadeUtil.getFacade().findCount(context, produtoArg);
 				
-				if (contalivros.longValue() > 400) {
-					msgUtil.msg("{conferencia.err.buscar.muitosItensExistentes}", new Object[] {contalivros}, PlcMessage.Cor.msgVermelhoPlc.name());
+				if (contaProdutos.longValue() > 400) {
+					msgUtil.msg("{conferencia.err.buscar.muitosItensExistentes}", new Object[] {contaProdutos}, PlcMessage.Cor.msgVermelhoPlc.name());
 					ok = false;
 				} else {
 					List<Produto> produtos = (List<Produto>)iocControleFacadeUtil.getFacade().findList(context, produtoArg, plcControleConversacao.getOrdenacaoPlc(), 0, 0);
@@ -226,10 +237,8 @@ public class ConferenciaMB extends AppMB {
 		
 		item.setConferencia(conferencia);
 		item.setProduto(produto);
+		item.setTipoProduto(produto.getTipoProduto());
 		item.setIndExcPlc("N");
-		
-		//TODO: Definir a localizacao
-		item.setLocalizacao(null);
 		return item;
 	}
 

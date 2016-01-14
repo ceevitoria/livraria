@@ -9,31 +9,56 @@
 	xmlns:tr="http://myfaces.apache.org/trinidad" 
 	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
 	<ui:composition> 
+	<script type="text/javascript">//<![CDATA[
+		plc.jq(document).ready(function(){
+			plc.jq("#span-tab-2").click(function(){
+				plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
+				plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
+				plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
+			});
+		});
+		//]]></script>
 		<plcf:tabela tituloChave="ajusteEstoque.mestre.2.titulo.comp"> 
 			<plcf:linha> 
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.regra.codigoBarras']}"/>  
-					<plcf:texto id="regra_codigoBarras" value="#{ajusteEstoque.regra.codigoBarras}" disabled="#{ajusteEstoque.status!='F'}" ajudaChave="ajuda.regra.codigoBarras"/> 
+					<plcf:texto id="regra_codigoBarras" value="#{ajusteEstoque.regra.codigoBarras}" ajudaChave="ajuda.regra.codigoBarras"/> 
 				</plcf:celula> 
-			</plcf:linha>  
-			<plcf:linha> 
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.regra.titulo']}"/>  
-					<plcf:texto id="regra_titulo" value="#{ajusteEstoque.regra.titulo}" disabled="#{ajusteEstoque.status!='F'}" ajudaChave="ajuda.regra.titulo"/> 
+					<plcf:texto id="regra_titulo" value="#{ajusteEstoque.regra.titulo}" ajudaChave="ajuda.regra.titulo"/> 
 				</plcf:celula>  
 			</plcf:linha>  
 			<plcf:linha> 
 				<plcf:celula> 
-					<plcf:titulo value="#{msg['label.regra.palavraChave']}"/>  
-					<plcf:texto id="regra_palavraChave" value="#{ajusteEstoque.regra.palavraChave}" disabled="#{ajusteEstoque.status!='F'}" ajudaChave="ajuda.regra.palavraChave"/> 
+					<plcf:titulo value="#{msg['label.regra.autor']}"/>  
+					<plcf:comboDinamico id="regra_autor" value="#{ajusteEstoque.regra.autor}" dominio="AutorEntity" exibeBranco="S" ajudaChave="ajuda.regra.autor"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.regra.espirito']}"/>  
+					<plcf:comboDinamico id="regra_espirito" value="#{ajusteEstoque.regra.espirito}" dominio="EspiritoEntity" exibeBranco="S" ajudaChave="ajuda.regra.espirito"/> 
 				</plcf:celula> 
 			</plcf:linha>  
-			<plcf:linha rendered="#{requestScope.utilizaLocalizacaoAjusteEstoque=='S'}" > 
-				<plcf:celula columnSpan="2"> 
-					<plcf:titulo value="#{msg['label.regra.localizacao']}"/>  
-					<plcf:comboDinamico id="regra_localizacao" value="#{ajusteEstoque.regra.localizacao}" disabled="#{ajusteEstoque.status!='F'}" dominio="LocalizacaoEntity" exibeBranco="S" ajudaChave="ajuda.regra.localizacao"/> 
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.regra.editora']}"/>  
+					<plcf:comboDinamico id="regra_editora" value="#{ajusteEstoque.regra.editora}" dominio="EditoraEntity" exibeBranco="S" ajudaChave="ajuda.regra.editora"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.regra.edicao']}"/>  
+					<plcf:numerico id="regra_edicao" value="#{ajusteEstoque.regra.edicao}" ajudaChave="ajuda.regra.edicao"/> 
 				</plcf:celula> 
-			</plcf:linha> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.regra.colecao']}"/>  
+					<plcf:comboDinamico id="regra_colecao" value="#{ajusteEstoque.regra.colecao}" dominio="ColecaoEntity" exibeBranco="S" ajudaChave="ajuda.regra.colecao"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.regra.palavraChave']}"/>  
+					<plcf:texto id="regra_palavraChave" value="#{ajusteEstoque.regra.palavraChave}" ajudaChave="ajuda.regra.palavraChave"/> 
+				</plcf:celula> 
+			</plcf:linha>  
 		</plcf:tabela> 
 	</ui:composition> 
 </html>

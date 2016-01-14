@@ -169,7 +169,7 @@ public class VendaProdutosRepository {
 
 			if (vp.getProduto() != null) {
 				@SuppressWarnings("unchecked")
-				List<Estoque> lista = (List<Estoque>)jpa.findByFields(context, EstoqueEntity.class, "querySelByLivro", new String[]{"livro"}, new Object[]{vp.getProduto()});
+				List<Estoque> lista = (List<Estoque>)jpa.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[]{"produto"}, new Object[]{vp.getProduto()});
 				
 				if (lista != null && lista.size() == 1) {
 					Estoque estoque = (Estoque)lista.get(0);
@@ -472,6 +472,7 @@ public class VendaProdutosRepository {
 				VendaProduto vp = (VendaProduto)o;
 				
 				if (vp.getProduto() != null) {
+					Produto produto = (Produto)jpa.findById(context, Produto.class, vp.getProduto().getId());
 					
 					PrecoTabela preco = livroDAO.obterPrecoTabela(context, vp.getProduto().getId());
 					
@@ -480,10 +481,11 @@ public class VendaProdutosRepository {
 					if (preco.getIdTabela() != null) {
 						vp.setValorUnitario(preco.getPrecoTabela());
 					} else {
-						Produto produto = (Produto)jpa.findById(context, Produto.class, vp.getProduto().getId());
 						vp.setValorUnitario(produto.getPrecoVendaSugerido());
 					}
 					
+					vp.setTipoProduto(produto.getTipoProduto());
+
 					if (vp.getQuantidade() == null || vp.getQuantidade() == 0) {
 						vp.setQuantidade(1);
 					}

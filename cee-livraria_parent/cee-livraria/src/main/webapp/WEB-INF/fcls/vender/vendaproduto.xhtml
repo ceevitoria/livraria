@@ -11,75 +11,6 @@
 	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
 	<ui:composition template="/fcls/template/PlcGeralTemplate.xhtml"> 
 		<ui:define name="plc-corpo-formulario"> 
-<script type="text/javascript" language="javascript">
-
-//<![CDATA[
-
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-
-function is_empty(obj) {
-
-    // null and undefined are empty
-    if (obj == null) return true;
-    // Assume if it has a length property with a non-zero value
-    // that that property is correct.
-    if (obj.length && obj.length > 0)    return false;
-    if (obj.length === 0)  return true;
-
-    for (var key in obj) {
-        if (hasOwnProperty.call(obj, key)) return false;
-    }
-
-    return true;
-}
-
-// Deprecated -- o calculo agora acontece no MB (VendaLivroMB)
-function calculaTotal(indice) {
-
-	if (indice != null) {
-		var i = indice - 1
-		var qt = document.getElementById('corpo:formulario:vendaproduto:' + i + ':quantidade')
-		var vl = document.getElementById('corpo:formulario:vendaproduto:' + i + ':valorUnitario')
-		var vt = document.getElementById('corpo:formulario:vendaproduto:' + i + ':valorTotal')
-		var vg = document.getElementById('corpo:formulario:valorTotalGeral')
-		
-		if (!is_empty(qt.value) && !is_empty(vl.value)) {
-
-			var nqt = parseInt(qt.value.replace('.', ''))
-			var nvl = parseFloat(vl.value.replace(',', '.'))
-			var nvt = nvl * nqt
-			vt.value = String(nvt.toFixed(2)).replace('.', ',')
-
-			// Calculo do Valor Total Geral
-			if (is_empty(vg.value)) {
-				vg.value = vt.value
-			} else {
-				var nvg = parseFloat(vg.value.replace(',', '.'))
-				nvg = nvt + nvg
-				vg.value = String(nvg.toFixed(2)).replace('.', ',')
-			}
-
-		} else {
-			vt.value = '0,00'	 
-		}
-	}
-}
-
-function formataVlUnitario(indice) {
-
-	if (indice != null) {
-		var i = indice - 1
-		var vl = document.getElementById('corpo:formulario:vendaproduto:' + i + ':valorUnitario')
-		
-		if (!is_empty(vl.value)) {
-			var nvl = parseFloat(vl.value.replace(',', '.'))
-			vl.value = String(nvl.toFixed(2)).replace('.', ',')	 
-		}	
-	}
-}
-
-//]]>
-</script>	
 			<div id="plc-corpo-formulario" class="plc-corpo-formulario plc-form-tabular"> 
 				<fieldset class="plc-fieldset"> 
 					<legend class="plc-fieldset-legend">#{msg['vendaproduto.titulo']}</legend>  
@@ -99,14 +30,14 @@ function formataVlUnitario(indice) {
 							<f:facet name="header">
 								<plcf:titulo value="#{msg['label.produto']}"/>
 							</f:facet>
-							<plcf:vinculado id="livro" value="#{vendaproduto.livro}" 
-								propSelPop="livro" idExibe="S" 
+							<plcf:vinculado id="produto" value="#{vendaproduto.produto}" 
+								propSelPop="produto" idExibe="S" 
 								idTamanho="12" lookupTamanho="60"
 								larg="1200" alt="800"
 								autoRecuperacaoPropriedade="codigoBarras"
 								autoComplete="true" evento="y"
-								idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.Livro" 
-								actionSel="livrosel" modal="S" ajudaChave="ajuda.venda.produto" 
+								idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.Produto" 
+								actionSel="produtosel" modal="S" ajudaChave="ajuda.venda.produto" 
 								onkeydown="selecionaPorTecla(event,this);" />
 						</h:column>  
 						<!-- 
@@ -116,25 +47,71 @@ function formataVlUnitario(indice) {
 							<f:facet name="header">
 								<plcf:titulo value="#{msg['label.quantidade']}"/>
 							</f:facet>
-							<plcf:numerico id="quantidade" value="#{vendaproduto.quantidade}" numCasas="0" onfocus="formataVlUnitario(#{rowCounter.indexIteration})" tamanho="6" ajudaChave="ajuda.quantidade"/> 
+							<!-- 
+							<plcf:numerico id="quantidade" value="#{vendaproduto.quantidade}" numCasas="0" onfocus="formataVlUnitario(#{rowCounter.indexIteration})" tamanho="5" ajudaChave="ajuda.quantidade"/> 
+							 -->
+							<h:inputText id="quantidade" size="5" value="#{vendaproduto.quantidade}" required="false">
+							<f:convertNumber 
+							    groupingUsed="true"
+							    minIntegerDigits="1"
+							    maxIntegerDigits="3"/>
+							</h:inputText>							
+						</h:column>  
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.tipoProduto']}"/>
+							</f:facet>
+							<!-- 
+							<plcf:exibe id="tipoProduto" rendered="#{vendaproduto.produto != null}" value="#{vendaproduto.tipoProduto}" ajudaChave="ajuda.tipoProduto"/> 
+							 -->  
+							<h:inputText id="tipoProduto" rendered="#{vendaproduto.produto != null}" size="10" value="#{vendaproduto.tipoProduto.name}" readonly="true" required="false"/>
+							<h:inputText id="tipoProduto2" rendered="#{vendaproduto.produto == null}" size="10" value="#{vendaproduto.tipoProduto}" readonly="true" required="false"/>
 						</h:column>  
 						<h:column> 
 							<f:facet name="header">
 								<plcf:titulo value="#{msg['label.nomeTabela']}"/>
-							</f:facet>  
-							<plcf:texto id="nomeTabela" value="#{vendaproduto.nomeTabela}" somenteLeitura="S" tamanho="15" ajudaChave="ajuda.nomeTabela"/> 
+							</f:facet>
+							<!-- 
+							<plcf:exibe id="nomeTabela" rendered="#{vendaproduto.produto != null}" value="#{vendaproduto.nomeTabela}" ajudaChave="ajuda.nomeTabela"/> 
+							 -->
+							<h:inputText id="nomeTabela" rendered="#{vendaproduto.produto != null}" size="15" value="#{vendaproduto.nomeTabela}" readonly="true" required="false"/>
+							<plcf:texto id="nomeTabela2" rendered="#{vendaproduto.produto == null}" value="#{vendaproduto.nomeTabela}" somenteLeitura="S" tamanho="15" ajudaChave="ajuda.nomeTabela"/> 
 						</h:column>  
 						<h:column> 
 							<f:facet name="header">
 								<plcf:titulo value="#{msg['label.valorUnitario']}"/>
 							</f:facet>  
-							<plcf:numerico id="valorUnitario" value="#{vendaproduto.valorUnitario}" somenteLeitura="S" tamanho="10" ajudaChave="ajuda.valorUnitario"/> 
+							<h:inputText id="valorUnitario" rendered="#{vendaproduto.produto != null}" size="6" value="#{vendaproduto.valorUnitario}" readonly="true" required="false">
+							<f:convertNumber maxFractionDigits="2"
+							    groupingUsed="true"
+							    pattern="#0.00"
+							    currencySymbol="R$"
+							    minFractionDigits="2"
+							    maxIntegerDigits="5"
+							    type="currency"/>
+							</h:inputText>							
+							<!-- 
+							<plcf:exibe id="valorUnitario" rendered="#{vendaproduto.produto != null}" value="#{vendaproduto.valorUnitario}" ajudaChave="ajuda.valorUnitario"/>
+							 --> 
+							<plcf:numerico id="valorUnitario2" rendered="#{vendaproduto.produto == null}" value="#{vendaproduto.valorUnitario}" somenteLeitura="S" tamanho="6" ajudaChave="ajuda.valorUnitario"/> 
 						</h:column>  
 						<h:column> 
 							<f:facet name="header">
 								<plcf:titulo value="#{msg['label.valorTotal']}"/>
 							</f:facet>  
-							<plcf:numerico id="valorTotal" value="#{vendaproduto.valorTotal}" tamanho="10" somenteLeitura="S" ajudaChave="ajuda.valorTotal"/> 
+							<!-- 
+							<plcf:exibe id="valorTotal" rendered="#{vendaproduto.produto != null}" value="#{vendaproduto.valorTotal}" ajudaChave="ajuda.valorTotal"/> 
+							 -->
+							<h:inputText id="valorTotal" rendered="#{vendaproduto.produto != null}" size="6" value="#{vendaproduto.valorTotal}" readonly="true" required="false">
+							<f:convertNumber maxFractionDigits="2"
+							    groupingUsed="true"
+							    pattern="#0.00"
+							    currencySymbol="R$"
+							    minFractionDigits="2"
+							    maxIntegerDigits="5"
+							    type="currency"/>
+							</h:inputText>							
+							<plcf:numerico id="valorTotal2" rendered="#{vendaproduto.produto == null}" value="#{vendaproduto.valorTotal}" tamanho="6" somenteLeitura="S" ajudaChave="ajuda.valorTotal"/> 
 						</h:column> 
 					</plcf:iteracao> 
 				</fieldset> 
@@ -147,7 +124,19 @@ function formataVlUnitario(indice) {
 							<f:facet name="header">
 								<plcf:titulo value="#{msg['label.valorTotalGeral']}"/>  
 							</f:facet>  
+							<!-- 
 							<plcf:numerico id="valorTotalGeral" value="#{pagamento.valor}" tamanho="8" numCasas="2" somenteLeitura="N" ajudaChave="ajuda.valorTotalGeral"/> 
+							<plcf:texto id="valorTotalGeral" value="#{pagamento.valor}" tamanho="8" formato="numerico" ajudaChave="ajuda.valorTotalGeral"/> 
+							 -->
+							<h:inputText id="valorTotalGeral" size="6" value="#{pagamento.valor}"  required="false">
+							<f:convertNumber maxFractionDigits="2"
+							    groupingUsed="true"
+							    pattern="#0.00"
+							    currencySymbol="R$"
+							    minFractionDigits="2"
+							    maxIntegerDigits="5"
+							    type="currency"/>
+							</h:inputText>							
 						</h:column>  
 						<h:column> 
 							<f:facet name="header">
@@ -155,15 +144,21 @@ function formataVlUnitario(indice) {
 							</f:facet>  
 							<plcf:comboDinamico id="formaPagto" value="#{pagamento.formaPagto}" dominio="FormaPagtoEntity" exibeBranco="S" ajudaChave="ajuda.formaPagtoGeral"/> 
 						</h:column>  
+						<h:column> 
+							<plcf:escondido id="automatico" value="#{pagamento.automatico}" /> 
+						</h:column>  
 					</plcf:iteracao> 
 				</fieldset> 
 			</div> 
 			<script type="text/javascript">//<![CDATA[
 			plc.jq(document).ready(function(){
-				plc.jq(document).keypress(function(e) {
+				plc.jq(document).keydown(function(e) {
 					if(e.which == 13) {
-						plc.jq( "#corpo\\:formulario\\:botaoAcaoBuscarDadosVenda" ).trigger( "click" );
+						plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarDadosVenda").trigger("click");
 					}
+				});
+				plc.jq(document).on("change", "#corpo\\:formulario\\:pagamento\\:0\\:valorTotalGeral", function() {
+					plc.jq("#corpo\\:formulario\\:pagamento\\:0\\:automatico").val( false );
 				});
 			});
 			//]]> </script>

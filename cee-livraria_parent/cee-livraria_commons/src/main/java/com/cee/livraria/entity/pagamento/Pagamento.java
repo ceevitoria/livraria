@@ -11,6 +11,8 @@ public class Pagamento {
 	@Digits(integer = 10, fraction = 2)
 	private BigDecimal valor;
 
+	private Boolean automatico;
+	
 	public Pagamento() {
 		super();
 	}
@@ -29,5 +31,13 @@ public class Pagamento {
 
 	public void setValor(BigDecimal valor) {
 		this.valor = valor;
+	}
+
+	public Boolean getAutomatico() {
+		return automatico;
+	}
+
+	public void setAutomatico(Boolean automatico) {
+		this.automatico = automatico;
 	}
 }

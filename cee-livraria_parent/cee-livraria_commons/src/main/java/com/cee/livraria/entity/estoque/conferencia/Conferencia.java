@@ -58,8 +58,8 @@ public abstract class Conferencia extends AppBaseEntity {
 	
 	@OneToMany (targetEntity = com.cee.livraria.entity.estoque.conferencia.ItemConferenciaEntity.class, fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="conferencia")
 	@ForeignKey(name="FK_ITEMCONFERENCIA_CONFERENCIA")
-	@PlcValDuplicity(property="livro")
-	@PlcValMultiplicity(referenceProperty="livro",  message="{jcompany.aplicacao.mestredetalhe.multiplicidade.ItemConferenciaEntity}")
+	@PlcValDuplicity(property="produto")
+	@PlcValMultiplicity(referenceProperty="produto",  message="{jcompany.aplicacao.mestredetalhe.multiplicidade.ItemConferenciaEntity}")
 	@Valid
 	private List<ItemConferencia> itemConferencia;
 
@@ -132,6 +132,5 @@ public abstract class Conferencia extends AppBaseEntity {
 	public void setRegra(RegraPesquisaProdutos regra) {
 		this.regra = regra;
 	}
-	
 	
 }
