@@ -38,6 +38,18 @@
 		<class>com.cee.livraria.entity.estoque.conferencia.ItemConferenciaEntity</class>
 		<class>com.cee.livraria.entity.estoque.ajuste.AjusteEstoque</class>
 		<class>com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque</class>
+	
+		<class>com.cee.livraria.entity.compra.Parcelamento</class>
+	
+		<class>com.cee.livraria.entity.compra.NotaFiscal</class>
+	
+		<class>com.cee.livraria.entity.compra.ItemNotaFiscal</class>
+	
+		<class>com.cee.livraria.entity.compra.Fornecedor</class>
+	
+		<class>com.cee.livraria.entity.compra.FornecedorContato</class>
+	
+		<class>com.cee.livraria.entity.compra.ContaPagar</class>
 	<properties>
 			<property name="hibernate.archive.autodetection" value="class, hbm"/>
 			<!-- property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect"/-->
