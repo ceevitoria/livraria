@@ -42,13 +42,13 @@
 							<f:facet name="header">
 								<plcf:titulo value="#{msg['label.numeroParcelas']}"/>
 							</f:facet>  
-							<plcf:numerico id="numeroParcelas" value="#{parcelamento.numeroParcelas}" ajudaChave="ajuda.numeroParcelas"/> 
+							<plcf:numerico id="numeroParcelas" value="#{parcelamento.numeroParcelas}" numCasas="0" ajudaChave="ajuda.numeroParcelas"/> 
 						</h:column>  
 						<h:column> 
 							<f:facet name="header">
 								<plcf:titulo value="#{msg['label.carenciaInicial']}"/>
 							</f:facet>  
-							<plcf:numerico id="carenciaInicial" value="#{parcelamento.carenciaInicial}" ajudaChave="ajuda.carenciaInicial"/> 
+							<plcf:numerico id="carenciaInicial" value="#{parcelamento.carenciaInicial}" numCasas="0" ajudaChave="ajuda.carenciaInicial"/> 
 						</h:column> 
 					</plcf:iteracao> 
 				</fieldset> 

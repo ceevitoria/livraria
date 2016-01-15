@@ -28,7 +28,9 @@
 		com.cee.livraria.entity.pagamento.FormaPagProdutoEntity.class,
 		com.cee.livraria.entity.AutorEntity.class,
 		com.cee.livraria.entity.EditoraEntity.class,
-		com.cee.livraria.entity.ColecaoEntity.class}
+		com.cee.livraria.entity.ColecaoEntity.class,
+		com.cee.livraria.entity.Uf.class,
+		com.cee.livraria.entity.Cidade.class}
 )
 
 package com.powerlogic.jcompany.config.app;

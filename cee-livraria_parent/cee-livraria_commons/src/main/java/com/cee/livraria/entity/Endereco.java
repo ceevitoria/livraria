@@ -35,11 +35,11 @@ public class Endereco implements Serializable {
 	private String cep;
 
 	@ManyToOne(targetEntity = Cidade.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_ENDERECO_CIDADE")
+	@ForeignKey(name = "FK_FORNECEDOR_CIDADE")
 	private Cidade cidade;
 
 	@ManyToOne(targetEntity = Uf.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_ENDERECO_UF")
+	@ForeignKey(name = "FK_FORNECEDOR_UF")
 	private Uf uf;
 
 	public Endereco() {
