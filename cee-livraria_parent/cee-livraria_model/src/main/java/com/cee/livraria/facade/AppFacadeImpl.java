@@ -22,7 +22,7 @@ import com.cee.livraria.model.CaixaRepository;
 import com.cee.livraria.model.VendaProdutosRepository;
 import com.cee.livraria.model.ajuste.AjusteEstoqueRepository;
 import com.cee.livraria.model.conferencia.ConferenciaRepository;
-import com.cee.livraria.persistence.jpa.livro.LivroDAO;
+import com.cee.livraria.persistence.jpa.produto.LivroDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.commons.config.qualifiers.QPlcDefault;

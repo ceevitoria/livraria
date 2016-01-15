@@ -2,35 +2,38 @@ package com.cee.livraria.entity.estoque;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.Valid;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.ForeignKey;
 
 import com.cee.livraria.entity.AppBaseEntity;
-import javax.persistence.EnumType;
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
-import javax.persistence.Enumerated;
-import javax.persistence.TemporalType;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.GenerationType;
-import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.Digits;
-import javax.persistence.GeneratedValue;
-import java.util.List;
 import com.powerlogic.jcompany.domain.validation.PlcValDuplicity;
-import javax.validation.Valid;
 import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
-import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import org.hibernate.annotations.ForeignKey;
 
 @MappedSuperclass
 public abstract class Movimento extends AppBaseEntity {
-	
+	private static final long serialVersionUID = -8683700782867114908L;
+
 	@OneToMany (targetEntity = com.cee.livraria.entity.estoque.ItemMovimentoEntity.class, fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="movimento")
 	@ForeignKey(name="FK_ITEMMOVIMENTO_MOVIMENTO")
 	@PlcValDuplicity(property="livro")
-	@PlcValMultiplicity(referenceProperty="livro",  message="{jcompany.aplicacao.mestredetalhe.multiplicidade.ItemMovimentoEntity}")
+	@PlcValMultiplicity(referenceProperty="produto",  message="{jcompany.aplicacao.mestredetalhe.multiplicidade.ItemMovimentoEntity}")
 	@Valid
 	private List<ItemMovimento> itemMovimento;
 

@@ -1,4 +1,4 @@
-package com.cee.livraria.persistence.jpa.livro;
+package com.cee.livraria.persistence.jpa.produto;
 
 import java.math.BigDecimal;
 import java.util.List;

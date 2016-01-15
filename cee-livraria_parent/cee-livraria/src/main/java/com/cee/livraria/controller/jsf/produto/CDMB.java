@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.cee.livraria.controller.jsf.AppMB;
-import com.cee.livraria.entity.produto.Produto;
+import com.cee.livraria.entity.produto.CD;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
@@ -24,13 +24,13 @@ import com.powerlogic.jcompany.controller.jsf.util.PlcCreateContextUtil;
 import com.powerlogic.jcompany.controller.util.PlcIocControllerFacadeUtil;
 
 @PlcConfigAggregation(
-	entity = com.cee.livraria.entity.produto.Produto.class
+	entity = com.cee.livraria.entity.produto.CD.class
 )
 
 @PlcConfigForm (
 	formPattern=FormPattern.Man,
 	selection=@PlcConfigSelection(apiQuerySel="querySel"),
-	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/produto"),
+	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/cd"),
 	behavior = @com.powerlogic.jcompany.config.collaboration.PlcConfigBehavior(batchInput=false)
 )
 
@@ -39,10 +39,11 @@ import com.powerlogic.jcompany.controller.util.PlcIocControllerFacadeUtil;
  */
  
 @SPlcMB
-@PlcUriIoC("produto")
+@PlcUriIoC("cd")
 @PlcHandleException
-public class ProdutoMB extends AppMB  {
-	
+public class CDMB extends AppMB  {
+	private static final long serialVersionUID = -5785871792231448449L;
+
 	@Inject @QPlcDefault 
 	protected PlcCreateContextUtil contextMontaUtil;
 
@@ -52,19 +53,18 @@ public class ProdutoMB extends AppMB  {
 	@Inject @QPlcDefault 
 	protected PlcIocControllerFacadeUtil iocControleFacadeUtil;
 	
-	
-	private static final long serialVersionUID = 1L;
-     		
 	/**
 	* Entidade da ação injetado pela CDI
 	*/
-	@Produces  @Named("produto")
-	public Produto createEntityPlc() {
-        if (this.entityPlc==null) {
-              this.entityPlc = new Produto();
-              this.newEntity();
-        }
-        return (Produto)this.entityPlc;     	
+	@Produces  @Named("cd")
+	public CD createEntityPlc() {
+        
+		if (this.entityPlc==null) {
+			this.entityPlc = new CD();
+			this.newEntity();
+		}
+		
+		return (CD)this.entityPlc;     	
 	}
 	
 	/**
@@ -77,13 +77,13 @@ public class ProdutoMB extends AppMB  {
         if (this.entityPlc!=null) {
     		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 
-    		Produto produto = (Produto)entityPlc;
+    		CD cd = (CD)entityPlc;
         	
-        	PrecoTabela preco = iocControleFacadeUtil.getFacade(IAppFacade.class).findPrecoTabela(context, produto.getId());
+        	PrecoTabela preco = iocControleFacadeUtil.getFacade(IAppFacade.class).findPrecoTabela(context, cd.getId());
         	
-        	produto.setIdTabela(preco.getIdTabela());
-        	produto.setPrecoTabela(preco.getPrecoTabela());
-        	produto.setNomeTabela(preco.getNomeTabela());
+        	cd.setIdTabela(preco.getIdTabela());
+        	cd.setPrecoTabela(preco.getPrecoTabela());
+        	cd.setNomeTabela(preco.getNomeTabela());
         }
 		
 		return result;

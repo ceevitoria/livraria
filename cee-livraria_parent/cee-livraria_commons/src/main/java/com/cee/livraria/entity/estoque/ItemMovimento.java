@@ -19,7 +19,6 @@ import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfTyp
 import org.hibernate.annotations.ForeignKey;
 
 import com.cee.livraria.entity.AppBaseEntity;
-import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.entity.produto.Produto;
 import com.powerlogic.jcompany.domain.validation.PlcValGroupEntityList;
 
@@ -48,17 +47,17 @@ public abstract class ItemMovimento extends AppBaseEntity {
 	private Produto produto;
 
 	@NotNull(groups = PlcValGroupEntityList.class)
-	@RequiredIf(valueOf = "livro", is = RequiredIfType.not_empty)
+	@RequiredIf(valueOf = "produto", is = RequiredIfType.not_empty)
 	@Digits(integer = 8, fraction = 0)
 	private Integer quantidade;
 
 	@NotNull(groups = PlcValGroupEntityList.class)
-	@RequiredIf(valueOf = "livro", is = RequiredIfType.not_empty)
+	@RequiredIf(valueOf = "produto", is = RequiredIfType.not_empty)
 	@Digits(integer = 10, fraction = 2)
 	private BigDecimal valorUnitario;
 
 	@NotNull(groups = PlcValGroupEntityList.class)
-	@RequiredIf(valueOf = "livro", is = RequiredIfType.not_empty)
+	@RequiredIf(valueOf = "produto", is = RequiredIfType.not_empty)
 	@Digits(integer = 10, fraction = 2)
 	private BigDecimal valorTotal;
 

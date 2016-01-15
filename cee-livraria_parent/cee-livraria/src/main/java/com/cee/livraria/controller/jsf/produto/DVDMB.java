@@ -1,11 +1,11 @@
-package com.cee.livraria.controller.jsf.livro;
+package com.cee.livraria.controller.jsf.produto;
 
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.cee.livraria.controller.jsf.AppMB;
-import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.DVD;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
@@ -24,13 +24,13 @@ import com.powerlogic.jcompany.controller.jsf.util.PlcCreateContextUtil;
 import com.powerlogic.jcompany.controller.util.PlcIocControllerFacadeUtil;
 
 @PlcConfigAggregation(
-	entity = com.cee.livraria.entity.produto.Livro.class
+	entity = com.cee.livraria.entity.produto.DVD.class
 )
 
 @PlcConfigForm (
 	formPattern=FormPattern.Man,
 	selection=@PlcConfigSelection(apiQuerySel="querySel"),
-	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/livro"),
+	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/dvd"),
 	behavior = @com.powerlogic.jcompany.config.collaboration.PlcConfigBehavior(batchInput=false)
 )
 
@@ -39,10 +39,11 @@ import com.powerlogic.jcompany.controller.util.PlcIocControllerFacadeUtil;
  */
  
 @SPlcMB
-@PlcUriIoC("livro")
+@PlcUriIoC("dvd")
 @PlcHandleException
-public class LivroMB extends AppMB  {
-	
+public class DVDMB extends AppMB  {
+	private static final long serialVersionUID = 4315626325943337745L;
+
 	@Inject @QPlcDefault 
 	protected PlcCreateContextUtil contextMontaUtil;
 
@@ -52,21 +53,18 @@ public class LivroMB extends AppMB  {
 	@Inject @QPlcDefault 
 	protected PlcIocControllerFacadeUtil iocControleFacadeUtil;
 	
-	
-	private static final long serialVersionUID = 1L;
-     		
 	/**
 	* Entidade da ação injetado pela CDI
 	*/
-	@Produces  @Named("livro")
-	public Livro createEntityPlc() {
+	@Produces  @Named("dvd")
+	public DVD createEntityPlc() {
         
 		if (this.entityPlc==null) {
-			this.entityPlc = new Livro();
+			this.entityPlc = new DVD();
 			this.newEntity();
 		}
 		
-		return (Livro)this.entityPlc;     	
+		return (DVD)this.entityPlc;     	
 	}
 	
 	/**
@@ -79,13 +77,13 @@ public class LivroMB extends AppMB  {
         if (this.entityPlc!=null) {
     		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 
-    		Livro livro = (Livro)entityPlc;
+    		DVD dvd = (DVD)entityPlc;
         	
-        	PrecoTabela preco = iocControleFacadeUtil.getFacade(IAppFacade.class).findPrecoTabela(context, livro.getId());
+        	PrecoTabela preco = iocControleFacadeUtil.getFacade(IAppFacade.class).findPrecoTabela(context, dvd.getId());
         	
-        	livro.setIdTabela(preco.getIdTabela());
-        	livro.setPrecoTabela(preco.getPrecoTabela());
-        	livro.setNomeTabela(preco.getNomeTabela());
+        	dvd.setIdTabela(preco.getIdTabela());
+        	dvd.setPrecoTabela(preco.getPrecoTabela());
+        	dvd.setNomeTabela(preco.getNomeTabela());
         }
 		
 		return result;

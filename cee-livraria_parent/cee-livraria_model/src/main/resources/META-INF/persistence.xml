@@ -16,6 +16,8 @@
 		<class>com.cee.livraria.entity.LocalizacaoEntity</class>
 		<class>com.cee.livraria.entity.produto.Produto</class>
 		<class>com.cee.livraria.entity.produto.Livro</class>
+		<class>com.cee.livraria.entity.produto.DVD</class>
+		<class>com.cee.livraria.entity.produto.CD</class>
 		<class>com.cee.livraria.entity.pagamento.FormaPagtoEntity</class>
 		<class>com.cee.livraria.entity.pagamento.FormaPagProdutoEntity</class>
 		<class>com.cee.livraria.entity.produto.RegraPesquisaProdutos</class>

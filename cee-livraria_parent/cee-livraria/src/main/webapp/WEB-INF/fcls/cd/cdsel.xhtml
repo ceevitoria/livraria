@@ -12,23 +12,23 @@
 		<ui:define name="plc-corpo-formulario"> 
 			<div id="plc-form-basico"> 
 				<div id="#{plcAliasPrefixoAction}Arg" class="plc-form-basico-topo"> 
-					<plcf:tabela tituloChave="produtoarg.titulo"> 
+					<plcf:tabela tituloChave="cdarg.titulo"> 
 						<plcf:linha> 
 							<plcf:celula> 
 								<plcf:titulo value="#{msg['label.codigoBarras']}"/>  
-								<plcf:texto id="codigoBarras" value="#{produto.codigoBarras}" ajudaChave="ajuda.codigoBarras" tamanho="15"/> 
+								<plcf:texto id="codigoBarras" value="#{cd.codigoBarras}" ajudaChave="ajuda.codigoBarras" tamanho="15"/> 
 							</plcf:celula>  
 							<plcf:celula> 
 								<plcf:titulo value="#{msg['label.titulo']}"/>  
-								<plcf:texto id="titulo" value="#{produto.titulo}" ajudaChave="ajuda.titulo" tamanho="30"/> 
-							</plcf:celula>  
-							<plcf:celula > 
-								<plcf:titulo value="#{msg['label.palavrasChave']}"/>  
-								<plcf:texto id="palavrasChave" value="#{produto.palavrasChave}" ajudaChave="ajuda.palavrasChave" tamanho="30"/> 
+								<plcf:texto id="titulo" value="#{cd.titulo}" ajudaChave="ajuda.titulo" tamanho="30"/> 
 							</plcf:celula>  
 							<plcf:celula> 
-								<plcf:titulo value="#{msg['label.tipoProduto']}"/>  
-								<plcf:comboEstatico id="tipoProduto" value="#{produto.tipoProduto}" dominio="TipoProduto" ajudaChave="ajuda.tipoProduto" /> 
+								<plcf:titulo value="#{msg['label.artista']}"/>  
+								<plcf:texto id="artista" value="#{cd.artista}" tamanho="30" ajudaChave="ajuda.artista"/> 
+							</plcf:celula>  
+							<plcf:celula > 
+								<plcf:titulo value="#{msg['label.gravadora']}"/>  
+								<plcf:texto id="gravadora" value="#{cd.gravadora}" tamanho="30" ajudaChave="ajuda.gravadora"/> 
 							</plcf:celula>  
 						</plcf:linha> 
 					</plcf:tabela> 
@@ -39,21 +39,21 @@
 		evento:'${param.evento}',
 			modoJanelaPlc:'${param.modoJanelaPlc}',
 			rowNum:'30',
-			nomeLogica:'produto',
-			propAgregada:'produto',
+			nomeLogica:'cd',
+			propAgregada:'cd',
 			jqGrid:{caption:
-				'#{msg['produto.titulo']}',
+				'#{msg['cd.titulo']}',
 				colNames:[
 					'#{msg['label.codigoBarras']}',
-					'#{msg['label.tipoProduto']}',
 					'#{msg['label.titulo']}',
-					'#{msg['label.palavrasChave']}'],
+					'#{msg['label.artista']}',
+					'#{msg['label.gravadora']}'],
 				colModel:[
-					{name:'codigoBarras',index:'codigoBarras', width:'50px', align:'center'},
-					{name:'tipoProduto',index:'tipoProduto', width:'40px', align:'center'},
-					{name:'titulo',index:'titulo', width:'300px'},
-					{name:'palavrasChave',index:'palavrasChave', width:'200px'}]},
-			urlEdicao:'#{request.contextPath}/f/n/produtoman'});});//]]> </script>  
+					{name:'codigoBarras',index:'codigoBarras', width:'80', align:'center'},
+					{name:'titulo',index:'titulo', width:'300'},
+					{name:'artista',index:'artista', width:'100'},
+					{name:'gravadora',index:'gravadora', width:'100'}]},
+			urlEdicao:'#{request.contextPath}/f/n/cdman'});});//]]> </script>  
 					<table id="plc-grid" width="100%" class="scroll" cellpadding="0" cellspacing="0"/>  
 					<div id="plc-grid-navegador" class="scroll" style="text-align:center;"/> 
 				</div> 

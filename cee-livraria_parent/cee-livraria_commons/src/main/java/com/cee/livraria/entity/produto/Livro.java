@@ -39,28 +39,11 @@ import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 	@NamedQuery(name="Livro.queryMan", query="from Livro"),
 	@NamedQuery(name="Livro.querySel", query="select obj.id as id, obj.codigoBarras as codigoBarras, obj.titulo as titulo, obj.isbn as isbn, obj.edicao as edicao, obj.palavrasChave as palavrasChave, obj.precoUltCompra as precoUltCompra, obj1.id as espirito_id, obj1.nome as espirito_nome, obj2.id as autor_id, obj2.nome as autor_nome, obj3.id as editora_id, obj3.nome as editora_nome, obj4.id as colecao_id, obj4.nome as colecao_nome from Livro obj left outer join obj.espirito as obj1 left outer join obj.autor as obj2 left outer join obj.editora as obj3 left outer join obj.colecao as obj4 order by obj.titulo asc"),
 	@NamedQuery(name="Livro.queryEdita", query="select obj from Livro obj where obj.id = ?"),
-//	@NamedQuery(name="Livro.queryPrecoTabela", query = 
-//			" select t.id as idTabela, t.nome as nomeTabela, i.preco as precoTabela " +
-//			"   from ItemTabelaEntity i " +
-//			"     left outer join i.livro as l " +
-//			"     left outer join i.tabelaPreco as t " +
-//			"  where l.id = :id " +
-//			"    and t.ativa = 'S' " +
-//			"    and t.sitHistoricoPlc = 'A' " +
-//			"    and i.sitHistoricoPlc = 'A' " +
-//			"    and ((t.dataFim is null and t.dataInicio <= current_date()) " +
-//			"     or  (t.dataFim is not null and current_date() between t.dataInicio and t.dataFim)) " +
-//			"   order by t.dataInicio desc "),
 	@NamedQuery(name="Livro.querySelLookup", query="select id as id, codigoBarras as codigoBarras, titulo as titulo from Livro where id = ? order by id asc") })
 @DiscriminatorValue("L")
-//@PrimaryKeyJoinColumn(name = "PRODUTO_ID")
 @ForeignKey(name = "FK_LIVRO_PRODUTO")
 public class Livro extends Produto {
 	private static final long serialVersionUID = 7797394047043215934L;
-
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_LIVRO")
-//	private Long id;
 
 	@Size(max = 20)
 	private String isbn;
@@ -91,14 +74,6 @@ public class Livro extends Produto {
 	@OrderBy(value="nome")
 	private Colecao colecao;
 	
-//	public Long getId() {
-//		return id;
-//	}
-//
-//	public void setId(Long id) {
-//		this.id = id;
-//	}
-
 	public String getIsbn() {
 		return isbn;
 	}
@@ -146,7 +121,6 @@ public class Livro extends Produto {
 	public void setColecao(Colecao colecao) {
 		this.colecao = colecao;
 	}
-
 
 	
 	/*

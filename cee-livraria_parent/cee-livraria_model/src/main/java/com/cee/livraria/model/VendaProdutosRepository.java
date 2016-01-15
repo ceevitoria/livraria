@@ -35,7 +35,7 @@ import com.cee.livraria.entity.pagamento.Pagamento;
 import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
-import com.cee.livraria.persistence.jpa.livro.LivroDAO;
+import com.cee.livraria.persistence.jpa.produto.LivroDAO;
 import com.cee.livraria.persistence.jpa.vendaproduto.VendaProdutoDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;

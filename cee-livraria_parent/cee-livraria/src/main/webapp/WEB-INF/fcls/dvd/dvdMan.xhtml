@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf"
+	xmlns:plct="http://www.powerlogic.com.br/plct" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition> 
+		<plcf:tabela tituloChave="dvdman.titulo"> 
+			<plcf:linha> 
+				<plcf:celula columnSpan="3"> 
+					<plcf:titulo value="#{msg['label.codigoBarras']}"/>  
+					<plcf:texto id="codigoBarras" value="#{dvd.codigoBarras}" ajudaChave="ajuda.codigoBarras" tamanho="30"/> 
+				</plcf:celula>  
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula columnSpan="3"> 
+					<plcf:titulo value="#{msg['label.titulo']}"/>  
+					<plcf:texto id="titulo" value="#{dvd.titulo}" ajudaChave="ajuda.titulo" tamanho="60"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula columnSpan="3"> 
+					<plcf:titulo value="#{msg['label.artista']}"/>  
+					<plcf:texto id="artista" value="#{dvd.artista}" tamanho="100" ajudaChave="ajuda.artista"/> 
+				</plcf:celula>  
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula columnSpan="3"> 
+					<plcf:titulo value="#{msg['label.gravadora']}"/>  
+					<plcf:texto id="gravadora" value="#{dvd.gravadora}" tamanho="100" ajudaChave="ajuda.gravadora"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.preco.ultima.compra']}"/>
+					<plcf:numerico id="precoOrig1" value="#{dvd.precoUltCompra}" somenteLeitura="S" rendered="#{not plct:execOneArg(request,'isUserInRole','Gestor')}" 
+						tamanho="10" ajudaChave="ajuda.preco.ultima.compra"/> 
+					<plcf:numerico id="precoOrig2" value="#{dvd.precoUltCompra}" somenteLeitura="N" rendered="#{plct:execOneArg(request,'isUserInRole','Gestor')}"
+						tamanho="10" ajudaChave="ajuda.preco.ultima.compra"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.tabpreco']}"/>  
+					<plcf:texto id="nomeTabela" value="#{dvd.nomeTabela}" somenteLeitura="S" tamanho="50" ajudaChave="ajuda.tabpreco"/> 
+	                <plcf:linkInteligente
+	                    link="#{request.contextPath}/f/n/tabprecomdt?id=#{dvd.idTabela}"
+	                    tituloChave="label.tabpreco"
+	                    ajudaChave="ajuda.tabpreco"
+	                    exibeSe="#{not empty dvd.idTabela and plct:execOneArg(request,'isUserInRole','Gestor')}" />
+				</plcf:celula> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.preco.venda']}"/>  
+					<plcf:numerico id="precoTabela" value="#{dvd.precoTabela}" 
+						somenteLeitura="S" tamanho="10" ajudaChave="ajuda.preco.venda"
+						exibeSe="#{not empty dvd.idTabela}" />
+					<plcf:numerico id="precoVendaSugerido1" value="#{dvd.precoVendaSugerido}" 
+						somenteLeitura="N" tamanho="10" ajudaChave="ajuda.preco.venda.sugerido"
+						exibeSe="#{empty dvd.idTabela and plct:execOneArg(request,'isUserInRole','Gestor')}" /> 
+					<plcf:numerico id="precoVendaSugerido2" value="#{dvd.precoVendaSugerido}" 
+						somenteLeitura="S" tamanho="10" ajudaChave="ajuda.preco.venda.sugerido"
+						exibeSe="#{empty dvd.idTabela and plct:execOneArg(request,'isUserInRole','Vendedor')}" /> 
+				</plcf:celula>  
+			</plcf:linha> 
+		</plcf:tabela> 
+	</ui:composition> 
+</html>
