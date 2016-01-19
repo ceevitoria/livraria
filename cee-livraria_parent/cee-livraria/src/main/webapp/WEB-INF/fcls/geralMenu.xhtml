@@ -53,6 +53,14 @@
 							<label jsfc="plcf:titulo" tituloChave="menu.formapaglivro.titulo">Formas Pagamento</label>
 						</a>
 					</li>
+				</ul>
+			</li>
+			<li style="#{plct:execOneArg(request,'isUserInRole','Gestor')?'':'display:none;'}">
+				<a>
+					<span class="ico iLeiautepadrao"/>
+					<label jsfc="plcf:titulo" tituloChave="app.m.compras">Compras</label>
+				</a>
+				<ul class="ui-state-hover">
 					<li>
 						<a href="#{request.contextPath}/f/n/parcelamento">
 							<label jsfc="plcf:titulo" tituloChave="menu.parcelamento.titulo">Parcelamento</label>
@@ -70,6 +78,7 @@
 					</li>
 				</ul>
 			</li>
+			
 			<li>
 				<a>
 					<span class="ico iLeiautepadrao"/>

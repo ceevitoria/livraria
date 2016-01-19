@@ -196,6 +196,16 @@
 				</plcf:botaoAcao>	
 			</ui:insert>
 
+			<ui:insert name="livraria_acao_registrarEntradaNotaFiscal">	 
+				<plcf:botaoAcao id="botaoAcaoRegistrarEntradaNotaFiscal" urlIcone="ico iGravar" acao="registrarEntradaNotaFiscal" 
+					limpaForm="false" partialSubmit="#{!partialSubmit}" label="compra.evt.registrarEntradaNotaFiscal" 
+					botaoArrayID="ENTRADA_NOTA_FISCAL" validaForm="false" immediate="false" blocking="true" 
+					rendered="#{requestScope.exibeBtnRegistrarEntradaNotaFiscal=='S'}" onclick="beforeSubmit();">
+					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
+					<f:param name="skipValidation" value="true"/>
+				</plcf:botaoAcao>
+			</ui:insert>
+
 			</div>			 
 		</ui:composition>
 	</body>

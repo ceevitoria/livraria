@@ -153,18 +153,18 @@ public class VendaProdutosRepository {
 	}
 
 	/**
-	 * Atualiza o saldo dos livros sendo vendidos no estoque
+	 * Atualiza o saldo dos produtos sendo vendidos no estoque
 	 * OBS: Não faz crítica para saldo negativo.
-	 * @param relacaoLivros Relação dos livros sendo vendidos
+	 * @param relacaoProdutos Relação dos produtos sendo vendidos
 	 * @param dataVenda Data em que a venda foi realizada
-	 * @return quantidade vendida de livros
+	 * @return quantidade vendida de produtos
 	 * @throws PlcException
 	 */
-	private int atualizaEstoque(List relacaoLivros, Date dataVenda) throws PlcException {
+	private int atualizaEstoque(List relacaoProdutos, Date dataVenda) throws PlcException {
 		int qtEstoque = 0;
 		int qtVendida = 0;
 		
-		for (Object o : relacaoLivros) {
+		for (Object o : relacaoProdutos) {
 			VendaProduto vp = (VendaProduto)o;
 
 			if (vp.getProduto() != null) {
@@ -182,9 +182,9 @@ public class VendaProdutosRepository {
 					}
 					
 					if (config.getAlertaEstoqueNegativoAtingido().equals(PlcYesNo.S) && qtEstoque < 0) {
-						alertas.add(String.format("Quantidade negativa em estoque atingida para o livro '%s-%s'", new Object[]{vp.getProduto().getCodigoBarras(), vp.getProduto().getTitulo()}));
+						alertas.add(String.format("Quantidade negativa em estoque atingida para o produto '%s-%s'", new Object[]{vp.getProduto().getCodigoBarras(), vp.getProduto().getTitulo()}));
 					} else if (config.getAlertaEstoqueMinimoAtingido().equals(PlcYesNo.S) && qtEstoque <= estoque.getQuantidadeMinima()) {
-						alertas.add(String.format("Quantidade minina em estoque atingida para o livro '%s-%s'", new Object[]{vp.getProduto().getCodigoBarras(), vp.getProduto().getTitulo()}));
+						alertas.add(String.format("Quantidade minina em estoque atingida para o produto '%s-%s'", new Object[]{vp.getProduto().getCodigoBarras(), vp.getProduto().getTitulo()}));
 					}
 					
 					estoque.setQuantidade(qtEstoque);
@@ -194,7 +194,7 @@ public class VendaProdutosRepository {
 
 					jpa.update(context, estoque);
 				} else {
-					throw new PlcException("{erro.vendaProduto.estoque.livro.inexistente}", new Object[]{vp.getProduto().getCodigoBarras(), vp.getProduto().getTitulo()});
+					throw new PlcException("{erro.vendaProduto.estoque.produto.inexistente}", new Object[]{vp.getProduto().getCodigoBarras(), vp.getProduto().getTitulo()});
 				}
 			}
 		}
@@ -398,17 +398,17 @@ public class VendaProdutosRepository {
 	}
 
 	/**
-	 * Registra o movimento de venda do tipo normal para os livros relacionados
-	 * @param relacaoLivros Relação dos livros sendo vendidos
-	 * @param dataVenda Data em que a venda foi realizada
+	 * Registra o movimento de venda do tipo normal para os produtos relacionados
+	 * @param relacaoProdutos Relação dos produtos sendo vendidos
+	 * @param dataMovimento Data em que a venda foi realizada
 	 * @param valorPago Valor efetivamente pago nesta venda (soma das formas de pagamento)
 	 */
-	private void registraMovimento(@SuppressWarnings("rawtypes") List relacaoLivros, Date dataVenda, double valorPago) throws PlcException {
+	private void registraMovimento(@SuppressWarnings("rawtypes") List relacaoProdutos, Date dataMovimento, double valorPago) throws PlcException {
 //		double valorGeral = 0.0;
 		Movimento mov = new MovimentoEntity();
 		List<ItemMovimento> itens = new ArrayList<ItemMovimento>();
 		
-		for (Object o : relacaoLivros) {
+		for (Object o : relacaoProdutos) {
 			VendaProduto vp = (VendaProduto)o;
 			
 			// Evita os itens em branco
@@ -429,7 +429,7 @@ public class VendaProdutosRepository {
 				item.setTipo(TipoMovimento.S);
 				item.setMovimento(mov);
 				
-				item.setDataUltAlteracao(dataVenda);
+				item.setDataUltAlteracao(dataMovimento);
 				item.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
 				
 				itens.add(item);
@@ -440,13 +440,13 @@ public class VendaProdutosRepository {
 
 //		valorGeral = Math.round(valorGeral * 100.00) / 100.00;
 		
-		mov.setData(dataVenda);
+		mov.setData(dataMovimento);
 		mov.setTipo(TipoMovimento.S);
 		mov.setModo(ModoMovimento.N);
 		mov.setValor(BigDecimal.valueOf(valorPago));
 		mov.setItemMovimento(itens);
 
-		mov.setDataUltAlteracao(dataVenda);
+		mov.setDataUltAlteracao(dataMovimento);
 		mov.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
 
 		jpa.insert(context, mov);

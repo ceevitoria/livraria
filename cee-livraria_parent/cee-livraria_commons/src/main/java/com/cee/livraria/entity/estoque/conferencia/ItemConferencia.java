@@ -16,7 +16,6 @@ import org.hibernate.annotations.ForeignKey;
 
 import com.cee.livraria.entity.AppBaseEntity;
 import com.cee.livraria.entity.Localizacao;
-import com.cee.livraria.entity.LocalizacaoEntity;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.produto.TipoProduto;
 
@@ -42,7 +41,7 @@ public abstract class ItemConferencia extends AppBaseEntity {
 	@Enumerated(EnumType.STRING)
 	private TipoProduto tipoProduto;
 
-	@ManyToOne(targetEntity = LocalizacaoEntity.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Localizacao.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_ITEMCONFERENCIA_LOCALIZACAO")
 	private Localizacao localizacao;
 

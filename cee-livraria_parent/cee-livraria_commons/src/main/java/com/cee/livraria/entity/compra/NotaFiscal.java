@@ -7,7 +7,10 @@ import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,7 +23,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
@@ -40,7 +42,7 @@ import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
 @Access(AccessType.FIELD)
 @NamedQueries({
 	@NamedQuery(name = "NotaFiscal.queryMan", query = "from NotaFiscal"),
-	@NamedQuery(name = "NotaFiscal.querySel", query = "select obj.id as id, obj.numero as numero, obj.dataEmissao as dataEmissao, obj.dataEntrada as dataEntrada, obj.valorTotal as valorTotal, obj1.id as fornecedor_id , obj1.nome as fornecedor_nome from NotaFiscal obj left outer join obj.fornecedor as obj1 order by obj.numero asc"),
+	@NamedQuery(name = "NotaFiscal.querySel", query = "select obj.id as id, obj.numero as numero, obj.dataEmissao as dataEmissao, obj.dataEntrada as dataEntrada, obj.valorTotal as valorTotal, obj.status as status, obj1.id as fornecedor_id, obj1.nome as fornecedor_nome from NotaFiscal obj left outer join obj.fornecedor as obj1 order by obj.numero asc"),
 	@NamedQuery(name = "NotaFiscal.querySelLookup", query = "select id as id, numero as numero from NotaFiscal where id = ? order by id asc") })
 public class NotaFiscal extends AppBaseEntity {
 	private static final long serialVersionUID = -305835460793103575L;
@@ -70,6 +72,11 @@ public class NotaFiscal extends AppBaseEntity {
 	@Digits(integer = 8, fraction = 2)
 	private BigDecimal valorTotal;
 
+	@Enumerated(EnumType.STRING)
+	@Column(length = 1)
+	@NotNull
+	private StatusNotaFiscal status;
+	
 	@OneToMany(targetEntity = ItemNotaFiscal.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "notaFiscal")
 	@ForeignKey(name = "FK_ITEMNOTAFISCAL_NOTAFISCAL")
 	@PlcValDuplicity(property = "codigoProduto")
@@ -135,6 +142,15 @@ public class NotaFiscal extends AppBaseEntity {
 		this.valorTotal = valorTotal;
 	}
 
+	
+	public StatusNotaFiscal getStatus() {
+		return status;
+	}
+	
+	public void setStatus(StatusNotaFiscal status) {
+		this.status = status;
+	}
+	
 	public List<ItemNotaFiscal> getItemNotaFiscal() {
 		return itemNotaFiscal;
 	}
@@ -155,5 +171,4 @@ public class NotaFiscal extends AppBaseEntity {
 	public String toString() {
 		return getNumero();
 	}
-
 }

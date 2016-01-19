@@ -5,10 +5,6 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.AssociationOverride;
-import javax.persistence.AssociationOverrides;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -17,7 +13,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -44,7 +39,7 @@ import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
 @Access(AccessType.FIELD)
 @NamedQueries({
 	@NamedQuery(name="Fornecedor.queryMan", query="from Fornecedor"),
-	@NamedQuery(name="Fornecedor.querySel", query="select obj.id as id, obj.nome as nome, obj.razaoSocial as razaoSocial, obj.inscricaoEstatudal as inscricaoEstatudal, obj.cnpj as cnpj, obj.descontoPadrao as descontoPadrao, obj1.id as endereco_cidade_id , obj1.nome as endereco_cidade_nome, obj2.id as endereco_uf_id , obj2.nome as endereco_uf_nome from Fornecedor obj left outer join obj.endereco.cidade as obj1 left outer join obj.endereco.uf as obj2 order by obj.nome asc"), 
+	@NamedQuery(name="Fornecedor.querySel", query="select obj.id as id, obj.nome as nome, obj.razaoSocial as razaoSocial, obj.inscricaoEstatudal as inscricaoEstatudal, obj.cnpj as cnpj, obj.descontoPadrao as descontoPadrao, obj.parcelamentoPadrao as parcelamentoPadrao, obj1.id as endereco_cidade_id , obj1.nome as endereco_cidade_nome, obj2.id as endereco_uf_id, obj2.nome as endereco_uf_nome from Fornecedor obj left outer join obj.endereco.cidade as obj1 left outer join obj.endereco.uf as obj2 order by obj.nome asc"), 
 	@NamedQuery(name="Fornecedor.querySelLookup", query="select id as id, nome as nome from Fornecedor where id = ? order by id asc") })
 public class Fornecedor extends AppBaseEntity {
 	private static final long serialVersionUID = -305835460793103576L;
@@ -54,18 +49,22 @@ public class Fornecedor extends AppBaseEntity {
 	private Long id;
 
 	@NotNull
-	@Size(max = 5)
+	@Size(max = 200)
+	@Column(length=200)
 	private String nome;
 
 	@NotNull
-	@Size(max = 5)
+	@Size(max = 200)
+	@Column(length=200)
 	private String razaoSocial;
 
-	@Size(max = 5)
+	@Size(max = 20)
+	@Column(length=20)
 	private String inscricaoEstatudal;
 
 	@NotNull
-	@Size(max = 5)
+	@Size(max = 20)
+	@Column(length=20)
 	private String cnpj;
 
 	@Embedded
@@ -76,7 +75,7 @@ public class Fornecedor extends AppBaseEntity {
 	@Digits(integer = 8, fraction = 2)
 	private BigDecimal descontoPadrao;
 
-	@ManyToOne(targetEntity = Parcelamento.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Parcelamento.class, fetch = FetchType.EAGER)
 	@ForeignKey(name = "FK_FORNECEDOR_PARCELAMENTOPADRAO")
 	@NotNull
 	private Parcelamento parcelamentoPadrao;

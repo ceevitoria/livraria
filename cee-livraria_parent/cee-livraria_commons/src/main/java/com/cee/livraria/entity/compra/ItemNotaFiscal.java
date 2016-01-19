@@ -156,4 +156,15 @@ public class ItemNotaFiscal extends AppBaseEntity {
 		return indExcPlc;
 	}
 
+	@Transient
+	private transient boolean isProdutoFornecedorExistente = false;
+
+	public boolean isProdutoFornecedorExistente() {
+		return isProdutoFornecedorExistente;
+	}
+
+	public void setProdutoFornecedorExistente(boolean isProdutoFornecedorExistente) {
+		this.isProdutoFornecedorExistente = isProdutoFornecedorExistente;
+	}
+	
 }

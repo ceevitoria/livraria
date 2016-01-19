@@ -23,7 +23,6 @@ import org.hibernate.annotations.ForeignKey;
 
 import com.cee.livraria.entity.AppBaseEntity;
 import com.cee.livraria.entity.Localizacao;
-import com.cee.livraria.entity.LocalizacaoEntity;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.produto.TipoProduto;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
@@ -55,7 +54,7 @@ public class ItemAjusteEstoque extends AppBaseEntity {
 	@Enumerated(EnumType.STRING)
 	private TipoProduto tipoProduto;
 
-	@ManyToOne(targetEntity = LocalizacaoEntity.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Localizacao.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_ITEMAJUSTEESTOQUE_LOCALIZACAO")
 	private Localizacao localizacao;
 

@@ -17,8 +17,6 @@ import org.hibernate.annotations.ForeignKey;
 
 import com.cee.livraria.entity.AppBaseEntity;
 import com.cee.livraria.entity.Localizacao;
-import com.cee.livraria.entity.LocalizacaoEntity;
-import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.entity.produto.Produto;
 
 @MappedSuperclass
@@ -49,7 +47,7 @@ public abstract class Estoque extends AppBaseEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataConferencia;
 
-	@ManyToOne(targetEntity = LocalizacaoEntity.class, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = Localizacao.class, fetch = FetchType.EAGER)
 	@ForeignKey(name = "FK_ESTOQUE_LOCALIZACAO")
 	@NotNull
 	private Localizacao localizacao;

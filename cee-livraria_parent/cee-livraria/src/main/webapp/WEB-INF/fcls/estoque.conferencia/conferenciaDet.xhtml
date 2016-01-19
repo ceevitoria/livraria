@@ -82,7 +82,7 @@
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.localizacao']}"/>
 				</f:facet>  
-				<plcf:comboDinamico id="localizacao" value="#{itemConferencia.localizacao}" disabled="#{conferencia.status=='C'}" dominio="LocalizacaoEntity" exibeBranco="S" ajudaChave="ajuda.localizacao"/> 
+				<plcf:comboDinamico id="localizacao" value="#{itemConferencia.localizacao}" disabled="#{conferencia.status=='C'}" dominio="Localizacao" exibeBranco="S" ajudaChave="ajuda.localizacao"/> 
 			</h:column>  
 			<h:column rendered="#{conferencia.status=='C'}"> 
 				<f:facet name="header" rendered="#{conferencia.status=='C'}">

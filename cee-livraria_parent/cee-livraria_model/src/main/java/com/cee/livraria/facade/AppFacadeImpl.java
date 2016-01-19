@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
+import com.cee.livraria.entity.compra.NotaFiscal;
 import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.estoque.EstoqueEntity;
@@ -21,6 +22,7 @@ import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.model.CaixaRepository;
 import com.cee.livraria.model.VendaProdutosRepository;
 import com.cee.livraria.model.ajuste.AjusteEstoqueRepository;
+import com.cee.livraria.model.compras.NotaFiscalRepository;
 import com.cee.livraria.model.conferencia.ConferenciaRepository;
 import com.cee.livraria.persistence.jpa.AppJpaDAO;
 import com.cee.livraria.persistence.jpa.produto.LivroDAO;
@@ -49,6 +51,9 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 
 	@Inject
 	private AjusteEstoqueRepository ajusteEstoqueRepository;
+
+	@Inject
+	private NotaFiscalRepository notaFiscalRepository;
 
 	@Inject
 	private CaixaRepository caixaRepository;
@@ -120,6 +125,14 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 		}
 		
 		return estoqueLista;
+	}
+
+
+	@PlcTransactional(commit=true)
+	@TransactionAttribute(javax.ejb.TransactionAttributeType.REQUIRED)
+	@Override
+	public RetornoConfig registrarEntradaNotaFiscal(PlcBaseContextVO context, NotaFiscal notaFiscal) throws PlcException {
+		return notaFiscalRepository.registrarEntradaNotaFiscal(context, notaFiscal);
 	}
 	
 }

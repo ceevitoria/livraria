@@ -1,21 +1,21 @@
 package com.cee.livraria.persistence.jpa.notafiscal;
 
-import com.cee.livraria.persistence.jpa.AppJpaDAO;
-import com.cee.livraria.entity.compra.NotaFiscal;
-import com.powerlogic.jcompany.persistence.jpa.PlcQueryParameter;
 import java.util.Date;
-import com.cee.livraria.entity.compra.Fornecedor;
-
 import java.util.List;
 
-import com.powerlogic.jcompany.persistence.jpa.PlcQuery;
-import com.powerlogic.jcompany.persistence.jpa.PlcQueryLineAmount;
-import com.powerlogic.jcompany.persistence.jpa.PlcQueryOrderBy;
-import com.powerlogic.jcompany.persistence.jpa.PlcQueryFirstLine;
+import com.cee.livraria.entity.compra.Fornecedor;
+import com.cee.livraria.entity.compra.NotaFiscal;
+import com.cee.livraria.entity.compra.StatusNotaFiscal;
+import com.cee.livraria.persistence.jpa.AppJpaDAO;
+import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.annotation.PlcAggregationDAOIoC;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcDataAccessObject;
+import com.powerlogic.jcompany.persistence.jpa.PlcQuery;
+import com.powerlogic.jcompany.persistence.jpa.PlcQueryFirstLine;
+import com.powerlogic.jcompany.persistence.jpa.PlcQueryLineAmount;
+import com.powerlogic.jcompany.persistence.jpa.PlcQueryOrderBy;
+import com.powerlogic.jcompany.persistence.jpa.PlcQueryParameter;
 import com.powerlogic.jcompany.persistence.jpa.PlcQueryService;
-import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 /**
  * Classe de Persistência gerada pelo assistente
  */
@@ -36,7 +36,8 @@ public class NotaFiscalDAO extends AppJpaDAO  {
 			@PlcQueryParameter(name="numero", expression="obj.numero like :numero || '%' ") String numero,
 			@PlcQueryParameter(name="dataEmissao", expression="obj.dataEmissao >= :dataEmissao  ") Date dataEmissao,
 			@PlcQueryParameter(name="dataEntrada", expression="obj.dataEntrada >= :dataEntrada  ") Date dataEntrada,
-			@PlcQueryParameter(name="fornecedor", expression="obj1 = :fornecedor") Fornecedor fornecedor
+			@PlcQueryParameter(name="fornecedor", expression="obj1 = :fornecedor") Fornecedor fornecedor,
+			@PlcQueryParameter(name="status", expression="obj.status = :status") StatusNotaFiscal status
 	);
 
 	@PlcQuery("querySel")
@@ -47,7 +48,8 @@ public class NotaFiscalDAO extends AppJpaDAO  {
 			@PlcQueryParameter(name="numero", expression="obj.numero like :numero || '%' ") String numero,
 			@PlcQueryParameter(name="dataEmissao", expression="obj.dataEmissao >= :dataEmissao  ") Date dataEmissao,
 			@PlcQueryParameter(name="dataEntrada", expression="obj.dataEntrada >= :dataEntrada  ") Date dataEntrada,
-			@PlcQueryParameter(name="fornecedor", expression="obj1 = :fornecedor") Fornecedor fornecedor
+			@PlcQueryParameter(name="fornecedor", expression="obj1 = :fornecedor") Fornecedor fornecedor,
+			@PlcQueryParameter(name="status", expression="obj.status = :status") StatusNotaFiscal status
 	);
 	
 }

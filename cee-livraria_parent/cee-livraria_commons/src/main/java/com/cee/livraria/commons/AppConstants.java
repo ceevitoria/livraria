@@ -25,6 +25,8 @@ public interface AppConstants extends PlcConstants {
 
     	String EXIBE_BT_ABRIR_AJUSTE_ESTOQUE  = "exibeBtnAbrirAjusteEstoque";
     	String EXIBE_BT_CONCLUIR_AJUSTE_ESTOQUE = "exibeBtnConcluirAjusteEstoque";
+    	
+    	String EXIBE_BT_REGISTRAR_ENTRADA_NOTA_FISCAL = "exibeBtnRegistrarEntradaNotaFiscal";
     }
     
     interface TELA_CONFEERENCIA {

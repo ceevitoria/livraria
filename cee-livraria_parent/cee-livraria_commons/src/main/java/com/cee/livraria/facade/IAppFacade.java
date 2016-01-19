@@ -6,6 +6,7 @@ import java.util.List;
 import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
+import com.cee.livraria.entity.compra.NotaFiscal;
 import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
@@ -87,5 +88,14 @@ public interface IAppFacade extends IPlcFacade {
 	 * @return itens do estoque relativos aos produtos informados
 	 */
 	public List<Estoque> buscarProdutosEstoque(PlcBaseContextVO context, List<Produto> listaProdutos) throws PlcException;
+	
+	
+	/**
+	 * Registra a entrada de uma nota fiscal para o sistema
+	 * @param context Contexto da aplicacao
+	 * @param notaFiscal Nota fiscal com seus itens a ser registrada
+	 * @return RetornoConfig Retorna com informacoes sobre entrada da nota fiscal (@see RetornoConfig)
+	 */
+	public RetornoConfig registrarEntradaNotaFiscal(PlcBaseContextVO context, NotaFiscal notaFiscal) throws PlcException;
 	
 }

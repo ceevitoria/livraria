@@ -74,7 +74,8 @@ public class ContaPagar extends AppBaseEntity {
 	@Digits(integer = 8, fraction = 2)
 	private BigDecimal valor;
 
-	@Size(max = 5)
+	@Size(max = 1024)
+	@Column(length=1024)
 	private String observacao;
 
 	public ContaPagar() {

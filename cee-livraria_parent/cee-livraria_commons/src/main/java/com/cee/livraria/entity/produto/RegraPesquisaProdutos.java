@@ -1,27 +1,29 @@
 package com.cee.livraria.entity.produto;
 
-import com.cee.livraria.entity.Autor;
-import com.cee.livraria.entity.Colecao;
-import com.cee.livraria.entity.Editora;
-import com.cee.livraria.entity.Espirito;
-import com.cee.livraria.entity.Localizacao;
 import java.io.Serializable;
+
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import com.cee.livraria.entity.AutorEntity;
-import javax.persistence.ManyToOne;
-import com.cee.livraria.entity.ColecaoEntity;
-import javax.validation.constraints.Size;
-import com.cee.livraria.entity.EditoraEntity;
-import com.cee.livraria.entity.LocalizacaoEntity;
-import javax.validation.constraints.Digits;
-import com.cee.livraria.entity.EspiritoEntity;
-import javax.persistence.FetchType;
-import org.hibernate.annotations.ForeignKey;
-import javax.persistence.Access;
-import javax.persistence.Embeddable;
-import javax.persistence.AccessType;
 import javax.persistence.OrderBy;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.ForeignKey;
+
+import com.cee.livraria.entity.Autor;
+import com.cee.livraria.entity.AutorEntity;
+import com.cee.livraria.entity.Colecao;
+import com.cee.livraria.entity.ColecaoEntity;
+import com.cee.livraria.entity.Editora;
+import com.cee.livraria.entity.EditoraEntity;
+import com.cee.livraria.entity.Espirito;
+import com.cee.livraria.entity.EspiritoEntity;
+import com.cee.livraria.entity.Localizacao;
 
 @Embeddable
 @Access(AccessType.FIELD)
@@ -61,7 +63,7 @@ public class RegraPesquisaProdutos implements Serializable {
 	@Size(max = 40)
 	private String palavraChave;
 
-	@ManyToOne(targetEntity = LocalizacaoEntity.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Localizacao.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_REGRATABELAPRECO_LOCALIZACAO")
 	@OrderBy(value="codigo")
 	private Localizacao localizacao;

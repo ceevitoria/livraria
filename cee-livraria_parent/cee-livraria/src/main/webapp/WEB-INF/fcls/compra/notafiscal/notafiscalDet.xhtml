@@ -28,18 +28,28 @@
 			plc.jq("#corpo\\:formulario\\:itemNotaFiscal\\:"+ index + "\\:valorLiquido" ).val(sValorLiquido);
 
 			var sum = sumjq(".classeValorLiquido");
-			var sSum = "R$ " + sum.toString(); 
-			sSum = sSum.replace(".",",");
-			plc.jq("#corpo\\:formulario\\:valorTotalNota").html(sSum);
+			
+			if (sum != "NaN") {
+				var sSum = "R$ " + sum.toString(); 
+				sSum = sSum.replace(".",",");
+				plc.jq("#corpo\\:formulario\\:valorTotalNota").html(sSum);
+			} else {
+				plc.jq("#corpo\\:formulario\\:valorTotalNota").html("R$ 0.00");
+			}
+			
 		}
 
 		sumjq = function(selector) {
 		    var sum = 0.0;
 		    jQuery(selector).each(function() {
 		    	sValorLiquido = jQuery(this).val();
-				sValorLiquido = sValorLiquido.replace(",",".");
-				var valorLiquido = parseFloat(sValorLiquido);
-				sum += valorLiquido; 
+
+		    	if (sValorLiquido != "") {
+					sValorLiquido = sValorLiquido.replace(",",".");
+					var valorLiquido = parseFloat(sValorLiquido);
+					sum += valorLiquido; 
+			    } 
+		    	
 		    });
 		    
 		    return sum.toFixed(2);
@@ -67,9 +77,14 @@
 			});
 
 			var sum = sumjq(".classeValorLiquido");
-			var sSum = "R$ " + sum.toString(); 
-			sSum = sSum.replace(".",",");
-			plc.jq("#corpo\\:formulario\\:valorTotalNota").html(sSum);
+			
+			if (sum != "NaN") {
+				var sSum = "R$ " + sum.toString(); 
+				sSum = sSum.replace(".",",");
+				plc.jq("#corpo\\:formulario\\:valorTotalNota").html(sSum);
+			} else {
+				plc.jq("#corpo\\:formulario\\:valorTotalNota").html("R$ 0.00");
+			}
 		});
 		//]]></script>
 
