@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition template="/fcls/template/PlcGeralTemplate.xhtml"> 
+		<ui:define name="plc-corpo-formulario"> 
+			<div id="plc-form-basico"> 
+				<div id="#{plcAliasPrefixoAction}Arg" class="plc-form-basico-topo"> 
+					<plcf:tabela tituloChave="fornecedorarg.titulo"> 
+						<plcf:linha> 
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.id']}"/>  
+								<plcf:numerico id="id" value="#{fornecedor.id}" ajudaChave="ajuda.id" tamanho="5"/> 
+							</plcf:celula>  
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.nome']}"/>  
+								<plcf:texto id="nome" value="#{fornecedor.nome}" ajudaChave="ajuda.nome" tamanho="30"/> 
+							</plcf:celula>  
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.razaoSocial']}"/>  
+								<plcf:texto id="razaoSocial" value="#{fornecedor.razaoSocial}" ajudaChave="ajuda.razaoSocial" tamanho="30"/> 
+							</plcf:celula>  
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.cnpj']}"/>  
+								<plcf:texto id="cnpj" value="#{fornecedor.cnpj}" ajudaChave="ajuda.cnpj" tamanho="15"/> 
+							</plcf:celula>  
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.endereco.uf']}"/>  
+								<plcf:comboDinamico id="endereco_uf" value="#{fornecedor.endereco.uf}" navegacaoParaCampos="endereco.cidade" dominio="Uf" exibeBranco="S" ajudaChave="ajuda.endereco.uf">
+									<f:ajax event="valueChange" render="endereco_cidade" onerror="plc.manipulaErroAjax"/> 
+								</plcf:comboDinamico>
+							</plcf:celula>  
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.endereco.cidade']}"/>  
+								<plcf:comboDinamico id="endereco_cidade" value="#{fornecedor.endereco.cidade}" comboAninhado="S"  dominio="Cidade" exibeBranco="S" skipCacheControl="true" ajudaChave="ajuda.endereco.cidade"/>
+							</plcf:celula> 
+						</plcf:linha> 
+					</plcf:tabela> 
+				</div>
+				<div id="#{plcAliasPrefixoAction}Sel" class="plc-form-basico-sel"> 
+					<script type="text/javascript">//<![CDATA[
+	jQuery(function(){plc.criaSelecaoJqGrid('plc-grid','plc-grid-navegador',{
+		evento:'${param.evento}',
+			modoJanelaPlc:'${param.modoJanelaPlc}',
+			rowNum:'20',
+			nomeLogica:'fornecedor',
+			propAgregada:'fornecedor',
+			jqGrid:{caption:
+				'#{msg['fornecedor.titulo']}',
+				colNames:
+					['#{msg['label.id']}',
+					'#{msg['label.nome']}',
+					'#{msg['label.razaoSocial']}',
+					'#{msg['label.inscricaoEstatudal']}',
+					'#{msg['label.cnpj']}',
+					'#{msg['label.endereco.cidade']}',
+					'#{msg['label.endereco.uf']}'],
+				colModel:[
+					{name:'id',index:'id', width:'25px'},
+					{name:'nome',index:'nome', width:'200px'},
+					{name:'razaoSocial',index:'razaoSocial', width:'150px'},
+					{name:'inscricaoEstatudal',index:'inscricaoEstatudal', width:'100px'},
+					{name:'cnpj',index:'cnpj', width:'80px', align:'center'},
+					{name:'endereco.cidade',index:'endereco.cidade', width:'100px'},
+					{name:'endereco.uf',index:'endereco.uf', width:'60px'}]},
+			urlEdicao:'#{request.contextPath}/f/n/fornecedormdt'});});//]]> </script>  
+					<table id="plc-grid" width="100%" class="scroll" cellpadding="0" cellspacing="0"/>  
+					<div id="plc-grid-navegador" class="scroll" style="text-align:center;"/> 
+				</div> 
+			</div> 
+		</ui:define> 
+	</ui:composition> 
+</html>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:plct="http://www.powerlogic.com.br/plct" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition> 
+		<plcf:iteracao var="fornecedorContato" id="fornecedorContato" value="#{fornecedor.fornecedorContato}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
+			<h:column> 
+				<h:outputText value="#{rowCounter.index}."/> 
+			</h:column>  
+			<h:column rendered="#{empty requestScope.visualizaDocumentoPlc}"> 
+				<f:facet name="header">
+					<plcf:tituloExclusao>Exc.</plcf:tituloExclusao>
+				</f:facet>  
+				<span class="celulaFormularioCaixaMarcacao">
+					<plcf:caixaExclusao id="indExcPlc" value="#{fornecedorContato.indExcPlc}"/>
+				</span> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.id']}"/>
+				</f:facet>  
+				<plcf:oid id="id" value="#{fornecedorContato.id}" ajudaChave="ajuda.id"/> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.nome']}"/>
+				</f:facet>  
+				<plcf:texto id="nome" value="#{fornecedorContato.nome}" ajudaChave="ajuda.nome" tamanho="50"/> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.celular']}"/>
+				</f:facet>  
+				<plcf:texto id="celular" value="#{fornecedorContato.celular}" ajudaChave="ajuda.celular" tamanho="15"/> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.fixo']}"/>
+				</f:facet>  
+				<plcf:texto id="fixo" value="#{fornecedorContato.fixo}" ajudaChave="ajuda.fixo" tamanho="15"/> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.ramal']}"/>
+				</f:facet>  
+				<plcf:texto id="ramal" value="#{fornecedorContato.ramal}" ajudaChave="ajuda.ramal"/> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.email']}"/>
+				</f:facet>  
+				<plcf:texto id="email" value="#{fornecedorContato.email}" ajudaChave="ajuda.email" tamanho="50"/> 
+			</h:column> 
+		</plcf:iteracao> 
+	</ui:composition> 
+</html>

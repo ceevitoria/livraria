@@ -19,13 +19,11 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIf;
-import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfType;
 import org.hibernate.annotations.ForeignKey;
 
 import com.cee.livraria.entity.AppBaseEntity;
+import com.cee.livraria.entity.produto.Produto;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
-import com.powerlogic.jcompany.domain.validation.PlcValGroupEntityList;
 
 @SPlcEntity
 @Entity
@@ -45,29 +43,34 @@ public class ItemNotaFiscal extends AppBaseEntity {
 	@NotNull
 	private NotaFiscal notaFiscal;
 
-	@NotNull(groups = PlcValGroupEntityList.class)
-	@RequiredIf(valueOf = "id", is = RequiredIfType.not_empty)
+//	@NotNull(groups = PlcValGroupEntityList.class)
+//	@RequiredIf(valueOf = "id", is = RequiredIfType.not_empty)
 	@Size(max = 20)
 	private String codigoProduto;
 
-	@NotNull(groups = PlcValGroupEntityList.class)
-	@RequiredIf(valueOf = "codigoProduto", is = RequiredIfType.not_empty)
-	@Digits(integer = 8, fraction = 2)
+	@ManyToOne(targetEntity = Produto.class, fetch = FetchType.EAGER)
+	@ForeignKey(name = "FK_ITEMNOTAFISCAL_PRODUTO")
+//	@NotNull
+	private Produto produto;
+	
+//	@NotNull(groups = PlcValGroupEntityList.class)
+//	@RequiredIf(valueOf = "codigoProduto", is = RequiredIfType.not_empty)
+	@Digits(integer = 10, fraction = 2)
 	private BigDecimal valorUnitario;
 
-	@NotNull(groups = PlcValGroupEntityList.class)
-	@RequiredIf(valueOf = "codigoProduto", is = RequiredIfType.not_empty)
+//	@NotNull(groups = PlcValGroupEntityList.class)
+//	@RequiredIf(valueOf = "codigoProduto", is = RequiredIfType.not_empty)
 	@Digits(integer = 5, fraction = 0)
 	private Integer quantidade;
 
-	@NotNull(groups = PlcValGroupEntityList.class)
-	@RequiredIf(valueOf = "codigoProduto", is = RequiredIfType.not_empty)
+//	@NotNull(groups = PlcValGroupEntityList.class)
+//	@RequiredIf(valueOf = "codigoProduto", is = RequiredIfType.not_empty)
 	@Digits(integer = 8, fraction = 2)
 	private BigDecimal percentualDesconto;
 
-	@NotNull(groups = PlcValGroupEntityList.class)
-	@RequiredIf(valueOf = "codigoProduto", is = RequiredIfType.not_empty)
-	@Digits(integer = 8, fraction = 2)
+//	@NotNull(groups = PlcValGroupEntityList.class)
+//	@RequiredIf(valueOf = "codigoProduto", is = RequiredIfType.not_empty)
+	@Digits(integer = 10, fraction = 2)
 	private BigDecimal valorLiquido;
 
 	public ItemNotaFiscal() {
@@ -89,6 +92,14 @@ public class ItemNotaFiscal extends AppBaseEntity {
 		this.codigoProduto = codigoProduto;
 	}
 
+	public Produto getProduto() {
+		return produto;
+	}
+	
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
+	
 	public BigDecimal getValorUnitario() {
 		return valorUnitario;
 	}

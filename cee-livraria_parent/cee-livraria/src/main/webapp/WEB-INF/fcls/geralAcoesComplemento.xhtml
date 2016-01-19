@@ -9,6 +9,51 @@
 	xmlns:trh="http://myfaces.apache.org/trinidad/html">
 	<body>
 		<ui:composition>
+<script>//<![CDATA[
+	function travaTela(){
+		jQuery( "#protetorTela" ).dialog({ modal: true});
+		document.getElementById("protetorTela").style.display = 'block';
+		jQuery(".ui-dialog-titlebar-close").attr("style", "display:none");
+		jQuery(".ui-dialog-titlebar").attr("style", "display:none");
+	}
+	
+	function travaTelaComTempo(tempo) {
+		jQuery( "#protetorTela" ).dialog({ modal: true});
+		document.getElementById("protetorTela").style.display = 'block';
+		jQuery(".ui-dialog-titlebar-close").attr("style", "display:none");
+		jQuery(".ui-dialog-titlebar").attr("style", "display:none");
+
+		try {
+			setTimeout( function() { destravaTela(); }, tempo );
+		} catch(e) {
+		}
+	}
+	
+	function destravaTela(){
+		jQuery(".ui-dialog-titlebar-close").trigger( "click" );
+	}
+//]]></script>
+			<span id="protetorTela" style="display: none">
+				<table id="protetorTelaIndicador">
+					<tr>
+						<td width="300px" align="center"><font size="20px"><b>Aguarde...</b></font><br/></td>
+					</tr>
+					<tr>
+						<td align="center" style="padding-top:10px;"><IMG src="#{request.contextPath}/res/midia/indicator.gif" width="30px;" height="30px;" /></td>
+					</tr>
+				</table>
+			</span>
+
+			<tr:panelBox rendered="#{not empty requestScope.destravaTela}"
+				inlineStyle="display:none">
+				<script>
+			      try {
+			    	  setTimeout("destravaTela()",10);
+				  } catch(e) {
+				  }
+			   </script>
+			</tr:panelBox>
+
 			<div id='plc-corpo-acao-personalisado' class='plc-corpo-acao-generico'>
 				<!--PONTO_INSERCAO-->
 			

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition template="/fcls/template/PlcGeralTemplate.xhtml"> 
+		<ui:define name="plc-corpo-formulario"> 
+			<div id="plc-form-basico"> 
+				<div id="#{plcAliasPrefixoAction}Arg" class="plc-form-basico-topo"> 
+					<plcf:tabela tituloChave="notafiscalarg.titulo"> 
+						<plcf:linha> 
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.id']}"/>  
+								<plcf:numerico id="id" value="#{notafiscal.id}" ajudaChave="ajuda.id" tamanho="5"/> 
+							</plcf:celula>  
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.numero']}"/>  
+								<plcf:texto id="numero" value="#{notafiscal.numero}" ajudaChave="ajuda.numero"/> 
+							</plcf:celula>  
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.dataEmissao']}"/>  
+								<plcf:data id="dataEmissao" value="#{notafiscal.dataEmissao}" ajudaChave="ajuda.dataEmissao"/> 
+							</plcf:celula>  
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.dataEntrada']}"/>  
+								<plcf:data id="dataEntrada" value="#{notafiscal.dataEntrada}" ajudaChave="ajuda.dataEntrada"/> 
+							</plcf:celula>  
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.fornecedor']}"/>  
+								<plcf:comboDinamico id="fornecedor" value="#{notafiscal.fornecedor}" dominio="Fornecedor" exibeBranco="S" ajudaChave="ajuda.fornecedor"/> 
+							</plcf:celula> 
+						</plcf:linha> 
+					</plcf:tabela> 
+				</div>
+				<div id="#{plcAliasPrefixoAction}Sel" class="plc-form-basico-sel"> 
+					<script type="text/javascript">//<![CDATA[
+	jQuery(function(){plc.criaSelecaoJqGrid('plc-grid','plc-grid-navegador',{
+		evento:'${param.evento}',
+			modoJanelaPlc:'${param.modoJanelaPlc}',
+			rowNum:'30',
+			nomeLogica:'notafiscal',
+			propAgregada:'notafiscal',
+			jqGrid:{caption:
+				'#{msg['notafiscal.titulo']}',
+				colNames:
+					['#{msg['label.id']}',
+					'#{msg['label.numero']}',
+					'#{msg['label.dataEmissao']}',
+					'#{msg['label.dataEntrada']}',
+					'#{msg['label.fornecedor']}',
+					'#{msg['label.valorTotal']}'],
+				colModel:[
+					{name:'id',index:'id', width:'25px'},
+					{name:'numero',index:'numero', width:'80px'},
+					{name:'dataEmissao',index:'dataEmissao', width:'80px'},
+					{name:'dataEntrada',index:'dataEntrada', width:'80px'},
+					{name:'fornecedor',index:'fornecedor', width:'200px'},
+					{name:'valorTotal',index:'valorTotal', width:'80px'}]},
+			urlEdicao:'#{request.contextPath}/f/n/notafiscalmdt'});});//]]> </script>  
+					<table id="plc-grid" width="100%" class="scroll" cellpadding="0" cellspacing="0"/>  
+					<div id="plc-grid-navegador" class="scroll" style="text-align:center;"/> 
+				</div> 
+			</div> 
+		</ui:define> 
+	</ui:composition> 
+</html>

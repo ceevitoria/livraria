@@ -42,7 +42,10 @@ import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
 @Table(name = "FORNECEDOR")
 @SequenceGenerator(name = "SE_FORNECEDOR", sequenceName = "SE_FORNECEDOR")
 @Access(AccessType.FIELD)
-@NamedQueries({ @NamedQuery(name = "Fornecedor.querySelLookup", query = "select id as id, nome as nome from Fornecedor where id = ? order by id asc") })
+@NamedQueries({
+	@NamedQuery(name="Fornecedor.queryMan", query="from Fornecedor"),
+	@NamedQuery(name="Fornecedor.querySel", query="select obj.id as id, obj.nome as nome, obj.razaoSocial as razaoSocial, obj.inscricaoEstatudal as inscricaoEstatudal, obj.cnpj as cnpj, obj.descontoPadrao as descontoPadrao, obj1.id as endereco_cidade_id , obj1.nome as endereco_cidade_nome, obj2.id as endereco_uf_id , obj2.nome as endereco_uf_nome from Fornecedor obj left outer join obj.endereco.cidade as obj1 left outer join obj.endereco.uf as obj2 order by obj.nome asc"), 
+	@NamedQuery(name="Fornecedor.querySelLookup", query="select id as id, nome as nome from Fornecedor where id = ? order by id asc") })
 public class Fornecedor extends AppBaseEntity {
 	private static final long serialVersionUID = -305835460793103576L;
 	
@@ -84,6 +87,13 @@ public class Fornecedor extends AppBaseEntity {
 	@PlcValMultiplicity(referenceProperty="nome",  message="{jcompany.aplicacao.mestredetalhe.multiplicidade.FornecedorContato}")
 	@Valid
 	private List<FornecedorContato> fornecedorContato;
+
+	@OneToMany (targetEntity = FornecedorProduto.class, fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="fornecedor")
+	@ForeignKey(name="FK_FORNECEDORPRODUTO_FORNECEDOR")
+	@PlcValDuplicity(property="codigoProduto")
+	@PlcValMultiplicity(referenceProperty="codigoProduto",  message="{jcompany.aplicacao.mestredetalhe.multiplicidade.FornecedorProduto}")
+	@Valid
+	private List<FornecedorProduto> fornecedorProduto;
 
 	public Fornecedor() {
 	}
@@ -163,6 +173,14 @@ public class Fornecedor extends AppBaseEntity {
 
 	public void setFornecedorContato(List<FornecedorContato> fornecedorContato) {
 		this.fornecedorContato=fornecedorContato;
+	}
+
+	public List<FornecedorProduto> getFornecedorProduto() {
+		return fornecedorProduto;
+	}
+
+	public void setFornecedorProduto(List<FornecedorProduto> fornecedorProduto) {
+		this.fornecedorProduto=fornecedorProduto;
 	}
 
 }

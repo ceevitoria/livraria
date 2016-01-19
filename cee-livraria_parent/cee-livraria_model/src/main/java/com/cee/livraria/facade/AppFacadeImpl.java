@@ -22,6 +22,7 @@ import com.cee.livraria.model.CaixaRepository;
 import com.cee.livraria.model.VendaProdutosRepository;
 import com.cee.livraria.model.ajuste.AjusteEstoqueRepository;
 import com.cee.livraria.model.conferencia.ConferenciaRepository;
+import com.cee.livraria.persistence.jpa.AppJpaDAO;
 import com.cee.livraria.persistence.jpa.produto.LivroDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
@@ -34,6 +35,9 @@ import com.powerlogic.jcompany.model.annotation.PlcTransactional;
 @SPlcFacade
 public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 
+	@Inject @QPlcDefault
+	AppJpaDAO dao;
+	
 	@Inject
 	private LivroDAO jpaDAO;
 	
@@ -49,6 +53,12 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	@Inject
 	private CaixaRepository caixaRepository;
 	
+	@PlcTransactional(commit=false)
+	@Override
+	public Object findById(PlcBaseContextVO context, Class classe, Object id) throws PlcException {
+		return dao.findById(context, classe, id);
+	}
+
 	@PlcTransactional(commit=false)
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
 	@Override

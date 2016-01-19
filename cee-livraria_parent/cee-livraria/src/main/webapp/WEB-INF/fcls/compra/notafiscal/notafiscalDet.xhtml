@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:plct="http://www.powerlogic.com.br/plct" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+
+	<ui:composition> 
+		<script type="text/javascript">//<![CDATA[
+		function calcularValorLiquido(index) {
+			var sValorUnitario = plc.jq("#corpo\\:formulario\\:itemNotaFiscal\\:"+ index + "\\:valorUnitario").val();
+			sValorUnitario = sValorUnitario.replace(",",".");
+			var valorUnitario = parseFloat(sValorUnitario);
+			var sQuantidade = plc.jq("#corpo\\:formulario\\:itemNotaFiscal\\:"+ index + "\\:quantidade").val();
+			var quantidade = parseInt(sQuantidade);
+			var sDesconto = plc.jq("#corpo\\:formulario\\:itemNotaFiscal\\:"+ index + "\\:percentualDesconto").val();
+			sDesconto = sDesconto.replace(",",".");
+			var desconto = parseFloat(sDesconto);
+			var valorLiquido = (valorUnitario * quantidade * (100.00 - desconto)) / 100.00;
+			valorLiquido = valorLiquido.toFixed(2);
+			var sValorLiquido = valorLiquido.toString(); 
+			sValorLiquido = sValorLiquido.replace(".",",");
+			plc.jq("#corpo\\:formulario\\:itemNotaFiscal\\:"+ index + "\\:valorLiquido" ).val(sValorLiquido);
+
+			var sum = sumjq(".classeValorLiquido");
+			var sSum = "R$ " + sum.toString(); 
+			sSum = sSum.replace(".",",");
+			plc.jq("#corpo\\:formulario\\:valorTotalNota").html(sSum);
+		}
+
+		sumjq = function(selector) {
+		    var sum = 0.0;
+		    jQuery(selector).each(function() {
+		    	sValorLiquido = jQuery(this).val();
+				sValorLiquido = sValorLiquido.replace(",",".");
+				var valorLiquido = parseFloat(sValorLiquido);
+				sum += valorLiquido; 
+		    });
+		    
+		    return sum.toFixed(2);
+		}		
+		
+		plc.jq(document).ready(function(){
+			plc.jq.each([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], function (index, value) {
+				plc.jq("#corpo\\:formulario\\:itemNotaFiscal\\:"+ index + "\\:codigoProduto" ).on("change", function(){
+					var codigo = plc.jq("#corpo\\:formulario\\:itemNotaFiscal\\:"+ index + "\\:codigoProduto" ).val();
+					plc.jq("#corpo\\:formulario\\:indiceItem").val( index );
+					plc.jq("#corpo\\:formulario\\:codigoItem").val( codigo );
+					plc.jq("#corpo\\:formulario\\:linkAcaoBuscarProdutoFornecedor").trigger("click");
+					plc.jq("#corpo\\:formulario\\:itemNotaFiscal\\:"+ index + "\\:valorLiquido").val();
+				});
+				
+				plc.jq("#corpo\\:formulario\\:itemNotaFiscal\\:"+ index + "\\:valorUnitario" ).on("change", function(){
+					calcularValorLiquido(index);
+				});
+				plc.jq("#corpo\\:formulario\\:itemNotaFiscal\\:"+ index + "\\:quantidade" ).on("change", function(){
+					calcularValorLiquido(index);
+				});
+				plc.jq("#corpo\\:formulario\\:itemNotaFiscal\\:"+ index + "\\:percentualDesconto" ).on("change", function(){
+					calcularValorLiquido(index);
+				});
+			});
+
+			var sum = sumjq(".classeValorLiquido");
+			var sSum = "R$ " + sum.toString(); 
+			sSum = sSum.replace(".",",");
+			plc.jq("#corpo\\:formulario\\:valorTotalNota").html(sSum);
+		});
+		//]]></script>
+
+		<plcf:iteracao var="itemNotaFiscal" id="itemNotaFiscal" value="#{notafiscal.itemNotaFiscal}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
+			<h:column> 
+				<h:outputText value="#{rowCounter.index}."/> 
+			</h:column>  
+			<h:column rendered="#{empty requestScope.visualizaDocumentoPlc}"> 
+				<f:facet name="header">
+					<plcf:tituloExclusao>Exc.</plcf:tituloExclusao>
+				</f:facet>  
+				<span class="celulaFormularioCaixaMarcacao">
+					<plcf:caixaExclusao id="indExcPlc" value="#{itemNotaFiscal.indExcPlc}"/>
+				</span> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.codigoProduto']}"/>
+				</f:facet>
+				<!-- 
+				<plcf:texto id="codigoProduto" value="#{itemNotaFiscal.codigoProduto}" style="text-align:right;" ajudaChave="ajuda.codigoProduto" tamanho="8"/> 
+				 -->  
+				<h:inputText id="codigoProduto" size="4" title="#{msg['ajuda.codigoProduto']}" value="#{itemNotaFiscal.codigoProduto}" style="text-align:right;" readonly="false" required="false"/>
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.produto']}"/>
+				</f:facet>  
+					<plcf:vinculado id="produto" value="#{itemNotaFiscal.produto}" 
+						propSelPop="produto" idExibe="S" lookupTamanho="50"
+						larg="1200" alt="800"
+						autoRecuperacaoPropriedade="codigoBarras"
+						autoComplete="true" idTamanho="10" evento="y"
+						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.Produto" 
+						actionSel="produtosel" modal="S" ajudaChave="ajuda.produto.local" 
+						onkeydown="selecionaPorTecla(event,this);" 
+						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.produto?q=titulo')"/> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.tipoProduto']}"/>
+				</f:facet>
+				<!-- 
+				<plcf:exibe id="tipoProduto" rendered="#{vendaproduto.produto != null}" value="#{vendaproduto.tipoProduto}" ajudaChave="ajuda.tipoProduto"/> 
+				 -->  
+				<h:inputText id="tipoProduto" title="#{msg['ajuda.tipoProduto']}" rendered="#{itemNotaFiscal.produto != null}" size="8" value="#{itemNotaFiscal.produto.tipoProduto.name}" readonly="true" required="false"/>
+				<h:inputText id="tipoProduto2" title="#{msg['ajuda.tipoProduto']}" rendered="#{itemNotaFiscal.produto == null}" size="8" value="#{itemNotaFiscal.produto}" readonly="true" required="false"/>
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.valorUnitario']}"/>
+				</f:facet>
+				<!-- 
+				<plcf:numerico id="valorUnitario" value="#{itemNotaFiscal.valorUnitario}" ajudaChave="ajuda.valorUnitario"/> 
+				 -->  
+				<h:inputText id="valorUnitario" title="#{msg['ajuda.valorUnitario']}" size="6" value="#{itemNotaFiscal.valorUnitario}" style="text-align:right;" readonly="false" required="false">
+				<f:convertNumber maxFractionDigits="2"
+				    groupingUsed="true"
+				    pattern="#0.00"
+				    currencySymbol="R$"
+				    minFractionDigits="2"
+				    maxIntegerDigits="5"
+				    type="currency"/>
+				</h:inputText>							
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.quantidade']}"/>
+				</f:facet>
+				<!-- 
+				<plcf:numerico id="quantidade" value="#{itemNotaFiscal.quantidade}" numCasas="0" ajudaChave="ajuda.quantidade"/> 
+				 -->  
+				<h:inputText id="quantidade" title="#{msg['ajuda.quantidade']}" size="4" value="#{itemNotaFiscal.quantidade}" style="text-align:right;" readonly="false" required="false"/>
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.percentualDesconto']}"/>
+				</f:facet>  
+				<!-- 
+				<plcf:numerico id="percentualDesconto" value="#{itemNotaFiscal.percentualDesconto}" ajudaChave="ajuda.percentualDesconto"/> 
+				 -->
+				<h:inputText id="percentualDesconto" title="#{msg['ajuda.percentualDesconto']}" size="6" value="#{itemNotaFiscal.percentualDesconto}" style="text-align:right;" readonly="false" required="false">
+				<f:convertNumber maxFractionDigits="2"
+				    groupingUsed="true"
+				    pattern="#0.00"
+				    currencySymbol="R$"
+				    minFractionDigits="2"
+				    maxIntegerDigits="5"
+				    type="currency"/>
+				</h:inputText>							
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.valorLiquido']}"/>
+				</f:facet>
+				<!-- 
+				<plcf:numerico id="valorLiquido" value="#{itemNotaFiscal.valorLiquido}" somenteLeitura="S" ajudaChave="ajuda.valorLiquido"/> 
+				 -->  
+				<h:inputText id="valorLiquido" class="classeValorLiquido" title="#{msg['ajuda.valorLiquido']}" size="6" value="#{itemNotaFiscal.valorLiquido}" style="text-align:right;" readonly="false" required="false">
+				<f:convertNumber maxFractionDigits="2"
+				    groupingUsed="true"
+				    pattern="#0.00"
+				    currencySymbol="R$"
+				    minFractionDigits="2"
+				    maxIntegerDigits="6"
+				    type="currency"/>
+				</h:inputText>							
+			</h:column> 
+		</plcf:iteracao> 
+		<div id="plc-corpo-formulario2" class="plc-corpo-formulario plc-form-tabular"> 
+			<fieldset class="plc-fieldset"> 
+				<legend class="plc-fieldset-legend"></legend>
+				<table>
+					<tr>
+					<th><plcf:titulo value="#{msg['compra.valorTotalNota']}"/></th>
+					</tr>
+					<tr>
+					<td><plcf:exibe id="valorTotalNota" value="#{notaFiscalMB.valorTotalNota}"/></td>
+					</tr>
+				</table>  
+			</fieldset> 
+		</div> 
+	</ui:composition> 
+</html>

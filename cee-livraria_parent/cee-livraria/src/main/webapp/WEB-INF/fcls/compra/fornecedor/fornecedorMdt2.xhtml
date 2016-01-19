@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition> 
+		<plcf:tabela tituloChave="fornecedor.mestre.2.titulo.comp"> 
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.endereco.logradouro']}"/>  
+					<plcf:texto id="endereco_logradouro" value="#{fornecedor.endereco.logradouro}" ajudaChave="ajuda.endereco.logradouro" tamanho="60"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.endereco.complemento']}"/>  
+					<plcf:texto id="endereco_complemento" value="#{fornecedor.endereco.complemento}" ajudaChave="ajuda.endereco.complemento" tamanho="20"/> 
+				</plcf:celula>  
+				<plcf:celula columnSpan="2"> 
+					<plcf:titulo value="#{msg['label.endereco.numero']}"/>  
+					<plcf:texto id="endereco_numero" value="#{fornecedor.endereco.numero}" ajudaChave="ajuda.endereco.numero"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.endereco.bairro']}"/>  
+					<plcf:texto id="endereco_bairro" value="#{fornecedor.endereco.bairro}" ajudaChave="ajuda.endereco.bairro" tamanho="60"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.endereco.uf']}"/>  
+					<plcf:comboDinamico id="endereco_uf" value="#{fornecedor.endereco.uf}" navegacaoParaCampos="endereco.cidade" dominio="Uf" exibeBranco="S" ajudaChave="ajuda.endereco.uf">
+						<f:ajax event="valueChange" render="endereco_cidade" onerror="plc.manipulaErroAjax"/> 
+					</plcf:comboDinamico>
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.endereco.cidade']}"/>  
+					<plcf:comboDinamico id="endereco_cidade" value="#{fornecedor.endereco.cidade}" comboAninhado="S"  dominio="Cidade" exibeBranco="S" skipCacheControl="true" ajudaChave="ajuda.endereco.cidade"/>
+				</plcf:celula> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.endereco.cep']}"/>  
+					<plcf:texto id="endereco_cep" value="#{fornecedor.endereco.cep}" tamanho="13" riaUsa="textmask(mask='99.999-999')"  ajudaChave="ajuda.endereco.cep"/> 
+				</plcf:celula>  
+			</plcf:linha> 
+		</plcf:tabela> 
+	</ui:composition> 
+</html>

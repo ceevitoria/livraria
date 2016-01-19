@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition> 
+
+<style>
+.escondido {
+   visibility: hidden;
+}
+</style>
+		<plcf:tabela tituloChave="notafiscal.mestre.titulo.comp"> 
+			<h:commandLink id="linkAcaoBuscarProdutoFornecedor" immediate="false" 
+				value="BuscarProdutoDoFornecedor"
+				action="#{notaFiscalMB.buscarProdutoFornecedor}"
+				style="color:blue;max-width:200px;font-size:12px;" styleClass="escondido">
+			</h:commandLink>		
+		
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.id']}"/>  
+					<plcf:oid id="id" value="#{notafiscal.id}" ajudaChave="ajuda.id"/> 
+					<plcf:texto id="indiceItem" value="#{notaFiscalMB.indiceItem}" ajudaChave="" styleClass="escondido"/>
+					<plcf:texto id="codigoItem" value="#{notaFiscalMB.codigoItem}" ajudaChave="" styleClass="escondido"/>
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.numero']}"/>  
+					<plcf:texto id="numero" value="#{notafiscal.numero}" ajudaChave="ajuda.numero"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.dataEmissao']}"/>  
+					<plcf:data id="dataEmissao" value="#{notafiscal.dataEmissao}" ajudaChave="ajuda.dataEmissao"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.dataEntrada']}"/>  
+					<plcf:data id="dataEntrada" value="#{notafiscal.dataEntrada}" ajudaChave="ajuda.dataEntrada"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.fornecedor']}"/>  
+					<plcf:comboDinamico id="fornecedor" value="#{notafiscal.fornecedor}" dominio="Fornecedor" exibeBranco="S" ajudaChave="ajuda.fornecedor"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.valorTotal']}"/>  
+					<plcf:numerico id="valorTotal" value="#{notafiscal.valorTotal}" ajudaChave="ajuda.valorTotal"/> 
+				</plcf:celula> 
+			</plcf:linha> 
+		</plcf:tabela> 
+	</ui:composition> 
+</html>

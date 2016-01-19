@@ -19,6 +19,9 @@ import com.powerlogic.jcompany.commons.facade.IPlcFacade;
 
 public interface IAppFacade extends IPlcFacade {
 	
+	@SuppressWarnings("rawtypes")
+	public Object findById(PlcBaseContextVO context, Class classe, Object id) throws PlcException;
+
 	/**
 	 * Encontra a tabela de preco vigente para produto informado
 	 * @param context

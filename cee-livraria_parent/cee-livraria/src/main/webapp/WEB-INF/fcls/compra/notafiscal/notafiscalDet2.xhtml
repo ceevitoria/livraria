@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:plct="http://www.powerlogic.com.br/plct" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition> 
+		<plcf:iteracao var="contaPagar" id="contaPagar" value="#{notafiscal.contaPagar}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
+			<h:column> 
+				<h:outputText value="#{rowCounter.index}."/> 
+			</h:column>  
+			<h:column rendered="#{empty requestScope.visualizaDocumentoPlc}"> 
+				<f:facet name="header">
+					<plcf:tituloExclusao>Exc.</plcf:tituloExclusao>
+				</f:facet>  
+				<span class="celulaFormularioCaixaMarcacao">
+					<plcf:caixaExclusao id="indExcPlc" value="#{contaPagar.indExcPlc}"/>
+				</span> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.dataEmissao']}"/>
+				</f:facet>  
+				<plcf:data id="dataEmissao" value="#{contaPagar.dataEmissao}" ajudaChave="ajuda.dataEmissao"/> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.dataVencimento']}"/>
+				</f:facet>  
+				<plcf:data id="dataVencimento" value="#{contaPagar.dataVencimento}" ajudaChave="ajuda.dataVencimento"/> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.status']}"/>
+				</f:facet>  
+				<plcf:comboEstatico id="status" value="#{contaPagar.status}" dominio="StatusContaPagar" exibeBranco="S" ajudaChave="ajuda.status"/> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.dataPagamento']}"/>
+				</f:facet>  
+				<plcf:data id="dataPagamento" value="#{contaPagar.dataPagamento}" ajudaChave="ajuda.dataPagamento"/> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.valor']}"/>
+				</f:facet>  
+				<plcf:numerico id="valor" value="#{contaPagar.valor}" ajudaChave="ajuda.valor"/> 
+			</h:column>  
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.observacao']}"/>
+				</f:facet>  
+				<plcf:texto id="observacao" value="#{contaPagar.observacao}" ajudaChave="ajuda.observacao" tamanho="50"/> 
+			</h:column> 
+		</plcf:iteracao> 
+	</ui:composition> 
+</html>
