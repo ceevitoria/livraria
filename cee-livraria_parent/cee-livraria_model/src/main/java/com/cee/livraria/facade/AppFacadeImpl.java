@@ -21,13 +21,14 @@ import com.cee.livraria.entity.pagamento.PagamentoList;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.model.CaixaRepository;
+import com.cee.livraria.model.DevolucaoProdutosRepository;
 import com.cee.livraria.model.ProdutoRepository;
 import com.cee.livraria.model.VendaProdutosRepository;
 import com.cee.livraria.model.ajuste.AjusteEstoqueRepository;
 import com.cee.livraria.model.compras.NotaFiscalRepository;
 import com.cee.livraria.model.conferencia.ConferenciaRepository;
 import com.cee.livraria.persistence.jpa.AppJpaDAO;
-import com.cee.livraria.persistence.jpa.produto.LivroDAO;
+import com.cee.livraria.persistence.jpa.produto.ProdutoDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.commons.config.qualifiers.QPlcDefault;
@@ -43,10 +44,13 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	AppJpaDAO dao;
 	
 	@Inject
-	private LivroDAO jpaDAO;
+	private ProdutoDAO produtoDAO;
 	
 	@Inject
 	private VendaProdutosRepository vendaProdutoRepository;
+	
+	@Inject
+	private DevolucaoProdutosRepository devolucaoProdutoRepository;
 	
 	@Inject
 	private ConferenciaRepository conferenciaRepository;
@@ -73,7 +77,7 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
 	@Override
 	public PrecoTabela findPrecoTabela(PlcBaseContextVO context, Long idProduto) throws PlcException {
-		return jpaDAO.obterPrecoTabela(context, idProduto);
+		return produtoDAO.obterPrecoTabela(context, idProduto);
 	}
 
 	@PlcTransactional(commit=true)
@@ -125,7 +129,7 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 		List<Estoque> estoqueLista = new ArrayList<Estoque>(listaProdutos.size());
 		
 		for (Produto produto: listaProdutos) {
-			List<Estoque> itens = jpaDAO.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
+			List<Estoque> itens = produtoDAO.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
 			estoqueLista.addAll(itens);
 		}
 		
@@ -146,5 +150,20 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	public Collection recuperarProdutos(PlcBaseContextVO context, Produto produtoArg, String orderByDinamico, int inicio, int total) throws PlcException {
 		return produtoRepository.recuperaProdutos(context, produtoArg, orderByDinamico, inicio, total);
 	}
+	
+	@PlcTransactional(commit=true)
+	@TransactionAttribute(javax.ejb.TransactionAttributeType.REQUIRED)
+	@Override
+	public RetornoConfig registrarDevolucaoProdutos(PlcBaseContextVO context, List entityList) throws PlcException {
+		return devolucaoProdutoRepository.registrarDevolucaoProdutos(context, entityList);
+	}
+	
+	@PlcTransactional(commit=false)
+	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
+	@Override
+	public BigDecimal buscarDadosDevolucaoProdutos(PlcBaseContextVO context, List entityList) throws PlcException {
+		return devolucaoProdutoRepository.buscarDadosDevolucaoProdutos(context, entityList);
+	}
+	
 	
 }

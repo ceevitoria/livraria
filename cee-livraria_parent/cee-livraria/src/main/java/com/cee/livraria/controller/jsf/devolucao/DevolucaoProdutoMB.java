@@ -1,8 +1,7 @@
-package com.cee.livraria.controller.jsf.vendaproduto;
+package com.cee.livraria.controller.jsf.devolucao;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.enterprise.inject.Produces;
@@ -11,13 +10,9 @@ import javax.inject.Named;
 
 import com.cee.livraria.commons.AppConstants;
 import com.cee.livraria.controller.jsf.AppMB;
-import com.cee.livraria.entity.config.CompraVendaConfig;
 import com.cee.livraria.entity.config.RetornoConfig;
+import com.cee.livraria.entity.estoque.apoio.DevolucaoProduto;
 import com.cee.livraria.entity.estoque.apoio.VendaProduto;
-import com.cee.livraria.entity.pagamento.FormaPagto;
-import com.cee.livraria.entity.pagamento.FormaPagtoEntity;
-import com.cee.livraria.entity.pagamento.Pagamento;
-import com.cee.livraria.entity.pagamento.PagamentoList;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcConstants;
@@ -34,15 +29,14 @@ import com.powerlogic.jcompany.controller.jsf.action.util.PlcConversationControl
 import com.powerlogic.jcompany.controller.jsf.annotations.PlcHandleException;
 import com.powerlogic.jcompany.controller.jsf.util.PlcCreateContextUtil;
 import com.powerlogic.jcompany.controller.util.PlcIocControllerFacadeUtil;
-import com.powerlogic.jcompany.domain.type.PlcYesNo;
 import com.powerlogic.jcompany.domain.validation.PlcMessage;
 	
-@PlcConfigAggregation(entity = com.cee.livraria.entity.estoque.apoio.VendaProduto.class)
+@PlcConfigAggregation(entity = com.cee.livraria.entity.estoque.apoio.DevolucaoProduto.class)
 
 @PlcConfigForm(
 	formPattern=FormPattern.Tab,
 	tabular = @PlcConfigTabular(numNew = 4), 
-	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/vender")
+	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/devolucao")
 )
 
 
@@ -51,9 +45,11 @@ import com.powerlogic.jcompany.domain.validation.PlcMessage;
  */
  
 @SPlcMB
-@PlcUriIoC("vendaproduto")	
+@PlcUriIoC("devolucaoproduto")	
+@Named("devolucaoProdutoMB")
 @PlcHandleException
-public class VendaProdutoMB extends AppMB  {
+public class DevolucaoProdutoMB extends AppMB  {
+	private static final long serialVersionUID = 1514409886499403257L;
 
 	@Inject @QPlcDefault 
 	protected PlcCreateContextUtil contextMontaUtil;
@@ -64,24 +60,20 @@ public class VendaProdutoMB extends AppMB  {
 	@Inject @QPlcDefault 
 	protected PlcIocControllerFacadeUtil iocControleFacadeUtil;
 
-	private static final long serialVersionUID = 1L;
+	private BigDecimal valorTotal;
 
-	protected PagamentoList pagamentoList;
+	public BigDecimal getValorTotal() {
+		return valorTotal;
+	}
+
+	public void setValorTotal(BigDecimal valorTotal) {
+		this.valorTotal = valorTotal;
+	}
 	
 	/**
 	 * Entidade da ação injetado pela CDI
 	*/
-	@Produces  @Named("pagamentoLista") 
-	public PagamentoList createPagamentoList() {
-		criaNovaListaPagamento();
-		
-		return this.pagamentoList;
-	}	
-	
-	/**
-	 * Entidade da ação injetado pela CDI
-	*/
-	@Produces  @Named("vendaprodutoLista") 
+	@Produces  @Named("devolucaoprodutoLista") 
 	public PlcEntityList createEntityListPlc() {
 		criaNovaLista();
 		return this.entityListPlc;
@@ -96,33 +88,14 @@ public class VendaProdutoMB extends AppMB  {
 	private void novosItens() {
 		List itens = new ArrayList<Object>();
 		
-		VendaProduto cl = null;
+		DevolucaoProduto cl = null;
 		
 		for (int i=0; i<4; i++) {
-			cl = new VendaProduto();
+			cl = new DevolucaoProduto();
 			itens.add(cl);
 		}
 		
 		this.entityListPlc.setItensPlc(itens);
-	}
-
-	private void criaNovaListaPagamento() {
-		
-		if (this.pagamentoList==null) {
-			this.pagamentoList = new PagamentoList();
-			
-			List<Pagamento> itens = pagamentoList.getItens();
-			
-			Pagamento pagto = null;
-			
-			for (int i=0; i<2; i++) {
-				pagto = new Pagamento();
-				itens.add(pagto);
-			}
-			
-			this.pagamentoList.setItens(itens);
-		}
-		
 	}
 
 	private void criaNovaLista() {
@@ -132,33 +105,39 @@ public class VendaProdutoMB extends AppMB  {
 		}
 	}
 	
+	/**
+	 * Limpa todos os argumentos da pesquisa.
+	 */
+	@Override
+	public String clearArgs()  {
+		return super.clearArgs();
+	}
+	
 	public void handleButtonsAccordingFormPattern() {
 		contextUtil.getRequest().setAttribute(PlcConstants.ACAO.EXIBE_BT_GRAVAR, PlcConstants.NAO_EXIBIR);
 		contextUtil.getRequest().setAttribute(PlcConstants.ACAO.EXIBE_BT_EXCLUIR, PlcConstants.NAO_EXIBIR);
 		contextUtil.getRequest().setAttribute(PlcConstants.ACAO.EXIBE_BT_INCLUIR, PlcConstants.EXIBIR);
 		
 		contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_LIMPAR, PlcConstants.EXIBIR);
+		
 		contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_NOVO, PlcConstants.EXIBIR);
 		contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_BUSCAR_PRODUTO, PlcConstants.EXIBIR);
 		
-		if (pagamentoList != null && pagamentoList.getItens() != null) {
-			Pagamento pagto = (Pagamento)pagamentoList.getItens().get(0);
-			
-			if (pagto != null && pagto.getValor() != null  && pagto.getValor().doubleValue() > 0.0) {
-				contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_REGISTRAR_VENDA, PlcConstants.EXIBIR);
-			}
+		if (valorTotal != null && valorTotal.doubleValue() > 0.01) {
+			contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_REGISTRAR_DEVOLUCAO, PlcConstants.EXIBIR);
 		}
+		
 	}
 	
-	private void limparOperacaoAnterior()  {
+	public void limparOperacaoAnterior()  {
 		limpaItens(entityListPlc.getItensPlc());
-		limpaFormasPagto(pagamentoList.getItens());
+		valorTotal = new BigDecimal("0.00");
 	}
 
 	private void limpaItens(List itens) {
 
 		for (Object o : itens) {
-			VendaProduto vl = (VendaProduto)o;
+			DevolucaoProduto vl = (DevolucaoProduto)o;
 			vl.setId(null);
 			vl.setProduto(null);
 			vl.setTipoProduto(null);
@@ -176,26 +155,18 @@ public class VendaProdutoMB extends AppMB  {
 		}
 	}
 
-	private void limpaFormasPagto(List itens) {
-		for (Object o : itens) {
-			Pagamento vl = (Pagamento)o;
-			vl.setValor(null);
-			vl.setFormaPagto(null);
-		}
-	}
-
 	private void limpaItensSemProdutos(List itens) {
 
 		for (Object o : itens) {
-			VendaProduto vl = (VendaProduto)o;
+			DevolucaoProduto dp = (DevolucaoProduto)o;
 			
-			if (vl.getProduto() == null || vl.getProduto().getCodigoBarras() == null || "".compareTo(vl.getProduto().getCodigoBarras().trim()) == 0) {
-				vl.setId(null);
-				vl.setProduto(null);
-				vl.setNomeTabela(null);
-				vl.setQuantidade(null);
-				vl.setValorUnitario(null);
-				vl.setValorTotal(null);
+			if (dp.getProduto() == null || dp.getProduto().getCodigoBarras() == null || "".compareTo(dp.getProduto().getCodigoBarras().trim()) == 0) {
+				dp.setId(null);
+				dp.setProduto(null);
+				dp.setNomeTabela(null);
+				dp.setQuantidade(null);
+				dp.setValorUnitario(null);
+				dp.setValorTotal(null);
 			}
 		}
 	}
@@ -203,14 +174,13 @@ public class VendaProdutoMB extends AppMB  {
 	/**
 	 * 
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public String registrarVendaProdutos()  {
+	@SuppressWarnings({ "rawtypes"})
+	public String registrarDevolucaoProdutos()  {
 		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 		
 		List itensPlc = entityListPlc.getItensPlc();
-		List itensPagamento = pagamentoList.getItens();
 
-		RetornoConfig ret = iocControleFacadeUtil.getFacade(IAppFacade.class).registrarVendaProdutos(context, itensPlc, itensPagamento);
+		RetornoConfig ret = iocControleFacadeUtil.getFacade(IAppFacade.class).registrarDevolucaoProdutos(context, itensPlc);
 		
 		if (ret.getAlertas().size() > 0) {
 			
@@ -226,11 +196,11 @@ public class VendaProdutoMB extends AppMB  {
 			}
 		}
 		
-		CompraVendaConfig config = (CompraVendaConfig)ret.getConfig();
-		
-		if (config.getAutoLimparTelaParaNovaVenda().equals(PlcYesNo.S)) {
+//		CompraVendaConfig config = (CompraVendaConfig)ret.getConfig();
+//		
+//		if (config.getAutoLimparTelaParaNovaVenda().equals(PlcYesNo.S)) {
 			limparOperacaoAnterior();
-		}
+//		}
 		
 		return baseEditMB.getDefaultNavigationFlow(); 
 	}
@@ -244,30 +214,11 @@ public class VendaProdutoMB extends AppMB  {
 
 		List itens = entityListPlc.getItensPlc();
 
-		BigDecimal valorTotal = iocControleFacadeUtil.getFacade(IAppFacade.class).buscarDadosVendaProdutos(context, itens);
-		
-		Collection formasPagto = iocControleFacadeUtil.getFacade(IAppFacade.class).findSimpleList(context, FormaPagtoEntity.class, "id");
-		
-		//Setar o primeiro item para o pagamento integral
-		FormaPagto formaPagto = (FormaPagto)formasPagto.iterator().next();
-		Pagamento pagto = (Pagamento)pagamentoList.getItens().get(0);
-		BigDecimal valorPrimeiraParcela = pagto.getValor();
-		
-		if (valorPrimeiraParcela == null || pagto.getAutomatico() == null || pagto.getAutomatico().booleanValue() == true) {
-			pagto.setValor(valorTotal);
-			pagto.setFormaPagto(formaPagto);
-			pagto.setAutomatico(true);
-		} else {
-			pagto = (Pagamento)pagamentoList.getItens().get(1);
-			BigDecimal valorSegundaParcela = valorTotal.subtract(valorPrimeiraParcela);
-			formaPagto = (FormaPagto)formasPagto.iterator().next();
-			pagto.setValor(valorSegundaParcela);
-			pagto.setFormaPagto(formaPagto);
-			pagto.setAutomatico(true);
-		}
+		valorTotal = iocControleFacadeUtil.getFacade(IAppFacade.class).buscarDadosDevolucaoProdutos(context, itens);
 		
 		limpaItensSemProdutos(itens);
 		
 		return baseEditMB.getDefaultNavigationFlow(); 
 	}
+
 }

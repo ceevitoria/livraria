@@ -67,35 +67,4 @@ public class LivroDAO extends AppJpaDAO  {
 		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal preco
 	);
 	
-	public PrecoTabela obterPrecoTabela(PlcBaseContextVO context, Long idProduto) throws PlcException {
-		String queryPrecoTabela = null;
-		PrecoTabela preco = null;
-		
-		if (context!=null && annotationPersistenceUtil.getNamedQueryByName(Produto.class, "queryPrecoTabela") != null) {
-			queryPrecoTabela = annotationPersistenceUtil.getNamedQueryByName(Produto.class, "queryPrecoTabela").query();
-		}
-		
-		if (queryPrecoTabela != null) {
-			List entities = null;
-
-			try {
-				entities = apiCreateQuery(context, Produto.class, queryPrecoTabela).setParameter("id", idProduto).getResultList();
-			} catch (NoResultException nre) {
-				entities = null;
-			}
-			
-			preco = new PrecoTabela();
-
-			if (entities == null || entities.isEmpty()) {
-				preco.setNomeTabela("Nenhuma precificação!");
-			} else {
-				Produto produto = (Produto)entities.get(0);
-				preco.setIdTabela(produto.getIdTabela());
-				preco.setNomeTabela(produto.getNomeTabela());
-				preco.setPrecoTabela(produto.getPrecoTabela());
-			}
-		}
-		
-		return preco;
-	}
 }

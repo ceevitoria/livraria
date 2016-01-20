@@ -8,6 +8,7 @@ public enum TipoMovimentoCaixa {
 	SA("{tipoMovimentoCaixa.Sangria}"),
 	SU("{tipoMovimentoCaixa.Suprimento}"),
 	VD("{tipoMovimentoCaixa.Venda}"),
+	DE("{tipoMovimentoCaixa.Devolucao}"),
 	AA("{tipoMovimentoCaixa.AjusteAutomatico}"),
 	AM("{tipoMovimentoCaixa.AjusteManual}"),
 	AB("{tipoMovimentoCaixa.Abertura}"),

@@ -215,7 +215,7 @@
 			plc.jq(document).ready(function(){
 				plc.jq(document).keydown(function(e) {
 					if(e.which == 13) {
-						plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarDadosVenda").trigger("click");
+						plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarDadosProduto").trigger("click");
 					}
 				});
 				
@@ -226,7 +226,7 @@
 				
 				plc.jq.each([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], function (index, value) {
 					plc.jq("#corpo\\:formulario\\:vendaproduto\\:"+ index + "\\:produto\\:codigoBarras").on("change", function(){
-						plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarDadosVenda").trigger("click");
+						plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarDadosProduto").trigger("click");
 						plc.jq("#corpo\\:formulario\\:vendaproduto\\:"+ index + "\\:quantidade").focus();
 					});
 					
@@ -234,7 +234,7 @@
 						var tipoProduto = plc.jq("#corpo\\:formulario\\:vendaproduto\\:"+ index + "\\:tipoProduto").val();
 
 						if (tipoProduto == null || tipoProduto == "") {
-							plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarDadosVenda").trigger("click");
+							plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarDadosProduto").trigger("click");
 						}
 						
 						calcularValorLiquido(index);

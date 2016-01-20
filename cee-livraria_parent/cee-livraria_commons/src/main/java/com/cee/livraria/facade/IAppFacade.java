@@ -35,7 +35,7 @@ public interface IAppFacade extends IPlcFacade {
 	/**
 	 * Registra a venda de produtos
 	 * @param context Contexto da aplicacao
-	 * @param entityList Relacao dos livros sendo vendidos
+	 * @param entityList Relacao dos produtos sendo vendidos
 	 * @param pagtoList Relacao dos pagamentos para a venda sendo realizada
 	 * @return RetornoConfig Retorna com informacoes sobre a venda realizada (@see RetornoConfig)
 	 */
@@ -101,5 +101,21 @@ public interface IAppFacade extends IPlcFacade {
 
 	@SuppressWarnings("rawtypes")
 	public Collection recuperarProdutos(PlcBaseContextVO context, Produto produtoArg, String orderByDinamico, int inicio, int total) throws PlcException;
+
+	/**
+	 * Registra a devolucao de produtos
+	 * @param context Contexto da aplicacao
+	 * @param entityList Relacao dos produtos sendo devolvidos
+	 * @return RetornoConfig Retorna com informacoes sobre a venda realizada (@see RetornoConfig)
+	 */
+	public RetornoConfig registrarDevolucaoProdutos(PlcBaseContextVO context, List entityList) throws PlcException;
+
+	/**
+	 * Busca os dados para a devolucao dos produtos
+	 * @param context
+	 * @param entityList
+	 * @return BigDecimal Valor total da devolucao 
+	 */
+	public BigDecimal buscarDadosDevolucaoProdutos(PlcBaseContextVO context, List entityList) throws PlcException;
 	
 }

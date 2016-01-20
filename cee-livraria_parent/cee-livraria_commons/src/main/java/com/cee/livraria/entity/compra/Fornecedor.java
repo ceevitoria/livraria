@@ -39,7 +39,7 @@ import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
 @Access(AccessType.FIELD)
 @NamedQueries({
 	@NamedQuery(name="Fornecedor.queryMan", query="from Fornecedor"),
-	@NamedQuery(name="Fornecedor.querySel", query="select obj.id as id, obj.nome as nome, obj.razaoSocial as razaoSocial, obj.inscricaoEstatudal as inscricaoEstatudal, obj.cnpj as cnpj, obj.descontoPadrao as descontoPadrao, obj.parcelamentoPadrao as parcelamentoPadrao, obj1.id as endereco_cidade_id , obj1.nome as endereco_cidade_nome, obj2.id as endereco_uf_id, obj2.nome as endereco_uf_nome from Fornecedor obj left outer join obj.endereco.cidade as obj1 left outer join obj.endereco.uf as obj2 order by obj.nome asc"), 
+	@NamedQuery(name="Fornecedor.querySel", query="select obj.id as id, obj.nome as nome, obj.razaoSocial as razaoSocial, obj.inscricaoEstatudal as inscricaoEstatudal, obj.cnpj as cnpj, obj.descontoPadrao as descontoPadrao, obj.parcelamentoPadrao as parcelamentoPadrao, obj1.id as endereco_cidade_id, obj1.nome as endereco_cidade_nome, obj2.id as endereco_uf_id, obj2.nome as endereco_uf_nome from Fornecedor obj left outer join obj.endereco.cidade as obj1 left outer join obj.endereco.uf as obj2 order by obj.nome asc"), 
 	@NamedQuery(name="Fornecedor.querySelLookup", query="select id as id, nome as nome from Fornecedor where id = ? order by id asc") })
 public class Fornecedor extends AppBaseEntity {
 	private static final long serialVersionUID = -305835460793103576L;

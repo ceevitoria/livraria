@@ -13,8 +13,9 @@ public interface AppConstants extends PlcConstants {
     interface ACAO {
     	String EXIBE_BT_LIMPAR = "exibeBtnLimpar";
     	String EXIBE_BT_NOVO = "exibeBtnNovo";
-    	String EXIBE_BT_BUSCAR_VENDA = "exibeBtnBuscarDadosVenda";
+    	String EXIBE_BT_BUSCAR_PRODUTO = "exibeBtnBuscarDadosProduto";
     	String EXIBE_BT_REGISTRAR_VENDA = "exibeBtnRegistrarVenda";
+    	String EXIBE_BT_REGISTRAR_DEVOLUCAO = "exibeBtnRegistrarDevolucao";
     	String EXIBE_BT_REGISTRAR_ABERTURA_CAIXA = "exibeBtnRegistrarAberturaCaixa";
     	String EXIBE_BT_REGISTRAR_SANGRIA_CAIXA = "exibeBtnRegistrarSangriaCaixa";
     	String EXIBE_BT_REGISTRAR_SUPRIMENTO_CAIXA = "exibeBtnRegistrarSuprimentoCaixa";

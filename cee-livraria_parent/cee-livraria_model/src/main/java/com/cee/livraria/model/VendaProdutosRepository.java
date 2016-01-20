@@ -32,19 +32,22 @@ import com.cee.livraria.entity.estoque.TipoMovimento;
 import com.cee.livraria.entity.estoque.apoio.VendaProduto;
 import com.cee.livraria.entity.pagamento.FormaPagto;
 import com.cee.livraria.entity.pagamento.Pagamento;
-import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
-import com.cee.livraria.persistence.jpa.produto.LivroDAO;
+import com.cee.livraria.persistence.jpa.produto.ProdutoDAO;
 import com.cee.livraria.persistence.jpa.vendaproduto.VendaProdutoDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
+import com.powerlogic.jcompany.commons.annotation.PlcAggregationDAOIoC;
+import com.powerlogic.jcompany.commons.config.stereotypes.SPlcRepository;
 import com.powerlogic.jcompany.domain.type.PlcYesNo;
 
+@SPlcRepository
+@PlcAggregationDAOIoC(value=VendaProduto.class)
 public class VendaProdutosRepository {
 	
 	@Inject
-	private LivroDAO livroDAO;
+	private ProdutoDAO produtoDAO;
 
 	@Inject
 	protected transient Logger log;
@@ -205,13 +208,13 @@ public class VendaProdutosRepository {
 	/**
 	 * Atualiza o saldo do caixa e cria um movimento de caixa para a venda atual.
 	 * Valida se existe um registro para o caixa e se o mesmo encontra-se aberto.
-	 * @param livros Relação dos livros sendo vendidos
+	 * @param produtos Relação dos produtos sendo vendidos
 	 * @param pagtos Relação dos pagamentos realizados
 	 * @param dataVenda Data em que a venda foi realizada
 	 * @param valor Valor total da venda
-	 * @param quantidade Quantidade total de livros vendidos
+	 * @param quantidade Quantidade total de produtos vendidos
 	 */
-	private void atualizaCaixa(List livros, List pagtos, Date dataVenda, double valor, int quantidade) throws PlcException {
+	private void atualizaCaixa(List produtos, List pagtos, Date dataVenda, double valor, int quantidade) throws PlcException {
 		Caixa caixa = null;
 		
 		//recupera o caixa existente (só deve existir um único registro de caixa para o sistema "LIV")
@@ -233,7 +236,7 @@ public class VendaProdutosRepository {
 			throw new PlcException("{erro.caixa.fechado}");
 		}
 		
-		List<String> listaObs = montaObservacao(livros);
+		List<String> listaObs = montaObservacao(produtos);
 
 		configuraMensagens(listaObs, valor, quantidade);
 		
@@ -358,28 +361,28 @@ public class VendaProdutosRepository {
 			if (config.getTipoMensagemSucessoVenda() .equals(TipoMensagemSucessoVendaConfig.B) ) {
 				mensagens.add("Venda realizada com sucesso!");
 			} else if (config.getTipoMensagemSucessoVenda() .equals(TipoMensagemSucessoVendaConfig.V) ){
-				mensagens.add(String.format("Venda de %02d livro(s) no valor total de R$ %,.02f realizada com sucesso!", new Object[]{quantidade, valor}));
+				mensagens.add(String.format("Venda de %02d produto(s) no valor total de R$ %,.02f realizada com sucesso!", new Object[]{quantidade, valor}));
 			} else if (config.getTipoMensagemSucessoVenda() .equals(TipoMensagemSucessoVendaConfig.D) ){
-				mensagens.add(String.format("Venda de %02d livro(s) no valor total de R$ %,.02f realizada com sucesso!", new Object[]{quantidade, valor}));
+				mensagens.add(String.format("Venda de %02d produto(s) no valor total de R$ %,.02f realizada com sucesso!", new Object[]{quantidade, valor}));
 				mensagens.addAll(listaObs);
 			}
 		}
 	}
 
 	/**
-	 * @param relacaoLivros
+	 * @param relacaoProdutos
 	 * @return
 	 */
-	private List<String> montaObservacao(List relacaoLivros) {
+	private List<String> montaObservacao(List relacaoProdutos) {
 		List<String> listaObs = new ArrayList<String>();
 
 		//monta o texto para a observação do movimento do caixa
-		for (Object o : relacaoLivros) {
+		for (Object o : relacaoProdutos) {
 			VendaProduto vp = (VendaProduto)o;
 
 			if (vp.getProduto() != null) {
 				StringBuilder obs = new StringBuilder();
-				obs.append("Livro: '");
+				obs.append("Produto: '");
 				obs.append(vp.getProduto().getCodigoBarras());
 				obs.append("-");
 				obs.append(vp.getProduto().getTitulo());
@@ -474,7 +477,7 @@ public class VendaProdutosRepository {
 				if (vp.getProduto() != null) {
 					Produto produto = (Produto)jpa.findById(context, Produto.class, vp.getProduto().getId());
 					
-					PrecoTabela preco = livroDAO.obterPrecoTabela(context, vp.getProduto().getId());
+					PrecoTabela preco = produtoDAO.obterPrecoTabela(context, vp.getProduto().getId());
 					
 					vp.setNomeTabela(preco.getNomeTabela());
 					

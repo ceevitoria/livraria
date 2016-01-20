@@ -119,11 +119,11 @@
 				</plcf:botaoAcao>
 			</ui:insert>
 
-			<ui:insert name="livraria_acao_buscarDadosVenda">	 	           
-				<plcf:botaoAcao id="botaoAcaoBuscarDadosVenda" urlIcone="ico iEspecifico" acao="buscarDadosVendaProdutos" 
+			<ui:insert name="livraria_acao_buscarDadosProduto">	 	           
+				<plcf:botaoAcao id="botaoAcaoBuscarDadosProduto" urlIcone="ico iEspecifico" acao="buscarDadosProdutos" 
 					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
 					label="cee.evt.buscar" limpaForm="true"  
-					botaoArrayID="BUSCAR" rendered="#{requestScope.exibeBtnBuscarDadosVenda=='S'}" 
+					botaoArrayID="BUSCAR" rendered="#{requestScope.exibeBtnBuscarDadosProduto=='S'}" 
 					onclick="beforeSubmit();">
 					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
 					<f:param name="skipValidation" value="true"/>
@@ -141,8 +141,19 @@
 				</plcf:botaoAcao>	
 			</ui:insert>
 
-			<ui:insert name="livraria_acao_limparVendaAnterior">	 	           
-				<plcf:botaoAcao id="botaoAcaoLimparVendaAnterior" urlIcone="ico iLimpar" acao="limparVendaAnterior" 
+			<ui:insert name="livraria_acao_registrarDevolucao">	 	           
+				<plcf:botaoAcao id="botaoAcaoRegistrarDevolucao" urlIcone="ico iGravar" acao="registrarDevolucaoProdutos" 
+					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
+					label="cee.evt.registrar" limpaForm="false"  
+					botaoArrayID="REGISTRAR_DEVOLUCAO" rendered="#{requestScope.exibeBtnRegistrarDevolucao=='S'}" 
+					onclick="beforeSubmit();">
+					<f:ajax event="action" execute="@form" render="@form" imediate="false" onerror="plc.manipulaErroAjax"/>
+					<f:param name="skipValidation" value="false"/>
+				</plcf:botaoAcao>	
+			</ui:insert>
+
+			<ui:insert name="livraria_acao_limparOperacaoAnterior">	 	           
+				<plcf:botaoAcao id="botaoAcaoLimparOperacaoAnterior" urlIcone="ico iLimpar" acao="limparOperacaoAnterior" 
 					partialSubmit="#{!partialSubmit}" 
 					label="cee.evt.limpar" limpaForm="true" validaForm="false" immediate="false" blocking="true"   
 					botaoArrayID="LIMPAR" rendered="#{requestScope.exibeBtnLimpar=='S'}" 
