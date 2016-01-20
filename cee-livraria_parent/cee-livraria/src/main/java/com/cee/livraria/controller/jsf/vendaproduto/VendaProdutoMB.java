@@ -254,7 +254,7 @@ public class VendaProdutoMB extends AppMB  {
 		Pagamento pagto = (Pagamento)pagamentoList.getItens().get(0);
 		BigDecimal valorPrimeiraParcela = pagto.getValor();
 		
-		if (pagto.getAutomatico() == null || pagto.getAutomatico().booleanValue() == true) {
+		if (valorPrimeiraParcela == null || pagto.getAutomatico() == null || pagto.getAutomatico().booleanValue() == true) {
 			pagto.setValor(valorTotal);
 			pagto.setFormaPagto(formaPagto);
 			pagto.setAutomatico(true);

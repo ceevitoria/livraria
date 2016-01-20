@@ -1,6 +1,7 @@
 package com.cee.livraria.facade;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 import com.cee.livraria.entity.caixa.Caixa;
@@ -97,5 +98,8 @@ public interface IAppFacade extends IPlcFacade {
 	 * @return RetornoConfig Retorna com informacoes sobre entrada da nota fiscal (@see RetornoConfig)
 	 */
 	public RetornoConfig registrarEntradaNotaFiscal(PlcBaseContextVO context, NotaFiscal notaFiscal) throws PlcException;
+
+	@SuppressWarnings("rawtypes")
+	public Collection recuperarProdutos(PlcBaseContextVO context, Produto produtoArg, String orderByDinamico, int inicio, int total) throws PlcException;
 	
 }

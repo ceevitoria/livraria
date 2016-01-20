@@ -161,7 +161,7 @@ public class AjusteEstoqueMB extends AppMB {
 			}
 			
 			if (ok) {
-				//Busca os livros que satisfazem às regras de pesquisa e os adiciona na listaItens caso ainda não tenham sido adicionados anteriormente
+				//Busca os produtos que satisfazem às regras de pesquisa e os adiciona na listaItens caso ainda não tenham sido adicionados anteriormente
 				RegraPesquisaProdutos regra = ajusteEstoque.getRegra();
 				
 				Produto produtoArg = criaArgumentoPesquisaProduto(regra);

@@ -130,7 +130,7 @@
 				<!-- 
 				<plcf:exibe id="tipoProduto" rendered="#{vendaproduto.produto != null}" value="#{vendaproduto.tipoProduto}" ajudaChave="ajuda.tipoProduto"/> 
 				 -->  
-				<h:inputText id="tipoProduto" title="#{msg['ajuda.tipoProduto']}" rendered="#{itemNotaFiscal.produto != null}" size="8" value="#{itemNotaFiscal.produto.tipoProduto.name}" readonly="true" required="false"/>
+				<h:inputText id="tipoProduto" title="#{msg['ajuda.tipoProduto']}" rendered="#{itemNotaFiscal.produto != null}" size="8" style="text-align:center;" value="#{itemNotaFiscal.produto.tipoProduto.name}" readonly="true" required="false"/>
 				<h:inputText id="tipoProduto2" title="#{msg['ajuda.tipoProduto']}" rendered="#{itemNotaFiscal.produto == null}" size="8" value="#{itemNotaFiscal.produto}" readonly="true" required="false"/>
 			</h:column>  
 			<h:column> 
@@ -199,10 +199,8 @@
 				<legend class="plc-fieldset-legend"></legend>
 				<table>
 					<tr>
-					<th><plcf:titulo value="#{msg['compra.valorTotalNota']}"/></th>
-					</tr>
-					<tr>
-					<td><plcf:exibe id="valorTotalNota" value="#{notaFiscalMB.valorTotalNota}"/></td>
+					<td><plcf:titulo value="#{msg['compra.valorTotalNota']}"/></td><td>&nbsp;&nbsp;&nbsp;</td>
+					<td><h:outputText id="valorTotalNota" value="#{notaFiscalMB.valorTotalNota}" style="text-align:right;color:blue;font-weight:bold;"/></td>
 					</tr>
 				</table>  
 			</fieldset> 

@@ -39,7 +39,7 @@ public class ProdutoDAO extends AppJpaDAO  {
 		@PlcQueryParameter(name="codigoBarras", expression="obj.codigoBarras = :codigoBarras") String codigoBarras,
 		@PlcQueryParameter(name="titulo", expression="obj.titulo like '%' || :titulo || '%' ") String titulo,
 		@PlcQueryParameter(name="palavrasChave", expression="obj.palavrasChave like '%' || :palavrasChave || '%' ") String palavrasChave,
-		@PlcQueryParameter(name="tipoProduto", expression="obj = :tipoProduto") TipoProduto tipoProduto,
+		@PlcQueryParameter(name="tipoProduto", expression="obj.tipoProduto = :tipoProduto") TipoProduto tipoProduto,
 		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal precoUltCompra
 	);
 
@@ -50,7 +50,7 @@ public class ProdutoDAO extends AppJpaDAO  {
 		@PlcQueryParameter(name="codigoBarras", expression="obj.codigoBarras = :codigoBarras") String codigoBarras,
 		@PlcQueryParameter(name="titulo", expression="obj.titulo like '%' || :titulo || '%' ") String titulo,
 		@PlcQueryParameter(name="palavrasChave", expression="obj.palavrasChave like '%' || :palavrasChave || '%' ") String palavrasChave,
-		@PlcQueryParameter(name="tipoProduto", expression="obj = :tipoProduto") TipoProduto tipoProduto,
+		@PlcQueryParameter(name="tipoProduto", expression="obj.tipoProduto = :tipoProduto") TipoProduto tipoProduto,
 		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal preco
 	);
 	

@@ -2,6 +2,7 @@ package com.cee.livraria.facade;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.ejb.TransactionAttribute;
@@ -20,6 +21,7 @@ import com.cee.livraria.entity.pagamento.PagamentoList;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.model.CaixaRepository;
+import com.cee.livraria.model.ProdutoRepository;
 import com.cee.livraria.model.VendaProdutosRepository;
 import com.cee.livraria.model.ajuste.AjusteEstoqueRepository;
 import com.cee.livraria.model.compras.NotaFiscalRepository;
@@ -57,6 +59,9 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 
 	@Inject
 	private CaixaRepository caixaRepository;
+	
+	@Inject
+	private ProdutoRepository produtoRepository;
 	
 	@PlcTransactional(commit=false)
 	@Override
@@ -133,6 +138,13 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	@Override
 	public RetornoConfig registrarEntradaNotaFiscal(PlcBaseContextVO context, NotaFiscal notaFiscal) throws PlcException {
 		return notaFiscalRepository.registrarEntradaNotaFiscal(context, notaFiscal);
+	}
+	
+	
+	@PlcTransactional(commit=false)
+	@Override
+	public Collection recuperarProdutos(PlcBaseContextVO context, Produto produtoArg, String orderByDinamico, int inicio, int total) throws PlcException {
+		return produtoRepository.recuperaProdutos(context, produtoArg, orderByDinamico, inicio, total);
 	}
 	
 }

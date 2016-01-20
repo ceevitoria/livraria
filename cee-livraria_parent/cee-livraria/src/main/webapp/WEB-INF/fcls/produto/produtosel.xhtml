@@ -35,6 +35,19 @@
 				</div>
 				<div id="#{plcAliasPrefixoAction}Sel" class="plc-form-basico-sel"> 
 					<script type="text/javascript">//<![CDATA[
+					plc.jq(document).ready(function(){
+						plc.jq("#corpo\\:formulario\\:codigoBarras").on("change", function() {
+							plc.jq( "#corpo\\:formulario\\:botaoAcaoPesquisar" ).trigger( "click" );
+						});
+						plc.jq("#corpo\\:formulario\\:tipoProduto").on("change", function() {
+							plc.jq( "#corpo\\:formulario\\:botaoAcaoPesquisar" ).trigger( "click" );
+						});
+						plc.jq(document).keydown(function(e) {
+							if(e.which == 13) {
+								plc.jq( "#corpo\\:formulario\\:botaoAcaoPesquisar" ).trigger( "click" );
+							}
+						});
+					});
 	jQuery(function(){plc.criaSelecaoJqGrid('plc-grid','plc-grid-navegador',{
 		evento:'${param.evento}',
 			modoJanelaPlc:'${param.modoJanelaPlc}',
@@ -47,12 +60,14 @@
 					'#{msg['label.codigoBarras']}',
 					'#{msg['label.tipoProduto']}',
 					'#{msg['label.titulo']}',
-					'#{msg['label.palavrasChave']}'],
+					'#{msg['label.palavrasChave']}',
+					'#{msg['label.quantidadeEstoque']}'],
 				colModel:[
 					{name:'codigoBarras',index:'codigoBarras', width:'50px', align:'center'},
 					{name:'tipoProduto',index:'tipoProduto', width:'40px', align:'center'},
-					{name:'titulo',index:'titulo', width:'300px'},
-					{name:'palavrasChave',index:'palavrasChave', width:'200px'}]},
+					{name:'titulo',index:'titulo', width:'250px'},
+					{name:'palavrasChave',index:'palavrasChave', width:'150px'},
+					{name:'quantidadeEstoque',index:'quantidadeEstoque', width:'50px', align:'center', sortable:false}]},
 			urlEdicao:'#{request.contextPath}/f/n/produtoman'});});//]]> </script>  
 					<table id="plc-grid" width="100%" class="scroll" cellpadding="0" cellspacing="0"/>  
 					<div id="plc-grid-navegador" class="scroll" style="text-align:center;"/> 
