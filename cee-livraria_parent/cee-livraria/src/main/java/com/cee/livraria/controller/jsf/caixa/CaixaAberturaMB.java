@@ -11,8 +11,11 @@ import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.config.RetornoConfig;
+import com.cee.livraria.entity.pagamento.FormaPagto;
+import com.cee.livraria.entity.pagamento.FormaPagtoEntity;
 import com.cee.livraria.entity.pagamento.Pagamento;
 import com.cee.livraria.entity.pagamento.PagamentoList;
+import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.commons.annotation.PlcUriIoC;
 import com.powerlogic.jcompany.commons.config.qualifiers.QPlcDefault;
@@ -22,6 +25,7 @@ import com.powerlogic.jcompany.config.collaboration.FormPattern;
 import com.powerlogic.jcompany.config.collaboration.PlcConfigForm;
 import com.powerlogic.jcompany.config.collaboration.PlcConfigFormLayout;
 import com.powerlogic.jcompany.controller.jsf.annotations.PlcHandleException;
+import com.powerlogic.jcompany.controller.util.PlcIocControllerFacadeUtil;
 
 @PlcConfigAggregation(entity = com.cee.livraria.entity.caixa.CaixaEntity.class)
 @PlcConfigForm(
@@ -38,6 +42,9 @@ public class CaixaAberturaMB extends AppMB {
 
 	@Inject @QPlcDefault 
 	protected CaixaOperacaoMB caixaOperacaoMB;
+	
+	@Inject @QPlcDefault 
+	protected PlcIocControllerFacadeUtil iocControleFacadeUtil;
 	
 	protected PagamentoList pagamentoList;
 
@@ -59,14 +66,18 @@ public class CaixaAberturaMB extends AppMB {
 	public PagamentoList criaListaPagamento() {
 		
 		if (this.pagamentoList==null) {
+    		FormaPagto formaPagto =(FormaPagto) iocControleFacadeUtil.getFacade(IAppFacade.class).findById(getContext(), FormaPagtoEntity.class, 1L);
     		pagamentoList = new PagamentoList();
-    		
 			List<Pagamento> itens = pagamentoList.getItens();
-			
 			Pagamento pagto = null;
 			
 			for (int i=0; i<2; i++) {
 				pagto = new Pagamento();
+				
+				if (i==0) {
+					pagto.setFormaPagto(formaPagto);
+				}
+
 				itens.add(pagto);
 			}
 		}

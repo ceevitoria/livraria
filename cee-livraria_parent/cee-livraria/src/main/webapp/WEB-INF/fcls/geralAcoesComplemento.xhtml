@@ -59,6 +59,23 @@
 			
 			<ui:include src="/fcls/javascript/tabJs.xhtml"/>
 
+			<ui:insert name="livraria_acao_gerarRelatorioFechamentoCaixa">	 
+				<h:commandLink id="linkAcaoGerarRelatorioFechamentoCaixa" immediate="false" 
+					rendered="#{requestScope.exibeBtnRelatorioFechamentoCaixa=='S'}"
+					value="Gerar Relatorio"
+					action="#{plcAction.gerarRelatorioFechamentoCaixa}"
+					style="color:blue;max-width:200px;font-size: 14px;visibility: hidden;">
+				</h:commandLink>
+			</ui:insert>
+
+			<ui:insert name="acao-botaoAcaoGerarRelatorioFechamentoCaixa">	
+				<plcf:botaoAcao id="botaoAcaoGerarRelatorioFechamentoCaixa" urlIcone="ico iEspecifico" 
+					limpaForm="false" partialSubmit="true" label="cee.evt.gerar.relatoriofechamentoCaixa" 
+					botaoArrayID="GERAR_RELATORTIO_FECHAMENTO_CAIXA" validaForm="false" immediate="false" blocking="true" 
+					rendered="#{requestScope.exibeBtnRelatorioFechamentoCaixa=='S'}" onclick="plc.jq('#corpo\\:formulario\\:linkAcaoGerarRelatorioFechamentoCaixa').trigger('click');">
+				</plcf:botaoAcao>
+			</ui:insert>
+
 			<ui:insert name="livraria_acao_abrirConferencia">	 
 				<plcf:botaoAcao id="botaoAcaoAbrirConferencia" urlIcone="ico iGravar" acao="abrirConferencia" 
 					limpaForm="false" partialSubmit="#{!partialSubmit}" label="conferencia.evt.abrirConferencia" 
@@ -206,7 +223,7 @@
 					<f:param name="skipValidation" value="true"/>
 				</plcf:botaoAcao>	
 			</ui:insert>
-
+			
 			<ui:insert name="livraria_acao_registrarEntradaNotaFiscal">	 
 				<plcf:botaoAcao id="botaoAcaoRegistrarEntradaNotaFiscal" urlIcone="ico iGravar" acao="registrarEntradaNotaFiscal" 
 					limpaForm="false" partialSubmit="#{!partialSubmit}" label="compra.evt.registrarEntradaNotaFiscal" 

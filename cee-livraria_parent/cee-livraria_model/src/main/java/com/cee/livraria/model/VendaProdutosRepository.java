@@ -407,7 +407,6 @@ public class VendaProdutosRepository {
 	 * @param valorPago Valor efetivamente pago nesta venda (soma das formas de pagamento)
 	 */
 	private void registraMovimento(@SuppressWarnings("rawtypes") List relacaoProdutos, Date dataMovimento, double valorPago) throws PlcException {
-//		double valorGeral = 0.0;
 		Movimento mov = new MovimentoEntity();
 		List<ItemMovimento> itens = new ArrayList<ItemMovimento>();
 		
@@ -421,14 +420,13 @@ public class VendaProdutosRepository {
 				double valorTotalItem = vp.getQuantidade().doubleValue() * vp.getValorUnitario().doubleValue();
 				
 				valorTotalItem = Math.round(valorTotalItem * 100.00) / 100.00;
-				item.setValorTotal(BigDecimal.valueOf(valorTotalItem));
 				
 				Produto produto = (Produto)jpa.findById(context, Produto.class, vp.getProduto().getId());
 				
 				item.setProduto(produto);
 				item.setQuantidade(vp.getQuantidade());
 				item.setValorUnitario(vp.getValorUnitario());
-				item.setValorTotal(vp.getValorTotal());
+				item.setValorTotal(BigDecimal.valueOf(valorTotalItem));
 				item.setTipo(TipoMovimento.S);
 				item.setMovimento(mov);
 				
@@ -436,13 +434,9 @@ public class VendaProdutosRepository {
 				item.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
 				
 				itens.add(item);
-				
-//				valorGeral += valorTotalItem;
 			}
 		}
 
-//		valorGeral = Math.round(valorGeral * 100.00) / 100.00;
-		
 		mov.setData(dataMovimento);
 		mov.setTipo(TipoMovimento.S);
 		mov.setModo(ModoMovimento.N);

@@ -27,6 +27,7 @@ import com.cee.livraria.model.VendaProdutosRepository;
 import com.cee.livraria.model.ajuste.AjusteEstoqueRepository;
 import com.cee.livraria.model.compras.NotaFiscalRepository;
 import com.cee.livraria.model.conferencia.ConferenciaRepository;
+import com.cee.livraria.model.relatorio.RelatorioFechamentoCaixaRepository;
 import com.cee.livraria.persistence.jpa.AppJpaDAO;
 import com.cee.livraria.persistence.jpa.produto.ProdutoDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
@@ -66,6 +67,9 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	
 	@Inject
 	private ProdutoRepository produtoRepository;
+	
+	@Inject
+	private RelatorioFechamentoCaixaRepository relatorioFechamentoCaixaRepository;
 	
 	@PlcTransactional(commit=false)
 	@Override
@@ -165,5 +169,18 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 		return devolucaoProdutoRepository.buscarDadosDevolucaoProdutos(context, entityList);
 	}
 	
+	@PlcTransactional(commit=false)
+	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
+	@Override
+	public byte[] gerarRelatorioFechamentoCaixa(PlcBaseContextVO context, String sheetName) throws PlcException {
+		return relatorioFechamentoCaixaRepository.gerarRelatorioFechamentoCaixa(context, sheetName);
+	}
+
+	@PlcTransactional(commit=false)
+	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
+	@Override
+	public Collection recuperaDadosFechamentoCaixa(PlcBaseContextVO context, String orderByDinamico, Integer inicio, Integer total) throws PlcException {
+		return relatorioFechamentoCaixaRepository.recuperaDadosFechamentoCaixa(context, orderByDinamico, inicio, total);
+	}
 	
 }

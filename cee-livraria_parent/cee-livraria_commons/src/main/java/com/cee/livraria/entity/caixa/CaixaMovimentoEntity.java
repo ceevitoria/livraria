@@ -20,8 +20,7 @@ import javax.persistence.Transient;
 @Access(AccessType.FIELD)
 @NamedQueries({ @NamedQuery(name = "CaixaMovimentoEntity.querySelLookup", query = "select id as id, valor as valor from CaixaMovimentoEntity where id = ? order by id asc") })
 public class CaixaMovimentoEntity extends CaixaMovimento {
-
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 4214193142279237948L;
 
 	/*
 	 * Construtor padrao

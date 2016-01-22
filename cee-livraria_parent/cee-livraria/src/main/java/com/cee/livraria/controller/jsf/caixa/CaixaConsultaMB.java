@@ -7,12 +7,15 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.cee.livraria.commons.AppConstants;
 import com.cee.livraria.controller.jsf.AppMB;
+import com.cee.livraria.controller.jsf.FileUploadDownloadMB;
 import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.apoio.CaixaConsulta;
 import com.cee.livraria.entity.pagamento.Pagamento;
 import com.cee.livraria.entity.pagamento.PagamentoList;
+import com.cee.livraria.entity.relatorio.RelatorioFechamentoCaixa;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcConstants;
@@ -28,6 +31,7 @@ import com.powerlogic.jcompany.controller.jsf.action.util.PlcConversationControl
 import com.powerlogic.jcompany.controller.jsf.annotations.PlcHandleException;
 import com.powerlogic.jcompany.controller.jsf.util.PlcCreateContextUtil;
 import com.powerlogic.jcompany.controller.util.PlcIocControllerFacadeUtil;
+import com.powerlogic.jcompany.domain.validation.PlcMessage;
 
 @PlcConfigAggregation(entity = com.cee.livraria.entity.caixa.apoio.CaixaConsulta.class)
 
@@ -57,8 +61,12 @@ public class CaixaConsultaMB extends AppMB  {
 	@Inject @QPlcDefault 
 	protected PlcIocControllerFacadeUtil iocControleFacadeUtil;
 
+	@Inject 
+	private FileUploadDownloadMB fileUploadBean;
+	
 	protected CaixaConsulta caixaConsulta;
 	protected PagamentoList pagamentoList;
+	protected PagamentoList movimentoList;
 	
 	/**
 	* Entidade da ação injetado pela CDI
@@ -92,9 +100,8 @@ public class CaixaConsultaMB extends AppMB  {
 	
 	@Produces  @Named("pagtoListaConsulta") 
 	public PagamentoList criaListaPagamento() {
+		
 		if (this.pagamentoList==null) {
-
-			
     		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
     		
     		Caixa caixa = new CaixaEntity();
@@ -129,6 +136,20 @@ public class CaixaConsultaMB extends AppMB  {
 		return pagamentoList;
 	}
 	
+	@Produces  @Named("movimentoListaConsulta") 
+	public PagamentoList criaListaMovimento() {
+		
+		if (this.movimentoList==null) {
+			List<RelatorioFechamentoCaixa> itens = (List<RelatorioFechamentoCaixa>)iocControleFacadeUtil.getFacade(IAppFacade.class).recuperaDadosFechamentoCaixa(getContext(), null, null, null);
+			
+			movimentoList = new PagamentoList();
+			movimentoList.setItens(itens);
+		
+		}
+
+		return movimentoList;
+	}
+	
 	public String search()  {
 		novosItens();
 
@@ -148,8 +169,30 @@ public class CaixaConsultaMB extends AppMB  {
 		this.entityListPlc.setItensPlc(itens);
 	}
 
-	
     public void handleButtonsAccordingFormPattern() {
+
+		contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_RELATORIO_FECHAMENTO_CAIXA, PlcConstants.EXIBIR);
+
+//    	if (entityPlc != null && StatusCaixa.A.equals(((Caixa)entityPlc).getStatus())) {
+    		contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_RELATORIO_FECHAMENTO_CAIXA, PlcConstants.EXIBIR);
+//    	}
+    	
 		contextUtil.getRequest().setAttribute(PlcConstants.ACAO.EXIBE_BT_GRAVAR, PlcConstants.NAO_EXIBIR);
     }
+    
+	public void gerarRelatorioFechamentoCaixa() {
+		
+//		if (this.entityPlc != null) {
+			PlcBaseContextVO context = getContext();
+			
+			byte[] relatorio = iocControleFacadeUtil.getFacade(IAppFacade.class).gerarRelatorioFechamentoCaixa(context, "RelatorioFechamentoCaixa");
+			
+			if (relatorio != null) {
+				fileUploadBean.downloadAbrindoArquivo(relatorio, "RelatorioFechamentoCaixa.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			} else {
+				msgUtil.msg("Nenhum arquivo gerado!", PlcMessage.Cor.msgAmareloPlc.name());
+			}
+//		}
+	}
+    
 }

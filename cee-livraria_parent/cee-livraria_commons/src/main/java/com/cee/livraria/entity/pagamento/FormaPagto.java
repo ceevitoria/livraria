@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 
 @MappedSuperclass
 public abstract class FormaPagto extends AppBaseEntity {
+	private static final long serialVersionUID = 7982967225496293107L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_FORMA_PAGTO")

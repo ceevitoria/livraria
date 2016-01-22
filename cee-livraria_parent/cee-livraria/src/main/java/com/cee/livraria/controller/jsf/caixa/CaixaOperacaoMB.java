@@ -89,8 +89,10 @@ public class CaixaOperacaoMB extends PlcBaseParentMB implements Serializable {
 			
 			// Só exisbe o botão para registrar fechamento do Caixa se ele estiver aberto
 			if (caixa != null && StatusCaixa.A.equals(caixa.getStatus())) {
+				contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_RELATORIO_FECHAMENTO_CAIXA, PlcConstants.EXIBIR);
 				contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_REGISTRAR_FECHAMENTO_CAIXA, PlcConstants.EXIBIR);
 			} else {
+				contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_RELATORIO_FECHAMENTO_CAIXA, PlcConstants.NAO_EXIBIR);
 				contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_REGISTRAR_FECHAMENTO_CAIXA, PlcConstants.NAO_EXIBIR);
 			}
 		}

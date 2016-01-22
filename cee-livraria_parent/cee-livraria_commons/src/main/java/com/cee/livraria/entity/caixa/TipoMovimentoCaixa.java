@@ -1,5 +1,6 @@
 package com.cee.livraria.entity.caixa;
 
+
 /**
  * Enum de dominio discreto gerada automaticamente pelo assistente do jCompany.
  */
@@ -29,4 +30,29 @@ public enum TipoMovimentoCaixa {
         return label;
     }
 	
+    
+    public String getName() {
+    	String ret = "Critical Application";
+    	
+    	if (this.equals(TipoMovimentoCaixa.SA)) {
+    		ret = "Sangria";
+    	} else if (this.equals(TipoMovimentoCaixa.SU)) {
+    		ret = "Suprimento";
+    	} else if (this.equals(TipoMovimentoCaixa.VD)) {
+    		ret = "Venda";
+    	} else if (this.equals(TipoMovimentoCaixa.DE)) {
+    		ret = "Devolução";
+    	} else if (this.equals(TipoMovimentoCaixa.AA)) {
+    		ret = "Ajuste Automatico";
+    	} else if (this.equals(TipoMovimentoCaixa.AM)) {
+    		ret = "Ajuste Manual";
+    	} else if (this.equals(TipoMovimentoCaixa.AB)) {
+    		ret = "Abertura";
+    	} else if (this.equals(TipoMovimentoCaixa.FE)) {
+    		ret = "Fechamento";
+    	} 
+    	
+    	return ret;
+    }
+    
 }

@@ -171,13 +171,19 @@
 
 						var sDif = dif.toString(); 
 						sDif = sDif.replace(".",",");
-						plc.jq("#corpo\\:formulario\\:pagamento\\:1\\:valorTotalGeral").val(sDif);
+
+						if (sDif != "NaN") {
+							plc.jq("#corpo\\:formulario\\:pagamento\\:1\\:valorTotalGeral").val(sDif);
+						} else {
+							plc.jq("#corpo\\:formulario\\:pagamento\\:1\\:valorTotalGeral").val("");
+						}
 					} else {
 						plc.jq("#corpo\\:formulario\\:pagamento\\:0\\:valorTotalGeral").val(sSum);
 					}
 					
 				} else {
-					plc.jq("#corpo\\:formulario\\:pagamento\\:0\\:valorTotalGeral").val("0,00");
+					plc.jq("#corpo\\:formulario\\:pagamento\\:0\\:valorTotalGeral").val("");
+					plc.jq("#corpo\\:formulario\\:pagamento\\:1\\:valorTotalGeral").val("");
 				}
 			}
 			

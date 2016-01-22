@@ -20,6 +20,7 @@ public interface AppConstants extends PlcConstants {
     	String EXIBE_BT_REGISTRAR_SANGRIA_CAIXA = "exibeBtnRegistrarSangriaCaixa";
     	String EXIBE_BT_REGISTRAR_SUPRIMENTO_CAIXA = "exibeBtnRegistrarSuprimentoCaixa";
     	String EXIBE_BT_REGISTRAR_FECHAMENTO_CAIXA = "exibeBtnRegistrarFechamentoCaixa";
+    	String EXIBE_BT_RELATORIO_FECHAMENTO_CAIXA = "exibeBtnRelatorioFechamentoCaixa";
     	
     	String EXIBE_BT_ABRIR_CONFERENCIA = "exibeBtnAbrirConferencia";
     	String EXIBE_BT_CONCLUIR_CONFERENCIA = "exibeBtnConcluirConferencia";

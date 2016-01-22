@@ -12,6 +12,8 @@ import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.caixa.apoio.CaixaConsulta;
 import com.cee.livraria.entity.config.RetornoConfig;
+import com.cee.livraria.entity.pagamento.FormaPagto;
+import com.cee.livraria.entity.pagamento.FormaPagtoEntity;
 import com.cee.livraria.entity.pagamento.Pagamento;
 import com.cee.livraria.entity.pagamento.PagamentoList;
 import com.cee.livraria.facade.IAppFacade;
@@ -47,6 +49,9 @@ public class CaixaSangriaMB extends AppMB {
 	@Inject @QPlcDefault 
 	protected CaixaOperacaoMB caixaOperacaoMB;
 
+	@Inject @QPlcDefault 
+	protected PlcIocControllerFacadeUtil iocControleFacadeUtil;
+	
 	protected PagamentoList pagamentoList;
 	
 	/**
@@ -67,14 +72,18 @@ public class CaixaSangriaMB extends AppMB {
 	public PagamentoList criaListaPagamento() {
 		
 		if (this.pagamentoList==null) {
+    		FormaPagto formaPagto =(FormaPagto) iocControleFacadeUtil.getFacade(IAppFacade.class).findById(getContext(), FormaPagtoEntity.class, 1L);
     		pagamentoList = new PagamentoList();
-    		
 			List<Pagamento> itens = pagamentoList.getItens();
-			
 			Pagamento pagto = null;
 			
 			for (int i=0; i<2; i++) {
 				pagto = new Pagamento();
+				
+				if (i==0) {
+					pagto.setFormaPagto(formaPagto);
+				}
+
 				itens.add(pagto);
 			}
 		}

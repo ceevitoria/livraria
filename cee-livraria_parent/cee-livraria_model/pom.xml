@@ -41,6 +41,16 @@
 			<groupId>powerlogic.jaguar.jcompany</groupId>
 			<artifactId>jcompany_model</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.12</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.12</version>
+		</dependency>
 	</dependencies>
 	
 	<profiles>

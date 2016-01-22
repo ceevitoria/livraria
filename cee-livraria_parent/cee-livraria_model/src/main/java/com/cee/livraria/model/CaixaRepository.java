@@ -110,8 +110,12 @@ public class CaixaRepository extends PlcBaseRepository {
 		// Calculo o valor total informado nas formas de pagamento
 		for (Pagamento pagamento : pagamentos) {
 			
+			if (pagamento.getValor() != null && pagamento.getFormaPagto() == null) {
+				throw new PlcException("{erro.caixa.formaPagamento.naoInformada}", new Object[]{pagamento.getValor()});
+			}
+			
 			if (pagamento.getFormaPagto() != null) {
-				// Localiza a Forma de Pagamento Livro relacionada ao pagamento do caixa
+				// Localiza a Forma de Pagamento Produto relacionada ao pagamento do caixa
 				for (FormaPagProduto fpl : formasPagProduto) {
 					
 					if (fpl.getFormaPagto().getId().equals(pagamento.getFormaPagto().getId())) {
@@ -355,9 +359,7 @@ public class CaixaRepository extends PlcBaseRepository {
 
 				caixaFormaPagto.setValor(new BigDecimal(valorCaixaFormaPagto));
 			} else {
-				// Se não localizar o pagamento e
-				// o tipo de operação for Fechamento do Caixa e 
-				// a forma de pag livro associada não gera caixa 
+				// Se não localizar o pagamento e o tipo de operação for Fechamento do Caixa e a forma de pag produto associada não gera caixa 
 				// --> devo zerar esta forma de pagamento
 				if (pagto == null && TipoMovimentoCaixa.FE.equals(tipo) && PlcYesNo.N.equals(formaPagProduto.getIsGeraCaixa())) {
 					// TODO: Cuidar para que este caixa pagamento já tenha gerado crédito na conta apropriada do Plano de Contas da CEE

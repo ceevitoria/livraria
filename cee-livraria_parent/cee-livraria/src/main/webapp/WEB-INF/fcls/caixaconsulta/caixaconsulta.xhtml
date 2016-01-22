@@ -42,7 +42,83 @@
 							<f:facet name="header">
 								<plcf:titulo value="#{msg['label.valorTotal']}"/>  
 							</f:facet>  
-							<plcf:numerico id="valor" value="#{pagamento.valor}" somenteLeitura="S" ajudaChave="ajuda.valorTotalGeral"/> 
+							<h:outputText id="valor" value="#{pagamento.valor}" style="text-align:right;color:black;">
+							<f:convertNumber maxFractionDigits="2"
+							    currencySymbol="R$"
+							    minFractionDigits="2"
+							    maxIntegerDigits="6"
+							    type="currency"/>
+							</h:outputText>
+						</h:column>  
+					</plcf:iteracao> 
+				</fieldset> 
+			</div> 
+			<div id="plc-corpo-formulario" class="plc-corpo-formulario plc-form-tabular"> 
+				<fieldset class="plc-fieldset"> 
+					<legend class="plc-fieldset-legend">#{msg['caixa.lista.movimentoCaixa']}</legend>  
+					<plcf:iteracao var="movimento" id="movimento" value="#{movimentoListaConsulta.itens}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.dataMovimento']}"/>  
+							</f:facet>  
+							<h:outputText id="dataMovimento" value="#{movimento.data}">
+				              <f:convertDateTime locale="pt,BR" dateStyle="long" pattern="dd/MM  HH:mm'h'" />
+				            </h:outputText>							 
+						</h:column>  
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.tipoMovimento']}"/>  
+							</f:facet>  
+							<plcf:exibe id="tipoMovimento" value="#{movimento.tipo.name}" /> 
+						</h:column>  
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.valorMovimento']}"/>  
+							</f:facet>  
+							<h:outputText id="valorMovimento" rendered="#{movimento.valor gt 0}" value="#{movimento.valor}" style="text-align:right;color:blue;">
+							<f:convertNumber maxFractionDigits="2"
+							    currencySymbol="R$"
+							    minFractionDigits="2"
+							    maxIntegerDigits="6"
+							    type="currency"/>
+							</h:outputText>
+							<h:outputText id="valorMovimento2" rendered="#{movimento.valor lt 0}" value="#{movimento.valor}" style="text-align:right;color:red;">
+							<f:convertNumber maxFractionDigits="2"
+							    currencySymbol="R$"
+							    minFractionDigits="2"
+							    maxIntegerDigits="6"
+							    type="currency"/>
+							</h:outputText>
+						</h:column>  
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.saldoInicialMovimento']}"/>  
+							</f:facet>  
+							<h:outputText id="saldoInicialMovimento" value="#{movimento.saldo}" style="text-align:right;">
+							<f:convertNumber maxFractionDigits="2"
+							    currencySymbol="R$"
+							    minFractionDigits="2"
+							    maxIntegerDigits="6"
+							    type="currency"/>
+							</h:outputText>
+						</h:column>  
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.saldoFinalMovimento']}"/>  
+							</f:facet>  
+							<h:outputText id="saldoFinalMovimento" value="#{movimento.saldoFinal}" style="text-align:right;">
+							<f:convertNumber maxFractionDigits="2"
+							    currencySymbol="R$"
+							    minFractionDigits="2"
+							    maxIntegerDigits="6"
+							    type="currency"/>
+							</h:outputText>
+						</h:column>  
+						<h:column> 
+							<f:facet name="header">
+								<plcf:titulo value="#{msg['label.observacao']}"/>  
+							</f:facet>  
+							<plcf:exibe id="observacaoMovimento" value="#{movimento.observacao}" /> 
 						</h:column>  
 					</plcf:iteracao> 
 				</fieldset> 
