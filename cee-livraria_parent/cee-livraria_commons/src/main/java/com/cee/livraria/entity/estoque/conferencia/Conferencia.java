@@ -119,9 +119,8 @@ public abstract class Conferencia extends AppBaseEntity {
 		this.itemConferencia=itemConferencia;
 	}
 	
-	@Embedded
-	@NotNull
 	@Valid
+	@Embedded
 	@Transient
 	private transient RegraPesquisaProdutos regra;
 	

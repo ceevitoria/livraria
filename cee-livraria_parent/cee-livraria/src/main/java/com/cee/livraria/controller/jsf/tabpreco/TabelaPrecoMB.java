@@ -10,9 +10,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.cee.livraria.controller.jsf.AppMB;
+import com.cee.livraria.entity.estoque.Estoque;
+import com.cee.livraria.entity.produto.CD;
+import com.cee.livraria.entity.produto.DVD;
 import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.produto.RegraPesquisaProdutos;
+import com.cee.livraria.entity.produto.TipoProduto;
 import com.cee.livraria.entity.tabpreco.FontePrecificacao;
 import com.cee.livraria.entity.tabpreco.ItemTabela;
 import com.cee.livraria.entity.tabpreco.ItemTabelaEntity;
@@ -21,8 +25,10 @@ import com.cee.livraria.entity.tabpreco.TabelaPrecoEntity;
 import com.cee.livraria.entity.tabpreco.TipoArredondamento;
 import com.cee.livraria.entity.tabpreco.TipoPrecificacao;
 import com.cee.livraria.entity.tabpreco.TipoVariacao;
+import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcConstants;
+import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.commons.annotation.PlcUriIoC;
 import com.powerlogic.jcompany.commons.config.qualifiers.QPlcDefault;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcMB;
@@ -93,8 +99,7 @@ public class TabelaPrecoMB extends AppMB {
 			List<ItemTabela> listaItens = tabPreco.getItemTabela();
 			PlcBaseContextVO context = contextMontaUtil	.createContextParam(plcControleConversacao);
 
-			// Busca os livros que satisfazem às regras de pesquisa e os
-			// adiciona na listaItens
+			// Busca os livros que satisfazem às regras de pesquisa e os adiciona na listaItens
 			RegraPesquisaProdutos regra = tabPreco.getRegra();
 			Produto produtoArg = criaArgumentoPesquisaProduto(regra);
 
@@ -115,19 +120,26 @@ public class TabelaPrecoMB extends AppMB {
 				Collections.sort(listaItens, comparator); 
 
 				List<Produto> produtos = (List<Produto>) iocControleFacadeUtil.getFacade().findList(context, produtoArg, plcControleConversacao.getOrdenacaoPlc(), 0, 0);
+				List<Estoque> estoques = null;
+				
+				if (regra.getLocalizacao() == null) {
+					estoques = (List<Estoque>) iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoque(context, produtos);
+				} else {
+					estoques = (List<Estoque>) iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoquePorLocalizacao(context, produtos, regra.getLocalizacao());
+				}
+				
+				for (Estoque itemEstoque : estoques) {
+					ItemTabela itemTabela = criaNovoItem(tabPreco, itemEstoque);
+					double preco = calcularAjustePrecoProduto(tabPreco, itemEstoque.getProduto());
+					itemTabela.setPreco(new BigDecimal(preco));
 
-				for (Produto produto : produtos) {
-					ItemTabela item = criaNovoItem(tabPreco, produto);
-					double preco = calcularAjustePrecoProduto(tabPreco, produto);
-					item.setPreco(new BigDecimal(preco));
-
-					int i = Collections.binarySearch(listaItens, item,	comparator);
+					int i = Collections.binarySearch(listaItens, itemTabela, comparator);
 
 					if (i < 0) {
-						listaItens.add(item);
+						listaItens.add(itemTabela);
 					} else {
-						item = listaItens.get(i);
-						item.setPreco(new BigDecimal(preco));
+						itemTabela = listaItens.get(i);
+						itemTabela.setPreco(new BigDecimal(preco));
 					}
 				}
 
@@ -141,27 +153,35 @@ public class TabelaPrecoMB extends AppMB {
 		return baseEditMB.getDefaultNavigationFlow();
 	}
 
-	private Produto criaArgumentoPesquisaProduto(RegraPesquisaProdutos regra) {
+	private Produto criaArgumentoPesquisaProduto(RegraPesquisaProdutos regra) throws PlcException {
 		Produto produtoArg = null;
 
-		if (regra.getAutor() != null 
-				|| regra.getEdicao() != null
-				|| regra.getColecao() != null 
-				|| regra.getEditora() != null
-				|| regra.getEspirito() != null) {
+		if (regra.getTipoProduto() == null) {
+			throw new PlcException("{erro.regra.informar.tipoProduto}");
+		}
+		
+		if (TipoProduto.L.equals(regra.getTipoProduto())) {
 			produtoArg = new Livro();
-
 			((Livro) produtoArg).setAutor(regra.getAutor());
 			((Livro) produtoArg).setColecao(regra.getColecao());
 			((Livro) produtoArg).setEdicao(regra.getEdicao());
 			((Livro) produtoArg).setEditora(regra.getEditora());
 			((Livro) produtoArg).setEspirito(regra.getEspirito());
+		} else if (TipoProduto.C.equals(regra.getTipoProduto())) {
+			produtoArg = new CD();
+			((CD) produtoArg).setArtista(regra.getArtista());
+			((CD) produtoArg).setGravadora(regra.getGravadora());
+		} else if (TipoProduto.D.equals(regra.getTipoProduto())) {
+			produtoArg = new DVD();
+			((DVD) produtoArg).setArtista(regra.getArtista());
+			((DVD) produtoArg).setGravadora(regra.getGravadora());
 		} else {
 			produtoArg = new Produto();
 		}
 
 		produtoArg.setTitulo(regra.getTitulo());
 		produtoArg.setCodigoBarras(regra.getCodigoBarras());
+		
 		return produtoArg;
 	}
 
@@ -250,16 +270,17 @@ public class TabelaPrecoMB extends AppMB {
 		return baseEditMB.getDefaultNavigationFlow();
 	}
 
-	private ItemTabela criaNovoItem(TabelaPreco tabPreco, Produto produto) {
+	private ItemTabela criaNovoItem(TabelaPreco tabPreco, Estoque itemEstoque) {
 		ItemTabela item = new ItemTabelaEntity();
 
 		item.setTabelaPreco(tabPreco);
-		item.setProduto(produto);
-		item.setTipoProduto(produto.getTipoProduto());
-		item.setTitulo(produto.getTitulo());
-		item.setCodigoBarras(produto.getCodigoBarras());
-		item.setPrecoUltCompra(produto.getPrecoUltCompra());
-		item.setPrecoVendaSugerido(produto.getPrecoVendaSugerido());
+		item.setProduto(itemEstoque.getProduto());
+		item.setTipoProduto(itemEstoque.getProduto().getTipoProduto());
+		item.setTitulo(itemEstoque.getProduto().getTitulo());
+		item.setCodigoBarras(itemEstoque.getProduto().getCodigoBarras());
+		item.setPrecoUltCompra(itemEstoque.getProduto().getPrecoUltCompra());
+		item.setPrecoVendaSugerido(itemEstoque.getProduto().getPrecoVendaSugerido());
+		item.setLocalizacao(itemEstoque.getLocalizacao());
 
 		return item;
 	}

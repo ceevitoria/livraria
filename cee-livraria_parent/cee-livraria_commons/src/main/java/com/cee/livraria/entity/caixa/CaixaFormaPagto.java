@@ -46,6 +46,13 @@ public abstract class CaixaFormaPagto extends AppBaseEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date data;
 
+	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataAbertura;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataFechamento;
+	
 	@ManyToOne(targetEntity = FormaPagtoEntity.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_CAIXAFORMAPAGTO_FORMAPAGTO")
 	@NotNull(groups = PlcValGroupEntityList.class)
@@ -56,6 +63,13 @@ public abstract class CaixaFormaPagto extends AppBaseEntity {
 	@Digits(integer = 10, fraction = 2)
 	private BigDecimal valor;
 
+	@NotNull
+	@Digits(integer = 10, fraction = 2)
+	private BigDecimal valorAbertura;
+	
+	@Digits(integer = 10, fraction = 2)
+	private BigDecimal valorFechamento;
+	
 	@NotNull(groups = PlcValGroupEntityList.class)
 	@RequiredIf(valueOf = "data", is = RequiredIfType.not_empty)
 	@Size(max = 1)
@@ -77,12 +91,44 @@ public abstract class CaixaFormaPagto extends AppBaseEntity {
 		this.data = data;
 	}
 
+	public Date getDataAbertura() {
+		return dataAbertura;
+	}
+
+	public void setDataAbertura(Date dataAbertura) {
+		this.dataAbertura = dataAbertura;
+	}
+
+	public Date getDataFechamento() {
+		return dataFechamento;
+	}
+
+	public void setDataFechamento(Date dataFechamento) {
+		this.dataFechamento = dataFechamento;
+	}
+
 	public BigDecimal getValor() {
 		return valor;
 	}
 
 	public void setValor(BigDecimal valor) {
 		this.valor = valor;
+	}
+
+	public BigDecimal getValorAbertura() {
+		return valorAbertura;
+	}
+
+	public void setValorAbertura(BigDecimal valorAbertura) {
+		this.valorAbertura = valorAbertura;
+	}
+
+	public BigDecimal getValorFechamento() {
+		return valorFechamento;
+	}
+
+	public void setValorFechamento(BigDecimal valorFechamento) {
+		this.valorFechamento = valorFechamento;
 	}
 
 	public String getSistema() {

@@ -118,6 +118,11 @@ public class VendaProdutosRepository {
 		for (Object o : pagtoList) {
 			Pagamento pagto = (Pagamento)o;
 			
+			if (pagto != null && (pagto.getFormaPagto() == null || pagto.getFormaPagto().getId() == null) && pagto.getValor() != null) {
+				throw new PlcException("{erro.vendaProduto.formaPagto.nao.informada}", 
+						new Object[] {String.format("R$ %,.02f", new Object[]{pagto.getValor()})});
+			}
+			
 			if (pagto != null && pagto.getValor() != null) {
 				double valorFormaPagto = pagto.getValor().doubleValue();
 				valorFormaPagto = Math.round(valorFormaPagto * 100.00) / 100.00;

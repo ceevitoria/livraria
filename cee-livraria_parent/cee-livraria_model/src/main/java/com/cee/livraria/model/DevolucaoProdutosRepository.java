@@ -228,9 +228,22 @@ public class DevolucaoProdutosRepository {
 	 * @param pagtos Lista dos pagamentos realizados
 	 */
 	private void atualizaFormaPagtoCaixa(Date dataVenda, Caixa caixa, double valor) throws PlcException {
-		CaixaFormaPagto caixaFormaPagto = (CaixaFormaPagto)dao.findById(context, CaixaFormaPagtoEntity.class, 1L);
+		CaixaFormaPagto caixaFormaPagto = null;
+		CaixaFormaPagto cfpArg = new CaixaFormaPagtoEntity();
+		cfpArg.setCaixa(caixa);
+		cfpArg.setDataAbertura(caixa.getDataUltAbertura());
 		
-		if (caixaFormaPagto.getValor().doubleValue() > valor) {
+		List<CaixaFormaPagto> formasPagtoCaixa = dao.findList(context, cfpArg, "", 0, 10);
+		
+		for (CaixaFormaPagto cfp : formasPagtoCaixa) {
+			
+			if (cfp.getFormaPagto().getId().compareTo(1L) == 0 ) {
+				caixaFormaPagto = cfp;
+				break;
+			}
+		}
+		
+		if (caixaFormaPagto != null && caixaFormaPagto.getValor().doubleValue() > valor) {
 			caixaFormaPagto.setValor(caixaFormaPagto.getValor().subtract(new BigDecimal(Double.toString(valor))));
 			
 			caixaFormaPagto.setDataUltAlteracao(dataVenda);

@@ -15,10 +15,33 @@
    visibility: hidden;
 }
 </style>
+
+	<script type="text/javascript">//<![CDATA[
+		plc.jq(document).ready(function(){
+
+			plc.jq("#corpo\\:formulario\\:fornecedor").on('change', function(e) {
+			    var indiceFornecedor = plc.jq(e.target).val();
+			    var nomeFornecedor = plc.jq(e.target).find("option:selected").text();
+
+				plc.jq("#corpo\\:formulario\\:indiceFornecedor").val( indiceFornecedor );
+				plc.jq("#corpo\\:formulario\\:nomeFornecedor").val( nomeFornecedor );
+
+				plc.jq("#corpo\\:formulario\\:linkAcaoBuscarParcelamentoFornecedor").trigger("click");
+			});
+
+		});
+	//]]> </script>
+	
 		<plcf:tabela tituloChave="notafiscal.mestre.titulo.comp"> 
 			<h:commandLink id="linkAcaoBuscarProdutoFornecedor" immediate="false" 
 				value="BuscarProdutoDoFornecedor"
 				action="#{notaFiscalMB.buscarProdutoFornecedor}"
+				style="color:blue;max-width:200px;font-size:12px;" styleClass="escondido">
+			</h:commandLink>		
+
+			<h:commandLink id="linkAcaoBuscarParcelamentoFornecedor" immediate="false" 
+				value="BuscarParcelamentoFornecedor"
+				action="#{notaFiscalMB.buscarParcelamentoFornecedor}"
 				style="color:blue;max-width:200px;font-size:12px;" styleClass="escondido">
 			</h:commandLink>		
 		
@@ -28,8 +51,10 @@
 					<plcf:oid id="id" value="#{notafiscal.id}" ajudaChave="ajuda.id"/> 
 					<plcf:texto id="indiceItem" value="#{notaFiscalMB.indiceItem}" ajudaChave="" styleClass="escondido"/>
 					<plcf:texto id="codigoItem" value="#{notaFiscalMB.codigoItem}" ajudaChave="" styleClass="escondido"/>
+					<plcf:texto id="indiceFornecedor" value="#{notaFiscalMB.indiceFornecedor}" ajudaChave="" styleClass="escondido"/>
+					<plcf:texto id="nomeFornecedor" value="#{notaFiscalMB.nomeFornecedor}" ajudaChave="" styleClass="escondido"/>
 				</plcf:celula>  
-				<plcf:celula> 
+				<plcf:celula columnSpan="2"> 
 					<plcf:titulo value="#{msg['label.numero']}"/>  
 					<plcf:texto id="numero" value="#{notafiscal.numero}" ajudaChave="ajuda.numero"/> 
 				</plcf:celula> 
@@ -37,21 +62,25 @@
 			<plcf:linha> 
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.dataEmissao']}"/>  
-					<plcf:data id="dataEmissao" value="#{notafiscal.dataEmissao}" ajudaChave="ajuda.dataEmissao"/> 
+					<plcf:data id="dataEmissao" value="#{notafiscal.dataEmissao}" tamanho="12" ajudaChave="ajuda.dataEmissao"/> 
 				</plcf:celula>  
-				<plcf:celula> 
+				<plcf:celula columnSpan="2"> 
 					<plcf:titulo value="#{msg['label.dataEntrada']}"/>  
-					<plcf:data id="dataEntrada" value="#{notafiscal.dataEntrada}" ajudaChave="ajuda.dataEntrada"/> 
+					<plcf:data id="dataEntrada" value="#{notafiscal.dataEntrada}" tamanho="12" ajudaChave="ajuda.dataEntrada"/> 
 				</plcf:celula> 
 			</plcf:linha>  
 			<plcf:linha> 
 				<plcf:celula> 
-					<plcf:titulo value="#{msg['label.fornecedor']}"/>  
-					<plcf:comboDinamico id="fornecedor" value="#{notafiscal.fornecedor}" dominio="Fornecedor" exibeBranco="S" ajudaChave="ajuda.fornecedor"/> 
-				</plcf:celula>  
-				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.valorTotal']}"/>  
 					<plcf:numerico id="valorTotal" value="#{notafiscal.valorTotal}" ajudaChave="ajuda.valorTotal"/> 
+				</plcf:celula> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.fornecedor']}"/>  
+					<plcf:comboDinamico id="fornecedor" value="#{notafiscal.fornecedor}" dominio="Fornecedor" exibeBranco="S" ajudaChave="ajuda.fornecedor"/>
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.parcelamento']}"/>
+					<plcf:comboDinamico id="parcelamento" value="#{notafiscal.parcelamento}" dominio="Parcelamento" obrigatorio="N" obrigatorioDestaque="N" exibeBranco="S" ajudaChave="ajuda.parcelamento"/> 
 				</plcf:celula> 
 			</plcf:linha> 
 		</plcf:tabela> 

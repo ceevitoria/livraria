@@ -255,14 +255,14 @@ public class VendaProdutoMB extends AppMB  {
 		
 		if (valorPrimeiraParcela == null || pagto.getAutomatico() == null || pagto.getAutomatico().booleanValue() == true) {
 			pagto.setValor(valorTotal);
-			pagto.setFormaPagto(formaPagto);
+			// pagto.setFormaPagto(formaPagto);
 			pagto.setAutomatico(true);
 		} else {
 			pagto = (Pagamento)pagamentoList.getItens().get(1);
 			BigDecimal valorSegundaParcela = valorTotal.subtract(valorPrimeiraParcela);
 			formaPagto = (FormaPagto)formasPagto.iterator().next();
 			pagto.setValor(valorSegundaParcela);
-			pagto.setFormaPagto(formaPagto);
+			// pagto.setFormaPagto(formaPagto);
 			pagto.setAutomatico(true);
 		}
 		

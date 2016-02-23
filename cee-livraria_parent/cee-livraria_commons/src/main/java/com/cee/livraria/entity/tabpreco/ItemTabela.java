@@ -20,6 +20,7 @@ import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfTyp
 import org.hibernate.annotations.ForeignKey;
 
 import com.cee.livraria.entity.AppBaseEntity;
+import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.produto.TipoProduto;
 import com.powerlogic.jcompany.domain.validation.PlcValGroupEntityList;
@@ -66,6 +67,11 @@ public abstract class ItemTabela extends AppBaseEntity {
 
 	@Digits(integer = 10, fraction = 2)
 	private BigDecimal precoVendaSugerido;
+	
+	@ManyToOne(targetEntity = Localizacao.class, fetch = FetchType.EAGER)
+	@ForeignKey(name = "FK_ITEMTABELA_LOCALIZACAO")
+	@NotNull
+	private Localizacao localizacao;
 	
 	@NotNull
 	@Size(max = 1)
@@ -149,6 +155,14 @@ public abstract class ItemTabela extends AppBaseEntity {
 
 	public void setPrecoVendaSugerido(BigDecimal precoVendaSugerido) {
 		this.precoVendaSugerido = precoVendaSugerido;
+	}
+
+	public Localizacao getLocalizacao() {
+		return localizacao;
+	}
+
+	public void setLocalizacao(Localizacao localizacao) {
+		this.localizacao = localizacao;
 	}
 
 	public String getSitHistoricoPlc() {

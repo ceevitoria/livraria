@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +27,11 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.cee.livraria.entity.caixa.Caixa;
+import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.CaixaFormaPagto;
 import com.cee.livraria.entity.caixa.CaixaFormaPagtoEntity;
+import com.cee.livraria.entity.caixa.StatusCaixa;
 import com.cee.livraria.entity.relatorio.RelatorioFechamentoCaixa;
 import com.cee.livraria.persistence.jpa.relatorio.RelatorioFechamentoCaixaDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
@@ -87,16 +91,22 @@ public class RelatorioFechamentoCaixaRepository extends PlcBaseRepository {
 		return dadosFechamentoCaixa;
 	}
 
-	private List<CaixaFormaPagto> recuperaDadosFormaPagamento(PlcBaseContextVO context) throws PlcException {
-		// Recupera todos os projetos conforme filtro e paginação definida na tela de seleção
-		List<CaixaFormaPagto> dadosFormaPagamento = relatorioDAO.findAll(context, CaixaFormaPagtoEntity.class, null);
+	private List<CaixaFormaPagto> recuperaDadosFormaPagamento(PlcBaseContextVO context, Caixa caixa) throws PlcException {
+		// Recupera todos as conforme filtro e paginação definida na tela de seleção
+		CaixaFormaPagto arg = new CaixaFormaPagtoEntity();
 		
-		return dadosFormaPagamento ;
+		arg.setCaixa(caixa);
+		arg.setDataAbertura(caixa.getDataUltAbertura());
+		
+		List<CaixaFormaPagto> dadosFormaPagamento = relatorioDAO.findList(context, arg, null, 0, 10);
+		
+		return dadosFormaPagamento;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public byte[] gerarRelatorioFechamentoCaixa(PlcBaseContextVO context, String sheetName) throws PlcException  {
 		List<RelatorioFechamentoCaixa> dadosRelatorioMovimento = (List<RelatorioFechamentoCaixa>) recuperaDadosFechamentoCaixa(context, null, null, null);
+		Caixa caixa = null;
 		
 		XSSFWorkbook wb = new XSSFWorkbook();
 		Map<String, XSSFCellStyle> styles = createStyles(wb);
@@ -113,6 +123,12 @@ public class RelatorioFechamentoCaixaRepository extends PlcBaseRepository {
 		for (RelatorioFechamentoCaixa dadoMovimento: dadosRelatorioMovimento) {
 			row = sheet.createRow(linhaExcel++);
 			populaDadosRelatorioFechamentoCaixa(dadoMovimento, factory, wb, sheet, row, styles);
+			
+			if (caixa == null) {
+				caixa = dadoMovimento.getCaixa();
+				
+				caixa = (Caixa)relatorioDAO.findById(context, CaixaEntity.class, caixa.getId());
+			}
 		}		
 		
 		sheet.createRow(linhaExcel++);
@@ -126,12 +142,11 @@ public class RelatorioFechamentoCaixaRepository extends PlcBaseRepository {
 		sheet.setColumnWidth(0, 256 * 20);
 		sheet.addMergedRegion(new CellRangeAddress(cell.getRowIndex(),cell.getRowIndex(),cell.getColumnIndex(),cell.getColumnIndex()+1));
 		
-		List<CaixaFormaPagto> formasPagamento = recuperaDadosFormaPagamento(context);
+		List<CaixaFormaPagto> formasPagamento = recuperaDadosFormaPagamento(context, caixa);
 		BigDecimal totalPagamentos = new BigDecimal("0.00");
 		
 		for (CaixaFormaPagto formaPagamento : formasPagamento) {
 			row = sheet.createRow(linhaExcel++);
-			
 			cell = row.createCell(0);
 			
 			if (formaPagamento.getFormaPagto() != null && formaPagamento.getFormaPagto().getNome() != null) {
@@ -140,10 +155,21 @@ public class RelatorioFechamentoCaixaRepository extends PlcBaseRepository {
 			
 			cell = row.createCell(1, Cell.CELL_TYPE_NUMERIC);
 			
-			if (formaPagamento.getValor() != null) {
-				cell.setCellStyle(styles.get("valor"));
-				cell.setCellValue(formaPagamento.getValor().doubleValue());
-				totalPagamentos = totalPagamentos.add(formaPagamento.getValor());
+			if (StatusCaixa.A.equals(caixa.getStatus())) {
+
+				if (formaPagamento.getValor() != null) {
+					cell.setCellStyle(styles.get("valor"));
+					cell.setCellValue(formaPagamento.getValor().doubleValue());
+					totalPagamentos = totalPagamentos.add(formaPagamento.getValor());
+				}
+				
+			} else {
+				
+				if (formaPagamento.getValorFechamento() != null) {
+					cell.setCellStyle(styles.get("valor"));
+					cell.setCellValue(formaPagamento.getValorFechamento() != null ? formaPagamento.getValorFechamento().doubleValue() : 0F);
+					totalPagamentos = totalPagamentos.add(formaPagamento.getValorFechamento());
+				}
 			}
 		}
 

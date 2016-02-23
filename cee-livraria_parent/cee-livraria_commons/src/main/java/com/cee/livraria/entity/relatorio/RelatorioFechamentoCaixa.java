@@ -42,8 +42,8 @@ import com.powerlogic.jcompany.domain.validation.PlcValGroupEntityList;
 @SequenceGenerator(name = "SE_CAIXA_MOVIMENTO", sequenceName = "SE_CAIXA_MOVIMENTO")
 @Access(AccessType.FIELD)
 @NamedQueries({ 
-	@NamedQuery(name="RelatorioFechamentoCaixa.queryMovimentoAbertura", query = "select obj from RelatorioFechamentoCaixa obj where obj.data = (select max(obj2.data) from RelatorioFechamentoCaixa obj2 left outer join obj2.caixa as obj3 where obj2.tipo = 'AB' and obj2.sitHistoricoPlc = 'A' and obj3.status = 'A' order by obj2.data asc)"),
-	@NamedQuery(name="RelatorioFechamentoCaixa.querySel", query = "select obj.id as id, obj.data as data, obj.tipo as tipo, obj.valor as valor, obj.observacao as observacao, obj2.id as caixa_id, obj2.status as caixa_status, obj2.saldo as caixa_saldo from RelatorioFechamentoCaixa obj inner join obj.caixa as obj2 where obj.sitHistoricoPlc = 'A' and obj2.status = 'A' order by obj.data asc") })
+	@NamedQuery(name="RelatorioFechamentoCaixa.queryMovimentoAbertura", query = "select obj from RelatorioFechamentoCaixa obj where obj.data = (select max(obj2.data) from RelatorioFechamentoCaixa obj2 left outer join obj2.caixa as obj3 where obj2.tipo = 'AB' and obj2.sitHistoricoPlc = 'A' order by obj2.data asc)"),
+	@NamedQuery(name="RelatorioFechamentoCaixa.querySel", query = "select obj.id as id, obj.data as data, obj.tipo as tipo, obj.valor as valor, obj.observacao as observacao, obj2.id as caixa_id, obj2.status as caixa_status, obj2.saldo as caixa_saldo from RelatorioFechamentoCaixa obj inner join obj.caixa as obj2 where obj.sitHistoricoPlc = 'A' order by obj.data asc") })
 public class RelatorioFechamentoCaixa extends AppBaseEntity {
 	private static final long serialVersionUID = 6776173807857711955L;
 

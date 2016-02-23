@@ -21,18 +21,20 @@
 				<span class="celulaFormularioCaixaMarcacao">
 					<plcf:caixaExclusao id="indExcPlc" value="#{contaPagar.indExcPlc}"/>
 				</span> 
-			</h:column>  
+			</h:column>
+			<!-- 
 			<h:column> 
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.dataEmissao']}"/>
 				</f:facet>  
-				<plcf:data id="dataEmissao" value="#{contaPagar.dataEmissao}" ajudaChave="ajuda.dataEmissao"/> 
+				<plcf:data id="dataEmissao" value="#{contaPagar.dataEmissao}" tamanho="12" ajudaChave="ajuda.dataEmissao"/> 
 			</h:column>  
+			 -->
 			<h:column> 
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.dataVencimento']}"/>
 				</f:facet>  
-				<plcf:data id="dataVencimento" value="#{contaPagar.dataVencimento}" ajudaChave="ajuda.dataVencimento"/> 
+				<plcf:data id="dataVencimento" value="#{contaPagar.dataVencimento}" tamanho="12" ajudaChave="ajuda.dataVencimento"/> 
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
@@ -44,7 +46,7 @@
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.dataPagamento']}"/>
 				</f:facet>  
-				<plcf:data id="dataPagamento" value="#{contaPagar.dataPagamento}" ajudaChave="ajuda.dataPagamento"/> 
+				<plcf:data id="dataPagamento" value="#{contaPagar.dataPagamento}" tamanho="12" ajudaChave="ajuda.dataPagamento"/> 
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
@@ -56,7 +58,7 @@
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.observacao']}"/>
 				</f:facet>  
-				<plcf:texto id="observacao" value="#{contaPagar.observacao}" ajudaChave="ajuda.observacao" tamanho="50"/> 
+				<plcf:texto id="observacao" value="#{contaPagar.observacao}" ajudaChave="ajuda.observacao" tamanho="80"/> 
 			</h:column> 
 		</plcf:iteracao> 
 	</ui:composition> 

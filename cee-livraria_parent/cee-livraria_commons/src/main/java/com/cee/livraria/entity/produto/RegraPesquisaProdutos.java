@@ -4,7 +4,10 @@ import java.io.Serializable;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -12,8 +15,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OrderBy;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.ForeignKey;
 
 import com.cee.livraria.entity.Autor;
 import com.cee.livraria.entity.AutorEntity;
@@ -31,6 +32,10 @@ import com.cee.livraria.entity.Localizacao;
 public class RegraPesquisaProdutos implements Serializable {
 	private static final long serialVersionUID = -9182328388056088277L;
 
+	@Column(length=1, insertable=false, updatable=false)
+	@Enumerated(EnumType.STRING)
+	private TipoProduto tipoProduto  = TipoProduto.P;
+
 	@Size(max = 40)
 	private String titulo;
 
@@ -38,17 +43,14 @@ public class RegraPesquisaProdutos implements Serializable {
 	private String codigoBarras;
 
 	@ManyToOne(targetEntity = AutorEntity.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_REGRATABELAPRECO_AUTOR")
 	@OrderBy(value="nome")
 	private Autor autor;
 
 	@ManyToOne(targetEntity = EspiritoEntity.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_REGRATABELAPRECO_ESPIRITO")
 	@OrderBy(value="nome")
 	private Espirito espirito;
 
 	@ManyToOne(targetEntity = EditoraEntity.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_REGRATABELAPRECO_EDITORA")
 	@OrderBy(value="nome")
 	private Editora editora;
 
@@ -56,17 +58,29 @@ public class RegraPesquisaProdutos implements Serializable {
 	private Integer edicao;
 
 	@ManyToOne(targetEntity = ColecaoEntity.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_REGRATABELAPRECO_COLECAO")
 	@OrderBy(value="nome")
 	private Colecao colecao;
 
 	@Size(max = 40)
 	private String palavraChave;
 
+	@Size(max = 100)
+	private String artista;
+
+	@Size(max = 100)
+	private String gravadora;
+	
 	@ManyToOne(targetEntity = Localizacao.class, fetch = FetchType.LAZY)
-	@ForeignKey(name = "FK_REGRATABELAPRECO_LOCALIZACAO")
 	@OrderBy(value="codigo")
 	private Localizacao localizacao;
+
+	public TipoProduto getTipoProduto() {
+		return tipoProduto;
+	}
+
+	public void setTipoProduto(TipoProduto tipoProduto) {
+		this.tipoProduto = tipoProduto;
+	}
 
 	public RegraPesquisaProdutos() {
 	}
@@ -133,6 +147,22 @@ public class RegraPesquisaProdutos implements Serializable {
 
 	public void setPalavraChave(String palavraChave) {
 		this.palavraChave = palavraChave;
+	}
+
+	public String getArtista() {
+		return artista;
+	}
+
+	public void setArtista(String artista) {
+		this.artista = artista;
+	}
+
+	public String getGravadora() {
+		return gravadora;
+	}
+
+	public void setGravadora(String gravadora) {
+		this.gravadora = gravadora;
 	}
 
 	public Localizacao getLocalizacao() {

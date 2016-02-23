@@ -6,6 +6,7 @@ import javax.inject.Named;
 
 import com.cee.livraria.controller.jsf.AppMB;
 import com.cee.livraria.entity.produto.DVD;
+import com.cee.livraria.entity.produto.TipoProduto;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
@@ -62,6 +63,8 @@ public class DVDMB extends AppMB  {
 		if (this.entityPlc==null) {
 			this.entityPlc = new DVD();
 			this.newEntity();
+
+			((DVD)this.entityPlc).setTipoProduto(TipoProduto.D);
 		}
 		
 		return (DVD)this.entityPlc;     	

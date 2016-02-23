@@ -71,6 +71,7 @@ public class CaixaFechamentoMB extends AppMB {
 		return (CaixaEntity) this.entityPlc;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Produces  @Named("pagtoListaFechamento") 
 	public PagamentoList criaListaPagamento() {
 		
@@ -81,13 +82,13 @@ public class CaixaFechamentoMB extends AppMB {
 			
 			Pagamento pagto = null;
 			
-			List<FormaPagProduto> formasPagLivro = caixaOperacaoMB.recuperarFormasPagamentoLivro();
+			List<FormaPagProduto> formasPagProduto = caixaOperacaoMB.recuperarFormasPagamentoProduto();
 			
-			for (FormaPagProduto formaPagProduto : formasPagLivro) {
+			for (FormaPagProduto formaPagProduto : formasPagProduto) {
 				
 				if (PlcYesNo.S.equals(formaPagProduto.getIsGeraCaixa())) {
 					pagto = new Pagamento();
-					pagto.setFormaPagto(formaPagProduto.getFormaPagto());
+//					pagto.setFormaPagto(formaPagProduto.getFormaPagto());
 					itens.add(pagto);
 				}
 			}
@@ -118,9 +119,9 @@ public class CaixaFechamentoMB extends AppMB {
 		
 		Pagamento pagto = null;
 		
-		List<FormaPagProduto> formasPagLivro = caixaOperacaoMB.recuperarFormasPagamentoLivro();
+		List<FormaPagProduto> formasPagProduto = caixaOperacaoMB.recuperarFormasPagamentoProduto();
 		
-		for (FormaPagProduto formaPagProduto : formasPagLivro) {
+		for (FormaPagProduto formaPagProduto : formasPagProduto) {
 			
 			if (PlcYesNo.S.equals(formaPagProduto.getIsGeraCaixa())) {
 				pagto = new Pagamento();

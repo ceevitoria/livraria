@@ -8,6 +8,7 @@ import java.util.List;
 import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
 
+import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
@@ -140,6 +141,19 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 		return estoqueLista;
 	}
 
+	@PlcTransactional(commit=false)
+	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
+	@Override
+	public List<Estoque> buscarProdutosEstoquePorLocalizacao(PlcBaseContextVO context, List<Produto> listaProdutos, Localizacao localizacao) throws PlcException {
+		List<Estoque> estoqueLista = new ArrayList<Estoque>(listaProdutos.size());
+		
+		for (Produto produto: listaProdutos) {
+			List<Estoque> itens = produtoDAO.findByFields(context, EstoqueEntity.class, "querySelByProdutoAndLocalizacao", new String[] {"produto", "localizacao"}, new Object[] {produto, localizacao});
+			estoqueLista.addAll(itens);
+		}
+		
+		return estoqueLista;
+	}
 
 	@PlcTransactional(commit=true)
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.REQUIRED)

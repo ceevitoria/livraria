@@ -1,6 +1,8 @@
 package com.cee.livraria.controller.jsf.conferencia;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.enterprise.inject.Produces;
@@ -18,9 +20,12 @@ import com.cee.livraria.entity.estoque.conferencia.ConferenciaEntity;
 import com.cee.livraria.entity.estoque.conferencia.ItemConferencia;
 import com.cee.livraria.entity.estoque.conferencia.ItemConferenciaEntity;
 import com.cee.livraria.entity.estoque.conferencia.StatusConferencia;
+import com.cee.livraria.entity.produto.CD;
+import com.cee.livraria.entity.produto.DVD;
 import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.produto.RegraPesquisaProdutos;
+import com.cee.livraria.entity.produto.TipoProduto;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcConstants;
@@ -112,27 +117,35 @@ public class ConferenciaMB extends AppMB {
 		config = (ConferenciaConfig)listaConfig.get(0);
 	}
 
-	private Produto criaArgumentoPesquisaProduto(RegraPesquisaProdutos regra) {
+	private Produto criaArgumentoPesquisaProduto(RegraPesquisaProdutos regra) throws PlcException {
 		Produto produtoArg = null;
 
-		if (regra.getAutor() != null 
-				|| regra.getEdicao() != null
-				|| regra.getColecao() != null 
-				|| regra.getEditora() != null
-				|| regra.getEspirito() != null) {
+		if (regra.getTipoProduto() == null) {
+			throw new PlcException("{erro.regra.informar.tipoProduto}");
+		}
+		
+		if (TipoProduto.L.equals(regra.getTipoProduto())) {
 			produtoArg = new Livro();
-
 			((Livro) produtoArg).setAutor(regra.getAutor());
 			((Livro) produtoArg).setColecao(regra.getColecao());
 			((Livro) produtoArg).setEdicao(regra.getEdicao());
 			((Livro) produtoArg).setEditora(regra.getEditora());
 			((Livro) produtoArg).setEspirito(regra.getEspirito());
+		} else if (TipoProduto.C.equals(regra.getTipoProduto())) {
+			produtoArg = new CD();
+			((CD) produtoArg).setArtista(regra.getArtista());
+			((CD) produtoArg).setGravadora(regra.getGravadora());
+		} else if (TipoProduto.D.equals(regra.getTipoProduto())) {
+			produtoArg = new DVD();
+			((DVD) produtoArg).setArtista(regra.getArtista());
+			((DVD) produtoArg).setGravadora(regra.getGravadora());
 		} else {
 			produtoArg = new Produto();
 		}
 
 		produtoArg.setTitulo(regra.getTitulo());
 		produtoArg.setCodigoBarras(regra.getCodigoBarras());
+		
 		return produtoArg;
 	}
 
@@ -169,7 +182,6 @@ public class ConferenciaMB extends AppMB {
 				
 				Produto produtoArg = criaArgumentoPesquisaProduto(regra);
 
-
 				Long contaProdutos = (Long)iocControleFacadeUtil.getFacade().findCount(context, produtoArg);
 				
 				if (contaProdutos.longValue() > 400) {
@@ -177,6 +189,22 @@ public class ConferenciaMB extends AppMB {
 					ok = false;
 				} else {
 					List<Produto> produtos = (List<Produto>)iocControleFacadeUtil.getFacade().findList(context, produtoArg, plcControleConversacao.getOrdenacaoPlc(), 0, 0);
+					List<Estoque> estoques = null;
+					
+					if (regra.getLocalizacao() == null) {
+						estoques = (List<Estoque>) iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoque(context, produtos);
+					} else {
+						estoques = (List<Estoque>) iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoquePorLocalizacao(context, produtos, regra.getLocalizacao());
+					}
+
+					Comparator<Estoque> comparator = new Comparator<Estoque>() {
+						public int compare(Estoque o1, Estoque o2) {
+							return o1.getProduto().getTitulo().compareTo(o2.getProduto().getTitulo());
+						}
+					};
+
+					Collections.sort(estoques, comparator);
+					
 					int totalExistente = 0;
 					
 					for (Produto produto : produtos) {
@@ -190,14 +218,24 @@ public class ConferenciaMB extends AppMB {
 								break;
 							}
 						}
+
+						Estoque itemEstoque = null;
 						
-						if (!existe) {
-							ItemConferenciaEntity itemConferencia = criaNovoItem(conferencia, produto);
+						for (Estoque estoque : estoques) {
+							
+							if (produto.getId().compareTo(estoque.getProduto().getId())==0) {
+								itemEstoque = estoque;
+								break;
+							}
+						}
+						
+						if ((!existe && regra.getLocalizacao() == null) || (!existe && regra.getLocalizacao() != null && itemEstoque != null)) {
+							ItemConferencia itemConferencia = criaNovoItem(conferencia, produto, itemEstoque);
 							listaItensExistentes.add(itemConferencia);
 						}
 					}
 					
-					carregaEstoqueProdutos(context, listaItensExistentes);
+//					carregaEstoqueProdutos(context, listaItensExistentes);
 					
 					msgUtil.msg("{conferencia.ok.buscar}", new Object[] {produtos.size()-totalExistente}, PlcMessage.Cor.msgAzulPlc.name());
 					msgUtil.msg("{conferencia.lembrar.gravar}", PlcMessage.Cor.msgAmareloPlc.name());
@@ -217,28 +255,31 @@ public class ConferenciaMB extends AppMB {
 			produtos.add(itemConferencia.getProduto());
 		}
 		
-		List<Estoque> estoqueList = (List<Estoque>)iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoque(context, produtos);
+		List<Estoque> estoques = (List<Estoque>)iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoque(context, produtos);
 		
-		for (Estoque estoque : estoqueList) {
+		for (Estoque itemEstoque : estoques) {
 			
 			for (ItemConferencia item : itensConferencia) {
 				
-				if (item.getProduto().getId().compareTo(estoque.getProduto().getId()) == 0) {
-					item.setQuantidadeEstoque(estoque.getQuantidade());
-					item.setLocalizacao(estoque.getLocalizacao());
+				if (item.getProduto().getId().compareTo(itemEstoque.getProduto().getId()) == 0) {
+					item.setQuantidadeEstoque(itemEstoque.getQuantidade());
+					item.setLocalizacao(itemEstoque.getLocalizacao());
 					break;
 				}
 			}
 		}
 	}
 
-	private ItemConferenciaEntity criaNovoItem(Conferencia conferencia, Produto produto) {
-		ItemConferenciaEntity item = new ItemConferenciaEntity();
+	private ItemConferencia criaNovoItem(Conferencia conferencia, Produto produto, Estoque itemEstoque) {
+		ItemConferencia item = new ItemConferenciaEntity();
 		
 		item.setConferencia(conferencia);
 		item.setProduto(produto);
 		item.setTipoProduto(produto.getTipoProduto());
-		item.setIndExcPlc("N");
+		item.setQuantidadeEstoque(itemEstoque != null ? itemEstoque.getQuantidade() : null);
+		item.setLocalizacao(itemEstoque != null ? itemEstoque.getLocalizacao() : null);
+		
+		((ItemConferenciaEntity)item).setIndExcPlc("N");
 		return item;
 	}
 

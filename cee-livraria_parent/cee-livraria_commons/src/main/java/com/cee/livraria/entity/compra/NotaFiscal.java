@@ -42,7 +42,7 @@ import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
 @Access(AccessType.FIELD)
 @NamedQueries({
 	@NamedQuery(name = "NotaFiscal.queryMan", query = "from NotaFiscal"),
-	@NamedQuery(name = "NotaFiscal.querySel", query = "select obj.id as id, obj.numero as numero, obj.dataEmissao as dataEmissao, obj.dataEntrada as dataEntrada, obj.valorTotal as valorTotal, obj.status as status, obj1.id as fornecedor_id, obj1.nome as fornecedor_nome from NotaFiscal obj left outer join obj.fornecedor as obj1 order by obj.numero asc"),
+	@NamedQuery(name = "NotaFiscal.querySel", query = "select obj.id as id, obj.numero as numero, obj.dataEmissao as dataEmissao, obj.dataEntrada as dataEntrada, obj.valorTotal as valorTotal, obj.status as status, obj1.id as fornecedor_id, obj1.nome as fornecedor_nome, obj2.id as parcelamento_id, obj2.nome as parcelamento_nome from NotaFiscal obj left outer join obj.fornecedor as obj1 left outer join obj.parcelamento as obj2 order by obj.numero asc"),
 	@NamedQuery(name = "NotaFiscal.querySelLookup", query = "select id as id, numero as numero from NotaFiscal where id = ? order by id asc") })
 public class NotaFiscal extends AppBaseEntity {
 	private static final long serialVersionUID = -305835460793103575L;
@@ -72,6 +72,10 @@ public class NotaFiscal extends AppBaseEntity {
 	@Digits(integer = 8, fraction = 2)
 	private BigDecimal valorTotal;
 
+	@ManyToOne(targetEntity = Parcelamento.class, fetch = FetchType.LAZY)
+	@ForeignKey(name = "FK_NOTAFISCAL_PARCELAMENTO")
+	private Parcelamento parcelamento;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(length = 1)
 	@NotNull
@@ -86,8 +90,8 @@ public class NotaFiscal extends AppBaseEntity {
 
 	@OneToMany(targetEntity = ContaPagar.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "notaFiscal")
 	@ForeignKey(name = "FK_CONTAPAGAR_NOTAFISCAL")
-	@PlcValDuplicity(property = "observacao")
-	@PlcValMultiplicity(referenceProperty = "observacao", message = "{jcompany.aplicacao.mestredetalhe.multiplicidade.ContaPagar}")
+	@PlcValDuplicity(property = "dataVencimento")
+	@PlcValMultiplicity(referenceProperty = "dataVencimento", message = "{jcompany.aplicacao.mestredetalhe.multiplicidade.ContaPagar}")
 	@Valid
 	private List<ContaPagar> contaPagar;
 
@@ -143,6 +147,14 @@ public class NotaFiscal extends AppBaseEntity {
 	}
 
 	
+	public Parcelamento getParcelamento() {
+		return parcelamento;
+	}
+
+	public void setParcelamento(Parcelamento parcelamento) {
+		this.parcelamento = parcelamento;
+	}
+
 	public StatusNotaFiscal getStatus() {
 		return status;
 	}

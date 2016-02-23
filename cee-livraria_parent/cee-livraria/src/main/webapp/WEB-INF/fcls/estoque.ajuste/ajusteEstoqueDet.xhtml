@@ -47,10 +47,11 @@
 				
 				<c:if test="#{ajusteEstoque.status=='F'}">
 					<plcf:vinculado id="produto" value="#{itemAjusteEstoque.produto}" 
-						propSelPop="produto" idExibe="S" lookupTamanho="32"
+						propSelPop="produto" idExibe="S" 
+						idTamanho="15" lookupTamanho="80"
 						larg="1200" alt="800"
 						autoRecuperacaoPropriedade="codigoBarras"
-						autoComplete="true" idTamanho="13" evento="y"
+						autoComplete="true" evento="y"
 						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.Produto" 
 						actionSel="produtosel" modal="S" ajudaChave="ajuda.produto" 
 						onkeydown="selecionaPorTecla(event,this);" 

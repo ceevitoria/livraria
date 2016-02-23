@@ -66,6 +66,9 @@ public class NotaFiscalMB extends AppMB  {
 
 	private Integer indiceItem;
 	private String codigoItem;
+	private Integer indiceFornecedor;
+	private String nomeFornecedor;
+	
 	private BigDecimal valorTotalNota = new BigDecimal("0.00");
 	
 	public Integer getIndiceItem() {
@@ -91,6 +94,23 @@ public class NotaFiscalMB extends AppMB  {
 	public void setValorTotalNota(BigDecimal valorTotalNota) {
 		this.valorTotalNota = valorTotalNota;
 	}
+	
+	public Integer getIndiceFornecedor() {
+		return indiceFornecedor;
+	}
+
+	public void setIndiceFornecedor(Integer indiceFornecedor) {
+		this.indiceFornecedor = indiceFornecedor;
+	}
+
+	public String getNomeFornecedor() {
+		return nomeFornecedor;
+	}
+
+	public void setNomeFornecedor(String nomeFornecedor) {
+		this.nomeFornecedor = nomeFornecedor;
+	}
+
 	/**
 	* Entidade da ação injetado pela CDI
 	*/
@@ -112,6 +132,7 @@ public class NotaFiscalMB extends AppMB  {
         ((NotaFiscal)this.entityPlc).setStatus(StatusNotaFiscal.A);
 		return ret;
 	}
+	
 	
 	public void buscarProdutoFornecedor() {
 
@@ -171,6 +192,37 @@ public class NotaFiscalMB extends AppMB  {
 		}
 	}
 	
+	public void buscarParcelamentoFornecedor() {
+
+		try {
+			NotaFiscal notaFiscal = (NotaFiscal)this.entityPlc;
+			Fornecedor fornecedor = notaFiscal.getFornecedor();
+			
+			if (fornecedor != null) {
+				
+				if (fornecedor.getParcelamentoPadrao() != null) {
+					notaFiscal.setParcelamento(fornecedor.getParcelamentoPadrao());
+				}
+				
+			} else {
+				
+				if (fornecedor == null && indiceFornecedor != null ) {
+					List<Fornecedor> fornecedores = (List<Fornecedor>)dominioLookupUtil.getDominio("Fornecedor");
+					
+					fornecedor = fornecedores.get(indiceFornecedor);
+					
+					if (fornecedor.getParcelamentoPadrao() != null) {
+						notaFiscal.setParcelamento(fornecedor.getParcelamentoPadrao());
+					}
+				}
+			}
+			
+			
+		} finally {
+			contextUtil.getRequest().setAttribute("destravaTela", "S");
+		}
+	}
+
 	public String registrarEntradaNotaFiscal() {
 		
 		save();

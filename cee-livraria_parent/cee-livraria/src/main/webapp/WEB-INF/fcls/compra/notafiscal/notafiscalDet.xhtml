@@ -62,7 +62,6 @@
 					plc.jq("#corpo\\:formulario\\:indiceItem").val( index );
 					plc.jq("#corpo\\:formulario\\:codigoItem").val( codigo );
 					plc.jq("#corpo\\:formulario\\:linkAcaoBuscarProdutoFornecedor").trigger("click");
-					plc.jq("#corpo\\:formulario\\:itemNotaFiscal\\:"+ index + "\\:valorLiquido").val();
 				});
 				
 				plc.jq("#corpo\\:formulario\\:itemNotaFiscal\\:"+ index + "\\:valorUnitario" ).on("change", function(){
@@ -107,14 +106,14 @@
 				<!-- 
 				<plcf:texto id="codigoProduto" value="#{itemNotaFiscal.codigoProduto}" style="text-align:right;" ajudaChave="ajuda.codigoProduto" tamanho="8"/> 
 				 -->  
-				<h:inputText id="codigoProduto" size="4" title="#{msg['ajuda.codigoProduto']}" value="#{itemNotaFiscal.codigoProduto}" style="text-align:right;" readonly="false" required="false"/>
+				<h:inputText id="codigoProduto" size="10" title="#{msg['ajuda.codigoProduto']}" value="#{itemNotaFiscal.codigoProduto}" style="text-align:right;" readonly="false" required="false"/>
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.produto']}"/>
 				</f:facet>  
 					<plcf:vinculado id="produto" value="#{itemNotaFiscal.produto}" 
-						propSelPop="produto" idExibe="S" lookupTamanho="50"
+						propSelPop="produto" idExibe="S" lookupTamanho="80"
 						larg="1200" alt="800"
 						autoRecuperacaoPropriedade="codigoBarras"
 						autoComplete="true" idTamanho="10" evento="y"
@@ -157,7 +156,7 @@
 				<!-- 
 				<plcf:numerico id="quantidade" value="#{itemNotaFiscal.quantidade}" numCasas="0" ajudaChave="ajuda.quantidade"/> 
 				 -->  
-				<h:inputText id="quantidade" title="#{msg['ajuda.quantidade']}" size="4" value="#{itemNotaFiscal.quantidade}" style="text-align:right;" readonly="false" required="false"/>
+				<h:inputText id="quantidade" title="#{msg['ajuda.quantidade']}" size="5" value="#{itemNotaFiscal.quantidade}" style="text-align:right;" readonly="false" required="false"/>
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
@@ -166,7 +165,7 @@
 				<!-- 
 				<plcf:numerico id="percentualDesconto" value="#{itemNotaFiscal.percentualDesconto}" ajudaChave="ajuda.percentualDesconto"/> 
 				 -->
-				<h:inputText id="percentualDesconto" title="#{msg['ajuda.percentualDesconto']}" size="6" value="#{itemNotaFiscal.percentualDesconto}" style="text-align:right;" readonly="false" required="false">
+				<h:inputText id="percentualDesconto" title="#{msg['ajuda.percentualDesconto']}" size="8" value="#{itemNotaFiscal.percentualDesconto}" style="text-align:right;" readonly="false" required="false">
 				<f:convertNumber maxFractionDigits="2"
 				    groupingUsed="true"
 				    pattern="#0.00"
@@ -183,7 +182,7 @@
 				<!-- 
 				<plcf:numerico id="valorLiquido" value="#{itemNotaFiscal.valorLiquido}" somenteLeitura="S" ajudaChave="ajuda.valorLiquido"/> 
 				 -->  
-				<h:inputText id="valorLiquido" class="classeValorLiquido" title="#{msg['ajuda.valorLiquido']}" size="6" value="#{itemNotaFiscal.valorLiquido}" style="text-align:right;" readonly="false" required="false">
+				<h:inputText id="valorLiquido" class="classeValorLiquido" title="#{msg['ajuda.valorLiquido']}" size="8" value="#{itemNotaFiscal.valorLiquido}" style="text-align:right;" readonly="false" required="false">
 				<f:convertNumber maxFractionDigits="2"
 				    groupingUsed="true"
 				    pattern="#0.00"

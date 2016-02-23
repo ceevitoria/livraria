@@ -25,7 +25,7 @@ import javax.validation.constraints.Size;
 @Access(AccessType.FIELD)
 @NamedQueries({
 	@NamedQuery(name="CaixaEntity.queryMan", query="from CaixaEntity where sistema = 'LIV'"),
-	@NamedQuery(name="CaixaEntity.querySel", query="select id as id, status as status, saldo as saldo from CaixaEntity where sistema = 'LIV'"),
+	@NamedQuery(name="CaixaEntity.querySel", query="select id as id, status as status, saldo as saldo, dataUltAbertura as dataUltAbertura, dataUltFechamento as dataUltFechamento from CaixaEntity where sistema = 'LIV'"),
 	@NamedQuery(name="CaixaEntity.querySelLookup", query="select id as id, saldo as saldo from CaixaEntity where id = ? and sistema = 'LIV' order by id asc") })
 public class CaixaEntity extends Caixa {
 
@@ -36,7 +36,7 @@ public class CaixaEntity extends Caixa {
 	private BigDecimal valor;
 	
 	@Transient
-	@Size(max = 500)
+	@Size(max = 2000)
 	private String observacao;
 	
 	public BigDecimal getValor() {

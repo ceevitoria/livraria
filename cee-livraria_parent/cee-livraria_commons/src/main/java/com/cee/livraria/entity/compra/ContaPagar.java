@@ -50,19 +50,17 @@ public class ContaPagar extends AppBaseEntity {
 	@ForeignKey(name = "FK_CONTAPAGAR_NOTAFISCAL")
 	private NotaFiscal notaFiscal;
 
-	@NotNull(groups = PlcValGroupEntityList.class)
-	@RequiredIf(valueOf = "observacao", is = RequiredIfType.not_empty)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataEmissao;
 
 	@NotNull(groups = PlcValGroupEntityList.class)
-	@RequiredIf(valueOf = "observacao", is = RequiredIfType.not_empty)
+	@RequiredIf(valueOf = "id", is = RequiredIfType.not_empty)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataVencimento;
 
 	@Enumerated(EnumType.STRING)
 	@NotNull(groups = PlcValGroupEntityList.class)
-	@RequiredIf(valueOf = "observacao", is = RequiredIfType.not_empty)
+	@RequiredIf(valueOf = "dataVencimento", is = RequiredIfType.not_empty)
 	@Column(length = 1)
 	private StatusContaPagar status;
 
@@ -70,7 +68,7 @@ public class ContaPagar extends AppBaseEntity {
 	private Date dataPagamento;
 
 	@NotNull(groups = PlcValGroupEntityList.class)
-	@RequiredIf(valueOf = "observacao", is = RequiredIfType.not_empty)
+	@RequiredIf(valueOf = "dataVencimento", is = RequiredIfType.not_empty)
 	@Digits(integer = 8, fraction = 2)
 	private BigDecimal valor;
 

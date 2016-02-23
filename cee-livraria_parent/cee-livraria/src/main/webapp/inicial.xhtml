@@ -51,8 +51,8 @@ e explicações sobre como se obter ajuda para a aplicação. Esta pagina é um 
 			<div><img class="ui-state-default plc-imagem" style="border: none;" src="#{request.contextPath}/res/midia/home-quiosque-livro.png"/></div><div>Livro</div></a>
 		</div>
 		<div style="#{plct:execOneArg(request,'isUserInRole','Vendedor')?'':'display:none;'}">
-			<a href="#{request.contextPath}/f/n/vendalivro" class="ui-state-default ui-corner-all plc-botao-quiosque">
-			<div><img class="ui-state-default plc-imagem" style="border: none;" src="#{request.contextPath}/res/midia/home-quiosque-vender.png"/></div><div>Vender Livro</div></a>
+			<a href="#{request.contextPath}/f/n/vendaproduto" class="ui-state-default ui-corner-all plc-botao-quiosque">
+			<div><img class="ui-state-default plc-imagem" style="border: none;" src="#{request.contextPath}/res/midia/home-quiosque-vender.png"/></div><div>Vender Produto</div></a>
 		</div>
 		<div style="#{plct:execOneArg(request,'isUserInRole','Vendedor')?'':'display:none;'}">
 			<a href="#{request.contextPath}/f/n/caixaabertura" class="ui-state-default ui-corner-all plc-botao-quiosque">

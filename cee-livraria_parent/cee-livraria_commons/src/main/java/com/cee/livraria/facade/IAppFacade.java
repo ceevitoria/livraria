@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
+import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.caixa.Caixa;
 import com.cee.livraria.entity.caixa.CaixaEntity;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
@@ -90,6 +91,15 @@ public interface IAppFacade extends IPlcFacade {
 	 */
 	public List<Estoque> buscarProdutosEstoque(PlcBaseContextVO context, List<Produto> listaProdutos) throws PlcException;
 	
+	/**
+	 * Busca os referidos produtos que estão em determinada localizacao do estoque
+	 * @param context
+	 * @param entityList relação de produtos a serem recuperados do estoque
+	 * @param localizacao A localização que se deseja encontrar os produtos informados
+	 * @return itens do estoque relativos aos produtos informados
+	 */
+	public List<Estoque> buscarProdutosEstoquePorLocalizacao(PlcBaseContextVO context, List<Produto> listaProdutos, Localizacao localizacao) throws PlcException;
+
 	
 	/**
 	 * Registra a entrada de uma nota fiscal para o sistema

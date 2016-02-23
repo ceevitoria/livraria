@@ -20,6 +20,7 @@ import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 @Access(AccessType.FIELD)
 @NamedQueries({ 
 	@NamedQuery(name = "EstoqueEntity.querySelByProduto", query = "from EstoqueEntity where produto = :produto"),
+	@NamedQuery(name = "EstoqueEntity.querySelByProdutoAndLocalizacao", query = "from EstoqueEntity where produto = :produto and localizacao = :localizacao"),
 	@NamedQuery(name = "EstoqueEntity.querySelLookup", query = "select id as id, produto as produto from EstoqueEntity where id = ? order by id asc")})
 public class EstoqueEntity extends Estoque {
 

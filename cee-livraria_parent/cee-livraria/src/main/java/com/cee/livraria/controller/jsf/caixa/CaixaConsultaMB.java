@@ -92,7 +92,6 @@ public class CaixaConsultaMB extends AppMB  {
     		if(contextUtil.getRequest().isUserInRole("Gestor")) {
     			caixaConsulta.setSaldo(caixa.getSaldo());
     		}
-    		
         }
         
         return caixaConsulta;     	
@@ -170,13 +169,8 @@ public class CaixaConsultaMB extends AppMB  {
 	}
 
     public void handleButtonsAccordingFormPattern() {
-
 		contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_RELATORIO_FECHAMENTO_CAIXA, PlcConstants.EXIBIR);
-
-//    	if (entityPlc != null && StatusCaixa.A.equals(((Caixa)entityPlc).getStatus())) {
-    		contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_RELATORIO_FECHAMENTO_CAIXA, PlcConstants.EXIBIR);
-//    	}
-    	
+   		contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_RELATORIO_FECHAMENTO_CAIXA, PlcConstants.EXIBIR);
 		contextUtil.getRequest().setAttribute(PlcConstants.ACAO.EXIBE_BT_GRAVAR, PlcConstants.NAO_EXIBIR);
     }
     

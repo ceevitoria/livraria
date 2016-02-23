@@ -39,6 +39,7 @@ import com.powerlogic.jcompany.controller.util.PlcIocControllerFacadeUtil;
 @PlcUriIoC("caixaabertura")
 @PlcHandleException
 public class CaixaAberturaMB extends AppMB {
+	private static final long serialVersionUID = 6961873574853765931L;
 
 	@Inject @QPlcDefault 
 	protected CaixaOperacaoMB caixaOperacaoMB;

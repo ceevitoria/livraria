@@ -48,6 +48,8 @@ import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
 	@NamedQuery(name="AjusteEstoque.querySel", query="select id as id, nome as nome, data as data, status as status from AjusteEstoque order by nome asc"), 
 	@NamedQuery(name="AjusteEstoque.querySelLookup", query="select id as id, nome as nome from AjusteEstoque where id = ? order by id asc") })
 public class AjusteEstoque extends AppBaseEntity {
+	private static final long serialVersionUID = 2235723478390266238L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_AJUSTEESTOQUE")
 	private Long id;
@@ -70,8 +72,8 @@ public class AjusteEstoque extends AppBaseEntity {
 
 	@OneToMany (targetEntity = com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque.class, fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="ajusteEstoque")
 	@ForeignKey(name="FK_ITEMAJUSTEESTOQUE_AJUSTEESTOQUE")
-	@PlcValDuplicity(property="livro")
-	@PlcValMultiplicity(referenceProperty="livro",  message="{jcompany.aplicacao.mestredetalhe.multiplicidade.ItemAjusteEstoque}")
+	@PlcValDuplicity(property="produto")
+	@PlcValMultiplicity(referenceProperty="produto",  message="{jcompany.aplicacao.mestredetalhe.multiplicidade.ItemAjusteEstoque}")
 	@Valid
 	private List<ItemAjusteEstoque> itemAjusteEstoque;
 
@@ -147,7 +149,6 @@ public class AjusteEstoque extends AppBaseEntity {
 	}
 
 	@Embedded
-	@NotNull
 	@Valid
 	@Transient
 	private transient RegraPesquisaProdutos regra;

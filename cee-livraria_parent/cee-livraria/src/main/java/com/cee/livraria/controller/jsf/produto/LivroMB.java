@@ -6,6 +6,7 @@ import javax.inject.Named;
 
 import com.cee.livraria.controller.jsf.AppMB;
 import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.produto.TipoProduto;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
@@ -64,6 +65,8 @@ public class LivroMB extends AppMB  {
 		if (this.entityPlc==null) {
 			this.entityPlc = new Livro();
 			this.newEntity();
+
+			((Livro)this.entityPlc).setTipoProduto(TipoProduto.C);
 		}
 		
 		return (Livro)this.entityPlc;     	

@@ -84,7 +84,7 @@ public class ConferenciaRepository extends PlcBaseRepository {
 		boolean autorizaGravacao = true;
 		int totalItensQuantidadeDivergente=0;
 		int totalItensLocalizacaoDivergente=0;
-		int quantidadeLivrosSemEstoque=0;
+		int quantidadeProdutosSemEstoque=0;
 
 		mensagens.clear();
 		alertas.clear();
@@ -98,10 +98,10 @@ public class ConferenciaRepository extends PlcBaseRepository {
 				List<Estoque> estoqueList = dao.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
 				
 				if (estoqueList == null || estoqueList.size() == 0) {
-					quantidadeLivrosSemEstoque++;
+					quantidadeProdutosSemEstoque++;
 					
 					if (config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.D) ) {
-						alertas.add(String.format("O livro '%s' não possui estoque associado.", 
+						alertas.add(String.format("O produto '%s' não possui estoque associado.", 
 							new Object[]{itemConferencia.getProduto().getTitulo()}));
 					}
 					
@@ -116,7 +116,7 @@ public class ConferenciaRepository extends PlcBaseRepository {
 							if (PlcYesNo.S.equals(config.getAlertaTrocaLocalizacaoLivros())) {
 								
 								if (config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.D) ) {
-									alertas.add(String.format("O livro '%s' teve sua localização trocada de '%s' para '%s'", 
+									alertas.add(String.format("O produto '%s' teve sua localização trocada de '%s' para '%s'", 
 											new Object[]{itemConferencia.getProduto().getTitulo(),
 											estoque.getLocalizacao().getDescricao(),
 											itemConferencia.getLocalizacao().getDescricao()}));
@@ -167,11 +167,11 @@ public class ConferenciaRepository extends PlcBaseRepository {
 				
 				mensagens.add(String.format("Total de itens com divergência na quantidade: %d", new Object[]{totalItensQuantidadeDivergente}));
 				
-				if (quantidadeLivrosSemEstoque == 1) {
-					alertas.add("Apenas um livro não possui estoque associado. Será criado automaticamente ao 'Ajustar Estoque'.");
-				} else if (quantidadeLivrosSemEstoque > 1) {
-					alertas.add(String.format("'%d' livros não possuem estoque associado. Será criado automaticamente ao 'Ajustar Estoque'.", 
-						new Object[]{quantidadeLivrosSemEstoque}));
+				if (quantidadeProdutosSemEstoque == 1) {
+					alertas.add("Apenas um produto não possui estoque associado. Será criado automaticamente ao 'Ajustar Estoque'.");
+				} else if (quantidadeProdutosSemEstoque > 1) {
+					alertas.add(String.format("'%d' produtos não possuem estoque associado. Será criado automaticamente ao 'Ajustar Estoque'.", 
+						new Object[]{quantidadeProdutosSemEstoque}));
 				}
 				
 			}
@@ -179,7 +179,7 @@ public class ConferenciaRepository extends PlcBaseRepository {
 			if (autorizaGravacao) {
 
 				mensagens.add("     "); 
-				if (totalItensQuantidadeDivergente+totalItensLocalizacaoDivergente == 0) {
+				if (totalItensQuantidadeDivergente+totalItensLocalizacaoDivergente+quantidadeProdutosSemEstoque == 0) {
 					conferencia.setResultado(ResultadoConferencia.S);
 					mensagens.add("Conferência gravada com sucesso sem divergência!"); 
 				} else {
@@ -216,8 +216,8 @@ public class ConferenciaRepository extends PlcBaseRepository {
 		AjusteEstoque ajusteEstoque = new AjusteEstoque();
 
 		ajusteEstoque.setData(dataConferencia);
-		ajusteEstoque.setNome("Ajuste Conferencia: '" + conferencia.getNome() + "'");
-		ajusteEstoque.setDescricao("Ajuste criado automaticamente devido a conferência concluída com divergência");
+		ajusteEstoque.setNome("Ajuste para Conferência: '" + conferencia.getNome() + "'");
+		ajusteEstoque.setDescricao("Ajuste criado automaticamente pois a conferência foi concluída com divergência.");
 		ajusteEstoque.setRegra(new RegraPesquisaProdutos());
 		ajusteEstoque.setStatus(StatusAjuste.A);
 		ajusteEstoque.setConferencia(conferencia);
@@ -229,12 +229,13 @@ public class ConferenciaRepository extends PlcBaseRepository {
 		
 		for (ItemConferencia itemConferencia : itensConferencia) {
 			
-			if (itemConferencia.getQuantidadeConferida().compareTo(itemConferencia.getQuantidadeEstoque())!=0) {
+			if (itemConferencia.getQuantidadeEstoque() == null || itemConferencia.getQuantidadeConferida().compareTo(itemConferencia.getQuantidadeEstoque())!=0) {
 				ItemAjusteEstoque itemAjuste = new ItemAjusteEstoque();
 				
 				itemAjuste.setProduto(itemConferencia.getProduto());
+				itemAjuste.setTipoProduto(itemConferencia.getTipoProduto());
 				itemAjuste.setLocalizacao(itemConferencia.getLocalizacao());
-				itemAjuste.setQuantidadeEstoque(itemConferencia.getQuantidadeEstoque());
+				itemAjuste.setQuantidadeEstoque(itemConferencia.getQuantidadeEstoque() != null ? itemConferencia.getQuantidadeEstoque() : 0);
 				itemAjuste.setQuantidadeInformada(itemConferencia.getQuantidadeConferida());
 				itemAjuste.setAjusteEstoque(ajusteEstoque);
 				

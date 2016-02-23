@@ -52,7 +52,7 @@ import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 			"   order by t.dataInicio desc "),
 	@NamedQuery(name="Produto.querySelLookup", query="select id as id, codigoBarras as codigoBarras, titulo as titulo from Produto where id = ? order by id asc") })
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name="tipoProduto", length=1, discriminatorType=DiscriminatorType.STRING)
+@DiscriminatorColumn(name="tipo_produto", length=1, discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue("P")
 public class Produto extends AppBaseEntity implements Estocavel {
 	private static final long serialVersionUID = 7010726688922277123L;
@@ -61,8 +61,7 @@ public class Produto extends AppBaseEntity implements Estocavel {
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_PRODUTO")
 	private Long id;
 
-	@NotNull
-	@Column(length=1, insertable=false, updatable=false)
+	@Column(length=1, insertable=true, updatable=false)
 	@Enumerated(EnumType.STRING)
 	private TipoProduto tipoProduto;
 

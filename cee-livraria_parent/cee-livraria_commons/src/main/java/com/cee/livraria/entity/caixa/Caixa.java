@@ -1,6 +1,7 @@
 package com.cee.livraria.entity.caixa;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
@@ -35,6 +38,12 @@ public abstract class Caixa extends AppBaseEntity {
 	@Column(length = 3)
 	private String sistema = "LIV";
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataUltAbertura;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataUltFechamento;
+
 	@Enumerated(EnumType.STRING)
 	@NotNull
 	@Column(length = 1)
@@ -72,6 +81,22 @@ public abstract class Caixa extends AppBaseEntity {
 
 	public void setSistema(String sistema) {
 		this.sistema = sistema;
+	}
+
+	public Date getDataUltAbertura() {
+		return dataUltAbertura;
+	}
+
+	public void setDataUltAbertura(Date dataUltAbertura) {
+		this.dataUltAbertura = dataUltAbertura;
+	}
+
+	public Date getDataUltFechamento() {
+		return dataUltFechamento;
+	}
+
+	public void setDataUltFechamento(Date dataUltFechamento) {
+		this.dataUltFechamento = dataUltFechamento;
 	}
 
 	public StatusCaixa getStatus() {

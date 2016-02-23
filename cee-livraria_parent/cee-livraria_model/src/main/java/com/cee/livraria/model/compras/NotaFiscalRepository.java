@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
@@ -36,6 +37,7 @@ import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.commons.annotation.PlcAggregationIoC;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcRepository;
 import com.powerlogic.jcompany.model.PlcBaseRepository;
+import com.powerlogic.jcompany.model.bindingtype.PlcUpdateBefore;
 
 /**
  * Classe de Modelo gerada pelo assistente
@@ -55,6 +57,31 @@ public class NotaFiscalRepository extends PlcBaseRepository {
 
 	private List<String> alertas = new ArrayList<String>();
 	private List<String> mensagens = new ArrayList<String>();
+
+	public void antesAtualizar (@Observes @PlcUpdateBefore PlcBaseContextVO context) throws PlcException {
+		
+		if (context.getUrl().equalsIgnoreCase("notaFiscal")) {
+			NotaFiscal notaFiscal = (NotaFiscal) context.getEntityForExtension();
+			
+			if (notaFiscal != null) {
+				ajustaDataEmissaoContasPagar(context, notaFiscal);
+			}
+		}
+	}
+	
+
+	private void ajustaDataEmissaoContasPagar(PlcBaseContextVO context, NotaFiscal notaFiscal) {
+		
+		if (notaFiscal.getContaPagar() != null) {
+			List<ContaPagar> contas = notaFiscal.getContaPagar();
+			
+			for (ContaPagar contaPagar : contas) {
+				contaPagar.setDataEmissao(notaFiscal.getDataEmissao());
+			}
+		}
+		
+	}
+
 
 	public RetornoConfig registrarEntradaNotaFiscal(PlcBaseContextVO context, NotaFiscal notaFiscal) throws PlcException {
 		Date dataRegistro = new Date();
@@ -186,19 +213,19 @@ public class NotaFiscalRepository extends PlcBaseRepository {
 			contasPagar.clear();
 			Fornecedor fornecedor = (Fornecedor) dao.findById(context, Fornecedor.class, notaFiscal.getFornecedor().getId());
 			
-			if (fornecedor.getParcelamentoPadrao() != null) {
-				Parcelamento parcelamento = fornecedor.getParcelamentoPadrao();
+			if (notaFiscal.getParcelamento() != null || fornecedor.getParcelamentoPadrao() != null) {
+				Parcelamento parcelamento = notaFiscal.getParcelamento() != null ? notaFiscal.getParcelamento() : fornecedor.getParcelamentoPadrao();
 				Calendar calendar = Calendar.getInstance();
 				double somaParcelas = 0.0;
 				int numParcelas = parcelamento.getNumeroParcelas();
 				
 				for(int i=0; i < numParcelas; i++) {
 					ContaPagar contaPagar = new ContaPagar();
-					contaPagar.setDataEmissao(dataRegistro);
+					contaPagar.setDataEmissao(notaFiscal.getDataEmissao());
 					contaPagar.setObservacao(String.format("Parcela %d/%d. Parcelamento '%s'", i+1, numParcelas, parcelamento.getNome()));
 					contaPagar.setStatus(StatusContaPagar.A);
 					
-					calendar.setTime(dataRegistro);
+					calendar.setTime(notaFiscal.getDataEmissao());
 					calendar.add(Calendar.MONTH, i);
 					calendar.add(Calendar.DAY_OF_MONTH, parcelamento.getCarenciaInicial());
 					contaPagar.setDataVencimento(calendar.getTime());

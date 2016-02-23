@@ -209,52 +209,65 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 	 * @return quantidade vendida de livros
 	 * @throws PlcException
 	 */
+	@SuppressWarnings("unchecked")
 	private void atualizaEstoque(PlcBaseContextVO context, AjusteEstoque ajusteEstoque, Date dataAjuste) throws PlcException {
 		List<ItemAjusteEstoque> itensAjusteEstoque = ajusteEstoque.getItemAjusteEstoque();
 		
 		for (ItemAjusteEstoque itemAjuste : itensAjusteEstoque) {
 
 			if (itemAjuste.getProduto() != null && itemAjuste.getProduto().getId() != null) {
-				@SuppressWarnings("unchecked")
-				List<Estoque> lista = (List<Estoque>)dao.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[]{"produto"}, new Object[]{itemAjuste.getProduto()});
+				int qtdInformada = itemAjuste.getQuantidadeInformada();
+				int qtdExistente = itemAjuste.getQuantidadeEstoque();
+				int qtdSaldo = 0;
 				
-				if (lista != null && lista.size() == 1) {
-					int qtdInformada = itemAjuste.getQuantidadeInformada();
-					int qtdExistente = itemAjuste.getQuantidadeEstoque();
-					int qtdSaldo = 0;
-					
-					if (qtdInformada > qtdExistente) {
-						qtdSaldo = qtdInformada - qtdExistente;
-					}
+				if (qtdInformada > qtdExistente) {
+					qtdSaldo = qtdInformada - qtdExistente;
+				}
 
-					if (qtdInformada < qtdExistente) {
-						qtdSaldo = qtdExistente - qtdInformada;
-					}
+				if (qtdInformada < qtdExistente) {
+					qtdSaldo = qtdExistente - qtdInformada;
+				}
+				
+				if (qtdSaldo != 0) {
+					List<Estoque> lista = (List<Estoque>)dao.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[]{"produto"}, new Object[]{itemAjuste.getProduto()});
 					
-					if (qtdSaldo != 0) {
+					if (lista != null && lista.size() == 1) {
 						Estoque estoque = (Estoque)lista.get(0);
 						
 						estoque.setQuantidade(qtdInformada);
-						
-						if (PlcYesNo.S.equals(config.getUtilizaLocalizacaoLivros()) ) {
-							
-							if (PlcYesNo.S.equals(config.getAjusteAutomaticoLocalizacaoLivros())) {
-								estoque.setLocalizacao(itemAjuste.getLocalizacao());
-							} else {
-								
-								if (estoque.getLocalizacao().getId().compareTo(itemAjuste.getLocalizacao().getId()) != 0) {
-									throw new PlcException("ajusteEstoque.err.item.localizacao.divergente", 
-										new Object[] {estoque.getProduto().getTitulo()});
-								}
-							}
-						}
-						
+						estoque.setLocalizacao(itemAjuste.getLocalizacao());
 						estoque.setDataConferencia(dataAjuste);
-
+						
+//						if (PlcYesNo.S.equals(config.getUtilizaLocalizacaoLivros()) ) {
+//							
+//							if (PlcYesNo.S.equals(config.getAjusteAutomaticoLocalizacaoLivros())) {
+//								estoque.setLocalizacao(itemAjuste.getLocalizacao());
+//							} else {
+//								
+//								if (estoque.getLocalizacao().getId().compareTo(itemAjuste.getLocalizacao().getId()) != 0) {
+//									throw new PlcException("ajusteEstoque.err.item.localizacao.divergente", 
+//										new Object[] {estoque.getProduto().getTitulo()});
+//								}
+//							}
+//						}
+						
 						estoque.setDataUltAlteracao(dataAjuste);
 						estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
-
+	
 						dao.update(context, estoque);
+					} else {
+						Estoque estoque = new EstoqueEntity();
+						
+						estoque.setProduto(itemAjuste.getProduto());
+						estoque.setQuantidade(qtdInformada);
+						estoque.setQuantidadeMinima(1);
+						estoque.setQuantidadeMaxima(50);
+						estoque.setLocalizacao(itemAjuste.getLocalizacao());
+						estoque.setDataConferencia(dataAjuste);
+						estoque.setDataUltAlteracao(dataAjuste);
+						estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
+	
+						dao.insert(context, estoque);
 					}
 				}
 			}

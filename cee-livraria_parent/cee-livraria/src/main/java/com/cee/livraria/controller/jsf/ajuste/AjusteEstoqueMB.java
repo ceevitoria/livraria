@@ -1,6 +1,8 @@
 package com.cee.livraria.controller.jsf.ajuste;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.enterprise.inject.Produces;
@@ -15,9 +17,12 @@ import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.StatusAjuste;
+import com.cee.livraria.entity.produto.CD;
+import com.cee.livraria.entity.produto.DVD;
 import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.produto.RegraPesquisaProdutos;
+import com.cee.livraria.entity.produto.TipoProduto;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcConstants;
@@ -109,27 +114,35 @@ public class AjusteEstoqueMB extends AppMB {
 		config = (AjusteEstoqueConfig)listaConfig.get(0);
 	}
 
-	private Produto criaArgumentoPesquisaProduto(RegraPesquisaProdutos regra) {
+	private Produto criaArgumentoPesquisaProduto(RegraPesquisaProdutos regra) throws PlcException {
 		Produto produtoArg = null;
 
-		if (regra.getAutor() != null 
-				|| regra.getEdicao() != null
-				|| regra.getColecao() != null 
-				|| regra.getEditora() != null
-				|| regra.getEspirito() != null) {
+		if (regra.getTipoProduto() == null) {
+			throw new PlcException("{erro.regra.informar.tipoProduto}");
+		}
+		
+		if (TipoProduto.L.equals(regra.getTipoProduto())) {
 			produtoArg = new Livro();
-
 			((Livro) produtoArg).setAutor(regra.getAutor());
 			((Livro) produtoArg).setColecao(regra.getColecao());
 			((Livro) produtoArg).setEdicao(regra.getEdicao());
 			((Livro) produtoArg).setEditora(regra.getEditora());
 			((Livro) produtoArg).setEspirito(regra.getEspirito());
+		} else if (TipoProduto.C.equals(regra.getTipoProduto())) {
+			produtoArg = new CD();
+			((CD) produtoArg).setArtista(regra.getArtista());
+			((CD) produtoArg).setGravadora(regra.getGravadora());
+		} else if (TipoProduto.D.equals(regra.getTipoProduto())) {
+			produtoArg = new DVD();
+			((DVD) produtoArg).setArtista(regra.getArtista());
+			((DVD) produtoArg).setGravadora(regra.getGravadora());
 		} else {
 			produtoArg = new Produto();
 		}
 
 		produtoArg.setTitulo(regra.getTitulo());
 		produtoArg.setCodigoBarras(regra.getCodigoBarras());
+		
 		return produtoArg;
 	}
 
@@ -175,6 +188,22 @@ public class AjusteEstoqueMB extends AppMB {
 					ok = false;
 				} else {
 					List<Produto> produtos = (List<Produto>)iocControleFacadeUtil.getFacade().findList(context, produtoArg, plcControleConversacao.getOrdenacaoPlc(), 0, 0);
+					List<Estoque> estoques = null;
+					
+					if (regra.getLocalizacao() == null) {
+						estoques = (List<Estoque>) iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoque(context, produtos);
+					} else {
+						estoques = (List<Estoque>) iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoquePorLocalizacao(context, produtos, regra.getLocalizacao());
+					}
+
+					Comparator<Estoque> comparator = new Comparator<Estoque>() {
+						public int compare(Estoque o1, Estoque o2) {
+							return o1.getProduto().getTitulo().compareTo(o2.getProduto().getTitulo());
+						}
+					};
+
+					Collections.sort(estoques, comparator);
+					
 					int totalExistente = 0;
 					
 					for (Produto produto : produtos) {
@@ -189,13 +218,23 @@ public class AjusteEstoqueMB extends AppMB {
 							}
 						}
 						
-						if (!existe) {
-							ItemAjusteEstoque itemAjusteEstoque = criaNovoItem(ajusteEstoque, produto);
+						Estoque itemEstoque = null;
+						
+						for (Estoque estoque : estoques) {
+							
+							if (produto.getId().compareTo(estoque.getProduto().getId())==0) {
+								itemEstoque = estoque;
+								break;
+							}
+						}
+						
+						if (!existe && itemEstoque != null) {
+							ItemAjusteEstoque itemAjusteEstoque = criaNovoItem(ajusteEstoque, produto, itemEstoque);
 							listaItensExistentes.add(itemAjusteEstoque);
 						}
 					}
 					
-					carregaEstoqueProdutos(context, listaItensExistentes);
+//					carregaEstoqueProdutos(context, listaItensExistentes);
 					
 					msgUtil.msg("{ajusteEstoque.ok.buscar}", new Object[] {produtos.size()-totalExistente}, PlcMessage.Cor.msgAzulPlc.name());
 					msgUtil.msg("{ajusteEstoque.lembrar.gravar}", PlcMessage.Cor.msgAmareloPlc.name());
@@ -208,11 +247,14 @@ public class AjusteEstoqueMB extends AppMB {
 		return baseEditMB.getDefaultNavigationFlow(); 
 	}
 	
-	private ItemAjusteEstoque criaNovoItem(AjusteEstoque ajusteEstoque, Produto produto) {
+	private ItemAjusteEstoque criaNovoItem(AjusteEstoque ajusteEstoque, Produto produto, Estoque itemEstoque) {
 		ItemAjusteEstoque item = new ItemAjusteEstoque();
 		
 		item.setAjusteEstoque(ajusteEstoque);
 		item.setProduto(produto);
+		item.setQuantidadeEstoque(itemEstoque != null ? itemEstoque.getQuantidade() : null);
+		item.setLocalizacao(itemEstoque != null ? itemEstoque.getLocalizacao() : null);
+		item.setIndExcPlc("N");
 		
 		return item;
 	}
@@ -224,15 +266,15 @@ public class AjusteEstoqueMB extends AppMB {
 			produtos.add(itemAjusteEstoque.getProduto());
 		}
 		
-		List<Estoque> estoqueList = (List<Estoque>)iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoque(context, produtos);
+		List<Estoque> estoques = (List<Estoque>)iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoque(context, produtos);
 		
-		for (Estoque estoque : estoqueList) {
+		for (Estoque itemEstoque : estoques) {
 			
 			for (ItemAjusteEstoque item : itensAjuste) {
 				
-				if (item.getProduto().getId().compareTo(estoque.getProduto().getId()) == 0) {
-					item.setQuantidadeEstoque(estoque.getQuantidade());
-					item.setLocalizacao(estoque.getLocalizacao());
+				if (item.getProduto().getId().compareTo(itemEstoque.getProduto().getId()) == 0) {
+					item.setQuantidadeEstoque(itemEstoque.getQuantidade());
+					item.setLocalizacao(itemEstoque.getLocalizacao());
 					break;
 				}
 			}

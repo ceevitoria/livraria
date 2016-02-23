@@ -212,7 +212,6 @@ public abstract class TabelaPreco extends AppBaseEntity {
 	}
 
 	@Embedded
-	@NotNull
 	@Valid
 	@Transient
 	private transient RegraPesquisaProdutos regra;
