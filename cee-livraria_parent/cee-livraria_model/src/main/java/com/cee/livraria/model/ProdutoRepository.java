@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.estoque.EstoqueEntity;
 import com.cee.livraria.entity.produto.Produto;
+import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.persistence.jpa.produto.ProdutoDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
@@ -42,6 +43,15 @@ public class ProdutoRepository extends PlcBaseRepository {
 			}
 			
 			produto.setQuantidadeEstoque(quantidade);
+			
+			PrecoTabela precoTabela = dao.obterPrecoTabela(context, produto.getId());
+			
+			if (precoTabela != null && precoTabela.getIdTabela() != null) {
+				produto.setPrecoTabela(precoTabela.getPrecoTabela());
+				produto.setIdTabela(precoTabela.getIdTabela());
+				produto.setNomeTabela(precoTabela.getNomeTabela());
+				produto.setPrecoVendaSugerido(precoTabela.getPrecoTabela());
+			}
 		}
 		
 		return produtos;

@@ -66,7 +66,7 @@ public class ProdutoDAO extends AppJpaDAO  {
 			List entities = null;
 
 			try {
-				entities = apiCreateQuery(context, Livro.class, queryPrecoTabela).setParameter("id", idProduto).getResultList();
+				entities = apiCreateQuery(context, Produto.class, queryPrecoTabela).setParameter("id", idProduto).getResultList();
 			} catch (NoResultException nre) {
 				entities = null;
 			}
