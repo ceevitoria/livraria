@@ -91,18 +91,10 @@ public class ConferenciaMB extends AppMB {
 		if (this.entityPlc == null) {
 			this.entityPlc = new ConferenciaEntity();
 			this.newEntity();
+			((Conferencia)this.entityPlc).setStatus(StatusConferencia.F);
 		}
 		
 		return (ConferenciaEntity) this.entityPlc;
-	}
-
-	@Override
-	public String create() {
-		String ret = super.create();
-		
-		((Conferencia)this.entityPlc).setStatus(StatusConferencia.F);
-		
-		return ret;
 	}
 	
 	private void carregaConfiguracao() {

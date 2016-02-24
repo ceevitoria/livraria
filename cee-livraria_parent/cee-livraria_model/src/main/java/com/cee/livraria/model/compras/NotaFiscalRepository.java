@@ -215,6 +215,11 @@ public class NotaFiscalRepository extends PlcBaseRepository {
 			
 			if (notaFiscal.getParcelamento() != null || fornecedor.getParcelamentoPadrao() != null) {
 				Parcelamento parcelamento = notaFiscal.getParcelamento() != null ? notaFiscal.getParcelamento() : fornecedor.getParcelamentoPadrao();
+				
+				if (parcelamento == null || parcelamento.getNumeroParcelas() == null) {
+					throw new PlcException("{compra.erro.estoque.parcelamento.invalido}");
+				}
+				
 				Calendar calendar = Calendar.getInstance();
 				double somaParcelas = 0.0;
 				int numParcelas = parcelamento.getNumeroParcelas();

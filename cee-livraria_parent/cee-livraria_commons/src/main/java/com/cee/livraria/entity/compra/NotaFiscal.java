@@ -42,7 +42,7 @@ import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
 @Access(AccessType.FIELD)
 @NamedQueries({
 	@NamedQuery(name = "NotaFiscal.queryMan", query = "from NotaFiscal"),
-	@NamedQuery(name = "NotaFiscal.querySel", query = "select obj.id as id, obj.numero as numero, obj.dataEmissao as dataEmissao, obj.dataEntrada as dataEntrada, obj.valorTotal as valorTotal, obj.status as status, obj1.id as fornecedor_id, obj1.nome as fornecedor_nome, obj2.id as parcelamento_id, obj2.nome as parcelamento_nome from NotaFiscal obj left outer join obj.fornecedor as obj1 left outer join obj.parcelamento as obj2 order by obj.numero asc"),
+	@NamedQuery(name = "NotaFiscal.querySel", query = "select obj.id as id, obj.numero as numero, obj.dataEmissao as dataEmissao, obj.dataEntrada as dataEntrada, obj.valorTotal as valorTotal, obj.status as status, obj1.id as fornecedor_id, obj1.nome as fornecedor_nome, obj2.id as fornecedor_parcelamentoPadrao_id, obj2.nome as fornecedor_parcelamentoPadrao_nome, obj2.numeroParcelas as fornecedor_parcelamentoPadrao_numeroParcelas, obj2.carenciaInicial as fornecedor_parcelamentoPadrao_carenciaInicial, obj3.id as parcelamento_id, obj3.nome as parcelamento_nome, obj3.numeroParcelas as parcelamento_numeroParcelas, obj3.carenciaInicial as parcelamento_carenciaInicial from NotaFiscal obj left outer join obj.fornecedor as obj1 left outer join obj1.parcelamentoPadrao as obj2 left outer join obj.parcelamento as obj3 order by obj.numero asc"),
 	@NamedQuery(name = "NotaFiscal.querySelLookup", query = "select id as id, numero as numero from NotaFiscal where id = ? order by id asc") })
 public class NotaFiscal extends AppBaseEntity {
 	private static final long serialVersionUID = -305835460793103575L;
@@ -63,7 +63,7 @@ public class NotaFiscal extends AppBaseEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataEntrada;
 
-	@ManyToOne(targetEntity = Fornecedor.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Fornecedor.class, fetch = FetchType.EAGER)
 	@ForeignKey(name = "FK_NOTAFISCAL_FORNECEDOR")
 	@NotNull
 	private Fornecedor fornecedor;
@@ -72,7 +72,7 @@ public class NotaFiscal extends AppBaseEntity {
 	@Digits(integer = 8, fraction = 2)
 	private BigDecimal valorTotal;
 
-	@ManyToOne(targetEntity = Parcelamento.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Parcelamento.class, fetch = FetchType.EAGER)
 	@ForeignKey(name = "FK_NOTAFISCAL_PARCELAMENTO")
 	private Parcelamento parcelamento;
 	

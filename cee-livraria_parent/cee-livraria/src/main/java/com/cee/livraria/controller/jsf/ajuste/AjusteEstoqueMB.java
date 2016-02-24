@@ -88,18 +88,10 @@ public class AjusteEstoqueMB extends AppMB {
 		if (this.entityPlc == null) {
 			this.entityPlc = new AjusteEstoque();
 			this.newEntity();
+			((AjusteEstoque)this.entityPlc).setStatus(StatusAjuste.F);
 		}
 		
 		return (AjusteEstoque) this.entityPlc;
-	}
-
-	@Override
-	public String create() {
-		String ret = super.create();
-		
-		((AjusteEstoque)this.entityPlc).setStatus(StatusAjuste.F);
-		
-		return ret;
 	}
 
 	private void carregaConfiguracao() {

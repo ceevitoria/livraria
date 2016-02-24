@@ -103,17 +103,14 @@
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.codigoProduto']}"/>
 				</f:facet>
-				<!-- 
-				<plcf:texto id="codigoProduto" value="#{itemNotaFiscal.codigoProduto}" style="text-align:right;" ajudaChave="ajuda.codigoProduto" tamanho="8"/> 
-				 -->  
-				<h:inputText id="codigoProduto" size="10" title="#{msg['ajuda.codigoProduto']}" value="#{itemNotaFiscal.codigoProduto}" style="text-align:right;" readonly="false" required="false"/>
+				<h:inputText id="codigoProduto" size="8" title="#{msg['ajuda.codigoProduto']}" value="#{itemNotaFiscal.codigoProduto}" style="text-align:right;" readonly="false" required="false"/>
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.produto']}"/>
 				</f:facet>  
 					<plcf:vinculado id="produto" value="#{itemNotaFiscal.produto}" 
-						propSelPop="produto" idExibe="S" lookupTamanho="80"
+						propSelPop="produto" idExibe="S" lookupTamanho="70"
 						larg="1200" alt="800"
 						autoRecuperacaoPropriedade="codigoBarras"
 						autoComplete="true" idTamanho="10" evento="y"
@@ -126,9 +123,6 @@
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.tipoProduto']}"/>
 				</f:facet>
-				<!-- 
-				<plcf:exibe id="tipoProduto" rendered="#{vendaproduto.produto != null}" value="#{vendaproduto.tipoProduto}" ajudaChave="ajuda.tipoProduto"/> 
-				 -->  
 				<h:inputText id="tipoProduto" title="#{msg['ajuda.tipoProduto']}" rendered="#{itemNotaFiscal.produto != null}" size="8" style="text-align:center;" value="#{itemNotaFiscal.produto.tipoProduto.name}" readonly="true" required="false"/>
 				<h:inputText id="tipoProduto2" title="#{msg['ajuda.tipoProduto']}" rendered="#{itemNotaFiscal.produto == null}" size="8" value="#{itemNotaFiscal.produto}" readonly="true" required="false"/>
 			</h:column>  
@@ -136,9 +130,6 @@
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.valorUnitario']}"/>
 				</f:facet>
-				<!-- 
-				<plcf:numerico id="valorUnitario" value="#{itemNotaFiscal.valorUnitario}" ajudaChave="ajuda.valorUnitario"/> 
-				 -->  
 				<h:inputText id="valorUnitario" title="#{msg['ajuda.valorUnitario']}" size="6" value="#{itemNotaFiscal.valorUnitario}" style="text-align:right;" readonly="false" required="false">
 				<f:convertNumber maxFractionDigits="2"
 				    groupingUsed="true"
@@ -153,18 +144,12 @@
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.quantidade']}"/>
 				</f:facet>
-				<!-- 
-				<plcf:numerico id="quantidade" value="#{itemNotaFiscal.quantidade}" numCasas="0" ajudaChave="ajuda.quantidade"/> 
-				 -->  
 				<h:inputText id="quantidade" title="#{msg['ajuda.quantidade']}" size="5" value="#{itemNotaFiscal.quantidade}" style="text-align:right;" readonly="false" required="false"/>
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.percentualDesconto']}"/>
 				</f:facet>  
-				<!-- 
-				<plcf:numerico id="percentualDesconto" value="#{itemNotaFiscal.percentualDesconto}" ajudaChave="ajuda.percentualDesconto"/> 
-				 -->
 				<h:inputText id="percentualDesconto" title="#{msg['ajuda.percentualDesconto']}" size="8" value="#{itemNotaFiscal.percentualDesconto}" style="text-align:right;" readonly="false" required="false">
 				<f:convertNumber maxFractionDigits="2"
 				    groupingUsed="true"
@@ -179,9 +164,6 @@
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.valorLiquido']}"/>
 				</f:facet>
-				<!-- 
-				<plcf:numerico id="valorLiquido" value="#{itemNotaFiscal.valorLiquido}" somenteLeitura="S" ajudaChave="ajuda.valorLiquido"/> 
-				 -->  
 				<h:inputText id="valorLiquido" class="classeValorLiquido" title="#{msg['ajuda.valorLiquido']}" size="8" value="#{itemNotaFiscal.valorLiquido}" style="text-align:right;" readonly="false" required="false">
 				<f:convertNumber maxFractionDigits="2"
 				    groupingUsed="true"
