@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.estoque.EstoqueEntity;
 import com.cee.livraria.entity.produto.Produto;
@@ -25,24 +26,31 @@ public class ProdutoRepository extends PlcBaseRepository {
 	private ProdutoDAO dao;
 
 	public Collection recuperaProdutos(PlcBaseContextVO context, Produto arg, String orderByDinamico, int inicio, int total) throws PlcException {
-
+		List<Produto> produtosRetorno = new ArrayList<Produto>();  
+		
 		// Recupera todos os projetos conforme filtro e paginação definida na tela de seleção
-		List<Produto> produtos = dao.findList(context, orderByDinamico, inicio, total,
+		List<Produto> produtosEncontrados = dao.findList(context, orderByDinamico, inicio, total,
 				arg.getCodigoBarras(), arg.getTitulo(), arg.getPalavrasChave(), arg.getTipoProduto(), arg.getPrecoUltCompra());
 
 		
-		List<Estoque> estoqueLista = new ArrayList<Estoque>(produtos.size());
+		List<Estoque> estoqueLista = new ArrayList<Estoque>(produtosEncontrados.size());
 		
-		for (Produto produto: produtos) {
+		for (Produto produto: produtosEncontrados) {
 			List<Estoque> estoquesProduto = dao.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
 			
 			int quantidade = 0;
+			Localizacao localizacao = null; 
 			
 			for (Estoque estoque : estoquesProduto) {
 				quantidade += estoque.getQuantidade();
+				
+				if (localizacao == null) {
+					localizacao = estoque.getLocalizacao();
+				}
 			}
 			
 			produto.setQuantidadeEstoque(quantidade);
+			produto.setLocalizacao(localizacao);
 			
 			PrecoTabela precoTabela = dao.obterPrecoTabela(context, produto.getId());
 			
@@ -52,9 +60,17 @@ public class ProdutoRepository extends PlcBaseRepository {
 				produto.setNomeTabela(precoTabela.getNomeTabela());
 				produto.setPrecoVendaSugerido(precoTabela.getPrecoTabela());
 			}
+			
+			// Se foi informado o critério de Localizacao, só retorna os produtos que pertencem à localizacao informada
+			if (arg.getLocalizacao() == null || 
+					(produto.getLocalizacao() != null && 
+					   (arg.getLocalizacao().getId().compareTo(produto.getLocalizacao().getId())) == 0)) {
+
+				produtosRetorno.add(produto);
+			}
 		}
 		
-		return produtos;
+		return produtosRetorno;
 	}
 	
 }

@@ -58,7 +58,7 @@ public class ConferenciaRepository extends PlcBaseRepository {
 		if (context.getUrl().equalsIgnoreCase("conferencia")) {
 			Conferencia conferencia = (Conferencia)context.getEntityForExtension();
 	
-			if (conferencia != null && StatusConferencia.C.equals(conferencia.getStatus())) {
+			if (conferencia != null && StatusConferencia.C.equals(conferencia.getStatusConferencia())) {
 				List<ItemConferencia> itens = conferencia.getItemConferencia();
 				
 				if (itens.size() == 0) {
@@ -187,7 +187,7 @@ public class ConferenciaRepository extends PlcBaseRepository {
 					mensagens.add("Conferência gravada com sucesso com divergência!"); 
 				}
 				
-				conferencia.setStatus(StatusConferencia.C);
+				conferencia.setStatusConferencia(StatusConferencia.C);
 				conferencia.setDataUltAlteracao(dataConferencia);
 				conferencia.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
 				dao.update(context, conferencia);
@@ -219,7 +219,7 @@ public class ConferenciaRepository extends PlcBaseRepository {
 		ajusteEstoque.setNome("Ajuste para Conferência: '" + conferencia.getNome() + "'");
 		ajusteEstoque.setDescricao("Ajuste criado automaticamente pois a conferência foi concluída com divergência.");
 		ajusteEstoque.setRegra(new RegraPesquisaProdutos());
-		ajusteEstoque.setStatus(StatusAjuste.A);
+		ajusteEstoque.setStatusAjuste(StatusAjuste.A);
 		ajusteEstoque.setConferencia(conferencia);
 
 		dao.insert(context, ajusteEstoque);

@@ -30,6 +30,10 @@
 								<plcf:titulo value="#{msg['label.tipoProduto']}"/>  
 								<plcf:comboEstatico id="tipoProduto" value="#{produto.tipoProduto}" dominio="TipoProduto" ajudaChave="ajuda.tipoProduto" /> 
 							</plcf:celula>  
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.localizacao']}"/>  
+								<plcf:comboDinamico id="localizacao" value="#{produto.localizacao}"  exibeBranco="S" dominio="Localizacao" ajudaChave="ajuda.localizacao"/> 
+							</plcf:celula> 
 						</plcf:linha> 
 					</plcf:tabela> 
 				</div>
@@ -61,15 +65,17 @@
 					'#{msg['label.tipoProduto']}',
 					'#{msg['label.titulo']}',
 					'#{msg['label.palavrasChave']}',
-					'#{msg['label.preco.venda.sugerido']}',
-					'#{msg['label.quantidadeEstoque']}'],
+					'#{msg['label.produto.preco']}',
+					'#{msg['label.produto.quantidadeEstoque']}',
+					'#{msg['label.produto.localizacao']}'],
 				colModel:[
 					{name:'codigoBarras',index:'codigoBarras', width:'50px', align:'center'},
 					{name:'tipoProduto',index:'tipoProduto', width:'40px', align:'center'},
 					{name:'titulo',index:'titulo', width:'250px'},
 					{name:'palavrasChave',index:'palavrasChave', width:'100px'},
-					{name:'precoVendaSugerido',index:'precoVendaSugerido', width:'50px', align:'right'},
-					{name:'quantidadeEstoque',index:'quantidadeEstoque', width:'50px', align:'center', sortable:false}]},
+					{name:'precoVendaSugerido',index:'precoVendaSugerido', width:'30px', align:'right'},
+					{name:'quantidadeEstoque',index:'quantidadeEstoque', width:'30px', align:'center', sortable:false},
+					{name:'localizacao',index:'localizacao', width:'40px', align:'center', sortable:false}]},
 			urlEdicao:'#{request.contextPath}/f/n/produtoman'});});//]]> </script>  
 					<table id="plc-grid" width="100%" class="scroll" cellpadding="0" cellspacing="0"/>  
 					<div id="plc-grid-navegador" class="scroll" style="text-align:center;"/> 

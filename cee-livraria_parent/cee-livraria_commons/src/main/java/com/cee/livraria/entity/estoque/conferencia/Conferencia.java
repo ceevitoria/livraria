@@ -49,8 +49,8 @@ public abstract class Conferencia extends AppBaseEntity {
 
 	@Enumerated(EnumType.STRING)
 	@NotNull
-	@Column(length = 1)
-	private StatusConferencia status; 
+	@Column(name = "STATUS", length = 1)
+	private StatusConferencia statusConferencia; 
 
 	@Enumerated(EnumType.STRING)
 	@Column(length = 1)
@@ -95,12 +95,12 @@ public abstract class Conferencia extends AppBaseEntity {
 		this.data = data;
 	}
 
-	public StatusConferencia getStatus() {
-		return status;
+	public StatusConferencia getStatusConferencia() {
+		return statusConferencia;
 	}
 
-	public void setStatus(StatusConferencia status) {
-		this.status = status;
+	public void setStatusConferencia(StatusConferencia statusConferencia) {
+		this.statusConferencia = statusConferencia;
 	}
 
 	public ResultadoConferencia getResultado() {

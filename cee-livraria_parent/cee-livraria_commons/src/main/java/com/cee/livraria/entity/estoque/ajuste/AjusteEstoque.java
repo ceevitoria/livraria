@@ -45,7 +45,7 @@ import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
 @Access(AccessType.FIELD)
 @NamedQueries({
 	@NamedQuery(name="AjusteEstoque.queryMan", query="from AjusteEstoque"),
-	@NamedQuery(name="AjusteEstoque.querySel", query="select id as id, nome as nome, data as data, status as status from AjusteEstoque order by nome asc"), 
+	@NamedQuery(name="AjusteEstoque.querySel", query="select id as id, nome as nome, data as data, statusAjuste as statusAjuste from AjusteEstoque order by nome asc"), 
 	@NamedQuery(name="AjusteEstoque.querySelLookup", query="select id as id, nome as nome from AjusteEstoque where id = ? order by id asc") })
 public class AjusteEstoque extends AppBaseEntity {
 	private static final long serialVersionUID = 2235723478390266238L;
@@ -67,8 +67,8 @@ public class AjusteEstoque extends AppBaseEntity {
 
 	@Enumerated(EnumType.STRING)
 	@NotNull
-	@Column(length = 1)
-	private StatusAjuste status; 
+	@Column(name="STATUS", length = 1)
+	private StatusAjuste statusAjuste; 
 
 	@OneToMany (targetEntity = com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque.class, fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="ajusteEstoque")
 	@ForeignKey(name="FK_ITEMAJUSTEESTOQUE_AJUSTEESTOQUE")
@@ -113,12 +113,12 @@ public class AjusteEstoque extends AppBaseEntity {
 		this.data = data;
 	}
 
-	public StatusAjuste getStatus() {
-		return status;
+	public StatusAjuste getStatusAjuste() {
+		return statusAjuste;
 	}
 
-	public void setStatus(StatusAjuste status) {
-		this.status = status;
+	public void setStatusAjuste(StatusAjuste statusAjuste) {
+		this.statusAjuste = statusAjuste;
 	}
 
 	public List<ItemAjusteEstoque> getItemAjusteEstoque() {

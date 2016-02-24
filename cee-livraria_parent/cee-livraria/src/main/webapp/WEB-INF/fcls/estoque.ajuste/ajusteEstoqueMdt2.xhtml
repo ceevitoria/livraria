@@ -13,8 +13,26 @@
 		plc.jq(document).ready(function(){
 			plc.jq("#span-tab-2").click(function(){
 				plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
-				plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
-				plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
+				
+				var status = plc.jq("#corpo\\:formulario\\:statusAjuste option:selected").text();
+
+				if (status == "Concluído") {
+					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarItensPorRegra").hide();
+				} else if (status == "Aberto") {
+					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarItensPorRegra").hide();
+				} else {
+					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarItensPorRegra").show();
+				}
+				
 			});
 		});
 		//]]></script>

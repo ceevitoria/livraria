@@ -10,39 +10,72 @@
 	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
 	<ui:composition> 
 	<script type="text/javascript">//<![CDATA[
-		plc.jq(document).ready(function(){
+	plc.jq("#corpo\\:formulario\\:linkPermanente").hide();
+	plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarItensPorRegra").hide();
+	
+	var status = plc.jq("#corpo\\:formulario\\:statusConferencia option:selected").text();
+
+	if (status == "Concluída") {
+		plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
+		plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").hide();
+		plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").hide();
+		plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").hide();
+	} else if (status == "Aberta") {
+		plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
+		plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
+		plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
+		plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
+	} else {
+		plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
+		plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
+		plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
+	}
+	
+	plc.jq("#span-tab-1").click(function(){
+		plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarItensPorRegra").hide();
+		
+		var status = plc.jq("#corpo\\:formulario\\:statusConferencia option:selected").text();
+		
+		if (status == "Concluída") {
+			plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
+			plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").hide();
+			plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").hide();
+			plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").hide();
+		} else if (status == "Aberta") {
 			plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
 			plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
+			plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
 			plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
-			
-			plc.jq("#span-tab-1").click(function(){
-				plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
-				plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
-				plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
-			});
-		});
+		} else {
+			plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
+			plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
+			plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
+		}
+	});
+
+	plc.jq("#corpo\\:formulario\\:linkPermanente").show();
 		//]]></script>
 		<plcf:tabela tituloChave="conferencia.mestre.titulo.comp"> 
 			<plcf:linha> 
 				<plcf:celula  columnSpan="3"> 
 					<plcf:titulo value="#{msg['label.nome']}"/>  
-					<plcf:texto id="nome" value="#{conferencia.nome}" disabled="#{conferencia.status != null and conferencia.status!='F'}" tamanho="100" ajudaChave="ajuda.nome"/> 
+					<plcf:texto id="nome" value="#{conferencia.nome}" disabled="#{conferencia.statusConferencia != null and conferencia.statusConferencia=='C'}" tamanho="100" ajudaChave="ajuda.nome"/> 
 				</plcf:celula>  
 			</plcf:linha>  
 			<plcf:linha> 
 				<plcf:celula columnSpan="3"> 
 					<plcf:titulo value="#{msg['label.descricao']}"/>  
-					<plcf:area id="descricao" value="#{conferencia.descricao}" disabled="#{conferencia.status != null and conferencia.status!='F'}" numLinhas="3" colunas="100" ajudaChave="ajuda.descricao"/> 
+					<plcf:area id="descricao" value="#{conferencia.descricao}" disabled="#{conferencia.statusConferencia != null and conferencia.statusConferencia=='C'}" numLinhas="3" colunas="100" ajudaChave="ajuda.descricao"/> 
 				</plcf:celula> 
 			</plcf:linha>  
 			<plcf:linha> 
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.data']}"/>  
-					<plcf:data id="data" tamanho="12" value="#{conferencia.data}" disabled="#{conferencia.status != null and conferencia.status!='F'}" ajudaChave="ajuda.data"/> 
+					<plcf:data id="data" tamanho="12" value="#{conferencia.data}" disabled="#{conferencia.statusConferencia != null and conferencia.statusConferencia=='C'}" ajudaChave="ajuda.data"/> 
 				</plcf:celula>  
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.statusConferencia']}"/>  
-					<plcf:comboEstatico id="status" value="#{conferencia.status}" dominio="StatusConferencia" disabled="true" exibeBranco="N" ajudaChave="ajuda.statusConferencia"/> 
+					<plcf:comboEstatico id="statusConferencia" value="#{conferencia.statusConferencia}" dominio="StatusConferencia" disabled="true" exibeBranco="N" ajudaChave="ajuda.statusConferencia"/> 
 				</plcf:celula> 
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.resultadoConferencia']}"/>  

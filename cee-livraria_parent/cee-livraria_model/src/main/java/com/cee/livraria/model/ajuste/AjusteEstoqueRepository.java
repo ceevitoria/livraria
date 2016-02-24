@@ -22,7 +22,6 @@ import com.cee.livraria.entity.estoque.TipoMovimento;
 import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.StatusAjuste;
-import com.cee.livraria.entity.produto.Livro;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.persistence.jpa.ajuste.AjusteEstoqueDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
@@ -64,7 +63,7 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 			
 			mensagens.add("Ajuste de Estoque realizado com sucesso!"); 
 			
-			ajusteEstoque.setStatus(StatusAjuste.C);
+			ajusteEstoque.setStatusAjuste(StatusAjuste.C);
 			ajusteEstoque.setDataUltAlteracao(dataAjusteEstoque);
 			ajusteEstoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
 			dao.update(context, ajusteEstoque);
@@ -89,8 +88,8 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 	}
 	
 	/**
-	 * Registra o movimento de ajuste de estoque para os livros informados
-	 * @param relacaoLivros Relação dos livros sendo vendidos
+	 * Registra o movimento de ajuste de estoque para os produtos informados
+	 * @param relacaoProdutos Relação dos produtos sendo vendidos
 	 */
 	private void registraMovimento(PlcBaseContextVO context, AjusteEstoque ajusteEstoque, Date dataMovimento) throws PlcException {
 		Movimento mov = new MovimentoEntity();
@@ -106,55 +105,54 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 			// Evita os itens em branco
 			if (itemAjuste.getProduto() != null && itemAjuste.getProduto().getId() != null) {
 				
-				if (itemAjuste.getQuantidadeInformada() == null) {
-					throw new PlcException("ajusteEstoque.err.item.sem.quantidade");
-				}
-				
-				if (itemAjuste.getQuantidadeEstoque() == null) {
-					insereEstoque(context, itemAjuste, dataMovimento);
-					itemAjuste.setQuantidadeEstoque(itemAjuste.getQuantidadeInformada());
-				}
-				
-				int qtdExistente = itemAjuste.getQuantidadeEstoque();
-				int qtdInformada = itemAjuste.getQuantidadeInformada();
-				
-				int qtdSaldo = 0;
-				int sinal = 1;
-				
-				TipoMovimento tipoMovimento = null;
-				
-				if (qtdInformada > qtdExistente) {
-					tipoMovimento = TipoMovimento.E;
-					qtdSaldo = qtdInformada - qtdExistente;
-					sinal = 1;
-					qtdEntrada++;
-				}
-
-				if (qtdInformada < qtdExistente) {
-					tipoMovimento = TipoMovimento.S;
-					qtdSaldo = qtdExistente - qtdInformada;
-					sinal = -1;
-					qtdSaida++;
-				}
-				
-				if (qtdSaldo != 0) {
-					ItemMovimento itemMovimento = new ItemMovimentoEntity();
+				if (itemAjuste.getQuantidadeInformada() != null) {
 					
-					Produto produto = (Produto)dao.findById(context, Produto.class, itemAjuste.getProduto().getId());
+					if (itemAjuste.getQuantidadeEstoque() == null) {
+						insereEstoque(context, itemAjuste, dataMovimento);
+						itemAjuste.setQuantidadeEstoque(itemAjuste.getQuantidadeInformada());
+					}
 					
-					itemMovimento.setProduto(produto);
-					itemMovimento.setTipo(tipoMovimento);
-					itemMovimento.setQuantidade(qtdSaldo);
-					itemMovimento.setValorUnitario(produto.getPrecoUltCompra());
-					itemMovimento.setValorTotal(produto.getPrecoUltCompra().multiply(new BigDecimal(qtdSaldo)));
-					itemMovimento.setMovimento(mov);
+					int qtdExistente = itemAjuste.getQuantidadeEstoque();
+					int qtdInformada = itemAjuste.getQuantidadeInformada();
 					
-					itemMovimento.setDataUltAlteracao(dataMovimento);
-					itemMovimento.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
+					int qtdSaldo = 0;
+					int sinal = 1;
 					
-					itens.add(itemMovimento);
+					TipoMovimento tipoMovimento = null;
 					
-					valorMovimento += (produto.getPrecoUltCompra().doubleValue() * qtdSaldo * sinal);
+					if (qtdInformada > qtdExistente) {
+						tipoMovimento = TipoMovimento.E;
+						qtdSaldo = qtdInformada - qtdExistente;
+						sinal = 1;
+						qtdEntrada++;
+					}
+					
+					if (qtdInformada < qtdExistente) {
+						tipoMovimento = TipoMovimento.S;
+						qtdSaldo = qtdExistente - qtdInformada;
+						sinal = -1;
+						qtdSaida++;
+					}
+					
+					if (qtdSaldo != 0) {
+						ItemMovimento itemMovimento = new ItemMovimentoEntity();
+						
+						Produto produto = (Produto)dao.findById(context, Produto.class, itemAjuste.getProduto().getId());
+						
+						itemMovimento.setProduto(produto);
+						itemMovimento.setTipo(tipoMovimento);
+						itemMovimento.setQuantidade(qtdSaldo);
+						itemMovimento.setValorUnitario(produto.getPrecoUltCompra());
+						itemMovimento.setValorTotal(produto.getPrecoUltCompra().multiply(new BigDecimal(qtdSaldo)));
+						itemMovimento.setMovimento(mov);
+						
+						itemMovimento.setDataUltAlteracao(dataMovimento);
+						itemMovimento.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
+						
+						itens.add(itemMovimento);
+						
+						valorMovimento += (produto.getPrecoUltCompra().doubleValue() * qtdSaldo * sinal);
+					}
 				}
 			}
 		}
@@ -202,11 +200,11 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 	}
 
 	/**
-	 * Atualiza o saldo dos livros sendo vendidos no estoque
+	 * Atualiza o saldo dos produtos sendo vendidos no estoque
 	 * OBS: Não faz crítica para saldo negativo.
-	 * @param relacaoLivros Relação dos livros sendo vendidos
+	 * @param relacaoProdutos Relação dos produtos sendo vendidos
 	 * @param dataVenda Data em que a venda foi realizada
-	 * @return quantidade vendida de livros
+	 * @return quantidade vendida de produtos
 	 * @throws PlcException
 	 */
 	@SuppressWarnings("unchecked")
@@ -216,31 +214,38 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 		for (ItemAjusteEstoque itemAjuste : itensAjusteEstoque) {
 
 			if (itemAjuste.getProduto() != null && itemAjuste.getProduto().getId() != null) {
-				int qtdInformada = itemAjuste.getQuantidadeInformada();
-				int qtdExistente = itemAjuste.getQuantidadeEstoque();
 				int qtdSaldo = 0;
 				
-				if (qtdInformada > qtdExistente) {
-					qtdSaldo = qtdInformada - qtdExistente;
-				}
-
-				if (qtdInformada < qtdExistente) {
-					qtdSaldo = qtdExistente - qtdInformada;
+				if (itemAjuste.getQuantidadeInformada() != null) {
+					
+					int qtdInformada = itemAjuste.getQuantidadeInformada();
+					int qtdExistente = itemAjuste.getQuantidadeEstoque();
+					
+					if (qtdInformada > qtdExistente) {
+						qtdSaldo = qtdInformada - qtdExistente;
+					}
+					
+					if (qtdInformada < qtdExistente) {
+						qtdSaldo = qtdExistente - qtdInformada;
+					}
 				}
 				
-				if (qtdSaldo != 0) {
+				if (qtdSaldo != 0 || (itemAjuste.getLocalizacao() != null && itemAjuste.getLocalizacao().getId() != null)) {
 					List<Estoque> lista = (List<Estoque>)dao.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[]{"produto"}, new Object[]{itemAjuste.getProduto()});
 					
 					if (lista != null && lista.size() == 1) {
 						Estoque estoque = (Estoque)lista.get(0);
 						
-						estoque.setQuantidade(qtdInformada);
+						if (itemAjuste.getQuantidadeInformada() != null) {
+							estoque.setQuantidade(itemAjuste.getQuantidadeInformada());
+						}
+						
 						estoque.setLocalizacao(itemAjuste.getLocalizacao());
 						estoque.setDataConferencia(dataAjuste);
 						
-//						if (PlcYesNo.S.equals(config.getUtilizaLocalizacaoLivros()) ) {
+//						if (PlcYesNo.S.equals(config.getUtilizaLocalizacaoProdutos()) ) {
 //							
-//							if (PlcYesNo.S.equals(config.getAjusteAutomaticoLocalizacaoLivros())) {
+//							if (PlcYesNo.S.equals(config.getAjusteAutomaticoLocalizacaoProdutos())) {
 //								estoque.setLocalizacao(itemAjuste.getLocalizacao());
 //							} else {
 //								
@@ -255,11 +260,11 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 						estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
 	
 						dao.update(context, estoque);
-					} else {
+					} else if (lista.size() == 0) {
 						Estoque estoque = new EstoqueEntity();
 						
 						estoque.setProduto(itemAjuste.getProduto());
-						estoque.setQuantidade(qtdInformada);
+						estoque.setQuantidade(itemAjuste.getQuantidadeInformada());
 						estoque.setQuantidadeMinima(1);
 						estoque.setQuantidadeMaxima(50);
 						estoque.setLocalizacao(itemAjuste.getLocalizacao());

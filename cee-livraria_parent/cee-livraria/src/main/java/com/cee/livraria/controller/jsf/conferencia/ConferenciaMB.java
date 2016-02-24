@@ -15,6 +15,8 @@ import com.cee.livraria.entity.config.ConferenciaConfig;
 import com.cee.livraria.entity.config.ConferenciaConfigEntity;
 import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.estoque.Estoque;
+import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
+import com.cee.livraria.entity.estoque.ajuste.StatusAjuste;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.estoque.conferencia.ConferenciaEntity;
 import com.cee.livraria.entity.estoque.conferencia.ItemConferencia;
@@ -91,10 +93,18 @@ public class ConferenciaMB extends AppMB {
 		if (this.entityPlc == null) {
 			this.entityPlc = new ConferenciaEntity();
 			this.newEntity();
-			((Conferencia)this.entityPlc).setStatus(StatusConferencia.F);
 		}
 		
 		return (ConferenciaEntity) this.entityPlc;
+	}
+	
+	@Override
+	public String create()  {
+		String ret = super.create();
+		
+		((Conferencia)this.entityPlc).setStatusConferencia(StatusConferencia.F);
+
+		return ret;
 	}
 	
 	private void carregaConfiguracao() {
@@ -153,7 +163,7 @@ public class ConferenciaMB extends AppMB {
 				
 			boolean ok = false;
 			
-			if (StatusConferencia.F.equals(conferencia.getStatus())) {
+			if (StatusConferencia.F.equals(conferencia.getStatusConferencia())) {
 				ok = true;
 				
 				// Remove os items vazios (sem livros)
@@ -278,7 +288,7 @@ public class ConferenciaMB extends AppMB {
 	public String abrirConferencia()  {
 		Conferencia conferencia = (Conferencia)this.entityPlc;
 
-		conferencia.setStatus(StatusConferencia.A);
+		conferencia.setStatusConferencia(StatusConferencia.A);
 		
 		return super.save(); 
 	}
@@ -326,7 +336,7 @@ public class ConferenciaMB extends AppMB {
 			if (this.entityPlc!=null) {
 				Conferencia conferencia = (Conferencia)this.entityPlc;
 				
-				if (StatusConferencia.F.equals(conferencia.getStatus())) {
+				if (StatusConferencia.F.equals(conferencia.getStatusConferencia())) {
 					contextUtil.getRequest().setAttribute("exibeBuscarItensPorRegra", PlcConstants.SIM);
 					contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_ABRIR_CONFERENCIA, PlcConstants.EXIBIR);
 				} else {
@@ -334,12 +344,12 @@ public class ConferenciaMB extends AppMB {
 					contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_ABRIR_CONFERENCIA, PlcConstants.NAO_EXIBIR);
 				}
 
-				if (StatusConferencia.A.equals(conferencia.getStatus())) {
+				if (StatusConferencia.A.equals(conferencia.getStatusConferencia())) {
 					contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_CONCLUIR_CONFERENCIA, PlcConstants.EXIBIR);
 					contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_ABRIR_CONFERENCIA, PlcConstants.NAO_EXIBIR);
 				}
 
-				if (StatusConferencia.C.equals(conferencia.getStatus())) {
+				if (StatusConferencia.C.equals(conferencia.getStatusConferencia())) {
 					contextUtil.getRequest().setAttribute( PlcConstants.ACAO.EXIBE_BT_GRAVAR, PlcConstants.NAO_EXIBIR);
 					contextUtil.getRequest().setAttribute( PlcConstants.ACAO.EXIBE_BT_EXCLUIR, PlcConstants.NAO_EXIBIR);
 				} else {

@@ -35,6 +35,16 @@
 				</div>
 				<div id="#{plcAliasPrefixoAction}Sel" class="plc-form-basico-sel"> 
 					<script type="text/javascript">//<![CDATA[
+					plc.jq(document).ready(function(){
+						plc.jq("#corpo\\:formulario\\:codigoBarras").on("change", function() {
+							plc.jq( "#corpo\\:formulario\\:botaoAcaoPesquisar" ).trigger( "click" );
+						});
+						plc.jq(document).keydown(function(e) {
+							if(e.which == 13) {
+								plc.jq( "#corpo\\:formulario\\:botaoAcaoPesquisar" ).trigger( "click" );
+							}
+						});
+					});
 	jQuery(function(){plc.criaSelecaoJqGrid('plc-grid','plc-grid-navegador',{
 		evento:'${param.evento}',
 			modoJanelaPlc:'${param.modoJanelaPlc}',

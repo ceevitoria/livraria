@@ -27,6 +27,7 @@ import javax.validation.constraints.Size;
 
 import com.cee.livraria.entity.AppBaseEntity;
 import com.cee.livraria.entity.Estocavel;
+import com.cee.livraria.entity.Localizacao;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 
 @SPlcEntity
@@ -185,6 +186,17 @@ public class Produto extends AppBaseEntity implements Estocavel {
 	}
 	
 	@Transient
+	private transient Localizacao localizacao; 
+	
+	public Localizacao getLocalizacao() {
+		return localizacao;
+	}
+	
+	public void setLocalizacao(Localizacao localizacao) {
+		this.localizacao = localizacao;
+	}
+	
+	@Transient
 	private transient Integer quantidadeEstoque; 
 	
 	public Integer getQuantidadeEstoque() {
@@ -194,5 +206,4 @@ public class Produto extends AppBaseEntity implements Estocavel {
 	public void setQuantidadeEstoque(Integer quantidadeEstoque) {
 		this.quantidadeEstoque = quantidadeEstoque;
 	}
-
 }

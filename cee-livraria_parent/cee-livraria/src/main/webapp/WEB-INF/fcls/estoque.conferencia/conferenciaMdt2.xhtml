@@ -11,10 +11,28 @@
 	<ui:composition> 
 	<script type="text/javascript">//<![CDATA[
 		plc.jq(document).ready(function(){
-			plc.jq("#span-tab-2").click(function(){
+			plc.jq("#ui-id-2").find("#span-tab-2").click(function(){
 				plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
-				plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
-				plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
+				
+				var status = plc.jq("#corpo\\:formulario\\:statusConferencia option:selected").text();
+				
+				if (status == "Concluída") {
+					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarItensPorRegra").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").hide();
+				} else if (status == "Aberta") {
+					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarItensPorRegra").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").hide();
+				} else {
+					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarItensPorRegra").show();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
+				}
+				
 			});
 		});
 		//]]></script>

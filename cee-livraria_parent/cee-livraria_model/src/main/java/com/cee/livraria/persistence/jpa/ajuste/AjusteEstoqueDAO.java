@@ -34,7 +34,7 @@ public class AjusteEstoqueDAO extends AppJpaDAO  {
 		@PlcQueryParameter(name="id", expression="id = :id") Long id,
 		@PlcQueryParameter(name="nome", expression="nome like '%' || :nome || '%' ") String nome,
 		@PlcQueryParameter(name="data", expression="data >= :data ") Date data,
-		@PlcQueryParameter(name="status", expression="status = :status") StatusAjuste status
+		@PlcQueryParameter(name="statusAjuste", expression="statusAjuste = :statusAjuste") StatusAjuste statusAjuste
 	);
 
 	@PlcQuery("querySel")
@@ -44,7 +44,7 @@ public class AjusteEstoqueDAO extends AppJpaDAO  {
 		@PlcQueryParameter(name="id", expression="id = :id") Long id,
 		@PlcQueryParameter(name="nome", expression="nome like '%' || :nome || '%' ") String nome,
 		@PlcQueryParameter(name="data", expression="data >= :data ") Date data,
-		@PlcQueryParameter(name="status", expression="status = :status") StatusAjuste status
+		@PlcQueryParameter(name="statusAjuste", expression="statusAjuste = :statusAjuste") StatusAjuste statusAjuste
 	);
 	
 }

@@ -13,17 +13,25 @@
 	<ui:composition> 
 	<script type="text/javascript">//<![CDATA[
 		plc.jq(document).ready(function(){
-			plc.jq("#itemAjusteEstoque").click(function(){
+			plc.jq("#span-tab-2").click(function(){
 				plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
+				plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarItensPorRegra").hide();
 				
-				var status = plc.jq("#corpo\\:formulario\\:status option:selected").text();
+				var status = plc.jq("#corpo\\:formulario\\:statusAjuste option:selected").text();
+				alert("teste");
 
-				if (status == "Formação") {
-					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
-					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
-				} else {
+				if (status == "Concluído") {
 					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").hide();
 					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").hide();
+				} else (status == "Aberto") {
+					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").hide();
+				} else {
+					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
 				}
 			});
 		});
@@ -37,7 +45,7 @@
 					<plcf:tituloExclusao>Exc.</plcf:tituloExclusao>
 				</f:facet>  
 				<span class="celulaFormularioCaixaMarcacao">
-					<plcf:caixaMarcacao id="indExcPlc" value="#{itemAjusteEstoque.indExcPlc}" disabled="#{ajusteEstoque.status!='F'}" />
+					<plcf:caixaMarcacao id="indExcPlc" value="#{itemAjusteEstoque.indExcPlc}" disabled="#{ajusteEstoque.statusAjuste=='C'}" />
 				</span> 
 			</h:column>  
 			<h:column> 
@@ -45,7 +53,7 @@
 					<plcf:titulo value="#{msg['label.produto']}"/>
 				</f:facet>
 				
-				<c:if test="#{ajusteEstoque.status=='F'}">
+				<c:if test="#{ajusteEstoque.statusAjuste=='F'}">
 					<plcf:vinculado id="produto" value="#{itemAjusteEstoque.produto}" 
 						propSelPop="produto" idExibe="S" 
 						idTamanho="15" lookupTamanho="80"
@@ -55,17 +63,17 @@
 						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.Produto" 
 						actionSel="produtosel" modal="S" ajudaChave="ajuda.produto" 
 						onkeydown="selecionaPorTecla(event,this);" 
-						disabled="#{ajusteEstoque.status!='F'}" 
+						disabled="#{ajusteEstoque.statusAjuste=='C'}" 
 						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.produto?q=titulo')"/> 
 				</c:if>
-				<c:if test="#{ajusteEstoque.status!='F'}">
+				<c:if test="#{ajusteEstoque.statusAjuste=='C'}">
 					<plcf:vinculado id="produto" value="#{itemAjusteEstoque.produto}" 
 						propSelPop="produto" idExibe="N" lookupTamanho="35"
 						autoComplete="true" idTamanho="15" evento="y"
 						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.Produto" 
 						actionSel="produtosel" modal="S" ajudaChave="ajuda.produto" 
 						onkeydown="selecionaPorTecla(event,this);" larg="900"
-						disabled="#{ajusteEstoque.status!='F'}" 
+						disabled="#{ajusteEstoque.statusAjuste=='C'}" 
 						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.produto?q=titulo')"/> 
 				</c:if>
 				  
@@ -81,7 +89,7 @@
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.localizacao']}"/>
 				</f:facet>  
-				<plcf:comboDinamico id="localizacao" value="#{itemAjusteEstoque.localizacao}" disabled="#{ajusteEstoque.status=='C'}" dominio="Localizacao" exibeBranco="S" ajudaChave="ajuda.localizacao"/> 
+				<plcf:comboDinamico id="localizacao" value="#{itemAjusteEstoque.localizacao}" disabled="#{ajusteEstoque.statusAjuste=='C'}" dominio="Localizacao" exibeBranco="S" ajudaChave="ajuda.localizacao"/> 
 			</h:column>  
 			<h:column> 
 				<f:facet name="header" >
@@ -93,7 +101,7 @@
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.quantidade.informada']}"/>
 				</f:facet>  
-				<plcf:numerico id="quantidadeInformada" tamanho="7" value="#{itemAjusteEstoque.quantidadeInformada}" numCasas="0" disabled="#{ajusteEstoque.status=='C'}" ajudaChave="ajuda.quantidade.informada"/> 
+				<plcf:numerico id="quantidadeInformada" tamanho="7" value="#{itemAjusteEstoque.quantidadeInformada}" numCasas="0" disabled="#{ajusteEstoque.statusAjuste=='C'}" ajudaChave="ajuda.quantidade.informada"/> 
 			</h:column> 
 		</plcf:iteracao> 
 	</ui:composition> 

@@ -24,7 +24,7 @@
 							</plcf:celula>  
 							<plcf:celula> 
 								<plcf:titulo value="#{msg['label.statusConferencia']}"/>  
-								<plcf:comboEstatico id="status" value="#{conferencia.status}" dominio="StatusConferencia" exibeBranco="S" ajudaChave="ajuda.statusConferencia"/> 
+								<plcf:comboEstatico id="statusConferencia" value="#{conferencia.statusConferencia}" dominio="StatusConferencia" exibeBranco="S" ajudaChave="ajuda.statusConferencia"/> 
 							</plcf:celula> 
 							<plcf:celula> 
 								<plcf:titulo value="#{msg['label.resultadoConferencia']}"/>  
@@ -51,7 +51,7 @@
 				colModel:[
 					{name:'nome',index:'nome',width:'40%'},
 					{name:'data',index:'data',width:'20%'},
-					{name:'status',index:'status',width:'20%'},
+					{name:'statusConferencia',index:'statusConferencia',width:'20%'},
 					{name:'resultado',index:'resultado',width:'20%'}]},
 			urlEdicao:'#{request.contextPath}/f/n/conferenciamdt'});});//]]> </script>  
 					<table id="plc-grid" width="100%" class="scroll" cellpadding="0" cellspacing="0"/>  

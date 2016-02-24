@@ -35,7 +35,7 @@ public class ConferenciaDAO extends AppJpaDAO  {
 			@PlcQueryParameter(name="id", expression="id = :id") Long id,
 			@PlcQueryParameter(name="nome", expression="nome like '%' || :nome || '%' ") String nome,
 			@PlcQueryParameter(name="data", expression="data >= :data ") Date data,
-			@PlcQueryParameter(name="status", expression="status = :status") StatusConferencia status,
+			@PlcQueryParameter(name="statusConferencia", expression="statusConferencia = :statusConferencia") StatusConferencia statusConferencia,
 			@PlcQueryParameter(name="resultado", expression="resultado = :resultado") ResultadoConferencia resultado
 	);
 
@@ -46,7 +46,7 @@ public class ConferenciaDAO extends AppJpaDAO  {
 			@PlcQueryParameter(name="id", expression="id = :id") Long id,
 			@PlcQueryParameter(name="nome", expression="nome like '%' || :nome || '%' ") String nome,
 			@PlcQueryParameter(name="data", expression="data >= :data ") Date data,
-			@PlcQueryParameter(name="status", expression="status = :status") StatusConferencia status,
+			@PlcQueryParameter(name="statusConferencia", expression="statusConferencia = :statusConferencia") StatusConferencia statusConferencia,
 			@PlcQueryParameter(name="resultado", expression="resultado = :resultado") ResultadoConferencia resultado
 	);
 	

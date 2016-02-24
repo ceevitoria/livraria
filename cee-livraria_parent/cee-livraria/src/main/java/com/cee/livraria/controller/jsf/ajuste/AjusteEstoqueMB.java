@@ -88,10 +88,18 @@ public class AjusteEstoqueMB extends AppMB {
 		if (this.entityPlc == null) {
 			this.entityPlc = new AjusteEstoque();
 			this.newEntity();
-			((AjusteEstoque)this.entityPlc).setStatus(StatusAjuste.F);
 		}
 		
 		return (AjusteEstoque) this.entityPlc;
+	}
+
+	@Override
+	public String create()  {
+		String ret = super.create();
+		
+		((AjusteEstoque)this.entityPlc).setStatusAjuste(StatusAjuste.F);
+
+		return ret;
 	}
 
 	private void carregaConfiguracao() {
@@ -137,7 +145,7 @@ public class AjusteEstoqueMB extends AppMB {
 		
 		return produtoArg;
 	}
-
+	
 	/**
 	 * buscarItensPorRegraPrecificacao
 	 */
@@ -159,7 +167,7 @@ public class AjusteEstoqueMB extends AppMB {
 				
 			boolean ok = false;
 			
-			if (StatusAjuste.F.equals(ajusteEstoque.getStatus())) {
+			if (StatusAjuste.F.equals(ajusteEstoque.getStatusAjuste())) {
 				ok = true;
 			} else {
 				msgUtil.msg("{ajusteEstoque.err.buscar.pendente}", PlcMessage.Cor.msgVermelhoPlc.name());
@@ -276,7 +284,7 @@ public class AjusteEstoqueMB extends AppMB {
 	public String abrirAjusteEstoque()  {
 		AjusteEstoque ajusteEstoque = (AjusteEstoque)this.entityPlc;
 
-		ajusteEstoque.setStatus(StatusAjuste.A);
+		ajusteEstoque.setStatusAjuste(StatusAjuste.A);
 		
 		return super.save(); 
 	}
@@ -325,7 +333,7 @@ public class AjusteEstoqueMB extends AppMB {
 			if (this.entityPlc!=null) {
 				AjusteEstoque ajusteEstoque = (AjusteEstoque)this.entityPlc;
 				
-				if (StatusAjuste.F.equals(ajusteEstoque.getStatus())) {
+				if (StatusAjuste.F.equals(ajusteEstoque.getStatusAjuste())) {
 					contextUtil.getRequest().setAttribute("exibeBuscarItensPorRegra", PlcConstants.SIM);
 					contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_ABRIR_AJUSTE_ESTOQUE, PlcConstants.EXIBIR);
 				} else {
@@ -333,12 +341,12 @@ public class AjusteEstoqueMB extends AppMB {
 					contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_ABRIR_AJUSTE_ESTOQUE, PlcConstants.NAO_EXIBIR);
 				}
 
-				if (StatusAjuste.A.equals(ajusteEstoque.getStatus())) {
+				if (StatusAjuste.A.equals(ajusteEstoque.getStatusAjuste())) {
 					contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_CONCLUIR_AJUSTE_ESTOQUE, PlcConstants.EXIBIR);
 					contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_ABRIR_AJUSTE_ESTOQUE, PlcConstants.NAO_EXIBIR);
 				}
 
-				if (StatusAjuste.C.equals(ajusteEstoque.getStatus())) {
+				if (StatusAjuste.C.equals(ajusteEstoque.getStatusAjuste())) {
 					contextUtil.getRequest().setAttribute( PlcConstants.ACAO.EXIBE_BT_GRAVAR, PlcConstants.NAO_EXIBIR);
 					contextUtil.getRequest().setAttribute( PlcConstants.ACAO.EXIBE_BT_EXCLUIR, PlcConstants.NAO_EXIBIR);
 				} else {
