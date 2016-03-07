@@ -206,4 +206,5 @@ public class Produto extends AppBaseEntity implements Estocavel {
 	public void setQuantidadeEstoque(Integer quantidadeEstoque) {
 		this.quantidadeEstoque = quantidadeEstoque;
 	}
+	
 }

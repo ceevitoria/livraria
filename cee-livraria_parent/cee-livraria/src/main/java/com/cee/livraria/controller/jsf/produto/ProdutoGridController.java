@@ -101,7 +101,7 @@ public class ProdutoGridController<E, I> extends PlcBaseGridController<E, I> {
 			Object instancia = getEntityType().newInstance();
 			
 			if (instancia instanceof Produto) {
-				Produto produto = (Produto) instancia;
+				Produto produtoArg = (Produto) instancia;
 				
 				PlcConfigSelection configSelecao = getConfigCollaboration().selection();
 				String querySel = null;
@@ -119,11 +119,18 @@ public class ProdutoGridController<E, I> extends PlcBaseGridController<E, I> {
 					orderByDinamico = orderBy + " " + StringUtils.defaultIfEmpty(order, "asc");
 				}
 				
-				this.beanPopulateUtil.transferMapToBean(request.getParameterMap(), produto);
+				this.beanPopulateUtil.transferMapToBean(request.getParameterMap(), produtoArg);
 				this.retrieveCollectionBefore();
 				
-				this.setTotal(getFacade().findCount(getContext(), produto));
-				List<E> lista = (List<E>) iocControleFacadeUtil.getFacade(IAppFacade.class).recuperarProdutos(getContext(), produto, orderByDinamico, ((page - 1) * rows), (rows));
+				this.setTotal(getFacade().findCount(getContext(), produtoArg));
+				List<E> lista = null;
+				
+//				if (produtoArg.getLocalizacao() == null) {
+					lista = (List<E>) iocControleFacadeUtil.getFacade(IAppFacade.class).recuperarProdutos(getContext(), produtoArg, orderByDinamico, ((page - 1) * rows), (rows));
+//				} else {
+//					lista = (List<E>) iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoquePorLocalizacao(getContext(), produtoArg, produtoArg.getLocalizacao()); 					
+//				}
+				
 				this.setEntityCollection(lista);
 				this.retrieveCollectionAfter();
 			}

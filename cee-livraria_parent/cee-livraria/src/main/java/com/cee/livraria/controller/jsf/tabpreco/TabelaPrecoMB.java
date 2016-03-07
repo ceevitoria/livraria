@@ -143,7 +143,7 @@ public class TabelaPrecoMB extends AppMB {
 					}
 				}
 
-				msgUtil.msg("{tabpreco.ok.buscar}",	new Object[] {produtos.size()}, PlcMessage.Cor.msgAzulPlc.name());
+				msgUtil.msg("{tabpreco.ok.buscar}",	new Object[] {estoques.size()}, PlcMessage.Cor.msgAzulPlc.name());
 				msgUtil.msg("{tabpreco.lembrar.gravar}", PlcMessage.Cor.msgAmareloPlc.name());
 
 				plcControleConversacao.setAlertaAlteracaoPlc("S");

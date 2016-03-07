@@ -20,6 +20,7 @@ import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.pagamento.PagamentoList;
 import com.cee.livraria.entity.produto.Produto;
+import com.cee.livraria.entity.rest.ProdutoRest;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.model.CaixaRepository;
 import com.cee.livraria.model.DevolucaoProdutosRepository;
@@ -155,6 +156,22 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 		return estoqueLista;
 	}
 
+	@PlcTransactional(commit=false)
+	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
+	@Override
+	public List<Estoque> buscarProdutosEstoquePorLocalizacao(PlcBaseContextVO context, Produto produtoArg, Localizacao localizacao) throws PlcException {
+		produtoArg.setLocalizacao(null);
+		
+		Estoque estoqueArg = new EstoqueEntity();
+		
+		estoqueArg.setProduto(produtoArg);
+		estoqueArg.setLocalizacao(localizacao);
+		
+		List<Estoque> itens = dao.findList(context, estoqueArg, null, 0, 0);
+		
+		return itens;
+	}
+
 	@PlcTransactional(commit=true)
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.REQUIRED)
 	@Override
@@ -196,5 +213,17 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	public Collection recuperaDadosFechamentoCaixa(PlcBaseContextVO context, String orderByDinamico, Integer inicio, Integer total) throws PlcException {
 		return relatorioFechamentoCaixaRepository.recuperaDadosFechamentoCaixa(context, orderByDinamico, inicio, total);
 	}
+
+	/*
+	@Override
+	public Collection findList(PlcBaseContextVO context, Object entidadeArg, String orderByDinamico, int primeiraLinha, int maximoLinhas) {
+
+		if (entidadeArg instanceof ProdutoRest) {
+			maximoLinhas = 300;
+		}
+		
+		return super.findList(context, entidadeArg, orderByDinamico, primeiraLinha, maximoLinhas);
+	}
+	*/
 	
 }

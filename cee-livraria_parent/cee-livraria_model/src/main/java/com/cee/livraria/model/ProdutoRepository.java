@@ -10,6 +10,7 @@ import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.estoque.EstoqueEntity;
 import com.cee.livraria.entity.produto.Produto;
+import com.cee.livraria.entity.rest.ProdutoRest;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.persistence.jpa.produto.ProdutoDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
@@ -29,10 +30,9 @@ public class ProdutoRepository extends PlcBaseRepository {
 		List<Produto> produtosRetorno = new ArrayList<Produto>();  
 		
 		// Recupera todos os projetos conforme filtro e paginação definida na tela de seleção
-		List<Produto> produtosEncontrados = dao.findList(context, orderByDinamico, inicio, total,
+		List<Produto> produtosEncontrados = dao.findList(context, orderByDinamico, 0, 0,
 				arg.getCodigoBarras(), arg.getTitulo(), arg.getPalavrasChave(), arg.getTipoProduto(), arg.getPrecoUltCompra());
 
-		
 		List<Estoque> estoqueLista = new ArrayList<Estoque>(produtosEncontrados.size());
 		
 		for (Produto produto: produtosEncontrados) {
@@ -62,9 +62,10 @@ public class ProdutoRepository extends PlcBaseRepository {
 			}
 			
 			// Se foi informado o critério de Localizacao, só retorna os produtos que pertencem à localizacao informada
-			if (arg.getLocalizacao() == null || 
+			if (produtosRetorno.size() < total && 
+					(arg.getLocalizacao() == null || 
 					(produto.getLocalizacao() != null && 
-					   (arg.getLocalizacao().getId().compareTo(produto.getLocalizacao().getId())) == 0)) {
+					(arg.getLocalizacao().getId().compareTo(produto.getLocalizacao().getId())) == 0))) {
 
 				produtosRetorno.add(produto);
 			}

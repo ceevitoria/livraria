@@ -99,7 +99,15 @@ public interface IAppFacade extends IPlcFacade {
 	 * @return itens do estoque relativos aos produtos informados
 	 */
 	public List<Estoque> buscarProdutosEstoquePorLocalizacao(PlcBaseContextVO context, List<Produto> listaProdutos, Localizacao localizacao) throws PlcException;
-
+	
+	/**
+	 * Busca os referidos produtos que estão em determinada localizacao do estoque
+	 * @param context
+	 * @param produtoArg produto para ser usado como argumento a serem recuperados do estoque
+	 * @param localizacao A localização que se deseja encontrar os produtos informados
+	 * @return itens do estoque relativos aos produtos informados
+	 */
+	public List<Estoque> buscarProdutosEstoquePorLocalizacao(PlcBaseContextVO context, Produto produtoArg, Localizacao localizacao) throws PlcException;
 	
 	/**
 	 * Registra a entrada de uma nota fiscal para o sistema

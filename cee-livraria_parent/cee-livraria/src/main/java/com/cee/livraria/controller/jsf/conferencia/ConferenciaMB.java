@@ -237,9 +237,7 @@ public class ConferenciaMB extends AppMB {
 						}
 					}
 					
-//					carregaEstoqueProdutos(context, listaItensExistentes);
-					
-					msgUtil.msg("{conferencia.ok.buscar}", new Object[] {produtos.size()-totalExistente}, PlcMessage.Cor.msgAzulPlc.name());
+					msgUtil.msg("{conferencia.ok.buscar}", new Object[] {estoques.size()-totalExistente}, PlcMessage.Cor.msgAzulPlc.name());
 					msgUtil.msg("{conferencia.lembrar.gravar}", PlcMessage.Cor.msgAmareloPlc.name());
 					
 					plcControleConversacao.setAlertaAlteracaoPlc("S");

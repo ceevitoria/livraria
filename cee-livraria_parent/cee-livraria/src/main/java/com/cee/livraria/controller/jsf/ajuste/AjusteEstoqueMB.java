@@ -234,9 +234,7 @@ public class AjusteEstoqueMB extends AppMB {
 						}
 					}
 					
-//					carregaEstoqueProdutos(context, listaItensExistentes);
-					
-					msgUtil.msg("{ajusteEstoque.ok.buscar}", new Object[] {produtos.size()-totalExistente}, PlcMessage.Cor.msgAzulPlc.name());
+					msgUtil.msg("{ajusteEstoque.ok.buscar}", new Object[] {estoques.size()-totalExistente}, PlcMessage.Cor.msgAzulPlc.name());
 					msgUtil.msg("{ajusteEstoque.lembrar.gravar}", PlcMessage.Cor.msgAmareloPlc.name());
 					
 					plcControleConversacao.setAlertaAlteracaoPlc("S");
