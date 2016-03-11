@@ -65,16 +65,8 @@
 						disabled="#{conferencia.statusConferencia=='C'}" 
 						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.produto?q=titulo')"/> 
 				</c:if>
-				<c:if test="#{conferencia.statusConferencia=='C'}">
-					<plcf:vinculado id="produto" value="#{itemConferencia.produto}" 
-						propSelPop="produto" idExibe="N" lookupTamanho="60"
-						larg="1200" alt="800"
-						autoComplete="true" idTamanho="15" evento="y"
-						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.Produto" 
-						actionSel="produtosel" modal="S" ajudaChave="ajuda.produto" 
-						onkeydown="selecionaPorTecla(event,this);" 
-						disabled="#{conferencia.statusConferencia=='C'}" 
-						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.produto?q=titulo')"/> 
+				<c:if test="#{conferencia.statusConferencia!='F'}">
+					<plcf:exibe id="produto" value="#{itemConferencia.produto}"/>
 				</c:if>
 				  
 			</h:column>  

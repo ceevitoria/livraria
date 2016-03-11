@@ -36,7 +36,7 @@ public class ItemConferenciaEntity extends ItemConferencia {
 	public String toString() {
 
 		if (getProduto() != null && getProduto().getTitulo() != null) {
-			return getProduto().getTitulo();
+			return getProduto().getCodigoBarras() + " - " + getProduto().getTitulo();
 		}
 
 		return "";

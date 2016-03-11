@@ -33,7 +33,7 @@ public abstract class ItemConferencia extends AppBaseEntity {
 	@NotNull
 	private Conferencia conferencia;
 
-	@ManyToOne(targetEntity = Produto.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Produto.class, fetch = FetchType.EAGER)
 	@ForeignKey(name = "FK_ITEMCONFERENCIA_PRODUTO")
 	private Produto produto;
 

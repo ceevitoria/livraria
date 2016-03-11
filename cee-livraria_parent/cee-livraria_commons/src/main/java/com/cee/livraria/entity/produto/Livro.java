@@ -132,7 +132,7 @@ public class Livro extends Produto {
 	@Override
 	public String toString() {
 		if (getTitulo() != null) {
-			return getTitulo();
+			return getCodigoBarras() + " - " + getTitulo();
 		} else {
 			return "Livro";
 		}

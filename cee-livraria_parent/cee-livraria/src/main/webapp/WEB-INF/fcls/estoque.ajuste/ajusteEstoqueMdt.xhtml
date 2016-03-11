@@ -12,8 +12,6 @@
 	<script type="text/javascript">//<![CDATA[
 		plc.jq(document).ready(function(){
 			plc.jq("#corpo\\:formulario\\:linkPermanente").hide();
-			plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarItensPorRegra").hide();
-			
 			var status = plc.jq("#corpo\\:formulario\\:statusAjuste option:selected").text();
 
 			if (status == "Concluído") {
@@ -27,14 +25,13 @@
 				plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
 				plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
 			} else {
+				plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarItensPorRegra").show();
 				plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
 				plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
 				plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
 			}
 			
 			plc.jq("#span-tab-1").click(function(){
-				plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarItensPorRegra").hide();
-				
 				var status = plc.jq("#corpo\\:formulario\\:statusAjuste option:selected").text();
 				
 				if (status == "Concluído") {
@@ -48,6 +45,7 @@
 					plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
 					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
 				} else {
+					plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarItensPorRegra").show();
 					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").show();
 					plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
 					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();

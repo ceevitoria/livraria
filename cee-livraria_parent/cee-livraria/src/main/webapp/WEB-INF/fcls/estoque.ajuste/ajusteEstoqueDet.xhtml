@@ -66,15 +66,8 @@
 						disabled="#{ajusteEstoque.statusAjuste=='C'}" 
 						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.produto?q=titulo')"/> 
 				</c:if>
-				<c:if test="#{ajusteEstoque.statusAjuste=='C'}">
-					<plcf:vinculado id="produto" value="#{itemAjusteEstoque.produto}" 
-						propSelPop="produto" idExibe="N" lookupTamanho="35"
-						autoComplete="true" idTamanho="15" evento="y"
-						idSomenteLeitura="N" autoRecuperacaoClasse="com.cee.livraria.entity.produto.Produto" 
-						actionSel="produtosel" modal="S" ajudaChave="ajuda.produto" 
-						onkeydown="selecionaPorTecla(event,this);" larg="900"
-						disabled="#{ajusteEstoque.statusAjuste=='C'}" 
-						riaUsa="autocomplete(url='/cee-livraria/soa/service/autocomplete.produto?q=titulo')"/> 
+				<c:if test="#{ajusteEstoque.statusAjuste!='F'}">
+					<plcf:exibe id="produto" value="#{itemAjusteEstoque.produto}"/>
 				</c:if>
 				  
 			</h:column>  

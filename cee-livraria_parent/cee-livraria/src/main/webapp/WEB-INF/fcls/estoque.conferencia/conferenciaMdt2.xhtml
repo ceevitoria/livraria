@@ -13,9 +13,8 @@
 		plc.jq(document).ready(function(){
 			plc.jq("#ui-id-2").find("#span-tab-2").click(function(){
 				plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
-				
 				var status = plc.jq("#corpo\\:formulario\\:statusConferencia option:selected").text();
-				
+
 				if (status == "Concluída") {
 					plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").hide();
 					plc.jq("#corpo\\:formulario\\:botaoAcaoBuscarItensPorRegra").hide();
@@ -32,7 +31,6 @@
 					plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
 					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").show();
 				}
-				
 			});
 		});
 		//]]></script>

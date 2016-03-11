@@ -139,7 +139,7 @@
  
  
  
- <!-- Comentar se estiver no TOMCAT 6 - INICIO --> 
+ <!-- Comentar se estiver no TOMCAT 6 - INICIO -->
  <filter>
   <filter-name>CorsFilter</filter-name>
   <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>

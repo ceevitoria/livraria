@@ -34,7 +34,7 @@ public class RegraPesquisaProdutos implements Serializable {
 
 	@Column(length=1, insertable=false, updatable=false)
 	@Enumerated(EnumType.STRING)
-	private TipoProduto tipoProduto  = TipoProduto.P;
+	private TipoProduto tipoProduto  = TipoProduto.L;
 
 	@Size(max = 40)
 	private String titulo;
