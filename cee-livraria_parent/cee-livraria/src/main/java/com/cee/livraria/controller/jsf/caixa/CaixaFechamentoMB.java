@@ -1,5 +1,6 @@
 package com.cee.livraria.controller.jsf.caixa;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.inject.Produces;
@@ -141,7 +142,9 @@ public class CaixaFechamentoMB extends AppMB {
 			byte[] relatorio = iocControleFacadeUtil.getFacade(IAppFacade.class).gerarRelatorioFechamentoCaixa(context, "RelatorioFechamentoCaixa");
 			
 			if (relatorio != null) {
-				fileUploadBean.downloadAbrindoArquivo(relatorio, "RelatorioFechamentoCaixa.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+				Date data = new Date();
+				String nomeArquivo = String.format("RelatorioFechamentoCaixa-%tY%tm%td.xlsx", data, data, data);
+				fileUploadBean.downloadAbrindoArquivo(relatorio, nomeArquivo, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			} else {
 				msgUtil.msg("Nenhum arquivo gerado!", PlcMessage.Cor.msgAmareloPlc.name());
 			}

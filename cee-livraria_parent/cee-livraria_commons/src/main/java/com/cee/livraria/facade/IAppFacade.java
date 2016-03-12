@@ -15,6 +15,7 @@ import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.pagamento.PagamentoList;
 import com.cee.livraria.entity.produto.Produto;
+import com.cee.livraria.entity.relatorio.RelatorioVendaPeriodo;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
@@ -140,4 +141,8 @@ public interface IAppFacade extends IPlcFacade {
 	public byte[] gerarRelatorioFechamentoCaixa(PlcBaseContextVO context, String sheetName) throws PlcException;
 
 	public Collection recuperaDadosFechamentoCaixa(PlcBaseContextVO context, String orderByDinamico, Integer inicio, Integer total) throws PlcException;
+
+	public byte[] gerarRelatorioVendaPeriodo(PlcBaseContextVO context, RelatorioVendaPeriodo relatorioArg, String string);
+
+	public Collection recuperaVendaPeriodo(PlcBaseContextVO context, RelatorioVendaPeriodo relatorioArg, String orderByDinamico, Integer inicio, Integer total) throws PlcException; 
 }

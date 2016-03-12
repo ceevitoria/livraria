@@ -1,6 +1,7 @@
 package com.cee.livraria.controller.jsf.caixa;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.inject.Produces;
@@ -175,18 +176,17 @@ public class CaixaConsultaMB extends AppMB  {
     }
     
 	public void gerarRelatorioFechamentoCaixa() {
+		PlcBaseContextVO context = getContext();
 		
-//		if (this.entityPlc != null) {
-			PlcBaseContextVO context = getContext();
-			
-			byte[] relatorio = iocControleFacadeUtil.getFacade(IAppFacade.class).gerarRelatorioFechamentoCaixa(context, "RelatorioFechamentoCaixa");
-			
-			if (relatorio != null) {
-				fileUploadBean.downloadAbrindoArquivo(relatorio, "RelatorioFechamentoCaixa.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-			} else {
-				msgUtil.msg("Nenhum arquivo gerado!", PlcMessage.Cor.msgAmareloPlc.name());
-			}
-//		}
+		byte[] relatorio = iocControleFacadeUtil.getFacade(IAppFacade.class).gerarRelatorioFechamentoCaixa(context, "RelatorioFechamentoCaixa");
+		
+		if (relatorio != null) {
+			Date data = new Date();
+			String nomeArquivo = String.format("RelatorioFechamentoCaixa-%tY%tm%td.xlsx", data, data, data);
+			fileUploadBean.downloadAbrindoArquivo(relatorio, nomeArquivo, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+		} else {
+			msgUtil.msg("Nenhum arquivo gerado!", PlcMessage.Cor.msgAmareloPlc.name());
+		}
 	}
     
 }

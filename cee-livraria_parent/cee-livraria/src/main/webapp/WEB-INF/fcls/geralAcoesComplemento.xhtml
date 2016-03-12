@@ -71,7 +71,7 @@
 			<ui:insert name="acao-botaoAcaoGerarRelatorioFechamentoCaixa">	
 				<plcf:botaoAcao id="botaoAcaoGerarRelatorioFechamentoCaixa" urlIcone="ico iEspecifico" 
 					limpaForm="false" partialSubmit="true" label="cee.evt.gerar.relatoriofechamentoCaixa" 
-					botaoArrayID="GERAR_RELATORTIO_FECHAMENTO_CAIXA" validaForm="false" immediate="false" blocking="true" 
+					botaoArrayID="GERAR_RELATORIO_FECHAMENTO_CAIXA" validaForm="false" immediate="false" blocking="true" 
 					rendered="#{requestScope.exibeBtnRelatorioFechamentoCaixa=='S'}" onclick="plc.jq('#corpo\\:formulario\\:linkAcaoGerarRelatorioFechamentoCaixa').trigger('click');">
 				</plcf:botaoAcao>
 			</ui:insert>
@@ -231,6 +231,23 @@
 					rendered="#{requestScope.exibeBtnRegistrarEntradaNotaFiscal=='S'}" onclick="beforeSubmit();">
 					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
 					<f:param name="skipValidation" value="true"/>
+				</plcf:botaoAcao>
+			</ui:insert>
+
+			<ui:insert name="livraria_acao_gerarRelatorioVendaPeriodo">	 
+				<h:commandLink id="linkAcaoGerarRelatorioVendaPeriodo" immediate="false" 
+					rendered="#{requestScope.exibeBtnRelatorioVendaPeriodo=='S'}"
+					value="Relatorio Venda Periodo"
+					action="#{plcAction.gerarRelatorioVendaPeriodo}"
+					style="color:blue;max-width:200px;font-size: 14px;visibility: hidden;">
+				</h:commandLink>
+			</ui:insert>
+
+			<ui:insert name="acao-botaoAcaoGerarRelatorioVendaPeriodo">	
+				<plcf:botaoAcao id="botaoAcaoGerarRelatorioVendaPeriodo" urlIcone="ico iEspecifico" 
+					limpaForm="false" partialSubmit="true" label="cee.evt.gerar.relatoriovendaPeriodo" 
+					botaoArrayID="GERAR_RELATORIO_VENDA_PERIODO" validaForm="false" immediate="false" blocking="true" 
+					rendered="#{requestScope.exibeBtnRelatorioVendaPeriodo=='S'}" onclick="plc.jq('#corpo\\:formulario\\:linkAcaoGerarRelatorioVendaPeriodo').trigger('click');">
 				</plcf:botaoAcao>
 			</ui:insert>
 
