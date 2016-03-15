@@ -2,8 +2,10 @@ package com.cee.livraria.entity.produto;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.DiscriminatorValue;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -40,11 +42,23 @@ import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 	@NamedQuery(name="Livro.querySel", query="select obj.id as id, obj.tipoProduto as tipoProduto, obj.codigoBarras as codigoBarras, obj.titulo as titulo, obj.isbn as isbn, obj.edicao as edicao, obj.palavrasChave as palavrasChave, obj.precoUltCompra as precoUltCompra, obj1.id as espirito_id, obj1.nome as espirito_nome, obj2.id as autor_id, obj2.nome as autor_nome, obj3.id as editora_id, obj3.nome as editora_nome, obj4.id as colecao_id, obj4.nome as colecao_nome from Livro obj left outer join obj.espirito as obj1 left outer join obj.autor as obj2 left outer join obj.editora as obj3 left outer join obj.colecao as obj4 order by obj.titulo asc"),
 	@NamedQuery(name="Livro.queryEdita", query="select obj from Livro obj where obj.id = ?"),
 	@NamedQuery(name="Livro.querySelLookup", query="select id as id, codigoBarras as codigoBarras, titulo as titulo from Livro where id = ? order by id asc") })
-@DiscriminatorValue("L")
+//@DiscriminatorValue("L")
 @ForeignKey(name = "FK_LIVRO_PRODUTO")
 public class Livro extends Produto {
 	private static final long serialVersionUID = 7797394047043215934L;
 
+	@Column(length=1, insertable=true, updatable=false)
+	@Enumerated(EnumType.STRING)
+	private TipoProduto tipoProduto = TipoProduto.L;
+	
+	public TipoProduto getTipoProduto() {
+		return tipoProduto;
+	}
+
+	public void setTipoProduto(TipoProduto tipoProduto) {
+		this.tipoProduto = tipoProduto;
+	}
+	
 	@Size(max = 20)
 	private String isbn;
 
@@ -121,7 +135,6 @@ public class Livro extends Produto {
 	public void setColecao(Colecao colecao) {
 		this.colecao = colecao;
 	}
-
 	
 	/*
 	 * Construtor padrao

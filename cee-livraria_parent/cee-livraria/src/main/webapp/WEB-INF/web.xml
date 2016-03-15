@@ -137,8 +137,6 @@
   <servlet-name>FacesServlet</servlet-name>
  </filter-mapping>
  
- 
- 
  <!-- Comentar se estiver no TOMCAT 6 - INICIO -->
  <filter>
   <filter-name>CorsFilter</filter-name>
@@ -173,14 +171,11 @@
   <url-pattern>/soa/*</url-pattern>
 </filter-mapping>
  <!-- Comentar se estiver no TOMCAT 6 - FIM --> 
- 
- 
- 
- <!-- Listerner Reasteasy: auto complete e rest 
-
+  
+  <!-- Listerner Reasteasy: auto complete e rest 
 		Verificar: Se for instalado depois do Listener Weld, acontece estouro
 		de memoria!
-	-->
+   -->
  <listener>
   <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
  </listener>
@@ -285,7 +280,7 @@
   <web-resource-collection>
    <web-resource-name>Todas as Páginas</web-resource-name>
    <url-pattern>/f/*</url-pattern>
-   <url-pattern>/soa/*</url-pattern>
+   <!-- url-pattern>/soa/*</url-pattern-->
    <url-pattern>/res-plc/jsps/geralUsuOnlinePlc.jsp</url-pattern>
   </web-resource-collection>
   <auth-constraint>

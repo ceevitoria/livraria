@@ -5,9 +5,6 @@ import java.math.BigDecimal;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -53,8 +50,8 @@ import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 			"   order by t.dataInicio desc "),
 	@NamedQuery(name="Produto.querySelLookup", query="select id as id, codigoBarras as codigoBarras, titulo as titulo from Produto where id = ? order by id asc") })
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name="tipo_produto", length=1, discriminatorType=DiscriminatorType.STRING)
-@DiscriminatorValue("P")
+//@DiscriminatorColumn(name="tipo_produto", length=1, discriminatorType=DiscriminatorType.STRING)
+//@DiscriminatorValue("P")
 public class Produto extends AppBaseEntity implements Estocavel {
 	private static final long serialVersionUID = 7010726688922277123L;
 

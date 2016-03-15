@@ -86,7 +86,7 @@
 						exibeSe="#{empty livro.idTabela and plct:execOneArg(request,'isUserInRole','Gestor')}" /> 
 					<plcf:numerico id="precoVendaSugerido2" value="#{livro.precoVendaSugerido}" 
 						somenteLeitura="S" tamanho="10" ajudaChave="ajuda.preco.venda.sugerido"
-						exibeSe="#{empty livro.idTabela and plct:execOneArg(request,'isUserInRole','Vendedor')}" /> 
+						exibeSe="#{empty livro.idTabela and plct:execOneArg(request,'isUserInRole','Vendedor') and not plct:execOneArg(request,'isUserInRole','Gestor')}}" /> 
 				</plcf:celula>  
 			</plcf:linha> 
 		</plcf:tabela> 
