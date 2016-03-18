@@ -6,19 +6,14 @@ Funcionalidades Principais
 
 1. Pacote: *Manter Estoque*
 
-    * Registrar Venda
-    * Registrar Pedido de Venda
-    * Conferir Estoque
-    * Ajustar Estoque
-    * Definir Precos
-    * Registrar Recebimento de Pedido
-    * Configurar Venda
-    * Configurar Compra
-    * Registrar Compra
-    * Incluir Livro
-    * Selecao de Livro
-
-
+    * Venda de Produto
+    * Devolução de Produto
+    * Conferencia de Estoque
+    * Ajustar de Estoque
+    * Tabela de Preços
+    * Cadastro de Fornecedor
+    * Entrada de Nota Fiscal
+    * Cadastro de Produtos (Livros, CDs e DVDs)
 
 2. Pacote: *Manter Caixa*
 
@@ -26,6 +21,7 @@ Funcionalidades Principais
     * Realizar Sangria
     * Realizar Suprimento
     * Fechar Caixa
+    * Consulta de Caixa
     * Configurar Caixa
 
 
