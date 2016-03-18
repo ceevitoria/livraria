@@ -1,6 +1,7 @@
 package com.cee.livraria.controller.jsf.relatorio;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -130,6 +131,16 @@ public class RelatorioVendaPeriodoGridController<E, I> extends PlcBaseGridContro
 			if (relatorioArg.getDataFim().before(relatorioArg.getDataInicio())) {
 				throw new PlcException("{relatorio.vendaPeriodo.erro.dataFimMenorDataInicio}");
 			}
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(relatorioArg.getDataFim());
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			cal.add(Calendar.DAY_OF_MONTH, 1);
+			cal.add(Calendar.SECOND, -1); // Obtem o último horário do período final. Ex: 23:59:59
+			relatorioArg.setDataFim(cal.getTime());
 			
 //			this.setTotal(getFacade().findCount(context, relatorioArg)); 
 			List<E> lista = (List<E>) iocControleFacadeUtil.getFacade(IAppFacade.class).recuperaVendaPeriodo(context, relatorioArg, orderByDinamico, ((page - 1) * rows), (rows));

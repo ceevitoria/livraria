@@ -105,6 +105,16 @@ public class RelatorioVendaPeriodoMB extends AppMB {
 				throw new PlcException("{relatorio.vendaPeriodo.erro.dataFimMenorDataInicio}");
 			}
 			
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(relatorioArg.getDataFim());
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			cal.add(Calendar.DAY_OF_MONTH, 1);
+			cal.add(Calendar.SECOND, -1); // Obtem o último horário do período final. Ex: 23:59:59
+			relatorioArg.setDataFim(cal.getTime());
+			
 			byte[] relatorio = iocControleFacadeUtil.getFacade(IAppFacade.class).gerarRelatorioVendaPeriodo(context, relatorioArg, "RelatorioVendaPeriodo");
 			
 			if (relatorio != null) {

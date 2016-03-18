@@ -39,7 +39,7 @@ public class RelatorioVendaPeriodoDAO extends AppJpaDAO  {
 		PlcBaseContextVO context,
 		
 		@PlcQueryParameter(name="dataInicio", expression="obj2.data >= :dataInicio") Date dataInicio,
-		@PlcQueryParameter(name="dataFim", expression="obj2.data < :dataFim") Date dataFim
+		@PlcQueryParameter(name="dataFim", expression="obj2.data <= :dataFim") Date dataFim
 	);
 	
 }
