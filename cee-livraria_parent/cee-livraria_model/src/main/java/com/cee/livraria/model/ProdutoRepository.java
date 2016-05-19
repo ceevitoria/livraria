@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.estoque.EstoqueEntity;
 import com.cee.livraria.entity.produto.Produto;
-import com.cee.livraria.entity.rest.ProdutoRest;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.persistence.jpa.produto.ProdutoDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
@@ -18,6 +18,7 @@ import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.commons.annotation.PlcAggregationDAOIoC;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcRepository;
 import com.powerlogic.jcompany.model.PlcBaseRepository;
+import com.powerlogic.jcompany.model.bindingtype.PlcDeleteBefore;
 
 @SPlcRepository
 @PlcAggregationDAOIoC(value=Produto.class)
@@ -26,6 +27,30 @@ public class ProdutoRepository extends PlcBaseRepository {
 	@Inject
 	private ProdutoDAO dao;
 
+	public void antesAtualizar (@Observes @PlcDeleteBefore PlcBaseContextVO context) throws PlcException {
+		String url = context.getUrl();
+		
+		if ("produtoman.livroman.cdman.dvdman".contains(url)) {
+			Produto produto = (Produto) context.getEntityForExtension();
+			
+			if (produto != null) {
+				verificaExclusaoEstoque(context, produto);
+			}
+		}
+	}
+	
+	private void verificaExclusaoEstoque(PlcBaseContextVO context, Produto produto) throws PlcException {
+		List<Estoque> estoqueList = dao.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
+
+		if (estoqueList != null) {
+		
+			if (estoqueList.size() == 1) {
+				Estoque estoque = estoqueList.get(0);
+				dao.delete(context, estoque);
+			}
+		}
+	}
+	
 	public Collection recuperaProdutos(PlcBaseContextVO context, Produto arg, String orderByDinamico, int inicio, int total) throws PlcException {
 		List<Produto> produtosRetorno = new ArrayList<Produto>();  
 		
@@ -73,5 +98,6 @@ public class ProdutoRepository extends PlcBaseRepository {
 		
 		return produtosRetorno;
 	}
+	
 	
 }

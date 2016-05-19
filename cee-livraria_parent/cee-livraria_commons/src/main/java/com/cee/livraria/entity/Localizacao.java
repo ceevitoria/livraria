@@ -15,8 +15,12 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIf;
+import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfType;
+
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 import com.powerlogic.jcompany.config.domain.PlcReference;
+import com.powerlogic.jcompany.domain.validation.PlcValGroupEntityList;
 
 @SPlcEntity
 @Entity
@@ -35,9 +39,10 @@ public class Localizacao extends AppBaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_LOCALIZACAO")
 	private Long id;
 
-	@NotNull
-	@Size(max = 30)
+	@NotNull(groups = PlcValGroupEntityList.class)
+	@RequiredIf(valueOf = "id", is = RequiredIfType.not_empty)
 	@PlcReference(testDuplicity = true)
+	@Size(max = 30)
 	private String codigo;
 
 	@Size(max = 200)
