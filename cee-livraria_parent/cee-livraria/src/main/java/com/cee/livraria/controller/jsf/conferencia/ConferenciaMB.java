@@ -93,6 +93,10 @@ public class ConferenciaMB extends AppMB {
 		if (this.entityPlc == null) {
 			this.entityPlc = new ConferenciaEntity();
 			this.newEntity();
+			
+			if ((((Conferencia)this.entityPlc).getStatusConferencia()) == null) {
+				((Conferencia)this.entityPlc).setStatusConferencia(StatusConferencia.F);
+			}
 		}
 		
 		return (ConferenciaEntity) this.entityPlc;

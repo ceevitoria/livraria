@@ -88,6 +88,10 @@ public class AjusteEstoqueMB extends AppMB {
 		if (this.entityPlc == null) {
 			this.entityPlc = new AjusteEstoque();
 			this.newEntity();
+			
+			if ((((AjusteEstoque)this.entityPlc).getStatusAjuste()) == null) {
+				((AjusteEstoque)this.entityPlc).setStatusAjuste(StatusAjuste.F);
+			}
 		}
 		
 		return (AjusteEstoque) this.entityPlc;

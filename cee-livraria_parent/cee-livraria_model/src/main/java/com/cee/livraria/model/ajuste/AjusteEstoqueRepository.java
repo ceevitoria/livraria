@@ -171,6 +171,12 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 			mov.setData(dataMovimento);
 			mov.setTipo(tipoMovimento);
 			mov.setModo(ModoMovimento.A);
+			
+			// Arredonda o valor em duas casa decimais
+			valorMovimento *= 100;
+			valorMovimento = Math.round(valorMovimento);
+			valorMovimento /= 100;
+			
 			mov.setValor(BigDecimal.valueOf(valorMovimento));
 			mov.setItemMovimento(itens);
 			
