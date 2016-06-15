@@ -302,7 +302,7 @@ public class NotaFiscalRepository extends PlcBaseRepository {
 		dao.insert(context, mov);
 	}
 	
-	private void insereEstoque(PlcBaseContextVO context, ItemNotaFiscal item, Date data)  throws PlcException {
+	private void insereEstoque(PlcBaseContextVO context, ItemNotaFiscal item, Date data, Localizacao localizacaoPadrao)  throws PlcException {
 		Produto produto = item.getProduto();
 
 		Estoque estoque = new EstoqueEntity();
@@ -313,9 +313,7 @@ public class NotaFiscalRepository extends PlcBaseRepository {
 		estoque.setQuantidadeMaxima(20);
 		estoque.setDataConferencia(data);
 		
-		//TODO Definir uma localizacao padrão para colocar os novos produtos que dão entrada numa nota fiscal
-		Localizacao localizacao = (Localizacao)dao.findById(context, Localizacao.class, 1L);
-		estoque.setLocalizacao(localizacao);
+		estoque.setLocalizacao(item.getLocalizacao() != null ? item.getLocalizacao() : localizacaoPadrao);
 		
 		estoque.setDataUltAlteracao(data);
 		estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
@@ -331,6 +329,12 @@ public class NotaFiscalRepository extends PlcBaseRepository {
 	 */
 	private void atualizaEstoque(PlcBaseContextVO context, NotaFiscal notaFiscal, Date dataRegistro) throws PlcException {
 		int qtEstoque = 0;
+
+		List<Localizacao> localizacaoList = dao.findByFields(context, Localizacao.class, "queryCaixaEntrada", new String[] {"codigo"}, new String[] {"Novos Produtos"});
+
+		if (localizacaoList.size() == 0) {
+			throw new PlcException("{produto.erro.localizacao.entrada.inexistente}");
+		}
 		
 		for (Object o : notaFiscal.getItemNotaFiscal()) {
 			ItemNotaFiscal itemNF = (ItemNotaFiscal)o;
@@ -342,7 +346,7 @@ public class NotaFiscalRepository extends PlcBaseRepository {
 				if (lista != null) {
 					
 					if (lista.size() == 0) {
-						insereEstoque(context, itemNF, dataRegistro);
+						insereEstoque(context, itemNF, dataRegistro, localizacaoList.get(0));
 					} else if (lista.size() == 1) {
 						Estoque estoque = (Estoque)lista.get(0);
 						

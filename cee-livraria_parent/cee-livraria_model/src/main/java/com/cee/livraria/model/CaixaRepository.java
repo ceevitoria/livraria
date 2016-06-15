@@ -529,7 +529,11 @@ public class CaixaRepository extends PlcBaseRepository {
 	 */
 	private void criaMovimentoCaixa(PlcBaseContextVO context, CaixaEntity caixa, Date data, TipoMovimentoCaixa tipo) throws PlcException, Exception {
 		
-		if (caixa.getValor() != null && caixa.getValor().doubleValue() > 0.00) {
+		if (caixa.getValor() == null) {
+			caixa.setValor(new BigDecimal("0.00"));
+		}
+		
+		if (caixa.getValor().doubleValue() >= 0.00) {
 
 			switch (tipo) {
 			case AB:
@@ -570,7 +574,7 @@ public class CaixaRepository extends PlcBaseRepository {
 				throw new PlcException("CaixaRepository", "criaMovimentoCaixa", e, log, "jpa.insert(context, movCaixa)");
 			}
 		} else {
-			alertas.add("{alerta.caixa.operacao.realizada.valorzerado}");
+			throw new PlcException("Valor invalido!");
 		}
 			
 	}

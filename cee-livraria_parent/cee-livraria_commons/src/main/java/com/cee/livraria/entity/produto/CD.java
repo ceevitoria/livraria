@@ -3,6 +3,7 @@ package com.cee.livraria.entity.produto;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -29,7 +30,7 @@ import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 	@NamedQuery(name="CD.querySel", query="select obj.id as id, obj.tipoProduto as tipoProduto, obj.codigoBarras as codigoBarras, obj.titulo as titulo, obj.artista as artista, obj.gravadora as gravadora, obj.palavrasChave as palavrasChave, obj.precoUltCompra as precoUltCompra from CD obj order by obj.titulo asc"),
 	@NamedQuery(name="CD.queryEdita", query="select obj from CD obj where obj.id = ?"),
 	@NamedQuery(name="CD.querySelLookup", query="select id as id, codigoBarras as codigoBarras, titulo as titulo from CD where id = ? order by id asc") })
-//@DiscriminatorValue("C")
+@DiscriminatorValue("C")
 @ForeignKey(name = "FK_CD_PRODUTO")
 public class CD extends Produto {
 	private static final long serialVersionUID = -3743563441057503441L;
@@ -74,13 +75,13 @@ public class CD extends Produto {
 	public CD() {
 	}
 	
-	@Override
-	public String toString() {
-		if (getTitulo() != null) {
-			return getCodigoBarras() + " - " + getTitulo();
-		} else {
-			return "CD";
-		}
-	}
+//	@Override
+//	public String toString() {
+//		if (getTitulo() != null) {
+//			return getCodigoBarras() + " - " + getTitulo();
+//		} else {
+//			return "CD";
+//		}
+//	}
 	
 }

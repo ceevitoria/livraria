@@ -84,6 +84,12 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	}
 
 	@PlcTransactional(commit=false)
+	@Override
+	public List findByFields(PlcBaseContextVO context, Class classe, String namedQuery, String[] parametros, Object[] valores) {
+		return dao.findByFields(context, classe, namedQuery, parametros, valores);
+	}
+	
+	@PlcTransactional(commit=false)
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
 	@Override
 	public PrecoTabela findPrecoTabela(PlcBaseContextVO context, Long idProduto) throws PlcException {

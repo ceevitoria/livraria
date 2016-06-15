@@ -22,6 +22,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.ForeignKey;
 
 import com.cee.livraria.entity.AppBaseEntity;
+import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.produto.Produto;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 
@@ -73,6 +74,10 @@ public class ItemNotaFiscal extends AppBaseEntity {
 	@Digits(integer = 10, fraction = 2)
 	private BigDecimal valorLiquido;
 
+	@ManyToOne(targetEntity = Localizacao.class, fetch = FetchType.LAZY)
+	@ForeignKey(name = "FK_ITEMNOTAFISCAL_LOCALIZACAO")
+	private Localizacao Localizacao;
+	
 	public ItemNotaFiscal() {
 	}
 
@@ -130,6 +135,14 @@ public class ItemNotaFiscal extends AppBaseEntity {
 
 	public void setValorLiquido(BigDecimal valorLiquido) {
 		this.valorLiquido = valorLiquido;
+	}
+
+	public Localizacao getLocalizacao() {
+		return Localizacao;
+	}
+
+	public void setLocalizacao(Localizacao localizacao) {
+		Localizacao = localizacao;
 	}
 
 	public NotaFiscal getNotaFiscal() {

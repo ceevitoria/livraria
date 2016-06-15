@@ -66,7 +66,7 @@ public class LivroMB extends AppMB  {
 			this.entityPlc = new Livro();
 			this.newEntity();
 
-			((Livro)this.entityPlc).setTipoProduto(TipoProduto.C);
+			((Livro)this.entityPlc).setTipoProduto(TipoProduto.L);
 		}
 		
 		return (Livro)this.entityPlc;     	

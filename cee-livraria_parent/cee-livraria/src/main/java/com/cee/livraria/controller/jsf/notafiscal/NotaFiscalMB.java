@@ -9,16 +9,20 @@ import javax.inject.Named;
 
 import com.cee.livraria.commons.AppConstants;
 import com.cee.livraria.controller.jsf.AppMB;
+import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.compra.Fornecedor;
 import com.cee.livraria.entity.compra.FornecedorProduto;
 import com.cee.livraria.entity.compra.ItemNotaFiscal;
 import com.cee.livraria.entity.compra.NotaFiscal;
 import com.cee.livraria.entity.compra.StatusNotaFiscal;
 import com.cee.livraria.entity.config.RetornoConfig;
+import com.cee.livraria.entity.estoque.Estoque;
+import com.cee.livraria.entity.estoque.EstoqueEntity;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcConstants;
+import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.commons.annotation.PlcUriIoC;
 import com.powerlogic.jcompany.commons.config.qualifiers.QPlcDefault;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcMB;
@@ -149,6 +153,9 @@ public class NotaFiscalMB extends AppMB  {
 					FornecedorProduto entidadeArg =  new FornecedorProduto();
 					entidadeArg.setFornecedor(fornecedor);
 					entidadeArg.setCodigoProduto(codigoItem);
+					entidadeArg.setDataUltAlteracao(null);
+					entidadeArg.setUsuarioUltAlteracao(null);
+					entidadeArg.setVersao(null);
 					
 					List<FornecedorProduto> fornecedorProdutos = (List<FornecedorProduto>)iocControleFacadeUtil.getFacade(IAppFacade.class).findList(context, entidadeArg, null, 0, 1);
 					
@@ -161,8 +168,17 @@ public class NotaFiscalMB extends AppMB  {
 							
 							Produto produto = fornecedorProduto.getProduto();
 							
+							Localizacao localizacao = null;
+							
+							List<Estoque> listaEstoque = (List<Estoque>)iocControleFacadeUtil.getFacade(IAppFacade.class).findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[]{"produto"}, new Object[]{produto});
+
+							if (listaEstoque != null && listaEstoque.size() > 0) {
+								localizacao = listaEstoque.get(0).getLocalizacao();
+							}
+							
 							item.setProduto(produto);
 							item.setProdutoFornecedorExistente(true);
+							item.setLocalizacao(localizacao);
 							
 							if (item.getValorUnitario() == null) {
 								item.setValorUnitario(produto.getPrecoUltCompra());
@@ -176,8 +192,13 @@ public class NotaFiscalMB extends AppMB  {
 								item.setPercentualDesconto(fornecedor.getDescontoPadrao());
 							}
 							
-							BigDecimal valorLiquido = item.getValorUnitario().multiply(new BigDecimal(item.getQuantidade())).multiply((new BigDecimal(100)).subtract(item.getPercentualDesconto()).divide(new BigDecimal(100)));
-							item.setValorLiquido(valorLiquido);
+							if (item.getValorUnitario() != null && item.getQuantidade() != null && item.getPercentualDesconto() != null) {
+								BigDecimal valorLiquido = item.getValorUnitario().multiply(new BigDecimal(item.getQuantidade())).multiply((new BigDecimal(100)).subtract(item.getPercentualDesconto()).divide(new BigDecimal(100)));
+								item.setValorLiquido(valorLiquido);
+							} else {
+								item.setValorUnitario(null);
+								item.setValorLiquido(null);
+							}
 						} else {
 							List<ItemNotaFiscal> itens = notaFiscal.getItemNotaFiscal();
 							ItemNotaFiscal item = itens.get(indiceItem);
@@ -186,6 +207,8 @@ public class NotaFiscalMB extends AppMB  {
 					}
 				}
 			}
+		} catch (Exception e) {
+			throw new PlcException(e);		
 			
 		} finally {
 			contextUtil.getRequest().setAttribute("destravaTela", "S");

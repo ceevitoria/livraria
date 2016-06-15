@@ -254,6 +254,7 @@ public class AjusteEstoqueMB extends AppMB {
 		
 		item.setAjusteEstoque(ajusteEstoque);
 		item.setProduto(produto);
+		item.setTipoProduto(produto.getTipoProduto());
 		item.setQuantidadeEstoque(itemEstoque != null ? itemEstoque.getQuantidade() : null);
 		item.setLocalizacao(itemEstoque != null ? itemEstoque.getLocalizacao() : null);
 		item.setIndExcPlc("N");

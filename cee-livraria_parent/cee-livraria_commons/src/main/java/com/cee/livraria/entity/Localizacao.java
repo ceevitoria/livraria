@@ -30,6 +30,7 @@ import com.powerlogic.jcompany.domain.validation.PlcValGroupEntityList;
 @NamedQueries({
 	@NamedQuery(name="Localizacao.queryMan", query="from Localizacao"), 
 	@NamedQuery(name="Localizacao.querySel", query="select id as id, codigo as codigo from Localizacao order by codigo asc"), 
+	@NamedQuery(name="Localizacao.queryCaixaEntrada", query="select id as id, codigo as codigo, descricao as descricao from Localizacao where codigo = :codigo"), 
 	@NamedQuery(name="Localizacao.querySelLookup", query="select id as id, codigo as codigo from Localizacao where id = ? order by codigo asc") 
 })
 public class Localizacao extends AppBaseEntity {

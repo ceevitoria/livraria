@@ -25,6 +25,20 @@ public interface IAppFacade extends IPlcFacade {
 	
 	@SuppressWarnings("rawtypes")
 	public Object findById(PlcBaseContextVO context, Class classe, Object id) throws PlcException;
+	
+	/**
+	 * Método Genérico para execução de uma NamedQuery com os parâmetros passados por argumento.
+	 * A NamedQuery deve ser declarada na entidade, por exemplo: "from UsuarioEntity where login = ? and cpf = ?"
+	 * Sendo que o objeto parâmetros deve conter os nomes dos parâmetros da Query: {"login", "cpf"}
+	 * O objeto valores deve conter o valore de cada filtro utilizados na Query: {"igor.guimaraes", "11111111111"}
+	 * @param context Contexto com informações - Por se tratar de Classe StateLess 
+	 * @param classe
+	 * @param namedQuery
+	 * @param parametros
+	 * @param valores
+	 * @return
+	 */
+	public List findByFields(PlcBaseContextVO context, Class classe, String namedQuery, String[] parametros, Object[] valores) throws PlcException;
 
 	/**
 	 * Encontra a tabela de preco vigente para produto informado

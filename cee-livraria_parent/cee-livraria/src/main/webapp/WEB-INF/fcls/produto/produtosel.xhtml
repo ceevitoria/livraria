@@ -10,6 +10,11 @@
 	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
 	<ui:composition template="/fcls/template/PlcGeralTemplate.xhtml"> 
 		<ui:define name="plc-corpo-formulario"> 
+			<script type="text/javascript">//<![CDATA[
+			plc.jq(document).ready(function(){
+				plc.jq("#corpo\\:formulario\\:botaoAcaoNovo_EXIBE_ALERTA_ALTERACAO").hide();
+			});
+			//]]></script>	
 			<div id="plc-form-basico"> 
 				<div id="#{plcAliasPrefixoAction}Arg" class="plc-form-basico-topo"> 
 					<plcf:tabela tituloChave="produtoarg.titulo"> 

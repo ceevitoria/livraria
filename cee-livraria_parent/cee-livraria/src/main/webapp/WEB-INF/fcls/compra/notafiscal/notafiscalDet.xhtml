@@ -110,7 +110,7 @@
 					<plcf:titulo value="#{msg['label.produto']}"/>
 				</f:facet>  
 					<plcf:vinculado id="produto" value="#{itemNotaFiscal.produto}" 
-						propSelPop="produto" idExibe="S" lookupTamanho="70"
+						propSelPop="produto" idExibe="S" lookupTamanho="40"
 						larg="1200" alt="800"
 						autoRecuperacaoPropriedade="codigoBarras"
 						autoComplete="true" idTamanho="10" 
@@ -174,6 +174,12 @@
 				    type="currency"/>
 				</h:inputText>							
 			</h:column> 
+			<h:column> 
+				<f:facet name="header">
+					<plcf:titulo value="#{msg['label.localizacao']}"/>  
+				</f:facet>
+				<plcf:comboDinamico id="localizacao" value="#{itemNotaFiscal.localizacao}" dominio="Localizacao" exibeBranco="S" ajudaChave="ajuda.localizacao"/> 
+			</h:column>  
 		</plcf:iteracao> 
 		<div id="plc-corpo-formulario2" class="plc-corpo-formulario plc-form-tabular"> 
 			<fieldset class="plc-fieldset"> 
