@@ -76,7 +76,7 @@ public class ItemNotaFiscal extends AppBaseEntity {
 
 	@ManyToOne(targetEntity = Localizacao.class, fetch = FetchType.LAZY)
 	@ForeignKey(name = "FK_ITEMNOTAFISCAL_LOCALIZACAO")
-	private Localizacao Localizacao;
+	private Localizacao localizacao;
 	
 	public ItemNotaFiscal() {
 	}
@@ -138,11 +138,11 @@ public class ItemNotaFiscal extends AppBaseEntity {
 	}
 
 	public Localizacao getLocalizacao() {
-		return Localizacao;
+		return localizacao;
 	}
 
 	public void setLocalizacao(Localizacao localizacao) {
-		Localizacao = localizacao;
+		localizacao = localizacao;
 	}
 
 	public NotaFiscal getNotaFiscal() {

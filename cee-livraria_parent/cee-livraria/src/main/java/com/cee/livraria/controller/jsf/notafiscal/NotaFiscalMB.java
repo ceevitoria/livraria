@@ -41,7 +41,8 @@ import com.powerlogic.jcompany.domain.validation.PlcMessage.Cor;
 	details = { 
 		@com.powerlogic.jcompany.config.aggregation.PlcConfigDetail(
 			clazz = com.cee.livraria.entity.compra.ItemNotaFiscal.class,
-			collectionName = "itemNotaFiscal", numNew = 4, onDemand = false),
+			collectionName = "itemNotaFiscal", numNew = 10, onDemand = false, 
+			navigation = @com.powerlogic.jcompany.config.aggregation.PlcConfigPagedDetail(numberByPage = 30)),
 		
 		@com.powerlogic.jcompany.config.aggregation.PlcConfigDetail(
 			clazz = com.cee.livraria.entity.compra.ContaPagar.class,
@@ -73,6 +74,7 @@ public class NotaFiscalMB extends AppMB  {
 	private Integer indiceFornecedor;
 	private String nomeFornecedor;
 	
+	private BigDecimal valorItensPagina = new BigDecimal("0.00");
 	private BigDecimal valorTotalNota = new BigDecimal("0.00");
 	
 	public Integer getIndiceItem() {
@@ -91,10 +93,18 @@ public class NotaFiscalMB extends AppMB  {
 		this.codigoItem = codigoItem;
 	}
 
+	public BigDecimal getValorItensPagina() {
+		return valorItensPagina;
+	}
+
+	public void setValorItensPagina(BigDecimal valorItensPagina) {
+		this.valorItensPagina = valorItensPagina;
+	}
+
 	public BigDecimal getValorTotalNota() {
 		return valorTotalNota;
 	}
-
+	
 	public void setValorTotalNota(BigDecimal valorTotalNota) {
 		this.valorTotalNota = valorTotalNota;
 	}
