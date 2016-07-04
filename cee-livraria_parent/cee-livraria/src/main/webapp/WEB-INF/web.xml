@@ -166,10 +166,12 @@
     <param-value>10</param-value>
   </init-param>
 </filter>
+
 <filter-mapping>
   <filter-name>CorsFilter</filter-name>
   <url-pattern>/soa/*</url-pattern>
 </filter-mapping>
+
  <!-- Comentar se estiver no TOMCAT 6 - FIM --> 
   
   <!-- Listerner Reasteasy: auto complete e rest 
@@ -182,6 +184,7 @@
  <listener>
   <listener-class>org.jboss.weld.el.WeldELContextListener</listener-class>
  </listener>
+ 
  <!-- Listener JCDI / Weld (RI) 
 
 		Deve vir antes de AppServletContextListener para que o "bootstrap" da

@@ -15,8 +15,6 @@ import com.cee.livraria.entity.config.ConferenciaConfig;
 import com.cee.livraria.entity.config.ConferenciaConfigEntity;
 import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.estoque.Estoque;
-import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
-import com.cee.livraria.entity.estoque.ajuste.StatusAjuste;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.estoque.conferencia.ConferenciaEntity;
 import com.cee.livraria.entity.estoque.conferencia.ItemConferencia;
@@ -159,7 +157,19 @@ public class ConferenciaMB extends AppMB {
 	 * buscarItensPorRegraPrecificacao
 	 */
 	public String buscarItensPorRegra()  {
-
+		String ret = null;
+		
+		try {
+			ret = buscarItens();
+		} finally {
+			contextUtil.getRequest().setAttribute("destravaTela", "S");
+		}
+		
+		return ret;
+	}
+	
+	private String buscarItens() {
+		
 		if (this.entityPlc!=null) {
 			Conferencia conferencia = (Conferencia)this.entityPlc;
 			List<ItemConferencia> listaItensExistentes = conferencia.getItemConferencia();
@@ -288,11 +298,17 @@ public class ConferenciaMB extends AppMB {
 	}
 
 	public String abrirConferencia()  {
-		Conferencia conferencia = (Conferencia)this.entityPlc;
-
-		conferencia.setStatusConferencia(StatusConferencia.A);
+		String ret = null;			
 		
-		return super.save(); 
+		try {
+			Conferencia conferencia = (Conferencia)this.entityPlc;
+			conferencia.setStatusConferencia(StatusConferencia.A);
+			ret = super.save();
+		} finally {
+			contextUtil.getRequest().setAttribute("destravaTela", "S");
+		}
+
+		return ret;		
 	}
 	
 	public String concluirConferencia()  {
@@ -300,7 +316,13 @@ public class ConferenciaMB extends AppMB {
 
 		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 		
-		RetornoConfig ret = iocControleFacadeUtil.getFacade(IAppFacade.class).concluirConferenciaLivros(context, conferencia);
+		RetornoConfig ret = null;
+		
+		try {
+			ret = iocControleFacadeUtil.getFacade(IAppFacade.class).concluirConferenciaLivros(context, conferencia);
+		} finally {
+			contextUtil.getRequest().setAttribute("destravaTela", "S");
+		}
 		
 		if (ret.getAlertas().size() > 0) {
 			

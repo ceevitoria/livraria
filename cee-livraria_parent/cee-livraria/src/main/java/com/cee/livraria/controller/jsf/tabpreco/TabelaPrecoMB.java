@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.cee.livraria.controller.jsf.AppMB;
+import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.produto.CD;
 import com.cee.livraria.entity.produto.DVD;
@@ -108,39 +109,44 @@ public class TabelaPrecoMB extends AppMB {
 			if (contaProdutos.longValue() > 400) {
 				msgUtil.msg("{tabpreco.err.buscar.muitosItensExistentes}", new Object[] { contaProdutos }, PlcMessage.Cor.msgVermelhoPlc.name());
 			} else {
-				Comparator<ItemTabela> comparator = new Comparator<ItemTabela>() {
-					public int compare(ItemTabela o1, ItemTabela o2) {
-						if (o1.getCodigoBarras().equals(o2.getCodigoBarras())) {
-							return o1.getProduto().getId().compareTo(o2.getProduto().getId());
-						}
-						return o1.getCodigoBarras().compareTo(o2.getCodigoBarras());
-					}
-				};
-
-				Collections.sort(listaItens, comparator); 
-
-				List<Produto> produtos = (List<Produto>) iocControleFacadeUtil.getFacade().findList(context, produtoArg, plcControleConversacao.getOrdenacaoPlc(), 0, 0);
 				List<Estoque> estoques = null;
 				
-				if (regra.getLocalizacao() == null) {
-					estoques = (List<Estoque>) iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoque(context, produtos);
-				} else {
-					estoques = (List<Estoque>) iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoquePorLocalizacao(context, produtos, regra.getLocalizacao());
-				}
-				
-				for (Estoque itemEstoque : estoques) {
-					ItemTabela itemTabela = criaNovoItem(tabPreco, itemEstoque);
-					double preco = calcularAjustePrecoProduto(tabPreco, itemEstoque.getProduto());
-					itemTabela.setPreco(new BigDecimal(preco));
-
-					int i = Collections.binarySearch(listaItens, itemTabela, comparator);
-
-					if (i < 0) {
-						listaItens.add(itemTabela);
+				try {
+					Comparator<ItemTabela> comparator = new Comparator<ItemTabela>() {
+						public int compare(ItemTabela o1, ItemTabela o2) {
+							if (o1.getCodigoBarras().equals(o2.getCodigoBarras())) {
+								return o1.getProduto().getId().compareTo(o2.getProduto().getId());
+							}
+							return o1.getCodigoBarras().compareTo(o2.getCodigoBarras());
+						}
+					};
+					
+					Collections.sort(listaItens, comparator); 
+					
+					List<Produto> produtos = (List<Produto>) iocControleFacadeUtil.getFacade().findList(context, produtoArg, plcControleConversacao.getOrdenacaoPlc(), 0, 0);
+					
+					if (regra.getLocalizacao() == null) {
+						estoques = (List<Estoque>) iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoque(context, produtos);
 					} else {
-						itemTabela = listaItens.get(i);
-						itemTabela.setPreco(new BigDecimal(preco));
+						estoques = (List<Estoque>) iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoquePorLocalizacao(context, produtos, regra.getLocalizacao());
 					}
+					
+					for (Estoque itemEstoque : estoques) {
+						ItemTabela itemTabela = criaNovoItem(tabPreco, itemEstoque);
+						double preco = calcularAjustePrecoProduto(tabPreco, itemEstoque.getProduto());
+						itemTabela.setPreco(new BigDecimal(preco));
+						
+						int i = Collections.binarySearch(listaItens, itemTabela, comparator);
+						
+						if (i < 0) {
+							listaItens.add(itemTabela);
+						} else {
+							itemTabela = listaItens.get(i);
+							itemTabela.setPreco(new BigDecimal(preco));
+						}
+					}
+				} finally {
+					contextUtil.getRequest().setAttribute("destravaTela", "S");
 				}
 
 				msgUtil.msg("{tabpreco.ok.buscar}",	new Object[] {estoques.size()}, PlcMessage.Cor.msgAzulPlc.name());
@@ -250,19 +256,24 @@ public class TabelaPrecoMB extends AppMB {
 		List<ItemTabela> listaItens = tabPreco.getItemTabela();
 		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 
-		for (ItemTabela item : listaItens) {
-			Produto produto = (Produto) iocControleFacadeUtil.getFacade().edit(context, Produto.class, item.getProduto().getId())[0];
-
-			item.setTitulo(produto.getTitulo());
-			item.setTipoProduto(produto.getTipoProduto());
-			item.setCodigoBarras(produto.getCodigoBarras());
-			item.setPrecoUltCompra(produto.getPrecoUltCompra());
-			item.setPrecoVendaSugerido(produto.getPrecoVendaSugerido());
-
-			double preco = calcularAjustePrecoProduto(tabPreco, produto);
-
-			item.setPreco(new BigDecimal(preco));
+		try {
+			for (ItemTabela item : listaItens) {
+				Produto produto = (Produto) iocControleFacadeUtil.getFacade().edit(context, Produto.class, item.getProduto().getId())[0];
+				
+				item.setTitulo(produto.getTitulo());
+				item.setTipoProduto(produto.getTipoProduto());
+				item.setCodigoBarras(produto.getCodigoBarras());
+				item.setPrecoUltCompra(produto.getPrecoUltCompra());
+				item.setPrecoVendaSugerido(produto.getPrecoVendaSugerido());
+				
+				double preco = calcularAjustePrecoProduto(tabPreco, produto);
+				
+				item.setPreco(new BigDecimal(preco));
+			}
+		} finally {
+			contextUtil.getRequest().setAttribute("destravaTela", "S");
 		}
+		
 
 		msgUtil.msg("{tabpreco.ok.atualizar}", new Object[] { listaItens.size() }, PlcMessage.Cor.msgAzulPlc.name());
 		msgUtil.msg("{tabpreco.lembrar.gravar}", PlcMessage.Cor.msgAmareloPlc.name());

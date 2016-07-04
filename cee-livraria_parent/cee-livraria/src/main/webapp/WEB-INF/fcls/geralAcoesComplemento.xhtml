@@ -80,7 +80,7 @@
 				<plcf:botaoAcao id="botaoAcaoAbrirConferencia" urlIcone="ico iGravar" acao="abrirConferencia" 
 					limpaForm="false" partialSubmit="#{!partialSubmit}" label="conferencia.evt.abrirConferencia" 
 					botaoArrayID="CONFERENCIA" validaForm="false" immediate="false" blocking="true" 
-					rendered="#{requestScope.exibeBtnAbrirConferencia=='S'}" onclick="beforeSubmit();">
+					rendered="#{requestScope.exibeBtnAbrirConferencia=='S'}" onclick="beforeSubmit();travaTelaComTempo(20000);">
 					<f:ajax event="action" execute="@form" render="@form" imediate="false" onerror="plc.manipulaErroAjax"/>
 					<f:param name="skipValidation" value="true"/>
 				</plcf:botaoAcao>
@@ -90,7 +90,7 @@
 				<plcf:botaoAcao id="botaoAcaoConcluirConferencia" urlIcone="ico iGravar" acao="concluirConferencia" 
 					limpaForm="false" partialSubmit="#{!partialSubmit}" label="conferencia.evt.concluirConferencia" 
 					botaoArrayID="CONFERENCIA" validaForm="false" immediate="false" blocking="true" 
-					rendered="#{requestScope.exibeBtnConcluirConferencia=='S'}" onclick="beforeSubmit();">
+					rendered="#{requestScope.exibeBtnConcluirConferencia=='S'}" onclick="beforeSubmit();travaTelaComTempo(20000);">
 					<f:ajax event="action" execute="@form" render="@form" imediate="false" onerror="plc.manipulaErroAjax"/>
 					<f:param name="skipValidation" value="true"/>
 				</plcf:botaoAcao>
@@ -100,7 +100,7 @@
 				<plcf:botaoAcao id="botaoAcaoAbrirAjusteEstoque" urlIcone="ico iGravar" acao="abrirAjusteEstoque" 
 					limpaForm="false" partialSubmit="#{!partialSubmit}" label="ajusteEstoque.evt.abrirAjusteEstoque" 
 					botaoArrayID="AJUSTEESTOQUE" validaForm="false" immediate="false" blocking="true" 
-					rendered="#{requestScope.exibeBtnAbrirAjusteEstoque=='S'}" onclick="beforeSubmit();">
+					rendered="#{requestScope.exibeBtnAbrirAjusteEstoque=='S'}" onclick="beforeSubmit();travaTelaComTempo(20000);">
 					<f:ajax event="action" execute="@form" render="@form" imediate="false" onerror="plc.manipulaErroAjax"/>
 					<f:param name="skipValidation" value="true"/>
 				</plcf:botaoAcao>
@@ -110,7 +110,7 @@
 				<plcf:botaoAcao id="botaoAcaoConcluirAjusteEstoque" urlIcone="ico iGravar" acao="concluirAjusteEstoque" 
 					limpaForm="false" partialSubmit="#{!partialSubmit}" label="ajusteEstoque.evt.concluirAjusteEstoque" 
 					botaoArrayID="AJUSTEESTOQUE" validaForm="false" immediate="false" blocking="true" 
-					rendered="#{requestScope.exibeBtnConcluirAjusteEstoque=='S'}" onclick="beforeSubmit();">
+					rendered="#{requestScope.exibeBtnConcluirAjusteEstoque=='S'}" onclick="beforeSubmit();travaTelaComTempo(20000);">
 					<f:ajax event="action" execute="@form" render="@form" imediate="false" onerror="plc.manipulaErroAjax"/>
 					<f:param name="skipValidation" value="true"/>
 				</plcf:botaoAcao>
@@ -120,7 +120,7 @@
 				<plcf:botaoAcao id="botaoAcaoBuscarItensPorRegra" urlIcone="ico iEspecifico" acao="buscarItensPorRegra" 
 					limpaForm="false" partialSubmit="#{!partialSubmit}" label="tabpreco.evt.buscarItensPorRegra" 
 					botaoArrayID="PRECIFICACAO" validaForm="false" immediate="false" blocking="true" 
-					rendered="#{requestScope.exibeBuscarItensPorRegra=='S'}" onclick="beforeSubmit();">
+					rendered="#{requestScope.exibeBuscarItensPorRegra=='S'}" onclick="beforeSubmit();travaTelaComTempo(20000);">
 					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
 					<f:param name="skipValidation" value="true"/>
 				</plcf:botaoAcao>
@@ -130,7 +130,7 @@
 				<plcf:botaoAcao id="botaoAcaoAtualizarItensPorPrecificacao" urlIcone="ico iRefresh" acao="atualizarItensPorPrecificacao" 
 					limpaForm="false"  partialSubmit="#{!partialSubmit}" label="tabpreco.evt.atualizarItensPorPrecificacao" 
 					botaoArrayID="PRECIFICACAO" validaForm="false" immediate="false" blocking="true" 
-					rendered="#{requestScope.atualizarItensPorPrecificacao=='S'}" onclick="beforeSubmit();">
+					rendered="#{requestScope.atualizarItensPorPrecificacao=='S'}" onclick="beforeSubmit();travaTelaComTempo(20000);">
 					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
 					<f:param name="skipValidation" value="true"/>
 				</plcf:botaoAcao>
@@ -152,7 +152,7 @@
 					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
 					label="cee.evt.registrar" limpaForm="false"  
 					botaoArrayID="REGISTRAR_VENDA" rendered="#{requestScope.exibeBtnRegistrarVenda=='S'}" 
-					onclick="beforeSubmit();">
+					onclick="beforeSubmit();travaTelaComTempo(20000);">
 					<f:ajax event="action" execute="@form" render="@form" imediate="false" onerror="plc.manipulaErroAjax"/>
 					<f:param name="skipValidation" value="false"/>
 				</plcf:botaoAcao>	
@@ -163,7 +163,7 @@
 					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
 					label="cee.evt.registrar" limpaForm="false"  
 					botaoArrayID="REGISTRAR_DEVOLUCAO" rendered="#{requestScope.exibeBtnRegistrarDevolucao=='S'}" 
-					onclick="beforeSubmit();">
+					onclick="beforeSubmit();travaTelaComTempo(20000);">
 					<f:ajax event="action" execute="@form" render="@form" imediate="false" onerror="plc.manipulaErroAjax"/>
 					<f:param name="skipValidation" value="false"/>
 				</plcf:botaoAcao>	
@@ -196,7 +196,7 @@
 					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
 					label="cee.evt.registrar" limpaForm="true"  
 					botaoArrayID="REGISTRAR_SANGRIA_CAIXA" rendered="#{requestScope.exibeBtnRegistrarSangriaCaixa=='S'}" 
-					onclick="beforeSubmit();">
+					onclick="beforeSubmit();travaTelaComTempo(20000);">
 					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
 					<f:param name="skipValidation" value="true"/>
 				</plcf:botaoAcao>	
@@ -207,7 +207,7 @@
 					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
 					label="cee.evt.registrar" limpaForm="true"  
 					botaoArrayID="REGISTRAR_SUPRIMENTO_CAIXA" rendered="#{requestScope.exibeBtnRegistrarSuprimentoCaixa=='S'}" 
-					onclick="beforeSubmit();">
+					onclick="beforeSubmit();travaTelaComTempo(20000);">
 					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
 					<f:param name="skipValidation" value="true"/>
 				</plcf:botaoAcao>	
@@ -218,7 +218,7 @@
 					partialSubmit="#{!partialSubmit}" alertaExcluirDetalhe="jcompany.alerta.excluir.detalhe" 
 					label="cee.evt.registrar" limpaForm="true"  
 					botaoArrayID="REGISTRAR_FECHAMENTO_CAIXA" rendered="#{requestScope.exibeBtnRegistrarFechamentoCaixa=='S'}" 
-					onclick="beforeSubmit();">
+					onclick="beforeSubmit();travaTelaComTempo(20000);">
 					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
 					<f:param name="skipValidation" value="true"/>
 				</plcf:botaoAcao>	
@@ -228,7 +228,7 @@
 				<plcf:botaoAcao id="botaoAcaoRegistrarEntradaNotaFiscal" urlIcone="ico iGravar" acao="registrarEntradaNotaFiscal" 
 					limpaForm="false" partialSubmit="#{!partialSubmit}" label="compra.evt.registrarEntradaNotaFiscal" 
 					botaoArrayID="ENTRADA_NOTA_FISCAL" validaForm="false" immediate="false" blocking="true" 
-					rendered="#{requestScope.exibeBtnRegistrarEntradaNotaFiscal=='S'}" onclick="beforeSubmit();">
+					rendered="#{requestScope.exibeBtnRegistrarEntradaNotaFiscal=='S'}" onclick="beforeSubmit();travaTelaComTempo(20000);">
 					<f:ajax event="action" execute="@form" render="@form" imediate="true" onerror="plc.manipulaErroAjax"/>
 					<f:param name="skipValidation" value="true"/>
 				</plcf:botaoAcao>

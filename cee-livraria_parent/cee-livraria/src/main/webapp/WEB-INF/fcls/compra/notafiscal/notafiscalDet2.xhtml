@@ -10,6 +10,13 @@
 	xmlns:tr="http://myfaces.apache.org/trinidad" 
 	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
 	<ui:composition> 
+		<script type="text/javascript">//<![CDATA[
+		plc.jq(document).ready(function(){
+			plc.jq("#contaPagar").click(function(){
+				plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").show();
+			});
+		});
+		//]]></script>	
 		<plcf:iteracao var="contaPagar" id="contaPagar" value="#{notafiscal.contaPagar}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
 			<h:column> 
 				<h:outputText value="#{rowCounter.index}."/> 

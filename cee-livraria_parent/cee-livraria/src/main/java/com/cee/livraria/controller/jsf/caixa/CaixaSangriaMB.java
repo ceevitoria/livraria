@@ -101,7 +101,13 @@ public class CaixaSangriaMB extends AppMB {
 	 * @throws PlcException 
 	 */
 	public String registrarSangriaCaixa() throws PlcException, Exception  {
-		RetornoConfig ret = caixaOperacaoMB.registrarOperacaoCaixa(TipoMovimentoCaixa.SA, this.entityPlc, this.pagamentoList.getItens());
+		RetornoConfig ret = null;
+		
+		try {
+			ret = caixaOperacaoMB.registrarOperacaoCaixa(TipoMovimentoCaixa.SA, this.entityPlc, this.pagamentoList.getItens());
+		} finally {
+			contextUtil.getRequest().setAttribute("destravaTela", "S");
+		}
 		
 		Caixa caixa = (Caixa) ret.getObject();
 

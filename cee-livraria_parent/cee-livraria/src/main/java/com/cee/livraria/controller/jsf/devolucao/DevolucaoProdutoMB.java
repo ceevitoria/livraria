@@ -82,6 +82,8 @@ public class DevolucaoProdutoMB extends AppMB  {
 	public String search()  {
 		novosItens();
 
+		msgUtil.msg("Devalução somente em dinheiro", PlcMessage.Cor.msgAzulPlc.name());
+		
 		return baseSearchMB.getDefaultNavigationFlow(); 
 	}
 
@@ -180,7 +182,13 @@ public class DevolucaoProdutoMB extends AppMB  {
 		
 		List itensPlc = entityListPlc.getItensPlc();
 
-		RetornoConfig ret = iocControleFacadeUtil.getFacade(IAppFacade.class).registrarDevolucaoProdutos(context, itensPlc);
+		RetornoConfig ret = null;
+		
+		try {
+			ret = iocControleFacadeUtil.getFacade(IAppFacade.class).registrarDevolucaoProdutos(context, itensPlc);
+		} finally {
+			contextUtil.getRequest().setAttribute("destravaTela", "S");
+		}
 		
 		if (ret.getAlertas().size() > 0) {
 			
@@ -196,11 +204,7 @@ public class DevolucaoProdutoMB extends AppMB  {
 			}
 		}
 		
-//		CompraVendaConfig config = (CompraVendaConfig)ret.getConfig();
-//		
-//		if (config.getAutoLimparTelaParaNovaVenda().equals(PlcYesNo.S)) {
-			limparOperacaoAnterior();
-//		}
+		limparOperacaoAnterior();
 		
 		return baseEditMB.getDefaultNavigationFlow(); 
 	}

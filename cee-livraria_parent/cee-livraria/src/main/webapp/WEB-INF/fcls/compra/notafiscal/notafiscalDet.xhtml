@@ -12,6 +12,18 @@
 
 	<ui:composition> 
 		<script type="text/javascript">//<![CDATA[
+
+		plc.jq(document).ready(function(){
+			
+			plc.jq("#itemNotaFiscal").click(function(){
+				var status = plc.jq("#corpo\\:formulario\\:statusNotaFiscal" ).text();
+	
+				if (status == 'Registrada') {
+					plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").hide();
+				}
+			});
+		});
+		
 		function calcularValorLiquido(index) {
 			var sValorUnitario = plc.jq("#corpo\\:formulario\\:itemNotaFiscal\\:"+ index + "\\:valorUnitario").val();
 			sValorUnitario = sValorUnitario.replace(",",".");
@@ -103,7 +115,7 @@
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.codigoProduto']}"/>
 				</f:facet>
-				<h:inputText id="codigoProduto" size="8" title="#{msg['ajuda.codigoProduto']}" value="#{itemNotaFiscal.codigoProduto}" style="text-align:right;" readonly="false" required="false"/>
+				<h:inputText id="codigoProduto" size="7" title="#{msg['ajuda.codigoProduto']}" value="#{itemNotaFiscal.codigoProduto}" style="text-align:right;" readonly="false" required="false"/>
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">
@@ -123,8 +135,8 @@
 				<f:facet name="header">
 					<plcf:titulo value="#{msg['label.tipoProduto']}"/>
 				</f:facet>
-				<h:inputText id="tipoProduto" title="#{msg['ajuda.tipoProduto']}" rendered="#{itemNotaFiscal.produto != null}" size="8" style="text-align:center;" value="#{itemNotaFiscal.produto.tipoProduto.name}" readonly="true" required="false"/>
-				<h:inputText id="tipoProduto2" title="#{msg['ajuda.tipoProduto']}" rendered="#{itemNotaFiscal.produto == null}" size="8" value="#{itemNotaFiscal.produto}" readonly="true" required="false"/>
+				<h:inputText id="tipoProduto" title="#{msg['ajuda.tipoProduto']}" rendered="#{itemNotaFiscal.tipoProduto != null}" size="6" style="text-align:center;" value="#{itemNotaFiscal.tipoProduto.name}" readonly="true" required="false"/>
+				<h:inputText id="tipoProduto2" title="#{msg['ajuda.tipoProduto']}" rendered="#{itemNotaFiscal.tipoProduto == null}" size="6" value="#{itemNotaFiscal.tipoProduto}" readonly="true" required="false"/>
 			</h:column>  
 			<h:column> 
 				<f:facet name="header">

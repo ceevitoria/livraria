@@ -37,6 +37,7 @@ import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.commons.annotation.PlcAggregationIoC;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcRepository;
 import com.powerlogic.jcompany.model.PlcBaseRepository;
+import com.powerlogic.jcompany.model.bindingtype.PlcEditAfter;
 import com.powerlogic.jcompany.model.bindingtype.PlcUpdateBefore;
 
 /**
@@ -69,6 +70,23 @@ public class NotaFiscalRepository extends PlcBaseRepository {
 		}
 	}
 	
+	public void depoisEditar (@Observes @PlcEditAfter PlcBaseContextVO context) throws PlcException {
+		
+		if (context.getUrl().equalsIgnoreCase("notaFiscal")) {
+			NotaFiscal notaFiscal = (NotaFiscal) context.getEntityForExtension();
+			
+			if (notaFiscal != null) {
+				
+				for (Object o : notaFiscal.getItemNotaFiscal()) {
+					ItemNotaFiscal itemNF = (ItemNotaFiscal)o;
+					
+					if (itemNF.getProduto() != null && itemNF.getProduto().getId() != null && itemNF.getProduto().getTipoProduto() != null) {
+						itemNF.setTipoProduto(itemNF.getProduto().getTipoProduto());
+					}
+				}
+			}
+		}
+	}
 
 	private void ajustaDataEmissaoContasPagar(PlcBaseContextVO context, NotaFiscal notaFiscal) {
 		
@@ -147,12 +165,14 @@ public class NotaFiscalRepository extends PlcBaseRepository {
 
 	private void validaValoresNota(PlcBaseContextVO context, NotaFiscal notaFiscal, Date dataRegistro) throws PlcException {
 		BigDecimal valorTotalItens = new BigDecimal("0.00");
+
+		List<ItemNotaFiscal> itensNotaFiscal = (List<ItemNotaFiscal>)dao.findByFields(context, ItemNotaFiscal.class, "recuperaItensNotaFiscal", new String[]{"notaFiscal"}, new Object[]{notaFiscal});
 		
-		for (Object o : notaFiscal.getItemNotaFiscal()) {
+		for (Object o : itensNotaFiscal) {
 			ItemNotaFiscal itemNF = (ItemNotaFiscal)o;
 			
-			// Evita os itens em branco
-			if (itemNF.getProduto() != null && itemNF.getProduto().getId() != null && itemNF.getValorLiquido() != null) {
+			// Evita os itens em branco e os marcados para exclusão
+			if (itemNF.getProduto() != null && "N".equals(itemNF.getIndExcPlc()) && itemNF.getProduto().getId() != null && itemNF.getValorLiquido() != null) {
 				valorTotalItens = valorTotalItens.add(itemNF.getValorLiquido());
 			}
 		}
@@ -160,6 +180,8 @@ public class NotaFiscalRepository extends PlcBaseRepository {
 		if (valorTotalItens.compareTo(notaFiscal.getValorTotal()) != 0) {
 			throw new PlcException("{compra.erro.notaFiscal.valorTotal.divergente}", new Object[] {String.format("R$ %10.2f", notaFiscal.getValorTotal()), String.format("R$ %10.2f", valorTotalItens)});
 		}
+		
+		notaFiscal.setItemNotaFiscal(itensNotaFiscal);
 	}
 
 	@SuppressWarnings("unchecked")

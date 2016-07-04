@@ -24,6 +24,7 @@ import org.hibernate.annotations.ForeignKey;
 import com.cee.livraria.entity.AppBaseEntity;
 import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.produto.Produto;
+import com.cee.livraria.entity.produto.TipoProduto;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 
 @SPlcEntity
@@ -31,7 +32,10 @@ import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 @Table(name = "ITEM_NOTA_FISCAL")
 @SequenceGenerator(name = "SE_ITEM_NOTA_FISCAL", sequenceName = "SE_ITEM_NOTA_FISCAL")
 @Access(AccessType.FIELD)
-@NamedQueries({ @NamedQuery(name = "ItemNotaFiscal.querySelLookup", query = "select id as id, codigoProduto as codigoProduto from ItemNotaFiscal where id = ? order by id asc") })
+@NamedQueries({ 
+	@NamedQuery(name = "ItemNotaFiscal.querySelLookup", query = "select id as id, codigoProduto as codigoProduto from ItemNotaFiscal where id = ? order by id asc"), 
+	@NamedQuery(name = "ItemNotaFiscal.recuperaItensNotaFiscal", query = "from ItemNotaFiscal where notaFiscal = :notaFiscal order by id asc") 
+})
 public class ItemNotaFiscal extends AppBaseEntity {
 	private static final long serialVersionUID = -305835460793103574L;
 
@@ -169,6 +173,17 @@ public class ItemNotaFiscal extends AppBaseEntity {
 		return indExcPlc;
 	}
 
+	@Transient
+	private TipoProduto tipoProduto;
+	
+	public TipoProduto getTipoProduto() {
+		return tipoProduto;
+	}
+	
+	public void setTipoProduto(TipoProduto tipoProduto) {
+		this.tipoProduto = tipoProduto;
+	}
+	
 	@Transient
 	private transient boolean isProdutoFornecedorExistente = false;
 

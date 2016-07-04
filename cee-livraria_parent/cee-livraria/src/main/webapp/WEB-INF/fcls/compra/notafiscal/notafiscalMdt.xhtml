@@ -28,19 +28,38 @@
 
 				plc.jq("#corpo\\:formulario\\:linkAcaoBuscarParcelamentoFornecedor").trigger("click");
 			});
+
+			var status = plc.jq("#corpo\\:formulario\\:statusNotaFiscal" ).text();
+
+			if (status == 'Registrada') {
+				plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
+				plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").hide();
+				plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").hide();
+			}
+
+			plc.jq("#ui-id-1").click(function(){
+				var status = plc.jq("#corpo\\:formulario\\:statusNotaFiscal" ).text();
+
+				if (status == 'Registrada') {
+					plc.jq("#corpo\\:formulario\\:botaoAcaoClonar_EXIBE_ALERTA_ALTERACAO").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoGravar").hide();
+					plc.jq("#corpo\\:formulario\\:botaoAcaoExcluir").hide();
+				}
+			});
+			
 		});
 	//]]> </script>
 	
 		<plcf:tabela tituloChave="notafiscal.mestre.titulo.comp"> 
 			<h:commandLink id="linkAcaoBuscarProdutoFornecedor" immediate="false" 
 				value="BuscarProdutoDoFornecedor"
-				action="#{notaFiscalMB.buscarProdutoFornecedor}"
+				action="#{notaFiscalMB.buscarProdutoFornecedor}" onclick="beforeSubmit();travaTelaComTempo(20000);"
 				style="color:blue;max-width:200px;font-size:12px;" styleClass="escondido">
 			</h:commandLink>		
 
 			<h:commandLink id="linkAcaoBuscarParcelamentoFornecedor" immediate="false" 
 				value="BuscarParcelamentoFornecedor"
-				action="#{notaFiscalMB.buscarParcelamentoFornecedor}"
+				action="#{notaFiscalMB.buscarParcelamentoFornecedor}" onclick="beforeSubmit();travaTelaComTempo(20000);"
 				style="color:blue;max-width:200px;font-size:12px;" styleClass="escondido">
 			</h:commandLink>		
 		
@@ -79,10 +98,20 @@
 				</plcf:celula>  
 			</plcf:linha>  
 			<plcf:linha> 
-				<plcf:celula columnSpan="2"> 
+				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.parcelamento']}"/>
 					<plcf:comboDinamico id="parcelamento" value="#{notafiscal.parcelamento}" dominio="Parcelamento" obrigatorio="N" obrigatorioDestaque="N" exibeBranco="S" ajudaChave="ajuda.parcelamento"/> 
+				</plcf:celula>
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.statusNotaFiscal']}"/>
+					<plcf:exibe id="statusNotaFiscal" value="#{notafiscal.status}" dominio="StatusNotaFiscal" somenteLeitura="S" ajudaChave="ajuda.statusNotaFiscal"/> 
 				</plcf:celula> 
+				<!-- 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.statusNotaFiscal']}"/>
+					<plcf:comboEstatico id="statusNotaFiscal" value="#{notafiscal.status}" dominio="StatusNotaFiscal" somenteLeitura="S" ajudaChave="ajuda.statusNotaFiscal"/> 
+				</plcf:celula> 
+				 -->
 			</plcf:linha> 
 		</plcf:tabela> 
 	</ui:composition> 

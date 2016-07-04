@@ -145,7 +145,7 @@ public class ConferenciaRepository extends PlcBaseRepository {
 					// Grava no item da conferencia a quantidade que existe atualmente contabilizada no estoque
 					itemConferencia.setQuantidadeEstoque(estoque.getQuantidade());
 					
-					if (itemConferencia.getQuantidadeConferida().compareTo(estoque.getQuantidade()) != 0) {
+					if (itemConferencia.getQuantidadeConferida() != null && itemConferencia.getQuantidadeConferida().compareTo(estoque.getQuantidade()) != 0) {
 
 						if (config.getTipoMensagem().equals(TipoMensagemConferenciaConfig.D) ) {
 							alertas.add(String.format("Quantidade divergente para o produto '%s'. Registrado: '%d'. Informado: '%d'", 
@@ -229,22 +229,25 @@ public class ConferenciaRepository extends PlcBaseRepository {
 		
 		for (ItemConferencia itemConferencia : itensConferencia) {
 			
-			if (itemConferencia.getQuantidadeEstoque() == null || itemConferencia.getQuantidadeConferida().compareTo(itemConferencia.getQuantidadeEstoque())!=0) {
-				ItemAjusteEstoque itemAjuste = new ItemAjusteEstoque();
+			if (itemConferencia != null) {
 				
-				itemAjuste.setProduto(itemConferencia.getProduto());
-				itemAjuste.setTipoProduto(itemConferencia.getTipoProduto());
-				itemAjuste.setLocalizacao(itemConferencia.getLocalizacao());
-				itemAjuste.setQuantidadeEstoque(itemConferencia.getQuantidadeEstoque() != null ? itemConferencia.getQuantidadeEstoque() : 0);
-				itemAjuste.setQuantidadeInformada(itemConferencia.getQuantidadeConferida());
-				itemAjuste.setAjusteEstoque(ajusteEstoque);
-				
-				itemAjuste.setDataUltAlteracao(dataConferencia);
-				itemAjuste.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
-				
-				dao.insert(context, itemAjuste);
-				
-				itensAjuste.add(itemAjuste);
+				if (itemConferencia.getQuantidadeEstoque() == null || (itemConferencia.getQuantidadeConferida() != null && itemConferencia.getQuantidadeConferida().compareTo(itemConferencia.getQuantidadeEstoque())!=0)) {
+					ItemAjusteEstoque itemAjuste = new ItemAjusteEstoque();
+					
+					itemAjuste.setProduto(itemConferencia.getProduto());
+					itemAjuste.setTipoProduto(itemConferencia.getTipoProduto());
+					itemAjuste.setLocalizacao(itemConferencia.getLocalizacao());
+					itemAjuste.setQuantidadeEstoque(itemConferencia.getQuantidadeEstoque() != null ? itemConferencia.getQuantidadeEstoque() : 0);
+					itemAjuste.setQuantidadeInformada(itemConferencia.getQuantidadeConferida());
+					itemAjuste.setAjusteEstoque(ajusteEstoque);
+					
+					itemAjuste.setDataUltAlteracao(dataConferencia);
+					itemAjuste.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
+					
+					dao.insert(context, itemAjuste);
+					
+					itensAjuste.add(itemAjuste);
+				}
 			}
 		}
 		

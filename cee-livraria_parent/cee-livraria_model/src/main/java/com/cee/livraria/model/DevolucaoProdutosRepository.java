@@ -243,7 +243,7 @@ public class DevolucaoProdutosRepository {
 			}
 		}
 		
-		if (caixaFormaPagto != null && caixaFormaPagto.getValor().doubleValue() > valor) {
+		if (caixaFormaPagto != null && caixaFormaPagto.getValor().doubleValue() >= valor) {
 			caixaFormaPagto.setValor(caixaFormaPagto.getValor().subtract(new BigDecimal(Double.toString(valor))));
 			
 			caixaFormaPagto.setDataUltAlteracao(dataVenda);

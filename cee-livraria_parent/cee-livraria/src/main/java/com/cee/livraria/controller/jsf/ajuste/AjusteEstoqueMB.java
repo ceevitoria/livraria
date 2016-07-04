@@ -17,6 +17,8 @@ import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.StatusAjuste;
+import com.cee.livraria.entity.estoque.conferencia.Conferencia;
+import com.cee.livraria.entity.estoque.conferencia.StatusConferencia;
 import com.cee.livraria.entity.produto.CD;
 import com.cee.livraria.entity.produto.DVD;
 import com.cee.livraria.entity.produto.Livro;
@@ -154,6 +156,18 @@ public class AjusteEstoqueMB extends AppMB {
 	 * buscarItensPorRegraPrecificacao
 	 */
 	public String buscarItensPorRegra()  {
+		String ret = null;
+		
+		try {
+			ret = buscarItens();
+		} finally {
+			contextUtil.getRequest().setAttribute("destravaTela", "S");
+		}
+		
+		return ret;
+	}
+	
+	private String buscarItens() {
 
 		if (this.entityPlc!=null) {
 			AjusteEstoque ajusteEstoque = (AjusteEstoque)this.entityPlc;
@@ -284,12 +298,18 @@ public class AjusteEstoqueMB extends AppMB {
 		}
 	}
 
-	public String abrirAjusteEstoque()  {
-		AjusteEstoque ajusteEstoque = (AjusteEstoque)this.entityPlc;
-
-		ajusteEstoque.setStatusAjuste(StatusAjuste.A);
+	public String abrirAjusteEstoque() {
+		String ret = null;			
 		
-		return super.save(); 
+		try {
+			AjusteEstoque ajusteEstoque = (AjusteEstoque)this.entityPlc;
+			ajusteEstoque.setStatusAjuste(StatusAjuste.A);
+			ret = super.save();
+		} finally {
+			contextUtil.getRequest().setAttribute("destravaTela", "S");
+		}
+
+		return ret;		
 	}
 
 	public String concluirAjusteEstoque()  {
@@ -297,7 +317,13 @@ public class AjusteEstoqueMB extends AppMB {
 
 		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
 		
-		RetornoConfig ret = iocControleFacadeUtil.getFacade(IAppFacade.class).concluirAjusteEstoqueLivros(context, ajusteEstoque);
+		RetornoConfig ret = null;
+		
+		try {
+			ret = iocControleFacadeUtil.getFacade(IAppFacade.class).concluirAjusteEstoqueLivros(context, ajusteEstoque);
+		} finally {
+			contextUtil.getRequest().setAttribute("destravaTela", "S");
+		}
 		
 		if (ret.getAlertas().size() > 0) {
 			

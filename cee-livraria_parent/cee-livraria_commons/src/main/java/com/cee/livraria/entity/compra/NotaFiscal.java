@@ -78,7 +78,6 @@ public class NotaFiscal extends AppBaseEntity {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(length = 1)
-	@NotNull
 	private StatusNotaFiscal status;
 	
 	@OneToMany(targetEntity = ItemNotaFiscal.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "notaFiscal")

@@ -132,9 +132,12 @@ public class NotaFiscalMB extends AppMB  {
 	public NotaFiscal createEntityPlc() {
 		
         if (this.entityPlc==null) {
-              this.entityPlc = new NotaFiscal();
-              this.newEntity();
-              ((NotaFiscal)this.entityPlc).setStatus(StatusNotaFiscal.A);
+			this.entityPlc = new NotaFiscal();
+			this.newEntity();
+              
+  			if ((((NotaFiscal)this.entityPlc).getStatus()) == null) {
+				((NotaFiscal)this.entityPlc).setStatus(StatusNotaFiscal.A);
+			}
         }
         
         return (NotaFiscal)this.entityPlc;     	
@@ -187,6 +190,7 @@ public class NotaFiscalMB extends AppMB  {
 							}
 							
 							item.setProduto(produto);
+							item.setTipoProduto(produto.getTipoProduto());
 							item.setProdutoFornecedorExistente(true);
 							item.setLocalizacao(localizacao);
 							
@@ -250,21 +254,22 @@ public class NotaFiscalMB extends AppMB  {
 				}
 			}
 			
-			
 		} finally {
 			contextUtil.getRequest().setAttribute("destravaTela", "S");
 		}
 	}
 
 	public String registrarEntradaNotaFiscal() {
-		
-		save();
-		
 		PlcBaseContextVO context = getContext();
-		
 		NotaFiscal notaFiscal = (NotaFiscal)entityPlc;
-
-		RetornoConfig ret = iocControleFacadeUtil.getFacade(IAppFacade.class).registrarEntradaNotaFiscal(context, notaFiscal);
+		
+		RetornoConfig ret = null;
+		
+		try {
+			ret = iocControleFacadeUtil.getFacade(IAppFacade.class).registrarEntradaNotaFiscal(context, notaFiscal);
+		} finally {
+			contextUtil.getRequest().setAttribute("destravaTela", "S");
+		}
 		
 		if (ret.getAlertas().size() > 0) {
 			
@@ -290,9 +295,14 @@ public class NotaFiscalMB extends AppMB  {
 		if ("notafiscal".equalsIgnoreCase(nomeAction)) {
 			NotaFiscal notaFiscal = (NotaFiscal)entityPlc;
 			
-			// Se a nota fiscal ainda está aberta
-			if (StatusNotaFiscal.A.equals(notaFiscal.getStatus())) {
+			// Se a nota fiscal já foi salva e está aberta
+			if (notaFiscal.getId() != null && StatusNotaFiscal.A.equals(notaFiscal.getStatus())) {
 				contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_REGISTRAR_ENTRADA_NOTA_FISCAL, PlcConstants.EXIBIR);
+			} else {
+				contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_REGISTRAR_ENTRADA_NOTA_FISCAL, PlcConstants.NAO_EXIBIR);
+				contextUtil.getRequest().setAttribute(PlcConstants.ACAO.EXIBE_BT_CLONAR, PlcConstants.NAO_EXIBIR);
+				contextUtil.getRequest().setAttribute(PlcConstants.ACAO.EXIBE_BT_GRAVAR, PlcConstants.NAO_EXIBIR);
+				contextUtil.getRequest().setAttribute(PlcConstants.ACAO.EXIBE_BT_EXCLUIR, PlcConstants.NAO_EXIBIR);
 			}
 		}
 		

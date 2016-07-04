@@ -210,7 +210,13 @@ public class VendaProdutoMB extends AppMB  {
 		List itensPlc = entityListPlc.getItensPlc();
 		List itensPagamento = pagamentoList.getItens();
 
-		RetornoConfig ret = iocControleFacadeUtil.getFacade(IAppFacade.class).registrarVendaProdutos(context, itensPlc, itensPagamento);
+		RetornoConfig ret = null;
+		
+		try {
+			ret = iocControleFacadeUtil.getFacade(IAppFacade.class).registrarVendaProdutos(context, itensPlc, itensPagamento);
+		} finally {
+			contextUtil.getRequest().setAttribute("destravaTela", "S");
+		}
 		
 		if (ret.getAlertas().size() > 0) {
 			
