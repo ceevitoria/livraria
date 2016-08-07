@@ -14,7 +14,6 @@ import com.cee.livraria.entity.config.ConferenciaConfigEntity;
 import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.config.TipoMensagemConferenciaConfig;
 import com.cee.livraria.entity.estoque.Estoque;
-import com.cee.livraria.entity.estoque.EstoqueEntity;
 import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.StatusAjuste;
@@ -26,6 +25,7 @@ import com.cee.livraria.entity.estoque.conferencia.StatusConferencia;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.produto.RegraPesquisaProdutos;
 import com.cee.livraria.persistence.jpa.conferencia.ConferenciaDAO;
+import com.cee.livraria.persistence.jpa.produto.ProdutoDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.commons.annotation.PlcAggregationIoC;
@@ -45,6 +45,9 @@ public class ConferenciaRepository extends PlcBaseRepository {
 	@Inject
 	private ConferenciaDAO dao;
 
+	@Inject
+	private ProdutoDAO produtoDAO;
+	
 	@Inject
 	protected transient Logger log;
 
@@ -95,9 +98,10 @@ public class ConferenciaRepository extends PlcBaseRepository {
 			
 			for (ItemConferencia itemConferencia : itensConferencia) {
 				Produto produto = itemConferencia.getProduto();
-				List<Estoque> estoqueList = dao.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
+//				List<Estoque> estoqueList = dao.findByFields(context, Estoque.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
+				Estoque estoque = produtoDAO.obterEstoqueProduto(context, produto);
 				
-				if (estoqueList == null || estoqueList.size() == 0) {
+				if (estoque == null) {
 					quantidadeProdutosSemEstoque++;
 					
 					if (config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.D) ) {
@@ -105,20 +109,19 @@ public class ConferenciaRepository extends PlcBaseRepository {
 							new Object[]{itemConferencia.getProduto().getTitulo()}));
 					}
 					
-				} else if (estoqueList.size() == 1) {
-					Estoque estoque = estoqueList.get(0);
-
+				} else {
 					// Se foi configurado para utilizar a localização do livros na conferencia de estoque
 					if (PlcYesNo.S.equals(config.getUtilizaLocalizacaoLivros())) {
+						boolean precisaAtualizaProduto = false;
 						
-						if (itemConferencia.getLocalizacao().getId().compareTo(estoque.getLocalizacao().getId())!=0) {
+						if (itemConferencia.getLocalizacao().getId().compareTo(produto.getLocalizacao().getId())!=0) {
 							
 							if (PlcYesNo.S.equals(config.getAlertaTrocaLocalizacaoLivros())) {
 								
 								if (config.getTipoMensagem() .equals(TipoMensagemConferenciaConfig.D) ) {
 									alertas.add(String.format("O produto '%s' teve sua localização trocada de '%s' para '%s'", 
 											new Object[]{itemConferencia.getProduto().getTitulo(),
-											estoque.getLocalizacao().getDescricao(),
+											produto.getLocalizacao().getDescricao(),
 											itemConferencia.getLocalizacao().getDescricao()}));
 								}
 							}
@@ -131,11 +134,24 @@ public class ConferenciaRepository extends PlcBaseRepository {
 								}
 								
 							} else if (PlcYesNo.S.equals(config.getAjusteAutomaticoLocalizacaoLivros())) {
-								estoque.setLocalizacao(itemConferencia.getLocalizacao());
 								estoque.setDataConferencia(dataConferencia);
 								estoque.setDataUltAlteracao(dataConferencia);
 								estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
 								dao.update(context, estoque);
+								
+								if (itemConferencia.getLocalizacao() != null && produto.getLocalizacao() == null) {
+									produto.setLocalizacao(itemConferencia.getLocalizacao());
+									precisaAtualizaProduto = true;
+								} else if (itemConferencia.getLocalizacao() != null && produto.getLocalizacao().getId().compareTo(itemConferencia.getLocalizacao().getId()) != 0) {
+									produto.setLocalizacao(itemConferencia.getLocalizacao());
+									precisaAtualizaProduto = true;
+								}
+
+								if (precisaAtualizaProduto) {
+									produto.setDataUltAlteracao(dataConferencia);
+									produto.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
+									dao.update(context, produto);
+								}
 							}
 							
 							totalItensLocalizacaoDivergente++;
@@ -256,6 +272,7 @@ public class ConferenciaRepository extends PlcBaseRepository {
 		dao.update(context, ajusteEstoque);
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void carregaConfiguracao(PlcBaseContextVO context) throws PlcException {
 		List listaConfig = (List)dao.findAll(context, ConferenciaConfigEntity.class, null);
 		

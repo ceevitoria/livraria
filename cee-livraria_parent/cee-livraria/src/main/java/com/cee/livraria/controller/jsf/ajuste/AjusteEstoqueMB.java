@@ -167,6 +167,7 @@ public class AjusteEstoqueMB extends AppMB {
 		return ret;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private String buscarItens() {
 
 		if (this.entityPlc!=null) {
@@ -205,22 +206,9 @@ public class AjusteEstoqueMB extends AppMB {
 					msgUtil.msg("{ajusteEstoque.err.buscar.muitosItensExistentes}", new Object[] {contaProdutos}, PlcMessage.Cor.msgVermelhoPlc.name());
 					ok = false;
 				} else {
-					List<Produto> produtos = (List<Produto>)iocControleFacadeUtil.getFacade().findList(context, produtoArg, plcControleConversacao.getOrdenacaoPlc(), 0, 0);
-					List<Estoque> estoques = null;
-					
-					if (regra.getLocalizacao() == null) {
-						estoques = (List<Estoque>) iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoque(context, produtos);
-					} else {
-						estoques = (List<Estoque>) iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoquePorLocalizacao(context, produtos, regra.getLocalizacao());
-					}
-
-					Comparator<Estoque> comparator = new Comparator<Estoque>() {
-						public int compare(Estoque o1, Estoque o2) {
-							return o1.getProduto().getTitulo().compareTo(o2.getProduto().getTitulo());
-						}
-					};
-
-					Collections.sort(estoques, comparator);
+					Estoque estoque;
+					produtoArg.setLocalizacao(regra.getLocalizacao());
+					List<Produto> produtos = (List<Produto>)iocControleFacadeUtil.getFacade(IAppFacade.class).recuperarProdutos(context, produtoArg, plcControleConversacao.getOrdenacaoPlc(), 0, 0);
 					
 					int totalExistente = 0;
 					
@@ -236,23 +224,15 @@ public class AjusteEstoqueMB extends AppMB {
 							}
 						}
 						
-						Estoque itemEstoque = null;
+						estoque = produto.getEstoque();
 						
-						for (Estoque estoque : estoques) {
-							
-							if (produto.getId().compareTo(estoque.getProduto().getId())==0) {
-								itemEstoque = estoque;
-								break;
-							}
-						}
-						
-						if (!existe && itemEstoque != null) {
-							ItemAjusteEstoque itemAjusteEstoque = criaNovoItem(ajusteEstoque, produto, itemEstoque);
+						if (!existe && estoque != null) {
+							ItemAjusteEstoque itemAjusteEstoque = criaNovoItem(ajusteEstoque, produto, estoque);
 							listaItensExistentes.add(itemAjusteEstoque);
 						}
 					}
 					
-					msgUtil.msg("{ajusteEstoque.ok.buscar}", new Object[] {estoques.size()-totalExistente}, PlcMessage.Cor.msgAzulPlc.name());
+					msgUtil.msg("{ajusteEstoque.ok.buscar}", new Object[] {produtos.size()-totalExistente}, PlcMessage.Cor.msgAzulPlc.name());
 					msgUtil.msg("{ajusteEstoque.lembrar.gravar}", PlcMessage.Cor.msgAmareloPlc.name());
 					
 					plcControleConversacao.setAlertaAlteracaoPlc("S");
@@ -270,32 +250,10 @@ public class AjusteEstoqueMB extends AppMB {
 		item.setProduto(produto);
 		item.setTipoProduto(produto.getTipoProduto());
 		item.setQuantidadeEstoque(itemEstoque != null ? itemEstoque.getQuantidade() : null);
-		item.setLocalizacao(itemEstoque != null ? itemEstoque.getLocalizacao() : null);
+		item.setLocalizacao(itemEstoque != null ? produto.getLocalizacao() : null);
 		item.setIndExcPlc("N");
 		
 		return item;
-	}
-
-	private void carregaEstoqueProdutos(PlcBaseContextVO context , List<ItemAjusteEstoque> itensAjuste) {
-		List<Produto> produtos = new ArrayList<Produto>(itensAjuste.size());
-		
-		for (ItemAjusteEstoque itemAjusteEstoque : itensAjuste) {
-			produtos.add(itemAjusteEstoque.getProduto());
-		}
-		
-		List<Estoque> estoques = (List<Estoque>)iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoque(context, produtos);
-		
-		for (Estoque itemEstoque : estoques) {
-			
-			for (ItemAjusteEstoque item : itensAjuste) {
-				
-				if (item.getProduto().getId().compareTo(itemEstoque.getProduto().getId()) == 0) {
-					item.setQuantidadeEstoque(itemEstoque.getQuantidade());
-					item.setLocalizacao(itemEstoque.getLocalizacao());
-					break;
-				}
-			}
-		}
 	}
 
 	public String abrirAjusteEstoque() {

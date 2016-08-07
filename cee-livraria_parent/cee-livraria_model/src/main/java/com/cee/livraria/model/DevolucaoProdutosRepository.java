@@ -19,7 +19,7 @@ import com.cee.livraria.entity.caixa.StatusCaixa;
 import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.estoque.Estoque;
-import com.cee.livraria.entity.estoque.EstoqueEntity;
+import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.estoque.ItemMovimento;
 import com.cee.livraria.entity.estoque.ItemMovimentoEntity;
 import com.cee.livraria.entity.estoque.ModoMovimento;
@@ -154,12 +154,10 @@ public class DevolucaoProdutosRepository {
 			DevolucaoProduto devolucao = (DevolucaoProduto)o;
 
 			if (devolucao.getProduto() != null) {
-				@SuppressWarnings("unchecked")
-				List<Estoque> lista = (List<Estoque>)dao.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[]{"produto"}, new Object[]{devolucao.getProduto()});
+				Produto produto = devolucao.getProduto();
+				Estoque estoque = produtoDAO.obterEstoqueProduto(context, produto);
 				
-				if (lista != null && lista.size() == 1) {
-					Estoque estoque = (Estoque)lista.get(0);
-					
+				if (estoque != null && estoque.getId() != null) {
 					qtDevolvida += devolucao.getQuantidade();
 					qtEstoque = estoque.getQuantidade() + devolucao.getQuantidade();
 					

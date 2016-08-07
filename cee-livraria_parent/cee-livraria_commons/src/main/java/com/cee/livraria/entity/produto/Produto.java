@@ -11,11 +11,13 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
@@ -25,9 +27,12 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.ForeignKey;
+
 import com.cee.livraria.entity.AppBaseEntity;
 import com.cee.livraria.entity.Estocavel;
 import com.cee.livraria.entity.Localizacao;
+import com.cee.livraria.entity.estoque.Estoque;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 
 @SPlcEntity
@@ -36,9 +41,11 @@ import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 @SequenceGenerator(name = "SE_PRODUTO", sequenceName = "SE_PRODUTO")
 @Access(AccessType.FIELD)
 @NamedQueries({
-	@NamedQuery(name="Produto.queryMan", query="from Produto"),
-	@NamedQuery(name="Produto.querySel", query="select obj.id as id, obj.tipoProduto as tipoProduto, obj.titulo as titulo, obj.codigoBarras as codigoBarras, obj.palavrasChave as palavrasChave, obj.precoUltCompra as precoUltCompra, obj.precoVendaSugerido as precoVendaSugerido from Produto obj order by obj.titulo asc"),
-	@NamedQuery(name="Produto.queryEdita", query="select obj from Produto obj where obj.id = ?"),
+	@NamedQuery(name="Produto.queryMan", query="from Produto obj inner join obj.estoque"),
+	@NamedQuery(name="Produto.querySel", query="select obj.id as id, obj.tipoProduto as tipoProduto, obj.titulo as titulo, obj.codigoBarras as codigoBarras, obj.palavrasChave as palavrasChave, obj.precoUltCompra as precoUltCompra, obj.precoVendaSugerido as precoVendaSugerido, obj1.id as estoque_id, obj1.quantidade as estoque_quantidade, obj1.quantidadeMinima as estoque_quantidadeMinima, obj1.quantidadeMaxima as estoque_quantidadeMaxima, obj1.dataConferencia as estoque_dataConferencia, obj2.id as localizacao_id, obj2.codigo as localizacao_codigo, obj2.descricao as localizacao_descricao from Produto obj inner join obj.estoque as obj1 inner join obj.localizacao as obj2 order by obj.titulo asc"),
+	@NamedQuery(name="Produto.obterEstoqueProduto", query="select obj.estoque as estoque from Produto obj where obj.id = :id"),
+	@NamedQuery(name="Produto.obterLocalizacaoProduto", query="select obj.localizacao as localizacao from Produto obj where obj.id = :id"),
+	@NamedQuery(name="Produto.queryEdita", query="select obj from Produto obj inner join obj.estoque where obj.id = ?"),
 	@NamedQuery(name="Produto.queryPrecoTabela", query = 
 			" select t.id as idTabela, t.nome as nomeTabela, i.preco as precoTabela " +
 			"   from ItemTabelaEntity i " +
@@ -82,6 +89,16 @@ public class Produto extends AppBaseEntity implements Estocavel {
 
 	@Digits(integer = 10, fraction = 2)
 	private BigDecimal precoVendaSugerido;
+	
+	@ManyToOne(targetEntity = Estoque.class, fetch = FetchType.EAGER)
+	@ForeignKey(name = "FK_PRODUTO_ESTOQUE")
+	@NotNull
+	private Estoque estoque;
+	
+	@ManyToOne(targetEntity = Localizacao.class, fetch = FetchType.EAGER)
+	@ForeignKey(name = "FK_PRODUTO_LOCALIZACAO")
+	@NotNull
+	private Localizacao localizacao;
 	
 	public Long getId() {
 		return id;
@@ -138,12 +155,52 @@ public class Produto extends AppBaseEntity implements Estocavel {
 	public void setPrecoVendaSugerido(BigDecimal precoVendaSugerido) {
 		this.precoVendaSugerido = precoVendaSugerido;
 	}
+	
+	public Estoque getEstoque() {
+		return estoque;
+	}
+	
+	public void setEstoque(Estoque estoque) {
+		this.estoque = estoque;
+	}
+	
+	public Localizacao getLocalizacao() {
+		return localizacao;
+	}
+	
+	public void setLocalizacao(Localizacao localizacao) {
+		this.localizacao = localizacao;
+	}
 
+	
+	/*
+	 * Construtor padrao
+	 */
+	public Produto() {
+	}
+
+	@Override
+	public String toString() {
+		if (getTitulo() != null) {
+			return getTitulo();
+		} else {
+			return "Produto";
+		}
+	}
+
+	
+	
+	@Transient
 	private transient Long idTabela;
-
+	
+	@Transient
 	private transient BigDecimal precoTabela;
 	
+	@Transient
 	private transient String nomeTabela;
+	
+	@Transient
+	private transient Integer quantidadeEstoque; 
 
 	public Long getIdTabela() {
 		return idTabela;
@@ -169,36 +226,6 @@ public class Produto extends AppBaseEntity implements Estocavel {
 		return precoTabela;
 	}
 	
-
-	/*
-	 * Construtor padrao
-	 */
-	public Produto() {
-	}
-
-	@Override
-	public String toString() {
-		if (getTitulo() != null) {
-			return getTitulo();
-		} else {
-			return "Produto";
-		}
-	}
-	
-	@Transient
-	private transient Localizacao localizacao; 
-	
-	public Localizacao getLocalizacao() {
-		return localizacao;
-	}
-	
-	public void setLocalizacao(Localizacao localizacao) {
-		this.localizacao = localizacao;
-	}
-	
-	@Transient
-	private transient Integer quantidadeEstoque; 
-	
 	public Integer getQuantidadeEstoque() {
 		return quantidadeEstoque;
 	}
@@ -206,5 +233,4 @@ public class Produto extends AppBaseEntity implements Estocavel {
 	public void setQuantidadeEstoque(Integer quantidadeEstoque) {
 		this.quantidadeEstoque = quantidadeEstoque;
 	}
-	
 }

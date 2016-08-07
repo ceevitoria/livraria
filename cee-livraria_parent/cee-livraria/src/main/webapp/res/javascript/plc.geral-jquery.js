@@ -1,16 +1,16 @@
 /**
  * plc.geral.jquery
- * Funções javascripts utilizadas pelo jCompany/Jaguar 
- * As funções abaixo, estão dispostas no formato jQuery, dando suporte para o funcionamento do sistema na camada visão.
+ * Funï¿½ï¿½es javascripts utilizadas pelo jCompany/Jaguar 
+ * As funï¿½ï¿½es abaixo, estï¿½o dispostas no formato jQuery, dando suporte para o funcionamento do sistema na camada visï¿½o.
  */
 
 plc = {
 	/**
 	 * Transforma um Form em um Objeto.
-	 * @param form Seletor jQuery, ou DOM do formulário.
-	 * @param preffix Prefixo presente nos elementos do formulário, que deve ser descartado.
+	 * @param form Seletor jQuery, ou DOM do formulï¿½rio.
+	 * @param preffix Prefixo presente nos elementos do formulï¿½rio, que deve ser descartado.
 	 * 
-	 * O Prefixo é comum em JSF. 
+	 * O Prefixo ï¿½ comum em JSF. 
 	 */
 	uriParam:'?evento=y'
 		
@@ -61,13 +61,13 @@ plc = {
 	}
 	/**
 	 * Cria uma nova Janela Dialog do jQuery UI.
-	 * Recebe um objeto de configuração, que deve ter como parâmetro, a url e o tamanho da janela.
+	 * Recebe um objeto de configuraï¿½ï¿½o, que deve ter como parï¿½metro, a url e o tamanho da janela.
 	 * {
 	 * 	url: '...'
 	 *  ,width: ...
 	 *  ,height: ...
 	 * }
-	 * @param Objeto de configuração com URL.
+	 * @param Objeto de configuraï¿½ï¿½o com URL.
 	 * @return Retorna o Objeto jQuery Dialog.
 	 */
 	,janelaModal: function(c, dialogOpener){
@@ -78,7 +78,7 @@ plc = {
 				return window.parent.plc.janelaModal(c, (dialogOpener || window));
 		}
 		var defaultWidth = 720, defaultHeight = 480;
-		//verificando se já existe uma janela modal
+		//verificando se jï¿½ existe uma janela modal
 		var janelas = plc.jq('div[id^=plc-modal]');
 		if (plc.jq('div[id^=plc-modal]').length == 0) {
 			id_modal = 'plc-modal';
@@ -176,10 +176,10 @@ plc = {
 	}
 	/**
 	 * Transforma um Form em um Objeto.
-	 * @param form Seletor jQuery, ou DOM do formulário.
-	 * @param preffix Prefixo presente nos elementos do formulário, que deve ser descartado.
+	 * @param form Seletor jQuery, ou DOM do formulï¿½rio.
+	 * @param preffix Prefixo presente nos elementos do formulï¿½rio, que deve ser descartado.
 	 * 
-	 * O Prefixo é comum em JSF. 
+	 * O Prefixo ï¿½ comum em JSF. 
 	 */
 	,criaSelecaoJqGrid: function(idGrid, idNavegacao, configuracaoGrid){
 		
@@ -330,7 +330,7 @@ plc = {
 						}	
 					}
 					dadosPesquisa = (data && data.rows) || [];
-					// Em caso de chave natural, o objeto não tem ID, e o Grid precisa do ID para identificar a linha
+					// Em caso de chave natural, o objeto nï¿½o tem ID, e o Grid precisa do ID para identificar a linha
 					plc.jq.each(dadosPesquisa, function(i, row){
 						plc.applyToString(row);
 						if (row.id == null && row.idNatural) {
@@ -485,7 +485,7 @@ plc = {
 				};
 			}	
 		}
-		// Pesquisa não intrusiva!
+		// Pesquisa nï¿½o intrusiva!
 		plc.jq(seletorBotaoPesquisar).removeAttr("onclick").click(pesquisar);
 		var larg; 
 		if (NavYes) { 
@@ -494,7 +494,7 @@ plc = {
 			larg = 0.965;
 		}
 		
-		// Sempre quando a tabela termina de ser carregada a sua altura é reajustada basedo
+		// Sempre quando a tabela termina de ser carregada a sua altura ï¿½ reajustada basedo
 		// na quantidade de linhas
 		reajustaAltura = function() {
 			plc.jq(".ui-jqgrid-bdiv").css("height", plc.jq("#plc-grid tr").length * 26);
@@ -695,7 +695,7 @@ plc = {
 		}
 	} 
 	/**
-	 * Exibe mensagem no cabeçalho da aplicação. Se a mensagem que for enviada for nula, o cabeçalho será limpado
+	 * Exibe mensagem no cabeï¿½alho da aplicaï¿½ï¿½o. Se a mensagem que for enviada for nula, o cabeï¿½alho serï¿½ limpado
 	 */
 	,mensagem: function( type, msg, clear, classMsg, classIcon, container ) {
 		// funcao que adiciona uma mensagem.
@@ -724,7 +724,7 @@ plc = {
 		} else {
 			type = !!type;
 		}
-		// Possibilita forçar o container de mensagens.
+		// Possibilita forï¿½ar o container de mensagens.
 		// Se nao informar, procura pelos divs de plc-msg-* dentro do #plc-mensagem
 		// Itera em todas os DIVS containers de mensagens.
 		plc.jq( container || "#plc-mensagem" ).children( "div" ).each(function( ){
@@ -738,7 +738,7 @@ plc = {
 					if ( msg === false ) {
 						$msg.empty( );
 					} else if ( msg !== true ) {
-						// mensagem(type, "msg", false) não limpa mensagens anteriores.
+						// mensagem(type, "msg", false) nï¿½o limpa mensagens anteriores.
 						if ( clear !== false ) {
 							$msg.empty( ).hide( );
 						}
@@ -764,7 +764,7 @@ plc = {
 	}
 
 	/**
-	 * Defini uma tecla de atalho, correspondendo a alguma ação do jCompany.
+	 * Defini uma tecla de atalho, correspondendo a alguma aï¿½ï¿½o do jCompany.
 	 */
 	,hotkey: function( hotkey, acao ) {
 		
@@ -773,7 +773,7 @@ plc = {
 			plc.jq(document).bind('keydown', hotkey,function (evt){acao(); return false; });
 		} else {
 			var botao = eval(selBotao(acao));
-			//se o botao for null é porque não achou ou é um link
+			//se o botao for null ï¿½ porque nï¿½o achou ou ï¿½ um link
 			if (botao == null) {
 				botao = plc.jq("#" + acao);
 			}	

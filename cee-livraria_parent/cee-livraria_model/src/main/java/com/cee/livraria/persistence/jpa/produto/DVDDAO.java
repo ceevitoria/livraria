@@ -3,6 +3,7 @@ package com.cee.livraria.persistence.jpa.produto;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.produto.DVD;
 import com.cee.livraria.persistence.jpa.AppJpaDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
@@ -35,7 +36,8 @@ public class DVDDAO extends AppJpaDAO  {
 		@PlcQueryParameter(name="artista", expression="obj.artista like '%' || :artista|| '%' ") String artista,
 		@PlcQueryParameter(name="gravadora", expression="obj.gravadora like '%' || :gravadora|| '%' ") String gravadora,
 		@PlcQueryParameter(name="palavrasChave", expression="obj.palavrasChave like '%' || :palavrasChave || '%' ") String palavrasChave,
-		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal precoUltCompra
+		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal precoUltCompra,
+		@PlcQueryParameter(name="localizacao", expression="obj.localizacao = :localizacao") Localizacao localizacao
 	);
 
 	@PlcQuery("querySel")
@@ -47,6 +49,7 @@ public class DVDDAO extends AppJpaDAO  {
 		@PlcQueryParameter(name="artista", expression="obj.artista like '%' || :artista|| '%' ") String artista,
 		@PlcQueryParameter(name="gravadora", expression="obj.gravadora like '%' || :gravadora|| '%' ") String gravadora,
 		@PlcQueryParameter(name="palavrasChave", expression="obj.palavrasChave like '%' || :palavrasChave || '%' ") String palavrasChave,
-		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal preco
+		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal preco,
+		@PlcQueryParameter(name="localizacao", expression="obj.localizacao = :localizacao") Localizacao localizacao
 	);
 }

@@ -24,7 +24,7 @@
 		<class>com.cee.livraria.entity.tabpreco.TabelaPrecoEntity</class>
 		<class>com.cee.livraria.entity.tabpreco.ItemTabelaEntity</class>
 		<class>com.cee.livraria.entity.tabpreco.Precificacao</class>
-		<class>com.cee.livraria.entity.estoque.EstoqueEntity</class>
+		<class>com.cee.livraria.entity.estoque.Estoque</class>
 		<class>com.cee.livraria.entity.estoque.MovimentoEntity</class>
 		<class>com.cee.livraria.entity.estoque.ItemMovimentoEntity</class>
 		<class>com.cee.livraria.entity.caixa.CaixaEntity</class>

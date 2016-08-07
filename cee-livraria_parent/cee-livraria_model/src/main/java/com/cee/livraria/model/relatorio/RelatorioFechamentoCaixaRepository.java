@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,6 +90,7 @@ public class RelatorioFechamentoCaixaRepository extends PlcBaseRepository {
 		return dadosFechamentoCaixa;
 	}
 
+	@SuppressWarnings("unchecked")
 	private List<CaixaFormaPagto> recuperaDadosFormaPagamento(PlcBaseContextVO context, Caixa caixa) throws PlcException {
 		// Recupera todos as conforme filtro e paginação definida na tela de seleção
 		CaixaFormaPagto arg = new CaixaFormaPagtoEntity();

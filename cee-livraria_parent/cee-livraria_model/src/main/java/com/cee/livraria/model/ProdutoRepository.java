@@ -8,9 +8,7 @@ import java.util.List;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.estoque.Estoque;
-import com.cee.livraria.entity.estoque.EstoqueEntity;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.persistence.jpa.produto.ProdutoDAO;
@@ -53,74 +51,68 @@ public class ProdutoRepository extends PlcBaseRepository {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void realizaInclusaoEstoque(PlcBaseContextVO context, Produto produto) throws PlcException {
-		List<Estoque> estoqueList = dao.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
-		List<Localizacao> localizacaoList = dao.findByFields(context, Localizacao.class, "queryCaixaEntrada", new String[] {"codigo"}, new String[] {"Novos Produtos"});
-
-		if (estoqueList != null) {
+//		List<Estoque> estoqueList = dao.findByFields(context, Estoque.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
 		
-			if (estoqueList.size() == 0) {
-				Estoque estoque = new EstoqueEntity();
-				estoque.setProduto(produto);
+		if (produto != null) {
+			Estoque estoque = dao.obterEstoqueProduto(context, produto);
+		
+			if (estoque == null) {
+				estoque = new Estoque();
+	
 				estoque.setQuantidadeMinima(1);
 				estoque.setQuantidade(0);
 				estoque.setQuantidadeMaxima(20);
 				estoque.setDataConferencia(null);
 				
-				if (localizacaoList.size() == 0) {
-					throw new PlcException("{produto.erro.localizacao.entrada.inexistente}");
-				}
-				
-				Localizacao localizacao = localizacaoList.get(0);
-				estoque.setLocalizacao(localizacao);
+//				List<Localizacao> localizacaoList = dao.findByFields(context, Localizacao.class, "queryCaixaEntrada", new String[] {"codigo"}, new String[] {"Novos Produtos"});
+//				
+//				if (localizacaoList.size() == 0) {
+//					throw new PlcException("{produto.erro.localizacao.entrada.inexistente}");
+//				}
+//				
+//				Localizacao localizacao = localizacaoList.get(0);
+//				estoque.setLocalizacao(localizacao);
 				
 				estoque.setDataUltAlteracao(new Date());
 				estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
 				
 				dao.insert(context, estoque);
+				
+				produto.setEstoque(estoque);
+				dao.update(context, produto);
 			}
 		}
 		
 	}
 
 	private void verificaExclusaoEstoque(PlcBaseContextVO context, Produto produto) throws PlcException {
-		List<Estoque> estoqueList = dao.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
+//		List<Estoque> estoqueList = dao.findByFields(context, Estoque.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
 
-		if (estoqueList != null) {
+		if (produto != null) {
+			Estoque estoque = dao.obterEstoqueProduto(context, produto);
 		
-			if (estoqueList.size() == 1) {
-				Estoque estoque = estoqueList.get(0);
+			if (estoque != null) {
+				estoque = produto.getEstoque();
 				dao.delete(context, estoque);
 			}
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Collection recuperaProdutos(PlcBaseContextVO context, Produto arg, String orderByDinamico, int inicio, int total) throws PlcException {
 		List<Produto> produtosRetorno = new ArrayList<Produto>();  
 		
-		// Recupera todos os projetos conforme filtro e paginação definida na tela de seleção
-		List<Produto> produtosEncontrados = dao.findList(context, orderByDinamico, 0, 0,
-				arg.getCodigoBarras(), arg.getTitulo(), arg.getPalavrasChave(), arg.getTipoProduto(), arg.getPrecoUltCompra());
+		// Recupera todos os produtos conforme filtro e paginação definida na tela de seleção
+		List<Produto> produtosEncontrados = null;
 
-		List<Estoque> estoqueLista = new ArrayList<Estoque>(produtosEncontrados.size());
+//		produtosEncontrados = dao.findList(context, orderByDinamico, inicio, total, arg.getCodigoBarras(), arg.getTitulo(), arg.getPalavrasChave(), arg.getTipoProduto(), arg.getPrecoUltCompra(), arg.getLocalizacao());
+		produtosEncontrados = (List<Produto>)dao.findList(context, arg, orderByDinamico, inicio, total);
+
 		
 		for (Produto produto: produtosEncontrados) {
-			List<Estoque> estoquesProduto = dao.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
-			
-			int quantidade = 0;
-			Localizacao localizacao = null; 
-			
-			for (Estoque estoque : estoquesProduto) {
-				quantidade += estoque.getQuantidade();
-				
-				if (localizacao == null) {
-					localizacao = estoque.getLocalizacao();
-				}
-			}
-			
-			produto.setQuantidadeEstoque(quantidade);
-			produto.setLocalizacao(localizacao);
-			
+
 			PrecoTabela precoTabela = dao.obterPrecoTabela(context, produto.getId());
 			
 			if (precoTabela != null && precoTabela.getIdTabela() != null) {
@@ -130,18 +122,14 @@ public class ProdutoRepository extends PlcBaseRepository {
 				produto.setPrecoVendaSugerido(precoTabela.getPrecoTabela());
 			}
 			
-			// Se foi informado o critério de Localizacao, só retorna os produtos que pertencem à localizacao informada
-			if (produtosRetorno.size() < total && 
-					(arg.getLocalizacao() == null || 
-					(produto.getLocalizacao() != null && 
-					(arg.getLocalizacao().getId().compareTo(produto.getLocalizacao().getId())) == 0))) {
-
-				produtosRetorno.add(produto);
-			}
+			Estoque estoque = dao.obterEstoqueProduto(context, produto);
+			produto.setEstoque(estoque);
+			produto.setQuantidadeEstoque(estoque.getQuantidade());
+			
+			produtosRetorno.add(produto);
 		}
 		
 		return produtosRetorno;
 	}
-	
 	
 }

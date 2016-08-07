@@ -3,18 +3,14 @@ package com.cee.livraria.persistence.jpa.produto;
 import java.math.BigDecimal;
 import java.util.List;
 
-import javax.persistence.NoResultException;
-
 import com.cee.livraria.entity.Autor;
 import com.cee.livraria.entity.Colecao;
 import com.cee.livraria.entity.Editora;
 import com.cee.livraria.entity.Espirito;
+import com.cee.livraria.entity.Localizacao;
 import com.cee.livraria.entity.produto.Livro;
-import com.cee.livraria.entity.produto.Produto;
-import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.persistence.jpa.AppJpaDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
-import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.commons.annotation.PlcAggregationDAOIoC;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcDataAccessObject;
 import com.powerlogic.jcompany.persistence.jpa.PlcQuery;
@@ -48,7 +44,8 @@ public class LivroDAO extends AppJpaDAO  {
 		@PlcQueryParameter(name="autor", expression="obj2 = :autor") Autor autor,
 		@PlcQueryParameter(name="editora", expression="obj3 = :editora") Editora editora,
 		@PlcQueryParameter(name="colecao", expression="obj4 = :colecao") Colecao colecao,
-		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal precoUltCompra
+		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal precoUltCompra,
+		@PlcQueryParameter(name="localizacao", expression="obj.localizacao = :localizacao") Localizacao localizacao
 	);
 
 	@PlcQuery("querySel")
@@ -64,7 +61,8 @@ public class LivroDAO extends AppJpaDAO  {
 		@PlcQueryParameter(name="autor", expression="obj2 = :autor") Autor autor,
 		@PlcQueryParameter(name="editora", expression="obj3 = :editora") Editora editora,
 		@PlcQueryParameter(name="colecao", expression="obj4 = :colecao") Colecao colecao,
-		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal preco
+		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal preco,
+		@PlcQueryParameter(name="localizacao", expression="obj.localizacao = :localizacao") Localizacao localizacao		
 	);
 	
 }

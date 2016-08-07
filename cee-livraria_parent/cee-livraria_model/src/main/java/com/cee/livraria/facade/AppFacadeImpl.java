@@ -1,7 +1,6 @@
 package com.cee.livraria.facade;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,7 +14,6 @@ import com.cee.livraria.entity.caixa.TipoMovimentoCaixa;
 import com.cee.livraria.entity.compra.NotaFiscal;
 import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.estoque.Estoque;
-import com.cee.livraria.entity.estoque.EstoqueEntity;
 import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.pagamento.PagamentoList;
@@ -90,6 +88,31 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 	}
 	
 	@PlcTransactional(commit=false)
+	public Long findCountProduto(PlcBaseContextVO context, Produto entidadeArg) throws PlcException {
+		Long count = null;
+		
+		if (entidadeArg.getLocalizacao() == null) {
+			count = produtoDAO.findCount(context, entidadeArg);
+		} else {
+			count = produtoDAO.findCount(context, entidadeArg.getCodigoBarras(), entidadeArg.getTitulo(), entidadeArg.getPalavrasChave(), entidadeArg.getTipoProduto(), entidadeArg.getPrecoVendaSugerido(), entidadeArg.getLocalizacao());
+		}
+		
+		return count; 
+	}
+
+	@PlcTransactional(commit=false)
+	@Override
+	public Estoque obterEstoqueProduto(PlcBaseContextVO context, Produto produto) throws PlcException {
+		return produtoDAO.obterEstoqueProduto(context, produto);
+	}
+	
+	@PlcTransactional(commit=false)
+	@Override
+	public Localizacao obterLocalizacaoProduto(PlcBaseContextVO context, Produto produto) throws PlcException {
+		return produtoDAO.obterLocalizacaoProduto(context, produto);
+	}
+	
+	@PlcTransactional(commit=false)
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
 	@Override
 	public PrecoTabela findPrecoTabela(PlcBaseContextVO context, Long idProduto) throws PlcException {
@@ -138,49 +161,49 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 		return ajusteEstoqueRepository.concluirAjusteEstoque(context, ajusteEstoque);
 	}
 
-	@PlcTransactional(commit=false)
-	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
-	@Override
-	public List<Estoque> buscarProdutosEstoque(PlcBaseContextVO context, List<Produto> listaProdutos) throws PlcException {
-		List<Estoque> estoqueLista = new ArrayList<Estoque>(listaProdutos.size());
-		
-		for (Produto produto: listaProdutos) {
-			List<Estoque> itens = produtoDAO.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
-			estoqueLista.addAll(itens);
-		}
-		
-		return estoqueLista;
-	}
+//	@PlcTransactional(commit=false)
+//	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
+//	@Override
+//	public List<Estoque> buscarProdutosEstoque(PlcBaseContextVO context, List<Produto> listaProdutos) throws PlcException {
+//		List<Estoque> estoqueLista = new ArrayList<Estoque>(listaProdutos.size());
+//		
+//		for (Produto produto: listaProdutos) {
+//			List<Estoque> itens = produtoDAO.findByFields(context, Estoque.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
+//			estoqueLista.addAll(itens);
+//		}
+//		
+//		return estoqueLista;
+//	}
 
-	@PlcTransactional(commit=false)
-	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
-	@Override
-	public List<Estoque> buscarProdutosEstoquePorLocalizacao(PlcBaseContextVO context, List<Produto> listaProdutos, Localizacao localizacao) throws PlcException {
-		List<Estoque> estoqueLista = new ArrayList<Estoque>(listaProdutos.size());
-		
-		for (Produto produto: listaProdutos) {
-			List<Estoque> itens = produtoDAO.findByFields(context, EstoqueEntity.class, "querySelByProdutoAndLocalizacao", new String[] {"produto", "localizacao"}, new Object[] {produto, localizacao});
-			estoqueLista.addAll(itens);
-		}
-		
-		return estoqueLista;
-	}
+//	@PlcTransactional(commit=false)
+//	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
+//	@Override
+//	public List<Estoque> buscarProdutosEstoquePorLocalizacao(PlcBaseContextVO context, List<Produto> listaProdutos, Localizacao localizacao) throws PlcException {
+//		List<Estoque> estoqueLista = new ArrayList<Estoque>(listaProdutos.size());
+//		
+//		for (Produto produto: listaProdutos) {
+//			List<Estoque> itens = produtoDAO.findByFields(context, Estoque.class, "querySelByProdutoAndLocalizacao", new String[] {"produto", "localizacao"}, new Object[] {produto, localizacao});
+//			estoqueLista.addAll(itens);
+//		}
+//		
+//		return estoqueLista;
+//	}
 
-	@PlcTransactional(commit=false)
-	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
-	@Override
-	public List<Estoque> buscarProdutosEstoquePorLocalizacao(PlcBaseContextVO context, Produto produtoArg, Localizacao localizacao) throws PlcException {
-		produtoArg.setLocalizacao(null);
-		
-		Estoque estoqueArg = new EstoqueEntity();
-		
-		estoqueArg.setProduto(produtoArg);
-		estoqueArg.setLocalizacao(localizacao);
-		
-		List<Estoque> itens = dao.findList(context, estoqueArg, null, 0, 0);
-		
-		return itens;
-	}
+//	@PlcTransactional(commit=false)
+//	@TransactionAttribute(javax.ejb.TransactionAttributeType.NOT_SUPPORTED)
+//	@Override
+//	public List<Estoque> buscarProdutosEstoquePorLocalizacao(PlcBaseContextVO context, Produto produtoArg, Localizacao localizacao) throws PlcException {
+//		produtoArg.setLocalizacao(null);
+//		
+//		Estoque estoqueArg = new Estoque();
+//		
+//		estoqueArg.setProduto(produtoArg);
+//		estoqueArg.setLocalizacao(localizacao);
+//		
+//		List<Estoque> itens = dao.findList(context, estoqueArg, null, 0, 0);
+//		
+//		return itens;
+//	}
 
 	@PlcTransactional(commit=true)
 	@TransactionAttribute(javax.ejb.TransactionAttributeType.REQUIRED)

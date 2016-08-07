@@ -2,35 +2,38 @@ package com.cee.livraria.entity.estoque;
 
 import java.util.Date;
 
-import javax.persistence.FetchType;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.ForeignKey;
-
 import com.cee.livraria.entity.AppBaseEntity;
-import com.cee.livraria.entity.Localizacao;
-import com.cee.livraria.entity.produto.Produto;
+import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 
-@MappedSuperclass
-public abstract class Estoque extends AppBaseEntity {
+@SPlcEntity
+@Entity
+@Table(name = "ESTOQUE")
+@SequenceGenerator(name = "SE_ESTOQUE", sequenceName = "SE_ESTOQUE")
+@Access(AccessType.FIELD)
+@NamedQueries({ 
+	@NamedQuery(name = "Estoque.querySel", query = "select obj.id, obj.quantidade, obj.dataConferencia from Estoque obj order by obj.quantidade asc"),
+	@NamedQuery(name = "Estoque.querySelLookup", query = "select id as id, quantidade as quantidade from Estoque where id = ? order by id asc")})
+public class Estoque extends AppBaseEntity {
 	private static final long serialVersionUID = -1730467297686228589L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SE_ESTOQUE")
 	private Long id;
-
-	@ManyToOne(targetEntity = Produto.class, fetch = FetchType.EAGER)
-	@ForeignKey(name = "FK_ESTOQUE_PRODUTO")
-	@NotNull
-	private Produto produto;
 
 	@NotNull
 	@Digits(integer = 5, fraction = 0)
@@ -47,25 +50,12 @@ public abstract class Estoque extends AppBaseEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataConferencia;
 
-	@ManyToOne(targetEntity = Localizacao.class, fetch = FetchType.EAGER)
-	@ForeignKey(name = "FK_ESTOQUE_LOCALIZACAO")
-	@NotNull
-	private Localizacao localizacao;
-	
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Produto getProduto() {
-		return produto;
-	}
-
-	public void setProduto(Produto produto) {
-		this.produto = produto;
 	}
 
 	public Integer getQuantidade() {
@@ -100,13 +90,6 @@ public abstract class Estoque extends AppBaseEntity {
 		this.dataConferencia = dataConferencia;
 	}
 
-	public Localizacao getLocalizacao() {
-		return localizacao;
-	}
-	
-	public void setLocalizacao(Localizacao localizacao) {
-		this.localizacao = localizacao;
-	}
 }
 
 

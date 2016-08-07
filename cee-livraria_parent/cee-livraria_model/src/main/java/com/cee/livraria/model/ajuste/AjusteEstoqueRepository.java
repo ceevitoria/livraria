@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import com.cee.livraria.entity.config.AjusteEstoqueConfig;
 import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.estoque.Estoque;
-import com.cee.livraria.entity.estoque.EstoqueEntity;
 import com.cee.livraria.entity.estoque.ItemMovimento;
 import com.cee.livraria.entity.estoque.ItemMovimentoEntity;
 import com.cee.livraria.entity.estoque.ModoMovimento;
@@ -24,11 +23,11 @@ import com.cee.livraria.entity.estoque.ajuste.ItemAjusteEstoque;
 import com.cee.livraria.entity.estoque.ajuste.StatusAjuste;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.persistence.jpa.ajuste.AjusteEstoqueDAO;
+import com.cee.livraria.persistence.jpa.produto.ProdutoDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.commons.annotation.PlcAggregationIoC;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcRepository;
-import com.powerlogic.jcompany.domain.type.PlcYesNo;
 import com.powerlogic.jcompany.model.PlcBaseRepository;
 
 /**
@@ -41,6 +40,9 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 
 	@Inject
 	private AjusteEstoqueDAO dao;
+	
+	@Inject
+	private ProdutoDAO produtoDAO;
 
 	@Inject
 	protected transient Logger log;
@@ -77,6 +79,7 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 		return new RetornoConfig(null, config, alertas, mensagens);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	private void carregaConfiguracao(PlcBaseContextVO context) throws PlcException {
 		List listaConfig = (List)dao.findAll(context, AjusteEstoqueConfig.class, null);
 		
@@ -188,16 +191,12 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 	}
 	
 	private void insereEstoque(PlcBaseContextVO context, ItemAjusteEstoque itemAjuste, Date data)  throws PlcException {
-		Produto produto = itemAjuste.getProduto();
-
-		Estoque estoque = new EstoqueEntity();
+		Estoque estoque = new Estoque();
 		
-		estoque.setProduto(produto);
 		estoque.setQuantidadeMinima(1);
 		estoque.setQuantidade(itemAjuste.getQuantidadeInformada());
 		estoque.setQuantidadeMaxima(20);
 		estoque.setDataConferencia(data);
-		estoque.setLocalizacao(itemAjuste.getLocalizacao());
 		
 		estoque.setDataUltAlteracao(data);
 		estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
@@ -213,7 +212,6 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 	 * @return quantidade vendida de produtos
 	 * @throws PlcException
 	 */
-	@SuppressWarnings("unchecked")
 	private void atualizaEstoque(PlcBaseContextVO context, AjusteEstoque ajusteEstoque, Date dataAjuste) throws PlcException {
 		List<ItemAjusteEstoque> itensAjusteEstoque = ajusteEstoque.getItemAjusteEstoque();
 		
@@ -237,48 +235,51 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 				}
 				
 				if (qtdSaldo != 0 || (itemAjuste.getLocalizacao() != null && itemAjuste.getLocalizacao().getId() != null)) {
-					List<Estoque> lista = (List<Estoque>)dao.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[]{"produto"}, new Object[]{itemAjuste.getProduto()});
+					boolean precisaAtualizaProduto = false;
+					Produto produto = (Produto)dao.findById(context, Produto.class, itemAjuste.getProduto().getId());
+//					List<Estoque> estoqueList = dao.findByFields(context, Estoque.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
 					
-					if (lista != null && lista.size() == 1) {
-						Estoque estoque = (Estoque)lista.get(0);
+					if (produto != null && produto.getEstoque() != null) {
+						Estoque estoque = produtoDAO.obterEstoqueProduto(context, produto);
 						
 						if (itemAjuste.getQuantidadeInformada() != null) {
 							estoque.setQuantidade(itemAjuste.getQuantidadeInformada());
 						}
 						
-						estoque.setLocalizacao(itemAjuste.getLocalizacao());
 						estoque.setDataConferencia(dataAjuste);
-						
-//						if (PlcYesNo.S.equals(config.getUtilizaLocalizacaoProdutos()) ) {
-//							
-//							if (PlcYesNo.S.equals(config.getAjusteAutomaticoLocalizacaoProdutos())) {
-//								estoque.setLocalizacao(itemAjuste.getLocalizacao());
-//							} else {
-//								
-//								if (estoque.getLocalizacao().getId().compareTo(itemAjuste.getLocalizacao().getId()) != 0) {
-//									throw new PlcException("ajusteEstoque.err.item.localizacao.divergente", 
-//										new Object[] {estoque.getProduto().getTitulo()});
-//								}
-//							}
-//						}
-						
 						estoque.setDataUltAlteracao(dataAjuste);
 						estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
 	
 						dao.update(context, estoque);
-					} else if (lista.size() == 0) {
-						Estoque estoque = new EstoqueEntity();
 						
-						estoque.setProduto(itemAjuste.getProduto());
+					} else if (produto != null && produto.getEstoque() == null) {
+						Estoque estoque = new Estoque();
+						
 						estoque.setQuantidade(itemAjuste.getQuantidadeInformada());
 						estoque.setQuantidadeMinima(1);
 						estoque.setQuantidadeMaxima(50);
-						estoque.setLocalizacao(itemAjuste.getLocalizacao());
 						estoque.setDataConferencia(dataAjuste);
 						estoque.setDataUltAlteracao(dataAjuste);
 						estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
 	
 						dao.insert(context, estoque);
+						
+						produto.setEstoque(estoque);
+						precisaAtualizaProduto = true;
+					}
+					
+					if (itemAjuste.getLocalizacao() != null && produto.getLocalizacao() == null) {
+						produto.setLocalizacao(itemAjuste.getLocalizacao());
+						precisaAtualizaProduto = true;
+					} else if (itemAjuste.getLocalizacao() != null && produto.getLocalizacao().getId().compareTo(itemAjuste.getLocalizacao().getId()) != 0) {
+						produto.setLocalizacao(itemAjuste.getLocalizacao());
+						precisaAtualizaProduto = true;
+					}
+
+					if (precisaAtualizaProduto) {
+						produto.setDataUltAlteracao(dataAjuste);
+						produto.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
+						dao.update(context, produto);
 					}
 				}
 			}

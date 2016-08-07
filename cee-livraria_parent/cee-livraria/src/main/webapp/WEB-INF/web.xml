@@ -171,7 +171,6 @@
   <filter-name>CorsFilter</filter-name>
   <url-pattern>/soa/*</url-pattern>
 </filter-mapping>
-
  <!-- Comentar se estiver no TOMCAT 6 - FIM --> 
   
   <!-- Listerner Reasteasy: auto complete e rest 

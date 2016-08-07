@@ -23,7 +23,6 @@ import com.cee.livraria.entity.compra.StatusNotaFiscal;
 import com.cee.livraria.entity.config.AjusteEstoqueConfig;
 import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.estoque.Estoque;
-import com.cee.livraria.entity.estoque.EstoqueEntity;
 import com.cee.livraria.entity.estoque.ItemMovimento;
 import com.cee.livraria.entity.estoque.ItemMovimentoEntity;
 import com.cee.livraria.entity.estoque.ModoMovimento;
@@ -32,6 +31,7 @@ import com.cee.livraria.entity.estoque.MovimentoEntity;
 import com.cee.livraria.entity.estoque.TipoMovimento;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.persistence.jpa.notafiscal.NotaFiscalDAO;
+import com.cee.livraria.persistence.jpa.produto.ProdutoDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.commons.annotation.PlcAggregationIoC;
@@ -48,6 +48,9 @@ import com.powerlogic.jcompany.model.bindingtype.PlcUpdateBefore;
 @PlcAggregationIoC(clazz=NotaFiscal.class)
 public class NotaFiscalRepository extends PlcBaseRepository {
 
+	@Inject
+	private ProdutoDAO produtoDAO;
+	
 	@Inject
 	private NotaFiscalDAO dao;
 
@@ -163,6 +166,7 @@ public class NotaFiscalRepository extends PlcBaseRepository {
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	private void validaValoresNota(PlcBaseContextVO context, NotaFiscal notaFiscal, Date dataRegistro) throws PlcException {
 		BigDecimal valorTotalItens = new BigDecimal("0.00");
 
@@ -324,23 +328,21 @@ public class NotaFiscalRepository extends PlcBaseRepository {
 		dao.insert(context, mov);
 	}
 	
-	private void insereEstoque(PlcBaseContextVO context, ItemNotaFiscal item, Date data, Localizacao localizacaoPadrao)  throws PlcException {
-		Produto produto = item.getProduto();
+	private Estoque insereEstoque(PlcBaseContextVO context, ItemNotaFiscal item, Date data, Localizacao localizacaoPadrao)  throws PlcException {
 
-		Estoque estoque = new EstoqueEntity();
+		Estoque estoque = new Estoque();
 		
-		estoque.setProduto(produto);
 		estoque.setQuantidadeMinima(1);
 		estoque.setQuantidade(item.getQuantidade());
 		estoque.setQuantidadeMaxima(20);
 		estoque.setDataConferencia(data);
 		
-		estoque.setLocalizacao(item.getLocalizacao() != null ? item.getLocalizacao() : localizacaoPadrao);
-		
 		estoque.setDataUltAlteracao(data);
 		estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
 		
 		dao.insert(context, estoque);
+		
+		return estoque;		
 	}
 
 	/**
@@ -350,8 +352,7 @@ public class NotaFiscalRepository extends PlcBaseRepository {
 	 * @throws PlcException
 	 */
 	private void atualizaEstoque(PlcBaseContextVO context, NotaFiscal notaFiscal, Date dataRegistro) throws PlcException {
-		int qtEstoque = 0;
-
+		@SuppressWarnings("unchecked")
 		List<Localizacao> localizacaoList = dao.findByFields(context, Localizacao.class, "queryCaixaEntrada", new String[] {"codigo"}, new String[] {"Novos Produtos"});
 
 		if (localizacaoList.size() == 0) {
@@ -362,29 +363,15 @@ public class NotaFiscalRepository extends PlcBaseRepository {
 			ItemNotaFiscal itemNF = (ItemNotaFiscal)o;
 
 			if (itemNF.getProduto() != null) {
-				@SuppressWarnings("unchecked")
-				List<Estoque> lista = (List<Estoque>)dao.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[]{"produto"}, new Object[]{itemNF.getProduto()});
+				Produto produto = itemNF.getProduto();
+				Estoque estoque = produtoDAO.obterEstoqueProduto(context, produto);
 				
-				if (lista != null) {
-					
-					if (lista.size() == 0) {
-						insereEstoque(context, itemNF, dataRegistro, localizacaoList.get(0));
-					} else if (lista.size() == 1) {
-						Estoque estoque = (Estoque)lista.get(0);
-						
-						qtEstoque = estoque.getQuantidade() + itemNF.getQuantidade();
-						
-						estoque.setQuantidade(qtEstoque);
-						
-						estoque.setDataUltAlteracao(dataRegistro);
-						estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
-						
-						dao.update(context, estoque);
-					} else {
-						throw new PlcException("{compra.erro.estoque.inconsistente}", new Object[]{itemNF.getProduto().getCodigoBarras(), itemNF.getProduto().getTitulo()});
-					}
+				if (estoque != null) {
+					estoque.setQuantidade(estoque.getQuantidade() + itemNF.getQuantidade());
 				} else {
-					throw new PlcException("{compra.erro.estoque.produto.inexistente}", new Object[]{itemNF.getProduto().getCodigoBarras(), itemNF.getProduto().getTitulo()});
+					estoque = insereEstoque(context, itemNF, dataRegistro, localizacaoList.get(0));
+					produto.setEstoque(estoque);
+					dao.update(context, estoque);
 				}
 			}
 		}

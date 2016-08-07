@@ -51,6 +51,9 @@
 						plc.jq("#corpo\\:formulario\\:tipoProduto").on("change", function() {
 							plc.jq( "#corpo\\:formulario\\:botaoAcaoPesquisar" ).trigger( "click" );
 						});
+						plc.jq("#corpo\\:formulario\\:localizacao").on("change", function() {
+							plc.jq( "#corpo\\:formulario\\:botaoAcaoPesquisar" ).trigger( "click" );
+						});
 						plc.jq(document).keydown(function(e) {
 							if(e.which == 13) {
 								plc.jq( "#corpo\\:formulario\\:botaoAcaoPesquisar" ).trigger( "click" );
@@ -79,8 +82,8 @@
 					{name:'titulo',index:'titulo', width:'250px'},
 					{name:'palavrasChave',index:'palavrasChave', width:'100px'},
 					{name:'precoVendaSugerido',index:'precoVendaSugerido', width:'30px', align:'right'},
-					{name:'quantidadeEstoque',index:'quantidadeEstoque', width:'30px', align:'center', sortable:false},
-					{name:'localizacao',index:'localizacao', width:'40px', align:'center', sortable:false}]},
+					{name:'quantidadeEstoque',index:'quantidadeEstoque', width:'30px', align:'center'},
+					{name:'localizacao',index:'localizacao', width:'40px', align:'center'}]},
 			urlEdicao:'#{request.contextPath}/f/n/produtoman'});});//]]> </script>  
 					<table id="plc-grid" width="100%" class="scroll" cellpadding="0" cellspacing="0"/>  
 					<div id="plc-grid-navegador" class="scroll" style="text-align:center;"/> 

@@ -1,8 +1,5 @@
 package com.cee.livraria.controller.jsf.conferencia;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.enterprise.inject.Produces;
@@ -168,6 +165,7 @@ public class ConferenciaMB extends AppMB {
 		return ret;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private String buscarItens() {
 		
 		if (this.entityPlc!=null) {
@@ -204,22 +202,9 @@ public class ConferenciaMB extends AppMB {
 					msgUtil.msg("{conferencia.err.buscar.muitosItensExistentes}", new Object[] {contaProdutos}, PlcMessage.Cor.msgVermelhoPlc.name());
 					ok = false;
 				} else {
-					List<Produto> produtos = (List<Produto>)iocControleFacadeUtil.getFacade().findList(context, produtoArg, plcControleConversacao.getOrdenacaoPlc(), 0, 0);
-					List<Estoque> estoques = null;
-					
-					if (regra.getLocalizacao() == null) {
-						estoques = (List<Estoque>) iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoque(context, produtos);
-					} else {
-						estoques = (List<Estoque>) iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoquePorLocalizacao(context, produtos, regra.getLocalizacao());
-					}
-
-					Comparator<Estoque> comparator = new Comparator<Estoque>() {
-						public int compare(Estoque o1, Estoque o2) {
-							return o1.getProduto().getTitulo().compareTo(o2.getProduto().getTitulo());
-						}
-					};
-
-					Collections.sort(estoques, comparator);
+					Estoque estoque;
+					produtoArg.setLocalizacao(regra.getLocalizacao());
+					List<Produto> produtos = (List<Produto>)iocControleFacadeUtil.getFacade(IAppFacade.class).recuperarProdutos(context, produtoArg, plcControleConversacao.getOrdenacaoPlc(), 0, 0);
 					
 					int totalExistente = 0;
 					
@@ -235,23 +220,15 @@ public class ConferenciaMB extends AppMB {
 							}
 						}
 
-						Estoque itemEstoque = null;
+						estoque = produto.getEstoque();
 						
-						for (Estoque estoque : estoques) {
-							
-							if (produto.getId().compareTo(estoque.getProduto().getId())==0) {
-								itemEstoque = estoque;
-								break;
-							}
-						}
-						
-						if ((!existe && regra.getLocalizacao() == null) || (!existe && regra.getLocalizacao() != null && itemEstoque != null)) {
-							ItemConferencia itemConferencia = criaNovoItem(conferencia, produto, itemEstoque);
+						if (!existe && estoque != null) {
+							ItemConferencia itemConferencia = criaNovoItem(conferencia, produto, estoque);
 							listaItensExistentes.add(itemConferencia);
 						}
 					}
 					
-					msgUtil.msg("{conferencia.ok.buscar}", new Object[] {estoques.size()-totalExistente}, PlcMessage.Cor.msgAzulPlc.name());
+					msgUtil.msg("{conferencia.ok.buscar}", new Object[] {produtos.size()-totalExistente}, PlcMessage.Cor.msgAzulPlc.name());
 					msgUtil.msg("{conferencia.lembrar.gravar}", PlcMessage.Cor.msgAmareloPlc.name());
 					
 					plcControleConversacao.setAlertaAlteracaoPlc("S");
@@ -262,28 +239,6 @@ public class ConferenciaMB extends AppMB {
 		return baseEditMB.getDefaultNavigationFlow(); 
 	}
 	
-	private void carregaEstoqueProdutos(PlcBaseContextVO context , List<ItemConferencia> itensConferencia) {
-		List<Produto> produtos = new ArrayList<Produto>(itensConferencia.size());
-		
-		for (ItemConferencia itemConferencia : itensConferencia) {
-			produtos.add(itemConferencia.getProduto());
-		}
-		
-		List<Estoque> estoques = (List<Estoque>)iocControleFacadeUtil.getFacade(IAppFacade.class).buscarProdutosEstoque(context, produtos);
-		
-		for (Estoque itemEstoque : estoques) {
-			
-			for (ItemConferencia item : itensConferencia) {
-				
-				if (item.getProduto().getId().compareTo(itemEstoque.getProduto().getId()) == 0) {
-					item.setQuantidadeEstoque(itemEstoque.getQuantidade());
-					item.setLocalizacao(itemEstoque.getLocalizacao());
-					break;
-				}
-			}
-		}
-	}
-
 	private ItemConferencia criaNovoItem(Conferencia conferencia, Produto produto, Estoque itemEstoque) {
 		ItemConferencia item = new ItemConferenciaEntity();
 		
@@ -291,7 +246,7 @@ public class ConferenciaMB extends AppMB {
 		item.setProduto(produto);
 		item.setTipoProduto(produto.getTipoProduto());
 		item.setQuantidadeEstoque(itemEstoque != null ? itemEstoque.getQuantidade() : null);
-		item.setLocalizacao(itemEstoque != null ? itemEstoque.getLocalizacao() : null);
+		item.setLocalizacao(itemEstoque != null ? produto.getLocalizacao() : null);
 		
 		((ItemConferenciaEntity)item).setIndExcPlc("N");
 		return item;

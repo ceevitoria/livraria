@@ -17,7 +17,6 @@ import com.cee.livraria.entity.compra.NotaFiscal;
 import com.cee.livraria.entity.compra.StatusNotaFiscal;
 import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.estoque.Estoque;
-import com.cee.livraria.entity.estoque.EstoqueEntity;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
@@ -151,6 +150,7 @@ public class NotaFiscalMB extends AppMB  {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	public void buscarProdutoFornecedor() {
 
 		try {
@@ -181,12 +181,11 @@ public class NotaFiscalMB extends AppMB  {
 							
 							Produto produto = fornecedorProduto.getProduto();
 							
+							Estoque estoque = produto.getEstoque();
 							Localizacao localizacao = null;
 							
-							List<Estoque> listaEstoque = (List<Estoque>)iocControleFacadeUtil.getFacade(IAppFacade.class).findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[]{"produto"}, new Object[]{produto});
-
-							if (listaEstoque != null && listaEstoque.size() > 0) {
-								localizacao = listaEstoque.get(0).getLocalizacao();
+							if (estoque != null) {
+								localizacao = produto.getLocalizacao();
 							}
 							
 							item.setProduto(produto);
@@ -229,6 +228,7 @@ public class NotaFiscalMB extends AppMB  {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void buscarParcelamentoFornecedor() {
 
 		try {

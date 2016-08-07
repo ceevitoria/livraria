@@ -10,6 +10,8 @@ import com.powerlogic.jcompany.commons.PlcConstants;
  */
 public interface AppConstants extends PlcConstants {
     
+	final int NUM_MAX_BUSCA_PRODUTOS = 100;
+	
     interface ACAO {
     	String EXIBE_BT_LIMPAR = "exibeBtnLimpar";
     	String EXIBE_BT_NOVO = "exibeBtnNovo";
@@ -32,6 +34,7 @@ public interface AppConstants extends PlcConstants {
     	String EXIBE_BT_GERAR_RELATORIO_VENDA_PERIODO = "exibeBtnRelatorioVendaPeriodo";
     	
     }
+    
     
     interface TELA_CONFEERENCIA {
     	String UTILIZA_lOCALIZACAO = "utilizaLocalizacaoConferencia";

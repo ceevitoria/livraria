@@ -5,7 +5,8 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 
-import com.cee.livraria.entity.produto.Livro;
+import com.cee.livraria.entity.Localizacao;
+import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.produto.TipoProduto;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
@@ -40,7 +41,8 @@ public class ProdutoDAO extends AppJpaDAO  {
 		@PlcQueryParameter(name="titulo", expression="obj.titulo like '%' || :titulo || '%' ") String titulo,
 		@PlcQueryParameter(name="palavrasChave", expression="obj.palavrasChave like '%' || :palavrasChave || '%' ") String palavrasChave,
 		@PlcQueryParameter(name="tipoProduto", expression="obj.tipoProduto = :tipoProduto") TipoProduto tipoProduto,
-		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal precoUltCompra
+		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal precoUltCompra,
+		@PlcQueryParameter(name="localizacao", expression="obj.localizacao = :localizacao") Localizacao localizacao
 	);
 
 	@PlcQuery("querySel")
@@ -51,9 +53,69 @@ public class ProdutoDAO extends AppJpaDAO  {
 		@PlcQueryParameter(name="titulo", expression="obj.titulo like '%' || :titulo || '%' ") String titulo,
 		@PlcQueryParameter(name="palavrasChave", expression="obj.palavrasChave like '%' || :palavrasChave || '%' ") String palavrasChave,
 		@PlcQueryParameter(name="tipoProduto", expression="obj.tipoProduto = :tipoProduto") TipoProduto tipoProduto,
-		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal preco
+		@PlcQueryParameter(name="precoUltCompra", expression="obj.precoUltCompra = :precoUltCompra") BigDecimal preco,
+		@PlcQueryParameter(name="localizacao", expression="obj.localizacao = :localizacao") Localizacao localizacao
 	);
 	
+	@SuppressWarnings("rawtypes")
+	public Estoque obterEstoqueProduto(PlcBaseContextVO context, Produto produto) {
+		String obterEstoqueProduto = null;
+		Estoque estoque = null;
+		
+		if(context!=null && annotationPersistenceUtil.getNamedQueryByName(Produto.class, "obterEstoqueProduto") != null) {
+			obterEstoqueProduto = annotationPersistenceUtil.getNamedQueryByName(Produto.class, "obterEstoqueProduto").query();
+		}
+		
+		if (obterEstoqueProduto != null) {
+			List entities = null;
+
+			try {
+				entities = apiCreateQuery(context, Produto.class, obterEstoqueProduto).setParameter("id", produto.getId()).getResultList();
+			} catch (NoResultException nre) {
+				entities = null;
+			}
+			
+
+			if (entities != null ) {
+				Produto p = (Produto)entities.get(0);
+				estoque = p.getEstoque();
+			}
+			
+		}
+		
+		return estoque;
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	public Localizacao obterLocalizacaoProduto(PlcBaseContextVO context, Produto produto) {
+		String obterLocalizacaoProduto = null;
+		Localizacao localizacao = null;
+		
+		if(context!=null && annotationPersistenceUtil.getNamedQueryByName(Produto.class, "obterLocalizacaoProduto") != null) {
+			obterLocalizacaoProduto = annotationPersistenceUtil.getNamedQueryByName(Produto.class, "obterLocalizacaoProduto").query();
+		}
+		
+		if (obterLocalizacaoProduto != null) {
+			List entities = null;
+			
+			try {
+				entities = apiCreateQuery(context, Produto.class, obterLocalizacaoProduto).setParameter("id", produto.getId()).getResultList();
+			} catch (NoResultException nre) {
+				entities = null;
+			}
+			
+			
+			if (entities != null ) {
+				Produto p = (Produto)entities.get(0);
+				localizacao = p.getLocalizacao();
+			}
+			
+		}
+		
+		return localizacao;
+	}
+	
+	@SuppressWarnings("rawtypes")
 	public PrecoTabela obterPrecoTabela(PlcBaseContextVO context, Long idProduto) throws PlcException {
 		String queryPrecoTabela = null;
 		PrecoTabela preco = null;

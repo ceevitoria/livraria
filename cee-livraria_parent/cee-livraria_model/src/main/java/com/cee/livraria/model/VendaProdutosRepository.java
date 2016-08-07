@@ -22,7 +22,6 @@ import com.cee.livraria.entity.config.CompraVendaConfigEntity;
 import com.cee.livraria.entity.config.RetornoConfig;
 import com.cee.livraria.entity.config.TipoMensagemSucessoVendaConfig;
 import com.cee.livraria.entity.estoque.Estoque;
-import com.cee.livraria.entity.estoque.EstoqueEntity;
 import com.cee.livraria.entity.estoque.ItemMovimento;
 import com.cee.livraria.entity.estoque.ItemMovimentoEntity;
 import com.cee.livraria.entity.estoque.ModoMovimento;
@@ -168,6 +167,7 @@ public class VendaProdutosRepository {
 	 * @return quantidade vendida de produtos
 	 * @throws PlcException
 	 */
+	@SuppressWarnings("rawtypes")
 	private int atualizaEstoque(List relacaoProdutos, Date dataVenda) throws PlcException {
 		int qtEstoque = 0;
 		int qtVendida = 0;
@@ -176,12 +176,13 @@ public class VendaProdutosRepository {
 			VendaProduto vp = (VendaProduto)o;
 
 			if (vp.getProduto() != null) {
-				@SuppressWarnings("unchecked")
-				List<Estoque> lista = (List<Estoque>)jpa.findByFields(context, EstoqueEntity.class, "querySelByProduto", new String[]{"produto"}, new Object[]{vp.getProduto()});
+//				@SuppressWarnings("unchecked")
+//				List<Estoque> lista = (List<Estoque>)jpa.findByFields(context, Estoque.class, "querySelByProduto", new String[]{"produto"}, new Object[]{vp.getProduto()});
+				Produto produto = vp.getProduto();
+//				Estoque estoque = produto.getEstoque();
+				Estoque estoque = produtoDAO.obterEstoqueProduto(context, produto);
 				
-				if (lista != null && lista.size() == 1) {
-					Estoque estoque = (Estoque)lista.get(0);
-					
+				if (estoque != null) {
 					qtVendida += vp.getQuantidade();
 					qtEstoque = estoque.getQuantidade() - vp.getQuantidade();
 					
