@@ -202,7 +202,7 @@ public class AjusteEstoqueMB extends AppMB {
 
 				Long contaProdutos = (Long)iocControleFacadeUtil.getFacade().findCount(context, produtoArg);
 				
-				if (contaProdutos.longValue() > 400) {
+				if (contaProdutos.longValue() > 100) {
 					msgUtil.msg("{ajusteEstoque.err.buscar.muitosItensExistentes}", new Object[] {contaProdutos}, PlcMessage.Cor.msgVermelhoPlc.name());
 					ok = false;
 				} else {
@@ -224,10 +224,8 @@ public class AjusteEstoqueMB extends AppMB {
 							}
 						}
 						
-						estoque = produto.getEstoque();
-						
-						if (!existe && estoque != null) {
-							ItemAjusteEstoque itemAjusteEstoque = criaNovoItem(ajusteEstoque, produto, estoque);
+						if (!existe) {
+							ItemAjusteEstoque itemAjusteEstoque = criaNovoItem(ajusteEstoque, produto);
 							listaItensExistentes.add(itemAjusteEstoque);
 						}
 					}
@@ -243,14 +241,14 @@ public class AjusteEstoqueMB extends AppMB {
 		return baseEditMB.getDefaultNavigationFlow(); 
 	}
 	
-	private ItemAjusteEstoque criaNovoItem(AjusteEstoque ajusteEstoque, Produto produto, Estoque itemEstoque) {
+	private ItemAjusteEstoque criaNovoItem(AjusteEstoque ajusteEstoque, Produto produto) {
 		ItemAjusteEstoque item = new ItemAjusteEstoque();
 		
 		item.setAjusteEstoque(ajusteEstoque);
 		item.setProduto(produto);
 		item.setTipoProduto(produto.getTipoProduto());
-		item.setQuantidadeEstoque(itemEstoque != null ? itemEstoque.getQuantidade() : null);
-		item.setLocalizacao(itemEstoque != null ? produto.getLocalizacao() : null);
+		item.setQuantidadeEstoque(produto.getEstoque() != null ? produto.getEstoque().getQuantidade() : null);
+		item.setLocalizacao(produto.getLocalizacao());
 		item.setIndExcPlc("N");
 		
 		return item;

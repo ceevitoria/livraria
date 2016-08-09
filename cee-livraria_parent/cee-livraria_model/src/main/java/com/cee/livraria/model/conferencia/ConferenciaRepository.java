@@ -97,9 +97,10 @@ public class ConferenciaRepository extends PlcBaseRepository {
 			List<ItemConferencia> itensConferencia = conferencia.getItemConferencia();
 			
 			for (ItemConferencia itemConferencia : itensConferencia) {
-				Produto produto = itemConferencia.getProduto();
+				Produto produto = (Produto)produtoDAO.findById(context, Produto.class, itemConferencia.getProduto().getId());
 //				List<Estoque> estoqueList = dao.findByFields(context, Estoque.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
-				Estoque estoque = produtoDAO.obterEstoqueProduto(context, produto);
+//				Estoque estoque = produtoDAO.obterEstoqueProduto(context, produto);
+				Estoque estoque = produto.getEstoque();
 				
 				if (estoque == null) {
 					quantidadeProdutosSemEstoque++;
@@ -114,7 +115,8 @@ public class ConferenciaRepository extends PlcBaseRepository {
 					if (PlcYesNo.S.equals(config.getUtilizaLocalizacaoLivros())) {
 						boolean precisaAtualizaProduto = false;
 						
-						if (itemConferencia.getLocalizacao().getId().compareTo(produto.getLocalizacao().getId())!=0) {
+						if (itemConferencia.getLocalizacao() != null && produto.getLocalizacao() != null && 
+							itemConferencia.getLocalizacao().getId().compareTo(produto.getLocalizacao().getId())!=0) {
 							
 							if (PlcYesNo.S.equals(config.getAlertaTrocaLocalizacaoLivros())) {
 								
@@ -134,10 +136,6 @@ public class ConferenciaRepository extends PlcBaseRepository {
 								}
 								
 							} else if (PlcYesNo.S.equals(config.getAjusteAutomaticoLocalizacaoLivros())) {
-								estoque.setDataConferencia(dataConferencia);
-								estoque.setDataUltAlteracao(dataConferencia);
-								estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
-								dao.update(context, estoque);
 								
 								if (itemConferencia.getLocalizacao() != null && produto.getLocalizacao() == null) {
 									produto.setLocalizacao(itemConferencia.getLocalizacao());

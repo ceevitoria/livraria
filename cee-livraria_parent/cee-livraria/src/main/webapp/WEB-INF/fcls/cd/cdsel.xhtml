@@ -30,6 +30,10 @@
 								<plcf:titulo value="#{msg['label.gravadora']}"/>  
 								<plcf:texto id="gravadora" value="#{cd.gravadora}" tamanho="30" ajudaChave="ajuda.gravadora"/> 
 							</plcf:celula>  
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.localizacao']}"/>  
+								<plcf:comboDinamico id="localizacao" value="#{cd.localizacao}"  exibeBranco="S" dominio="Localizacao" ajudaChave="ajuda.localizacao"/> 
+							</plcf:celula> 
 						</plcf:linha> 
 					</plcf:tabela> 
 				</div>
@@ -37,6 +41,9 @@
 					<script type="text/javascript">//<![CDATA[
 					plc.jq(document).ready(function(){
 						plc.jq("#corpo\\:formulario\\:codigoBarras").on("change", function() {
+							plc.jq( "#corpo\\:formulario\\:botaoAcaoPesquisar" ).trigger( "click" );
+						});
+						plc.jq("#corpo\\:formulario\\:localizacao").on("change", function() {
 							plc.jq( "#corpo\\:formulario\\:botaoAcaoPesquisar" ).trigger( "click" );
 						});
 						plc.jq(document).keydown(function(e) {
@@ -57,12 +64,14 @@
 					'#{msg['label.codigoBarras']}',
 					'#{msg['label.titulo']}',
 					'#{msg['label.artista']}',
-					'#{msg['label.gravadora']}'],
+					'#{msg['label.gravadora']}',
+					'#{msg['label.produto.localizacao']}'],
 				colModel:[
 					{name:'codigoBarras',index:'codigoBarras', width:'80', align:'center'},
-					{name:'titulo',index:'titulo', width:'300'},
+					{name:'titulo',index:'titulo', width:'200'},
 					{name:'artista',index:'artista', width:'100'},
-					{name:'gravadora',index:'gravadora', width:'100'}]},
+					{name:'gravadora',index:'gravadora', width:'100'},
+					{name:'localizacao',index:'localizacao', width:'40px', align:'center'}]},
 			urlEdicao:'#{request.contextPath}/f/n/cdman'});});//]]> </script>  
 					<table id="plc-grid" width="100%" class="scroll" cellpadding="0" cellspacing="0"/>  
 					<div id="plc-grid-navegador" class="scroll" style="text-align:center;"/> 

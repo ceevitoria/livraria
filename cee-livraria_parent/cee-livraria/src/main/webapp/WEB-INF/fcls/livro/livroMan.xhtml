@@ -12,9 +12,13 @@
 	<ui:composition> 
 		<plcf:tabela tituloChave="livroman.titulo"> 
 			<plcf:linha> 
-				<plcf:celula columnSpan="2"> 
+				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.codigoBarras']}"/>  
 					<plcf:texto id="codigoBarras" value="#{livro.codigoBarras}" ajudaChave="ajuda.codigoBarras" tamanho="30"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.localizacao']}"/>  
+					<plcf:comboDinamico id="localizacao" value="#{livro.localizacao}" dominio="Localizacao" exibeBranco="S" ajudaChave="ajuda.localizacao"/> 
 				</plcf:celula>  
 			</plcf:linha>  
 			<plcf:linha> 

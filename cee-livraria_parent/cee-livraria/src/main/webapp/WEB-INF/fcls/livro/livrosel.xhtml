@@ -54,6 +54,10 @@
 								<plcf:titulo value="#{msg['label.isbn']}"/>  
 								<plcf:texto id="isbn" value="#{livro.isbn}" tamanho="15" ajudaChave="ajuda.isbn"/> 
 							</plcf:celula> 
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.localizacao']}"/>  
+								<plcf:comboDinamico id="localizacao" value="#{livro.localizacao}"  exibeBranco="S" dominio="Localizacao" ajudaChave="ajuda.localizacao"/> 
+							</plcf:celula> 
 						</plcf:linha> 
 					</plcf:tabela> 
 				</div>
@@ -61,6 +65,9 @@
 					<script type="text/javascript">//<![CDATA[
 					plc.jq(document).ready(function(){
 						plc.jq("#corpo\\:formulario\\:codigoBarras").on("change", function() {
+							plc.jq( "#corpo\\:formulario\\:botaoAcaoPesquisar" ).trigger( "click" );
+						});
+						plc.jq("#corpo\\:formulario\\:localizacao").on("change", function() {
 							plc.jq( "#corpo\\:formulario\\:botaoAcaoPesquisar" ).trigger( "click" );
 						});
 						plc.jq(document).keydown(function(e) {
@@ -84,15 +91,17 @@
 					'#{msg['label.autor']}',
 					'#{msg['label.espirito']}',
 					'#{msg['label.editora']}',
-					'#{msg['label.colecao']}'],
+					'#{msg['label.colecao']}',
+					'#{msg['label.produto.localizacao']}'],
 				colModel:[
 					{name:'codigoBarras',index:'codigoBarras', width:'80', align:'center'},
-					{name:'titulo',index:'titulo', width:'300'},
-					{name:'edicao',index:'edicao', width:'40', align:'center'},
-					{name:'autor',index:'autor'},
-					{name:'espirito',index:'espirito'},
-					{name:'editora',index:'editora'},
-					{name:'colecao',index:'colecao'}]},
+					{name:'titulo',index:'titulo', width:'200'},
+					{name:'edicao',index:'edicao', width:'30', align:'center'},
+					{name:'autor',index:'autor', width:'80'},
+					{name:'espirito',index:'espirito', width:'80'},
+					{name:'editora',index:'editora', width:'80'},
+					{name:'colecao',index:'colecao', width:'80'},
+					{name:'localizacao',index:'localizacao', width:'40px', align:'center'}]},					
 			urlEdicao:'#{request.contextPath}/f/n/livroman'});});//]]> </script>  
 					<table id="plc-grid" width="100%" class="scroll" cellpadding="0" cellspacing="0"/>  
 					<div id="plc-grid-navegador" class="scroll" style="text-align:center;"/> 

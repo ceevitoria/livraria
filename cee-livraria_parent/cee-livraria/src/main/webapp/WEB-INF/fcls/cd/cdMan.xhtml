@@ -12,9 +12,13 @@
 	<ui:composition> 
 		<plcf:tabela tituloChave="cdman.titulo"> 
 			<plcf:linha> 
-				<plcf:celula columnSpan="3"> 
+				<plcf:celula columnSpan="2"> 
 					<plcf:titulo value="#{msg['label.codigoBarras']}"/>  
 					<plcf:texto id="codigoBarras" value="#{cd.codigoBarras}" ajudaChave="ajuda.codigoBarras" tamanho="30"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.localizacao']}"/>  
+					<plcf:comboDinamico id="localizacao" value="#{cd.localizacao}" dominio="Localizacao" exibeBranco="S" ajudaChave="ajuda.localizacao"/> 
 				</plcf:celula>  
 			</plcf:linha>  
 			<plcf:linha> 
@@ -37,13 +41,6 @@
 			</plcf:linha>  
 			<plcf:linha> 
 				<plcf:celula> 
-					<plcf:titulo value="#{msg['label.preco.ultima.compra']}"/>
-					<plcf:numerico id="precoOrig1" value="#{cd.precoUltCompra}" somenteLeitura="S" rendered="#{not plct:execOneArg(request,'isUserInRole','Gestor')}" 
-						tamanho="10" ajudaChave="ajuda.preco.ultima.compra"/> 
-					<plcf:numerico id="precoOrig2" value="#{cd.precoUltCompra}" somenteLeitura="N" rendered="#{plct:execOneArg(request,'isUserInRole','Gestor')}"
-						tamanho="10" ajudaChave="ajuda.preco.ultima.compra"/> 
-				</plcf:celula>  
-				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.tabpreco']}"/>  
 					<plcf:texto id="nomeTabela" value="#{cd.nomeTabela}" somenteLeitura="S" tamanho="50" ajudaChave="ajuda.tabpreco"/> 
 	                <plcf:linkInteligente
@@ -52,6 +49,13 @@
 	                    ajudaChave="ajuda.tabpreco"
 	                    exibeSe="#{not empty cd.idTabela and plct:execOneArg(request,'isUserInRole','Gestor')}" />
 				</plcf:celula> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.preco.ultima.compra']}"/>
+					<plcf:numerico id="precoOrig1" value="#{cd.precoUltCompra}" somenteLeitura="S" rendered="#{not plct:execOneArg(request,'isUserInRole','Gestor')}" 
+						tamanho="10" ajudaChave="ajuda.preco.ultima.compra"/> 
+					<plcf:numerico id="precoOrig2" value="#{cd.precoUltCompra}" somenteLeitura="N" rendered="#{plct:execOneArg(request,'isUserInRole','Gestor')}"
+						tamanho="10" ajudaChave="ajuda.preco.ultima.compra"/> 
+				</plcf:celula>  
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.preco.venda']}"/>  
 					<plcf:numerico id="precoTabela" value="#{cd.precoTabela}" 

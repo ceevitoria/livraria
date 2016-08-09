@@ -27,7 +27,7 @@ import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 @Access(AccessType.FIELD)
 @NamedQueries({
 	@NamedQuery(name="CD.queryMan", query="from CD"),
-	@NamedQuery(name="CD.querySel", query="select obj.id as id, obj.tipoProduto as tipoProduto, obj.codigoBarras as codigoBarras, obj.titulo as titulo, obj.artista as artista, obj.gravadora as gravadora, obj.palavrasChave as palavrasChave, obj.precoUltCompra as precoUltCompra, obj.precoVendaSugerido as precoVendaSugerido from CD obj order by obj.titulo asc"),
+	@NamedQuery(name="CD.querySel", query="select obj.id as id, obj.tipoProduto as tipoProduto, obj.codigoBarras as codigoBarras, obj.titulo as titulo, obj.artista as artista, obj.gravadora as gravadora, obj.palavrasChave as palavrasChave, obj.precoUltCompra as precoUltCompra, obj.precoVendaSugerido as precoVendaSugerido, obj2.id as localizacao_id, obj2.codigo as localizacao_codigo, obj2.descricao as localizacao_descricao from CD obj left outer join obj.localizacao as obj2 order by obj.titulo asc"),
 	@NamedQuery(name="CD.queryEdita", query="select obj from CD obj where obj.id = ?"),
 	@NamedQuery(name="CD.querySelLookup", query="select id as id, codigoBarras as codigoBarras, titulo as titulo from CD where id = ? order by id asc") })
 @DiscriminatorValue("C")

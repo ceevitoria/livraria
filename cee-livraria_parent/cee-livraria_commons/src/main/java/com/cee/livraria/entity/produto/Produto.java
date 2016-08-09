@@ -92,7 +92,6 @@ public class Produto extends AppBaseEntity implements Estocavel {
 	
 	@ManyToOne(targetEntity = Estoque.class, fetch = FetchType.EAGER)
 	@ForeignKey(name = "FK_PRODUTO_ESTOQUE")
-	@NotNull
 	private Estoque estoque;
 	
 	@ManyToOne(targetEntity = Localizacao.class, fetch = FetchType.EAGER)

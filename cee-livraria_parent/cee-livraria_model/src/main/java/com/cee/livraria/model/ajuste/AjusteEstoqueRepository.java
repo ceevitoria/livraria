@@ -240,7 +240,8 @@ public class AjusteEstoqueRepository extends PlcBaseRepository {
 //					List<Estoque> estoqueList = dao.findByFields(context, Estoque.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
 					
 					if (produto != null && produto.getEstoque() != null) {
-						Estoque estoque = produtoDAO.obterEstoqueProduto(context, produto);
+//						Estoque estoque = produtoDAO.obterEstoqueProduto(context, produto);
+						Estoque estoque = produto.getEstoque();
 						
 						if (itemAjuste.getQuantidadeInformada() != null) {
 							estoque.setQuantidade(itemAjuste.getQuantidadeInformada());

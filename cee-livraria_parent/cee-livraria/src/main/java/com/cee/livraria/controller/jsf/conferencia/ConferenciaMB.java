@@ -198,7 +198,7 @@ public class ConferenciaMB extends AppMB {
 
 				Long contaProdutos = (Long)iocControleFacadeUtil.getFacade().findCount(context, produtoArg);
 				
-				if (contaProdutos.longValue() > 400) {
+				if (contaProdutos.longValue() > 100) {
 					msgUtil.msg("{conferencia.err.buscar.muitosItensExistentes}", new Object[] {contaProdutos}, PlcMessage.Cor.msgVermelhoPlc.name());
 					ok = false;
 				} else {
@@ -220,10 +220,8 @@ public class ConferenciaMB extends AppMB {
 							}
 						}
 
-						estoque = produto.getEstoque();
-						
-						if (!existe && estoque != null) {
-							ItemConferencia itemConferencia = criaNovoItem(conferencia, produto, estoque);
+						if (!existe) {
+							ItemConferencia itemConferencia = criaNovoItem(conferencia, produto);
 							listaItensExistentes.add(itemConferencia);
 						}
 					}
@@ -239,14 +237,14 @@ public class ConferenciaMB extends AppMB {
 		return baseEditMB.getDefaultNavigationFlow(); 
 	}
 	
-	private ItemConferencia criaNovoItem(Conferencia conferencia, Produto produto, Estoque itemEstoque) {
+	private ItemConferencia criaNovoItem(Conferencia conferencia, Produto produto) {
 		ItemConferencia item = new ItemConferenciaEntity();
 		
 		item.setConferencia(conferencia);
 		item.setProduto(produto);
 		item.setTipoProduto(produto.getTipoProduto());
-		item.setQuantidadeEstoque(itemEstoque != null ? itemEstoque.getQuantidade() : null);
-		item.setLocalizacao(itemEstoque != null ? produto.getLocalizacao() : null);
+		item.setQuantidadeEstoque(produto.getEstoque() != null ? produto.getEstoque().getQuantidade() : null);
+		item.setLocalizacao(produto.getLocalizacao());
 		
 		((ItemConferenciaEntity)item).setIndExcPlc("N");
 		return item;

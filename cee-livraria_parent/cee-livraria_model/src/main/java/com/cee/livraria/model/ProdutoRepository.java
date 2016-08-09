@@ -18,7 +18,7 @@ import com.powerlogic.jcompany.commons.annotation.PlcAggregationDAOIoC;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcRepository;
 import com.powerlogic.jcompany.model.PlcBaseRepository;
 import com.powerlogic.jcompany.model.bindingtype.PlcDeleteBefore;
-import com.powerlogic.jcompany.model.bindingtype.PlcInsertAfter;
+import com.powerlogic.jcompany.model.bindingtype.PlcInsertBefore;
 
 @SPlcRepository
 @PlcAggregationDAOIoC(value=Produto.class)
@@ -27,19 +27,7 @@ public class ProdutoRepository extends PlcBaseRepository {
 	@Inject
 	private ProdutoDAO dao;
 
-	public void antesExcluir (@Observes @PlcDeleteBefore PlcBaseContextVO context) throws PlcException {
-		String url = context.getUrl();
-		
-		if ("produtoman.livroman.cdman.dvdman".contains(url)) {
-			Produto produto = (Produto) context.getEntityForExtension();
-			
-			if (produto != null) {
-				verificaExclusaoEstoque(context, produto);
-			}
-		}
-	}
-	
-	public void aposIncluir (@Observes @PlcInsertAfter PlcBaseContextVO context) throws PlcException {
+	public void antesIncluir (@Observes @PlcInsertBefore PlcBaseContextVO context) throws PlcException {
 		String url = context.getUrl();
 		
 		if ("produtoman.livroman.cdman.dvdman".contains(url)) {
@@ -51,12 +39,10 @@ public class ProdutoRepository extends PlcBaseRepository {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void realizaInclusaoEstoque(PlcBaseContextVO context, Produto produto) throws PlcException {
-//		List<Estoque> estoqueList = dao.findByFields(context, Estoque.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
 		
 		if (produto != null) {
-			Estoque estoque = dao.obterEstoqueProduto(context, produto);
+			Estoque estoque = produto.getEstoque();
 		
 			if (estoque == null) {
 				estoque = new Estoque();
@@ -66,40 +52,17 @@ public class ProdutoRepository extends PlcBaseRepository {
 				estoque.setQuantidadeMaxima(20);
 				estoque.setDataConferencia(null);
 				
-//				List<Localizacao> localizacaoList = dao.findByFields(context, Localizacao.class, "queryCaixaEntrada", new String[] {"codigo"}, new String[] {"Novos Produtos"});
-//				
-//				if (localizacaoList.size() == 0) {
-//					throw new PlcException("{produto.erro.localizacao.entrada.inexistente}");
-//				}
-//				
-//				Localizacao localizacao = localizacaoList.get(0);
-//				estoque.setLocalizacao(localizacao);
-				
 				estoque.setDataUltAlteracao(new Date());
 				estoque.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
 				
 				dao.insert(context, estoque);
 				
 				produto.setEstoque(estoque);
-				dao.update(context, produto);
 			}
 		}
 		
 	}
 
-	private void verificaExclusaoEstoque(PlcBaseContextVO context, Produto produto) throws PlcException {
-//		List<Estoque> estoqueList = dao.findByFields(context, Estoque.class, "querySelByProduto", new String[] {"produto"}, new Object[] {produto});
-
-		if (produto != null) {
-			Estoque estoque = dao.obterEstoqueProduto(context, produto);
-		
-			if (estoque != null) {
-				estoque = produto.getEstoque();
-				dao.delete(context, estoque);
-			}
-		}
-	}
-	
 	@SuppressWarnings("unchecked")
 	public Collection recuperaProdutos(PlcBaseContextVO context, Produto arg, String orderByDinamico, int inicio, int total) throws PlcException {
 		List<Produto> produtosRetorno = new ArrayList<Produto>();  
