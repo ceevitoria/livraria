@@ -391,7 +391,7 @@ public class CaixaRepository extends PlcBaseRepository {
 					break;
 				case SA:
 					// Movimentos de sangria devemos trocar o sinal do atributo valor pois sao retiradas do caixa
-					valorPagto = valorPagto * -1;
+					valorPagto = Math.round(valorPagto * -1 * 100.00) / 100.00;
 					break;
 				case SU:
 					break;
@@ -400,7 +400,8 @@ public class CaixaRepository extends PlcBaseRepository {
 					caixaFormaPagto.setDataFechamento(caixa.getDataUltFechamento());
 
 					// Movimentos de sangria devemos trocar o sinal do atributo valor pois sao retiradas do caixa
-					valorPagto = valorPagto * -1;
+					valorPagto = Math.round(valorPagto * -1 * 100.00) / 100.00;
+					
 					break;
 				}
 				
@@ -554,10 +555,13 @@ public class CaixaRepository extends PlcBaseRepository {
 				break;
 			}
 
+			double valorCaixa = caixa.getValor().doubleValue(); 
+			valorCaixa = Math.round(valorCaixa * 100.00) / 100.00;
+			
 			CaixaMovimento movCaixa = new CaixaMovimentoEntity();
 			movCaixa.setData(data);
 			movCaixa.setTipo(tipo);
-			movCaixa.setValor(caixa.getValor());
+			movCaixa.setValor(new BigDecimal(Double.toString(valorCaixa)));
 			movCaixa.setObservacao(caixa.getObservacao());
 			movCaixa.setSitHistoricoPlc("A");
 			movCaixa.setCaixa(caixa);
