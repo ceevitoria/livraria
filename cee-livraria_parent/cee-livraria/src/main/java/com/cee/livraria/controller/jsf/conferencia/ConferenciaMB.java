@@ -144,8 +144,10 @@ public class ConferenciaMB extends AppMB {
 			produtoArg = new Produto();
 		}
 
+		produtoArg.setTipoProduto(regra.getTipoProduto());
 		produtoArg.setTitulo(regra.getTitulo());
 		produtoArg.setCodigoBarras(regra.getCodigoBarras());
+		produtoArg.setLocalizacao(regra.getLocalizacao());
 		
 		return produtoArg;
 	}

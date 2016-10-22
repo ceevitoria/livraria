@@ -3,6 +3,7 @@ package com.cee.livraria.controller.jsf.vendaproduto;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.inject.Produces;
@@ -67,6 +68,10 @@ public class VendaProdutoMB extends AppMB  {
 	private static final long serialVersionUID = 1L;
 
 	protected PagamentoList pagamentoList;
+
+	private boolean isRegistrandoVenda = false;
+	private Date dataInicioRegistroVenda = new Date();
+	private RetornoConfig retornoConfiguracao = null;
 	
 	/**
 	 * Entidade da ação injetado pela CDI
@@ -203,42 +208,55 @@ public class VendaProdutoMB extends AppMB  {
 	/**
 	 * 
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	public String registrarVendaProdutos()  {
-		PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
-		
-		List itensPlc = entityListPlc.getItensPlc();
-		List itensPagamento = pagamentoList.getItens();
 
-		RetornoConfig ret = null;
+		Date dataHoraCorrente = new Date();
+		long diffTimeInMillies = dataHoraCorrente.getTime() - dataInicioRegistroVenda.getTime();
 		
-		try {
-			ret = iocControleFacadeUtil.getFacade(IAppFacade.class).registrarVendaProdutos(context, itensPlc, itensPagamento);
-		} finally {
+		if (!isRegistrandoVenda || diffTimeInMillies > 5000) {
+			isRegistrandoVenda = true;
+			dataInicioRegistroVenda = new Date();
+			PlcBaseContextVO context = contextMontaUtil.createContextParam(plcControleConversacao);
+			
+			List itensPlc = entityListPlc.getItensPlc();
+			List itensPagamento = pagamentoList.getItens();
+			
+			try {
+				retornoConfiguracao = iocControleFacadeUtil.getFacade(IAppFacade.class).registrarVendaProdutos(context, itensPlc, itensPagamento);
+			} finally {
+				contextUtil.getRequest().setAttribute("destravaTela", "S");
+			}
+			
+			exibeResultado();
+		} else {
 			contextUtil.getRequest().setAttribute("destravaTela", "S");
+			exibeResultado();
 		}
 		
-		if (ret.getAlertas().size() > 0) {
+		return baseEditMB.getDefaultNavigationFlow(); 
+	}
+
+	private void exibeResultado() {
+		if (retornoConfiguracao.getAlertas().size() > 0) {
 			
-			for (String alerta : ret.getAlertas()) {
+			for (String alerta : retornoConfiguracao.getAlertas()) {
 				msgUtil.msg(alerta, PlcMessage.Cor.msgAmareloPlc.name());
 			}
 		}
 		
-		if (ret.getMensagens().size() > 0) {
+		if (retornoConfiguracao.getMensagens().size() > 0) {
 			
-			for (String mensagem : ret.getMensagens()) {
+			for (String mensagem : retornoConfiguracao.getMensagens()) {
 				msgUtil.msg(mensagem, PlcMessage.Cor.msgAzulPlc.name());
 			}
 		}
 		
-		CompraVendaConfig config = (CompraVendaConfig)ret.getConfig();
+		CompraVendaConfig config = (CompraVendaConfig)retornoConfiguracao.getConfig();
 		
 		if (config.getAutoLimparTelaParaNovaVenda().equals(PlcYesNo.S)) {
 			limparOperacaoAnterior();
 		}
-		
-		return baseEditMB.getDefaultNavigationFlow(); 
 	}
 	
 	/**
