@@ -50,7 +50,7 @@
 					'#{msg['label.resultadoConferencia']}'],
 				colModel:[
 					{name:'nome',index:'nome',width:'40%'},
-					{name:'data',index:'data',width:'20%'},
+					{name:'data',index:'data',width:'20%',firstsortorder:'desc'},
 					{name:'statusConferencia',index:'statusConferencia',width:'20%'},
 					{name:'resultado',index:'resultado',width:'20%'}]},
 			urlEdicao:'#{request.contextPath}/f/n/conferenciamdt'});});//]]> </script>  
@@ -58,6 +58,12 @@
 					<div id="plc-grid-navegador" class="scroll" style="text-align:center;"/> 
 				</div> 
 			</div> 
+			<script type="text/javascript">//<![CDATA[
+				jQuery(document).ready(function(){
+					jQuery("#jqgh_plc-grid_data").trigger("click");
+				});
+			//]]> 
+			</script>
 		</ui:define> 
 	</ui:composition> 
 </html>
