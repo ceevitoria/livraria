@@ -194,7 +194,7 @@ public class NotaFiscalMB extends AppMB  {
 							item.setLocalizacao(localizacao);
 							
 							if (item.getValorUnitario() == null) {
-								item.setValorUnitario(produto.getPrecoUltCompra());
+								item.setValorUnitario(produto.getPrecoVendaSugerido());
 							}
 							
 							if (item.getQuantidade() == null) {
