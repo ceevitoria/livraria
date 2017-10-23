@@ -6,7 +6,7 @@
          privileged="true" swallowOutput="off">
    
 <Resource name="jdbc/cee-apps" type="javax.sql.DataSource"
-		auth="Container" driverClassName="com.mysql.jdbc.Driver" 
+	   auth="Container" driverClassName="com.mysql.jdbc.Driver" 
        url="jdbc:mysql://localhost:3306/ceedb" username="ceeuser" password="xjtq28"
 		  maxActive="500"
 	      maxWait="30000" 
@@ -23,6 +23,7 @@
 		  defaultAutoCommit="false"
 		  fairQueue="true"
 		  testOnBorrow="true"
+		  autoReconnect="true"
 		  validationQuery="select 1" />
 
 
