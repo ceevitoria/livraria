@@ -13,15 +13,15 @@
 		<ui:define name="plc-corpo-formulario"> 
 			<div id="plc-form-basico">
 				<div id="#{plcAliasPrefixoAction}Arg" class="plc-form-basico-topo">
-					<plcf:tabela tituloChave="relatorioVendaPeriodoarg.titulo"> 
+					<plcf:tabela tituloChave="relatorioUltimasComprasPeriodoarg.titulo"> 
 						<plcf:linha>
 							<plcf:celula> 
 								<plcf:titulo value="#{msg['label.dataInicio']}"/>  
-								<plcf:data id="dataInicio" value="#{relatorioVendaPeriodo.dataInicio}" ajudaChave="ajuda.dataInicio" obrigatorio="S" obrigatorioDestaque="S" /> 
+								<plcf:data id="dataInicio" value="#{relatorioUltimasComprasPeriodo.dataInicio}" ajudaChave="ajuda.dataInicio" obrigatorio="S" obrigatorioDestaque="S" /> 
 							</plcf:celula>
 							<plcf:celula> 
 								<plcf:titulo value="#{msg['label.dataFim']}"/>
-								<plcf:data id="dataFim" value="#{relatorioVendaPeriodo.dataFim}" ajudaChave="ajuda.dataFim" obrigatorio="S" obrigatorioDestaque="S" /> 
+								<plcf:data id="dataFim" value="#{relatorioUltimasComprasPeriodo.dataFim}" ajudaChave="ajuda.dataFim" obrigatorio="S" obrigatorioDestaque="S" /> 
 							</plcf:celula> 
 						</plcf:linha> 
 					</plcf:tabela> 
@@ -39,27 +39,36 @@
 		evento:'${param.evento}',
 			modoJanelaPlc:'${param.modoJanelaPlc}',
 			rowNum:'60',
-			nomeLogica:'relatoriovendaperiodocon',
-			propAgregada:'relatorioVendaPeriodo',
+			nomeLogica:'relatorioultimascomprasperiodocon',
+			propAgregada:'relatorioUltimasComprasPeriodo',
 			jqGrid:{caption:
-				'#{msg['vendasPeriodo.titulo']}',
+				'#{msg['relatorioultimascomprasperiodo.titulo']}',
 				colNames:
 				   ['#{msg['label.codigoBarras']}',
 					'#{msg['label.titulo']}',
 					'#{msg['label.tipoProduto']}',
-					'#{msg['label.quantidade']}',
-					'#{msg['label.valor']}'],
+					'#{msg['label.valorUnitario']}',
+					'#{msg['label.qtdeCompra']}',
+					'#{msg['label.qtdeEstoque']}',
+					'#{msg['label.notafiscal']}',
+					'#{msg['label.dataCompra']}',
+					'#{msg['label.fornecedor']}'],
 				colModel:[
 					{name:'produto.codigoBarras',index:'obj.produto.codigoBarras', align:"center", width:'9%', title:true},
-					{name:'produto.titulo',index:'obj.produto.titulo', width:'60%', title:true},
-					{name:'produto.tipoProduto',index:'obj.produto.tipoProduto', align:"center", width:'8%', title:true},
+					{name:'produto.titulo',index:'obj.produto.titulo', width:'44%', title:true},
+					{name:'produto.tipoProduto',index:'obj.produto.tipoProduto', align:"center", width:'6%', title:true},
+					{name:'valorUnitario',index:'obj.valorUnitario', align:"right", width:'6%', title:true},
 					{name:'quantidade',index:'obj.quantidade', align:"right", width:'6%', title:true},
-					{name:'valorTotal',index:'obj.valorTotal', align:"right", width:'6%', title:true}]},
+					{name:'estoque.quantidade',index:'est.quantidade', align:"right", width:'6%', title:true},
+					{name:'notaFiscal.numero', index:'obj2.numero', align:"center", width:'5%', title:true},
+					{name:'notaFiscal.dataEmissao',index:'obj2.dataEmissao', align:"center", width:'9%', title:true},
+					{name:'fornecedor.nome',index:'for.nome', align:"center", width:'9%', title:true}]},
 			aoSelecionar:function(id){}});});//]]> </script>  
 					<table id="plc-grid" width="100%" class="scroll" cellpadding="0" cellspacing="0"/>  
 					<div id="plc-grid-navegador" class="scroll" style="text-align:center;"/> 
 				</div> 
 			</div> 
 		</ui:define> 
-	</ui:composition> 
+	</ui:composition>
 </html>
+

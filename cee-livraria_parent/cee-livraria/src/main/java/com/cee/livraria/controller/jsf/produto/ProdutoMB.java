@@ -41,7 +41,7 @@ import com.powerlogic.jcompany.controller.util.PlcIocControllerFacadeUtil;
 @SPlcMB
 @PlcUriIoC("produto")
 @PlcHandleException
-public class ProdutoMB extends AppMB  {
+public class ProdutoMB extends AppMB {
 	
 	@Inject @QPlcDefault 
 	protected PlcCreateContextUtil contextMontaUtil;

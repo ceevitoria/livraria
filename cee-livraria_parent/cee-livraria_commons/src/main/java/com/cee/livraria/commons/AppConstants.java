@@ -32,7 +32,7 @@ public interface AppConstants extends PlcConstants {
     	
     	String EXIBE_BT_REGISTRAR_ENTRADA_NOTA_FISCAL = "exibeBtnRegistrarEntradaNotaFiscal";
     	String EXIBE_BT_GERAR_RELATORIO_VENDA_PERIODO = "exibeBtnRelatorioVendaPeriodo";
-    	
+    	String EXIBE_BT_GERAR_RELATORIO_ULTIMAS_COMPRAS_PERIODO = "exibeBtnRelatorioUltimasComprasPeriodo";    	
     }
     
     

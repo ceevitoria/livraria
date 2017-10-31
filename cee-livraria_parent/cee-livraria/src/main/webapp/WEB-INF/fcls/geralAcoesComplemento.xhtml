@@ -251,6 +251,23 @@
 				</plcf:botaoAcao>
 			</ui:insert>
 
+			<ui:insert name="livraria_acao_gerarRelatorioUltimasComprasPeriodo">	 
+				<h:commandLink id="linkAcaoGerarRelatorioUltimasComprasPeriodo" immediate="false" 
+					rendered="#{requestScope.exibeBtnRelatorioUltimasComprasPeriodo=='S'}"
+					value="Relatorio Ultimas Compras Periodo"
+					action="#{plcAction.gerarRelatorioUltimasComprasPeriodo}"
+					style="color:blue;max-width:200px;font-size: 14px;visibility: hidden;">
+				</h:commandLink>
+			</ui:insert>
+
+			<ui:insert name="acao-botaoAcaoGerarRelatorioUltimasComprasPeriodo">	
+				<plcf:botaoAcao id="botaoAcaoGerarRelatorioUltimasComprasPeriodo" urlIcone="ico iEspecifico" 
+					limpaForm="false" partialSubmit="true" label="cee.evt.gerar.relatorioultimasComprasPeriodo" 
+					botaoArrayID="GERAR_RELATORIO_ULTIMAS_COMPRAS_PERIODO" validaForm="false" immediate="false" blocking="true" 
+					rendered="#{requestScope.exibeBtnRelatorioUltimasComprasPeriodo=='S'}" onclick="plc.jq('#corpo\\:formulario\\:linkAcaoGerarRelatorioUltimasComprasPeriodo').trigger('click');">
+				</plcf:botaoAcao>
+			</ui:insert>
+
 			</div>			 
 		</ui:composition>
 	</body>

@@ -18,6 +18,7 @@ import com.cee.livraria.entity.estoque.ajuste.AjusteEstoque;
 import com.cee.livraria.entity.estoque.conferencia.Conferencia;
 import com.cee.livraria.entity.pagamento.PagamentoList;
 import com.cee.livraria.entity.produto.Produto;
+import com.cee.livraria.entity.relatorio.RelatorioUltimasComprasPeriodo;
 import com.cee.livraria.entity.relatorio.RelatorioVendaPeriodo;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
 import com.cee.livraria.model.CaixaRepository;
@@ -28,6 +29,7 @@ import com.cee.livraria.model.ajuste.AjusteEstoqueRepository;
 import com.cee.livraria.model.compras.NotaFiscalRepository;
 import com.cee.livraria.model.conferencia.ConferenciaRepository;
 import com.cee.livraria.model.relatorio.RelatorioFechamentoCaixaRepository;
+import com.cee.livraria.model.relatorio.RelatorioUltimasComprasPeriodoRepository;
 import com.cee.livraria.model.relatorio.RelatorioVendaPeriodoRepository;
 import com.cee.livraria.persistence.jpa.AppJpaDAO;
 import com.cee.livraria.persistence.jpa.produto.ProdutoDAO;
@@ -74,6 +76,9 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 
 	@Inject
 	private RelatorioVendaPeriodoRepository relatorioVendaPeriodoRepository;
+	
+	@Inject
+	private RelatorioUltimasComprasPeriodoRepository relatorioUltimasComprasPeriodoRepository;
 	
 	@PlcTransactional(commit=false)
 	@Override
@@ -267,5 +272,15 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade {
 
 	public Collection recuperaVendaPeriodo(PlcBaseContextVO context, RelatorioVendaPeriodo relatorioArg, String orderByDinamico, Integer inicio, Integer total) throws PlcException {
 		return relatorioVendaPeriodoRepository.recuperaVendaPeriodo(context, relatorioArg, orderByDinamico, inicio, total);
+	}
+	
+	@PlcTransactional(commit=false)
+	@Override
+	public byte[] gerarRelatorioUltimasComprasPeriodo(PlcBaseContextVO context, RelatorioUltimasComprasPeriodo relatorioArg, String sheetName) throws PlcException {
+		return relatorioUltimasComprasPeriodoRepository.gerarRelatorioUltimasComprasPeriodo(context, relatorioArg, sheetName);
+	}
+	
+	public Collection recuperaUltimasComprasPeriodo(PlcBaseContextVO context, RelatorioUltimasComprasPeriodo relatorioArg, String orderByDinamico, Integer inicio, Integer total) throws PlcException {
+		return relatorioUltimasComprasPeriodoRepository.recuperaUltimasComprasPeriodo(context, relatorioArg, orderByDinamico, inicio, total);
 	}
 }

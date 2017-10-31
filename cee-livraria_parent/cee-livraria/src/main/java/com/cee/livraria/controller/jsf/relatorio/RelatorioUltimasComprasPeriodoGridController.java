@@ -10,7 +10,7 @@ import javax.ws.rs.QueryParam;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.cee.livraria.entity.relatorio.RelatorioVendaPeriodo;
+import com.cee.livraria.entity.relatorio.RelatorioUltimasComprasPeriodo;
 import com.cee.livraria.facade.IAppFacade;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.PlcException;
@@ -24,8 +24,8 @@ import com.powerlogic.jcompany.controller.util.PlcIocControllerFacadeUtil;
 
 @SPlcController
 @QPlcControllerName("grid")
-@QPlcControllerQualifier("relatoriovendaperiodocon")
-public class RelatorioVendaPeriodoGridController<E, I> extends PlcBaseGridController<E, I> {
+@QPlcControllerQualifier("relatorioultimascomprasperiodocon")
+public class RelatorioUltimasComprasPeriodoGridController<E, I> extends PlcBaseGridController<E, I> {
 
 	@Inject @QPlcDefault 
 	protected PlcIocControllerFacadeUtil iocControleFacadeUtil;
@@ -102,7 +102,7 @@ public class RelatorioVendaPeriodoGridController<E, I> extends PlcBaseGridContro
 		try {
 			Object instancia = getEntityType().newInstance();
 			
-			RelatorioVendaPeriodo relatorioArg = (RelatorioVendaPeriodo) instancia;
+			RelatorioUltimasComprasPeriodo relatorioArg = (RelatorioUltimasComprasPeriodo) instancia;
 			
 			PlcConfigSelection configSelecao = getConfigCollaboration().selection();
 			String querySel = null;
@@ -124,11 +124,11 @@ public class RelatorioVendaPeriodoGridController<E, I> extends PlcBaseGridContro
 			this.retrieveCollectionBefore();
 			
 			if (relatorioArg.getDataFim() == null || relatorioArg.getDataInicio() == null) {
-				throw new PlcException("{relatorio.vendaPeriodo.erro.peridoInvalido}");
+				throw new PlcException("{relatorio.ultimasComprasPeriodo.erro.peridoInvalido}");
 			}
 			
 			if (relatorioArg.getDataFim().before(relatorioArg.getDataInicio())) {
-				throw new PlcException("{relatorio.vendaPeriodo.erro.dataFimMenorDataInicio}");
+				throw new PlcException("{relatorio.ultimasComprasPeriodo.erro.dataFimMenorDataInicio}");
 			}
 			
 			Calendar cal = Calendar.getInstance();
@@ -142,7 +142,7 @@ public class RelatorioVendaPeriodoGridController<E, I> extends PlcBaseGridContro
 			relatorioArg.setDataFim(cal.getTime());
 			
 //			this.setTotal(getFacade().findCount(context, relatorioArg)); 
-			List<E> lista = (List<E>) iocControleFacadeUtil.getFacade(IAppFacade.class).recuperaVendaPeriodo(context, relatorioArg, orderByDinamico, ((page - 1) * rows), (rows));
+			List<E> lista = (List<E>) iocControleFacadeUtil.getFacade(IAppFacade.class).recuperaUltimasComprasPeriodo(context, relatorioArg, orderByDinamico, ((page - 1) * rows), (rows));
 			this.setTotal((long)lista.size()); 
 			this.setEntityCollection(lista);
 			this.retrieveCollectionAfter();
