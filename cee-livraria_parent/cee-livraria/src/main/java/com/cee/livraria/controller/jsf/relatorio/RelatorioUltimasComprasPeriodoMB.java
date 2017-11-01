@@ -132,11 +132,11 @@ public class RelatorioUltimasComprasPeriodoMB extends AppMB {
 	}
 	
 	public void handleButtonsAccordingFormPattern() {
-//		String nomeAction = (String) contextUtil.getRequestAttribute(PlcConstants.PlcJsfConstantes.URL_SEM_BARRA);
-//		
-//		if ("relatorioUltimasComprasPeriodo".equalsIgnoreCase(nomeAction)) {
-//			contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_GERAR_RELATORIO_ULTIMAS_COMPRAS_PERIODO, PlcConstants.EXIBIR);
-//		}
+		String nomeAction = (String) contextUtil.getRequestAttribute(PlcConstants.PlcJsfConstantes.URL_SEM_BARRA);
+		
+		if ("relatorioUltimasComprasPeriodo".equalsIgnoreCase(nomeAction)) {
+			contextUtil.getRequest().setAttribute(AppConstants.ACAO.EXIBE_BT_GERAR_RELATORIO_ULTIMAS_COMPRAS_PERIODO, PlcConstants.EXIBIR);
+		}
 		
 		super.handleButtonsAccordingFormPattern();
 	}
