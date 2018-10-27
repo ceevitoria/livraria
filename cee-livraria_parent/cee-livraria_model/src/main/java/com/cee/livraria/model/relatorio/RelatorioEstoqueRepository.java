@@ -50,9 +50,10 @@ public class RelatorioEstoqueRepository extends PlcBaseRepository {
 		int CODIGO_BARRAS		= 0;
 		int TITULO				= 1;
 		int TIPO_PRODUTO		= 2;
-		int QUANTIDADE			= 3;
-		int PRECO_ULT_COMPRA	= 4;
-		int PRECO_VENDA			= 5;
+		int DATA_ULT_COMPRA		= 3;
+		int QUANTIDADE			= 4;
+		int PRECO_ULT_COMPRA	= 5;
+		int PRECO_VENDA			= 6;
 	}
 	
 	@Inject
@@ -159,7 +160,7 @@ public class RelatorioEstoqueRepository extends PlcBaseRepository {
 		cell = row.createCell(0);
 		cell.setCellValue(titulo);
 		
-		CellRangeAddress region = new CellRangeAddress(0, 0, 0, 5);
+		CellRangeAddress region = new CellRangeAddress(0, 0, 0, 6);
 		cleanBeforeMergeOnValidCells(row.getSheet(), region, styles.get("titulo"));
 		row.getSheet().addMergedRegion(region);// merging cells that has a title name		
 	}
@@ -179,6 +180,10 @@ public class RelatorioEstoqueRepository extends PlcBaseRepository {
 		cell.setCellValue(relatorio.getTipoProduto().getName());
 		cell.setCellStyle(styles.get("centeredTextStyle"));
 
+		cell = row.createCell(COL.DATA_ULT_COMPRA);
+		cell.setCellValue(relatorio.getNotaFiscal().getDataEmissao());
+		cell.setCellStyle(styles.get("dateStyle"));
+		
 		cell = row.createCell(COL.QUANTIDADE);
 		cell.setCellValue(relatorio.getEstoque().getQuantidade());
 		
@@ -208,13 +213,18 @@ public class RelatorioEstoqueRepository extends PlcBaseRepository {
 		cell.setCellStyle(styles.get("cabecalho"));
 		sheet.setColumnWidth(COL.TIPO_PRODUTO, 256 * 10);
 		
+		cell = row.createCell(COL.DATA_ULT_COMPRA);
+		cell.setCellValue("Data Ult Compra");
+		cell.setCellStyle(styles.get("cabecalho"));
+		sheet.setColumnWidth(COL.DATA_ULT_COMPRA, 256 * 16);
+		
 		cell = row.createCell(COL.QUANTIDADE);
 		cell.setCellValue("Quantidade");
 		cell.setCellStyle(styles.get("cabecalho"));
 		sheet.setColumnWidth(COL.QUANTIDADE, 256 * 13);
 
 		cell = row.createCell(COL.PRECO_ULT_COMPRA);
-		cell.setCellValue("Preço Ult. Compra");
+		cell.setCellValue("Preço Ult Compra");
 		cell.setCellStyle(styles.get("cabecalho"));
 		sheet.setColumnWidth(COL.PRECO_ULT_COMPRA, 256 * 18);
 

@@ -27,6 +27,7 @@ import org.hibernate.annotations.ForeignKey;
 
 import com.cee.livraria.entity.AppBaseEntity;
 import com.cee.livraria.entity.Localizacao;
+import com.cee.livraria.entity.compra.NotaFiscal;
 import com.cee.livraria.entity.estoque.Estoque;
 import com.cee.livraria.entity.produto.TipoProduto;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
@@ -48,10 +49,19 @@ import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 	"       obj1.quantidadeMaxima as estoque_quantidadeMaxima, " + 
 	"       obj1.dataConferencia as estoque_dataConferencia, " + 
 	"       obj2.id as localizacao_id, obj2.codigo as localizacao_codigo, " + 
-	"       obj2.descricao as localizacao_descricao " + 
-	"  from RelatorioEstoque obj " + 
-	"     inner join obj.estoque as obj1 " + 
+	"       obj2.descricao as localizacao_descricao, " + 
+	"       nf as notaFiscal " + 
+	"  from RelatorioEstoque obj, ItemNotaFiscal inf " + 
+	"     inner join obj.estoque as obj1     " + 
 	"     inner join obj.localizacao as obj2 " + 
+	"     inner join inf.notaFiscal as nf    " + 
+	"where obj.id = inf.produto.id           " +
+	"   and nf.dataEmissao = (               " +
+	"	select max(snf.dataEmissao)          " +
+	"	  from ItemNotaFiscal sinf           " +
+	"	     inner join sinf.produto sobj    " +
+	"	     inner join sinf.notaFiscal snf  " +
+	"	  where obj.id = sobj.id)            " +
 	" order by obj.titulo asc")})
 public class RelatorioEstoque extends AppBaseEntity {
 	private static final long serialVersionUID = -8819729450996123321L;
@@ -89,6 +99,11 @@ public class RelatorioEstoque extends AppBaseEntity {
 	@ForeignKey(name = "FK_PRODUTO_LOCALIZACAO")
 	@NotNull
 	private Localizacao localizacao;
+	
+	@ManyToOne(targetEntity = NotaFiscal.class, fetch = FetchType.EAGER)
+	@ForeignKey(name = "FK_ITEMNOTAFISCAL_NOTAFISCAL")
+	@NotNull
+	private NotaFiscal notaFiscal;
 	
 	public Long getId() {
 		return id;
@@ -162,6 +177,14 @@ public class RelatorioEstoque extends AppBaseEntity {
 		this.localizacao = localizacao;
 	}
 	
+	public NotaFiscal getNotaFiscal() {
+		return notaFiscal;
+	}
+
+	public void setNotaFiscal(NotaFiscal notaFiscal) {
+		this.notaFiscal = notaFiscal;
+	}
+
 	@Override
 	public String toString() {
 		if (getTitulo() != null) {
