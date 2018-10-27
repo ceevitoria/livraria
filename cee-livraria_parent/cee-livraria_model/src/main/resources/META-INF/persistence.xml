@@ -51,6 +51,7 @@
 		<class>com.cee.livraria.entity.relatorio.RelatorioFechamentoCaixa</class>
 		<class>com.cee.livraria.entity.relatorio.RelatorioVendaPeriodo</class>
 		<class>com.cee.livraria.entity.relatorio.RelatorioUltimasComprasPeriodo</class>
+		<class>com.cee.livraria.entity.relatorio.RelatorioEstoque</class>
 		<class>com.cee.livraria.entity.rest.ProdutoRest</class>		
 	<properties>
 			<property name="hibernate.archive.autodetection" value="class, hbm"/>

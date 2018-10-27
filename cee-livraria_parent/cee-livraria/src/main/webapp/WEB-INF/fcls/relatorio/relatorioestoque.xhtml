@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+
+	<ui:composition template="/fcls/template/PlcGeralTemplate.xhtml">
+		<ui:define name="plc-corpo-formulario"> 
+			<div id="plc-form-basico">
+				<!-- 
+				<div id="#{plcAliasPrefixoAction}Arg" class="plc-form-basico-topo">
+					<plcf:tabela tituloChave="relatorioUltimasComprasPeriodoarg.titulo"> 
+						<plcf:linha>
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.dataInicio']}"/>  
+								<plcf:data id="dataInicio" value="#{relatorioUltimasComprasPeriodo.dataInicio}" ajudaChave="ajuda.dataInicio" obrigatorio="S" obrigatorioDestaque="S" /> 
+							</plcf:celula>
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.dataFim']}"/>
+								<plcf:data id="dataFim" value="#{relatorioUltimasComprasPeriodo.dataFim}" ajudaChave="ajuda.dataFim" obrigatorio="S" obrigatorioDestaque="S" /> 
+							</plcf:celula> 
+						</plcf:linha> 
+					</plcf:tabela> 
+				</div>
+				 -->
+				<div id="#{plcAliasPrefixoAction}Con" class="plc-form-basico-con"> 
+					<script type="text/javascript">//<![CDATA[
+					plc.jq(document).ready(function(){
+						plc.jq(document).keypress(function(e) {
+							if(e.which == 13) { 
+								plc.jq( "#corpo\\:formulario\\:botaoAcaoPesquisar" ).trigger( "click" );
+							}
+						});
+					});
+	jQuery(function(){plc.criaSelecaoJqGrid('plc-grid','plc-grid-navegador',{
+		evento:'${param.evento}',
+			modoJanelaPlc:'${param.modoJanelaPlc}',
+			rowNum:'60',
+			nomeLogica:'relatorioestoquecon',
+			propAgregada:'relatorioEstoque',
+			jqGrid:{caption:
+				'#{msg['relatorioestoque.titulo']}',
+				colNames:
+				   ['#{msg['label.codigoBarras']}',
+					'#{msg['label.titulo']}',
+					'#{msg['label.tipoProduto']}',
+					'#{msg['label.quantidade']}',
+					'#{msg['label.precoUltCompra']}',
+					'#{msg['label.precoVenda']}'],
+				colModel:[
+					{name:'codigoBarras',index:'obj.codigoBarras', align:"center", width:'9%', title:true},
+					{name:'titulo',index:'obj.titulo', width:'44%', title:true},
+					{name:'tipoProduto',index:'obj.tipoProduto', align:"center", width:'6%', title:true},
+					{name:'estoque.quantidade',index:'est.quantidade', align:"right", width:'6%', title:true},
+					{name:'precoUltCompra',index:'obj.precoUltCompra', align:"right", width:'6%', title:true},
+					{name:'precoVendaSugerido',index:'obj.precoVendaSugerido', align:"right", width:'6%', title:true}]},
+			aoSelecionar:function(id){}});});//]]> </script>  
+					<table id="plc-grid" width="100%" class="scroll" cellpadding="0" cellspacing="0"/>  
+					<div id="plc-grid-navegador" class="scroll" style="text-align:center;"/> 
+				</div> 
+			</div> 
+		</ui:define> 
+	</ui:composition>
+</html>
+

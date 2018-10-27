@@ -268,6 +268,23 @@
 				</plcf:botaoAcao>
 			</ui:insert>
 
+			<ui:insert name="livraria_acao_gerarRelatorioEstoque">	 
+				<h:commandLink id="linkAcaoGerarRelatorioEstoque" immediate="false" 
+					rendered="#{requestScope.exibeBtnRelatorioEstoque=='S'}"
+					value="Relatorio Estoque"
+					action="#{plcAction.gerarRelatorioEstoque}"
+					style="color:blue;max-width:200px;font-size: 14px;visibility: hidden;">
+				</h:commandLink>
+			</ui:insert>
+
+			<ui:insert name="acao-botaoAcaoGerarRelatorioEstoque">	
+				<plcf:botaoAcao id="botaoAcaoGerarRelatorioEstoque" urlIcone="ico iEspecifico" 
+					limpaForm="false" partialSubmit="true" label="cee.evt.gerar.relatorioEstoque" 
+					botaoArrayID="GERAR_RELATORIO_ESTOQUE" validaForm="false" immediate="false" blocking="true" 
+					rendered="#{requestScope.exibeBtnRelatorioEstoque=='S'}" onclick="plc.jq('#corpo\\:formulario\\:linkAcaoGerarRelatorioEstoque').trigger('click');">
+				</plcf:botaoAcao>
+			</ui:insert>
+
 			</div>			 
 		</ui:composition>
 	</body>
