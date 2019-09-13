@@ -33,6 +33,7 @@ import com.cee.livraria.entity.pagamento.FormaPagto;
 import com.cee.livraria.entity.pagamento.Pagamento;
 import com.cee.livraria.entity.produto.Produto;
 import com.cee.livraria.entity.tabpreco.apoio.PrecoTabela;
+import com.cee.livraria.persistence.jpa.caixa.CaixaDAO;
 import com.cee.livraria.persistence.jpa.produto.ProdutoDAO;
 import com.cee.livraria.persistence.jpa.vendaproduto.VendaProdutoDAO;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
@@ -44,7 +45,7 @@ import com.powerlogic.jcompany.domain.type.PlcYesNo;
 @SPlcRepository
 @PlcAggregationDAOIoC(value=VendaProduto.class)
 public class VendaProdutosRepository {
-	
+
 	@Inject
 	private ProdutoDAO produtoDAO;
 
@@ -54,12 +55,18 @@ public class VendaProdutosRepository {
 	private CompraVendaConfig config;
 	private List<String> alertas = new ArrayList<String>();
 	private List<String> mensagens = new ArrayList<String>();
-	
+
 	@Inject
 	private VendaProdutoDAO jpa;
-	
+
+	@Inject
+	private CaixaDAO caixaDAO;
+
+	@Inject
+	private CaixaRepository caixaRepository;
+
 	private PlcBaseContextVO context;
-	
+
 	/** 
 	 * Registra de venda dos produtos se o caixa estiver aberto
 	 * @param entityList
@@ -231,6 +238,7 @@ public class VendaProdutosRepository {
 			
 			if ("LIV".equals(((Caixa)object).getSistema())) {
 				caixa = (Caixa)object;
+				break;
 			}
 		}
 		
@@ -263,7 +271,7 @@ public class VendaProdutosRepository {
 	 */
 	@SuppressWarnings("unchecked")
 	private void atualizaPagtosCaixa(Date dataVenda, Caixa caixa, List pagtos) throws PlcException {
-		List<CaixaFormaPagto> formasPagtoCaixa = caixa.getCaixaFormaPagto();
+		List<CaixaFormaPagto> formasPagtoCaixa = (List<CaixaFormaPagto>)caixaDAO.findByFields(context, CaixaFormaPagtoEntity.class, "querySelByCaixa", new String[]{"caixa", "dataAbertura"}, new Object[]{caixa, caixa.getDataUltAbertura()});
 		
 		for (Object o : pagtos) {
 			boolean achou = false;
@@ -271,19 +279,16 @@ public class VendaProdutosRepository {
 			FormaPagto formaPagto = pagto.getFormaPagto();
 			
 			if (formaPagto != null) {
-				
 				for (CaixaFormaPagto caixaFormaPagto : formasPagtoCaixa) {
 					caixaFormaPagto = (CaixaFormaPagto)jpa.findById(context, CaixaFormaPagtoEntity.class, caixaFormaPagto.getId());
 					
 					if (caixaFormaPagto.getFormaPagto().getId().equals(formaPagto.getId())) {
 						caixaFormaPagto.setValor(caixaFormaPagto.getValor().add(pagto.getValor()));
-						
 						caixaFormaPagto.setDataUltAlteracao(dataVenda);
 						caixaFormaPagto.setUsuarioUltAlteracao(context.getUserProfile().getLogin());
-						
 						jpa.update(context, caixaFormaPagto);
-						
 						achou = true;
+						break;
 					}
 				}
 
